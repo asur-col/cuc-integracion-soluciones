@@ -214,7 +214,7 @@
 
   <table>
     <tr><th>Componente</th><th>Qué es</th><th>Rol en tu flujo</th></tr>
-    <tr><td>Terminal web</td><td><code>https://labs.proyectoasur.org/ios-estNN/</code></td><td>Tu consola bash remota — el lab ocurre aquí dentro</td></tr>
+    <tr><td>Terminal web</td><td><code>https://labs.proyectoasur.org/</code> (login) → tu usuario elegido</td><td>Tu consola bash remota — el lab ocurre aquí dentro</td></tr>
     <tr><td>Docker rootless</td><td>Daemon dedicado, corre con TU usuario Linux</td><td>Construye y corre contenedores sin acceso al host</td></tr>
     <tr><td>Registro privado</td><td><code>200.30.0.3:5000</code> (compartido, con login)</td><td>Donde publicas tu imagen — como Docker Hub, pero del curso</td></tr>
     <tr><td>Puerto asignado</td><td><code>$LAB_PORT</code> (ej. 8007 para est07)</td><td>Publica tu app sin chocar con la de tus compañeros</td></tr>
@@ -242,15 +242,16 @@
   <h2><span class="paso">PREVIO</span> Requisitos (verifícalos antes de empezar)</h2>
   <ul>
     <li>Un navegador web actualizado (Chrome / Firefox / Edge).</li>
-    <li>Las credenciales que entregó el docente en la hoja impresa/digital:
+    <li>Las credenciales que entregó el docente en clase:
       <ul>
-        <li><b>URL personal de tu terminal</b>: patrón <code>https://labs.proyectoasur.org/ios-estNN/</code>.</li>
-        <li><b>Usuario y clave de la terminal</b> (uno por estudiante).</li>
-        <li><b>Usuario y clave del registro Docker</b> (compartido con la clase, válido solo hoy).</li>
+        <li><b>URL única de entrada</b>: <code>https://labs.proyectoasur.org/</code> — la misma para todo el curso, no hay una distinta por estudiante.</li>
+        <li><b>Usuario</b>: cualquiera de <code>ios-est01</code> a <code>ios-est20</code> que esté <b>libre</b> — no tienes uno asignado, elige uno que nadie más esté usando.</li>
+        <li><b>Clave de terminal</b>: <code>cuc2026lab</code> (la misma para las 20 cuentas, válida solo hoy).</li>
+        <li><b>Usuario y clave del registro Docker</b> (compartido con la clase, válido solo hoy) — distintos de los de la terminal.</li>
       </ul>
     </li>
   </ul>
-  <div class="warn"><b>Cambia <code>NN</code> por tu número real</b> en la URL. Si te tocó el 7, tu terminal es <code>https://labs.proyectoasur.org/ios-est07/</code>. Pegar la URL literal con <code>NN</code> da 404 — fue el error más visto en la primera sesión.</div>
+  <div class="warn"><b>El usuario que elijas es tu identidad para la evidencia</b> del entregable — avisa en clase cuál tomaste y no lo cambies a mitad del lab ni uses uno ya ocupado por un compañero.</div>
   <div class="tip">Este lab corre íntegramente en infraestructura del curso (servidores ASUR aprovisionados para esta clase). No instalas ni configuras nada en tu computador.</div>
 </section>
 
@@ -259,7 +260,7 @@
   <h2><span class="paso">PARTE A</span> Entrar a tu entorno <span style="color:var(--ink-soft);font-size:14px">(~10 min)</span></h2>
 
   <h3>A.1 — Abrir tu terminal web</h3>
-  <p>Entra a tu URL personal y autentícate con tu usuario y clave de terminal (el navegador las pide una sola vez por sesión). Debe aparecerte un banner como este:</p>
+  <p>Entra a <code>https://labs.proyectoasur.org/</code> e inicia sesión con el usuario que elegiste y la clave <code>cuc2026lab</code>. Si el usuario ya está en uso, elige otro número libre. Debe aparecerte un banner como este:</p>
 <pre><code>============================================================
  Lab: Sandbox de Contenedores — Integración de Soluciones
  Usuario: ios-est07   |   Tu puerto: <span class="y">8007</span>   |   Registro: 200.30.0.3:5000
@@ -382,12 +383,12 @@ v1: digest: <span class="g">sha256:92907e84d135...</span> size: 856</code></pre>
     <tr><td><code>denied: requested access to the resource is denied</code> en <code>push</code></td><td>No estás autenticado o la sesión expiró</td><td>Repite <code>docker login 200.30.0.3:5000</code></td></tr>
     <tr><td><code>network unreachable</code> o timeout al hacer login/push</td><td>Escribiste mal la dirección del registro</td><td>El registro es <code>200.30.0.3:5000</code> — ni <code>localhost</code> ni otra IP</td></tr>
     <tr><td><code>docker version</code> no muestra sección Server</td><td>Tu daemon tardó en arrancar o se cayó</td><td>Avisa al docente (se reinicia con un comando)</td></tr>
-    <tr><td>Terminal web pide credenciales de nuevo</td><td>Sesión expirada</td><td>Vuelve a entrar a tu URL con tu usuario/clave</td></tr>
+    <tr><td>Terminal web pide credenciales de nuevo</td><td>Sesión expirada</td><td>Vuelve a entrar a <code>https://labs.proyectoasur.org/</code> con tu usuario y la clave <code>cuc2026lab</code></td></tr>
   </table>
 
   <h3>Checklist de advertencias durante el lab</h3>
   <ul class="checklist">
-    <li>Tus credenciales son personales — no las compartas (la actividad es individual y la evidencia lleva tu usuario).</li>
+    <li>La clave es compartida, pero el usuario que elegiste es tu identidad para la evidencia — no lo cambies a mitad del lab ni uses uno ya ocupado por un compañero.</li>
     <li>Todo corre remoto en los servidores del curso: no intentes instalar Docker en tu PC durante el lab.</li>
     <li>Usa siempre <code>$IMAGE</code> y <code>${LAB_PORT}</code> de tu sesión en vez de tipear valores a mano — evitas el 90% de los errores.</li>
     <li>Al terminar la clase el entorno se conserva unos días por si el docente pide evidencia adicional; después se limpia con el procedimiento de teardown.</li>

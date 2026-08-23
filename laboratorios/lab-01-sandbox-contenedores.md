@@ -32,9 +32,10 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
 
 1. Un navegador web (Chrome/Firefox/Edge actualizado).
 2. Las credenciales que entregó el docente:
-   - **URL personal de terminal**: `https://labs.proyectoasur.org/ios-estNN/` — **cambia `NN` por tu número asignado** (ej. si te tocó el 7: `https://labs.proyectoasur.org/ios-est07/`). La lista exacta usuario-por-usuario está en la hoja de credenciales del docente.
-   - **Usuario y clave de la terminal** (uno por estudiante).
-   - **Usuario y clave del registro Docker** (compartido, válido solo hoy).
+   - **URL única de entrada**: `https://labs.proyectoasur.org/` — es la misma para todo el curso, no hay una URL distinta por estudiante.
+   - **Usuario de terminal**: cualquiera de `ios-est01` a `ios-est20` **que esté libre** — no tienes uno asignado, elige uno que ningún compañero esté usando y avisa cuál tomaste (ese usuario queda como tu identidad en la evidencia del entregable).
+   - **Clave de terminal**: `cuc2026lab` (la misma para las 20 cuentas — solo válida hoy, en esta sesión).
+   - **Usuario y clave del registro Docker** (compartido, válido solo hoy) — te los da el docente aparte, no son los mismos de la terminal.
 
 > Este lab corre íntegramente en infraestructura del curso. Nada se instala ni se configura en tu computador.
 
@@ -44,8 +45,8 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
 
 ### A.1 — Abrir tu terminal web
 
-1. Abre en el navegador la URL que te asignó el docente.
-2. Autentícate con tu usuario y clave de terminal (el navegador te las pedirá una vez).
+1. Abre en el navegador `https://labs.proyectoasur.org/`.
+2. En la página de login, escribe el usuario que elegiste (ej. `ios-est07`) y la clave `cuc2026lab`. Si el usuario ya está en uso por otro compañero, elige otro número libre.
 3. Debe aparecer un banner como este:
 
 ```
@@ -232,11 +233,11 @@ Un solo documento (PDF) con estas 4 evidencias, en este orden:
 | `denied: requested access to the resource is denied` en `push` | No estás autenticado o sesión expiró | Repite `docker login 200.30.0.3:5000` |
 | `network unreachable` o timeout al hacer login/push | Escribiste mal la dirección del registro | El registro es `200.30.0.3:5000`, ni `localhost` ni otra IP |
 | `docker version` no muestra sección Server | Tu daemon tardó en arrancar o se cayó | Avisa al docente (se reinicia con un comando) |
-| Terminal web pide credenciales de nuevo | Sesión expirada | Vuelve a entrar a tu URL con tu usuario/clave |
+| Terminal web pide credenciales de nuevo | Sesión expirada | Vuelve a entrar a https://labs.proyectoasur.org/ con tu usuario y la clave `cuc2026lab` |
 
 ## Checklist de advertencias (revisar durante el lab)
 
-- Tus credenciales son personales — no las compartas (la actividad es individual y la evidencia lleva tu usuario).
+- La clave es compartida, pero el **usuario que elegiste** es tu identidad para la evidencia — no lo cambies a mitad del lab ni uses uno que ya vieras ocupado por otro compañero.
 - Todo corre remoto en los servidores del curso: no intentes instalar Docker en tu PC durante el lab.
 - Usa siempre `$IMAGE` y `${LAB_PORT}` de tu sesión en vez de tipear valores a mano — evitas el 90% de los errores.
 - Al terminar la clase el entorno se conserva unos días por si el docente pide evidencia adicional; después se limpia con el procedimiento de teardown.
