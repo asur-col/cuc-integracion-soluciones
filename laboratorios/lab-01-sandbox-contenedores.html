@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 1 — Sandbox de Contenedores · Integración de Soluciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+  header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  header.top img.logo{height:52px;margin-bottom:14px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,4vw,40px);margin:0 0 10px;line-height:1.15}
+  .sub{color:var(--ink-soft);margin:0;font-size:16px}
+  .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;margin:0}
+  .meta b{color:var(--ink)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-top:26px;box-shadow:var(--shadow)}
+  h2{font-family:var(--serif);font-size:24px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  h2 .paso{font-family:var(--mono);font-size:13px;background:var(--vino);color:#fff;border-radius:8px;padding:3px 11px;font-weight:500}
+  h3{font-size:16.5px;margin:26px 0 8px;color:var(--vino-strong)}
+  .lead{color:var(--ink-soft);margin-top:2px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:14px 0}
+  th{text-align:left;background:var(--surface-2);padding:9px 12px;border:1px solid var(--line);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+  td{padding:8px 12px;border:1px solid var(--line)}
+  code{font-family:var(--mono);font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  pre{background:#211D18;color:#EFE7D9;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;border:1px solid #3D362B}
+  pre code{background:none;border:none;padding:0;color:inherit}
+  pre .c{color:#8B95B0} pre .k{color:#F0748A} pre .g{color:#5BD69E} pre .y{color:#E4BC5C}
+  @media(prefers-color-scheme:light){ pre{background:#2A2A2A;} }
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .tip{border-color:var(--ok);background:var(--ok-tint)} .tip::before{content:"💡 TIP — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok)}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint)} .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado)}
+  .danger{border-color:var(--vino);background:var(--vino-tint)} .danger::before{content:"☠ CRÍTICO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino)}
+  figure.diagram{margin:22px 0;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+  figure.diagram svg{min-width:640px;width:100%;height:auto;display:block}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.04em}
+  details{border:1px solid var(--line);border-radius:10px;margin:14px 0;background:var(--surface-2)}
+  summary{cursor:pointer;padding:12px 16px;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--vino-strong)}
+  details pre{margin:12px;border-radius:8px}
+  .checklist{list-style:none;padding:0;margin:12px 0}
+  .checklist li{padding:7px 0 7px 30px;position:relative;border-bottom:1px dashed var(--line)}
+  .checklist li::before{content:"☐";position:absolute;left:4px;color:var(--vino);font-size:16px}
+  footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+  .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:8px}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa">
+  <p class="eyebrow">Laboratorio 1 · Unidad 1 — Actividad 2 · 5%</p>
+  <h1>Sandbox de Contenedores:<br>build → push → run en infraestructura propia</h1>
+  <p class="sub">El mismo flujo que ejecuta un pipeline CI/CD de producción — sobre un entorno Docker real y aislado que ya está aprovisionado para ti</p>
+  <div class="accent-bar"></div>
+  <p class="meta">
+    <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Duración estimada:</b> 90 minutos &nbsp;·&nbsp; <b>Modalidad:</b> terminal web remota (no instalas nada en tu equipo) &nbsp;·&nbsp; <b>Nivel:</b> introductorio<br><b>Tipo:</b> actividad práctica calificable — 5% de la nota final de la Unidad 1
+  </p>
+  <span class="ia-badge">Construido y documentado por ox-alpha (IA) + Ing. Rodolfo Cañas — probado en producción real, no en teoría</span>
+</header>
+
+<div class="wrap">
+
+<!-- ============ OBJETIVOS ============ -->
+<section>
+  <h2><span class="paso">OBJETIVOS</span> Qué vas a aprender</h2>
+  <p class="lead">Al terminar este laboratorio serás capaz de:</p>
+  <ul>
+    <li>Ejecutar el flujo completo de despliegue moderno: <b>build → push → run → verify</b>, igual que un pipeline CI/CD.</li>
+    <li>Construir una <b>imagen de contenedor</b> a partir de un <code>Dockerfile</code> y entender el papel de las capas y la caché.</li>
+    <li>Publicar tu imagen en un <b>registro privado autenticado</b> y comprobar su integridad por <b>digest</b> (<code>sha256:...</code>).</li>
+    <li>Correr tu contenedor como servicio y verificarlo con un <b>health check automatizable</b> (<code>GET /health</code>) — lo mismo que hace un balanceador antes de enviar tráfico real.</li>
+    <li>Trabajar sobre un entorno <b>Docker rootless aislado por estudiante</b>, sin acceso al sistema anfitrión ni a los entornos de tus compañeros.</li>
+  </ul>
+  <div class="tip">En la parte teórica vimos cómo se interconectan las nubes (VCN/VPC, peering, VPN). Este lab ejecuta la otra mitad de la historia: cómo una aplicación llega a cualquiera de esas nubes — como imagen portable, no como servidor configurado a mano.</div>
+</section>
+
+<!-- ============ ARQUITECTURA ============ -->
+<section>
+  <h2><span class="paso">ARQUITECTURA</span> El flujo que vas a ejecutar</h2>
+  <figure class="diagram">
+  <svg viewBox="0 0 960 320" role="img" aria-label="Flujo build push run verify">
+    <defs>
+      <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#A6192E"/></marker>
+    </defs>
+    <!-- píldora $IMAGE -->
+    <rect x="180" y="22" width="600" height="36" rx="18" fill="#FBF3DE" stroke="#A9791C"/>
+    <text x="480" y="45" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7E1223">$IMAGE = 200.30.0.3:5000/hello-multicloud-ios-estNN:v1  (variable ya configurada)</text>
+
+    <!-- BUILD -->
+    <rect x="40" y="96" width="180" height="104" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+    <text x="130" y="120" text-anchor="middle" font-size="11" font-family="IBM Plex Mono" fill="#A6192E">PARTE B</text>
+    <text x="130" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#7E1223">BUILD</text>
+    <text x="130" y="164" text-anchor="middle" font-size="11" fill="#6B6259">docker build -t "$IMAGE"</text>
+    <text x="130" y="182" text-anchor="middle" font-size="10.5" fill="#6B6259">node:22-alpine + tu código</text>
+    <!-- PUSH -->
+    <rect x="280" y="96" width="180" height="104" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+    <text x="370" y="120" text-anchor="middle" font-size="11" font-family="IBM Plex Mono" fill="#A6192E">PARTE C</text>
+    <text x="370" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#7E1223">PUSH</text>
+    <text x="370" y="164" text-anchor="middle" font-size="11" fill="#6B6259">docker push "$IMAGE"</text>
+    <text x="370" y="182" text-anchor="middle" font-size="10.5" fill="#6B6259">al registro privado</text>
+    <!-- RUN -->
+    <rect x="520" y="96" width="180" height="104" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+    <text x="610" y="120" text-anchor="middle" font-size="11" font-family="IBM Plex Mono" fill="#A6192E">PARTE D</text>
+    <text x="610" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#7E1223">RUN</text>
+    <text x="610" y="164" text-anchor="middle" font-size="11" fill="#6B6259">docker run -d -p ...</text>
+    <text x="610" y="182" text-anchor="middle" font-size="10.5" fill="#6B6259">tu puerto asignado → 3000</text>
+    <!-- VERIFY -->
+    <rect x="760" y="96" width="160" height="104" rx="10" fill="#FBEBEC" stroke="#0E7A4B" stroke-width="2"/>
+    <text x="840" y="120" text-anchor="middle" font-size="11" font-family="IBM Plex Mono" fill="#0E7A4B">EVIDENCIA</text>
+    <text x="840" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#0E7A4B">VERIFY</text>
+    <text x="840" y="164" text-anchor="middle" font-size="11" fill="#6B6259">curl :$LAB_PORT/health</text>
+    <text x="840" y="182" text-anchor="middle" font-size="10.5" fill="#0E7A4B">{"status":"ok"} ✅</text>
+
+    <!-- flechas -->
+    <line x1="220" y1="148" x2="272" y2="148" stroke="#A6192E" stroke-width="2.5" marker-end="url(#ar)"/>
+    <line x1="460" y1="148" x2="512" y2="148" stroke="#A6192E" stroke-width="2.5" marker-end="url(#ar)"/>
+    <line x1="700" y1="148" x2="752" y2="148" stroke="#A6192E" stroke-width="2.5" marker-end="url(#ar)"/>
+
+    <!-- anotaciones -->
+    <rect x="40" y="236" width="900" height="44" rx="8" fill="#fff" stroke="#E5DCCB"/>
+    <text x="480" y="256" text-anchor="middle" font-size="11.5" fill="#6B6259">La imagen es <tspan font-weight="700" fill="#7E1223">inmutable y portable</tspan>: el mismo digest sha256 puede correrse en AWS, Azure, GCP o un servidor propio.</text>
+    <text x="480" y="272" text-anchor="middle" font-size="11" fill="#6B6259">Lo único que cambia entre nubes es dónde vive el registro y qué runtime ejecuta el contenedor.</text>
+  </svg>
+  <figcaption>FIG 1 — El pipeline completo: construir una vez, publicar, correr donde sea y verificar siempre</figcaption>
+  </figure>
+
+  <h3>Aislamiento: tu entorno es tuyo y solo tuyo</h3>
+  <figure class="diagram">
+  <svg viewBox="0 0 960 440" role="img" aria-label="Aislamiento por estudiante">
+    <defs>
+      <marker id="arg" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#A9791C"/></marker>
+    </defs>
+    <!-- mensaje clave -->
+    <rect x="150" y="18" width="660" height="34" rx="17" fill="#FBF3DE" stroke="#A9791C"/>
+    <text x="480" y="40" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7E1223">Cada estudiante: su propio daemon Docker rootless — sin acceso al host ni a contenedores ajenos</text>
+
+    <!-- zona est07 -->
+    <rect x="30" y="72" width="280" height="290" rx="12" fill="#FBEBEC33" stroke="#A6192E" stroke-dasharray="6 4"/>
+    <text x="170" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7E1223">ios-est07</text>
+    <rect x="60" y="112" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="170" y="136" text-anchor="middle" font-size="11.5" fill="#2A2A2A">🌐 Navegador + tu clave</text>
+    <line x1="170" y1="150" x2="170" y2="172" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="60" y="174" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="170" y="198" text-anchor="middle" font-size="11.5" fill="#2A2A2A">ttyd — terminal web (login)</text>
+    <line x1="170" y1="212" x2="170" y2="234" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="60" y="236" width="220" height="46" rx="8" fill="#fff" stroke="#0E7A4B" stroke-width="1.5"/>
+    <text x="170" y="255" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0E7A4B">dockerd ROOTLESS</text>
+    <text x="170" y="272" text-anchor="middle" font-size="10.5" fill="#6B6259">corre como usuario ios-est07</text>
+
+    <!-- zona estNN -->
+    <rect x="340" y="72" width="280" height="290" rx="12" fill="#FBEBEC33" stroke="#A6192E" stroke-dasharray="6 4"/>
+    <text x="480" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7E1223">ios-estNN (tú)</text>
+    <rect x="370" y="112" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="480" y="136" text-anchor="middle" font-size="11.5" fill="#2A2A2A">🌐 Navegador + tu clave</text>
+    <line x1="480" y1="150" x2="480" y2="172" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="370" y="174" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="480" y="198" text-anchor="middle" font-size="11.5" fill="#2A2A2A">ttyd — terminal web (login)</text>
+    <line x1="480" y1="212" x2="480" y2="234" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="370" y="236" width="220" height="46" rx="8" fill="#fff" stroke="#0E7A4B" stroke-width="1.5"/>
+    <text x="480" y="255" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0E7A4B">dockerd ROOTLESS</text>
+    <text x="480" y="272" text-anchor="middle" font-size="10.5" fill="#6B6259">corre como usuario ios-estNN</text>
+
+    <!-- zona est20 -->
+    <rect x="650" y="72" width="280" height="290" rx="12" fill="#FBEBEC33" stroke="#A6192E" stroke-dasharray="6 4"/>
+    <text x="790" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7E1223">ios-est20</text>
+    <rect x="680" y="112" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="790" y="136" text-anchor="middle" font-size="11.5" fill="#2A2A2A">🌐 Navegador + tu clave</text>
+    <line x1="790" y1="150" x2="790" y2="172" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="680" y="174" width="220" height="38" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="790" y="198" text-anchor="middle" font-size="11.5" fill="#2A2A2A">ttyd — terminal web (login)</text>
+    <line x1="790" y1="212" x2="790" y2="234" stroke="#6B6259" stroke-width="2" marker-end="url(#arg)"/>
+    <rect x="680" y="236" width="220" height="46" rx="8" fill="#fff" stroke="#0E7A4B" stroke-width="1.5"/>
+    <text x="790" y="255" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0E7A4B">dockerd ROOTLESS</text>
+    <text x="790" y="272" text-anchor="middle" font-size="10.5" fill="#6B6259">corre como usuario ios-est20</text>
+
+    <!-- registro compartido -->
+    <rect x="30" y="376" width="900" height="50" rx="10" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.5"/>
+    <text x="480" y="398" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">REGISTRO PRIVADO COMPARTIDO — 200.30.0.3:5000</text>
+    <text x="480" y="416" text-anchor="middle" font-size="11" fill="#6B6259">autenticación obligatoria · cada quien publica en su propio repositorio hello-multicloud-&lt;usuario&gt;</text>
+
+    <!-- flechas push/pull -->
+    <line x1="170" y1="282" x2="230" y2="376" stroke="#A9791C" stroke-width="2" marker-end="url(#arg)"/>
+    <line x1="480" y1="282" x2="480" y2="376" stroke="#A9791C" stroke-width="2" marker-end="url(#arg)"/>
+    <line x1="790" y1="282" x2="730" y2="376" stroke="#A9791C" stroke-width="2" marker-end="url(#arg)"/>
+    <text x="512" y="340" text-anchor="start" font-size="10.5" fill="#A9791C" font-weight="600">push / pull</text>
+  </svg>
+  <figcaption>FIG 2 — Aislamiento por diseño: zonas separadas por estudiante; lo único compartido es el registro, con autenticación</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Componente</th><th>Qué es</th><th>Rol en tu flujo</th></tr>
+    <tr><td>Terminal web</td><td><code>https://labs.proyectoasur.org/ios-estNN/</code></td><td>Tu consola bash remota — el lab ocurre aquí dentro</td></tr>
+    <tr><td>Docker rootless</td><td>Daemon dedicado, corre con TU usuario Linux</td><td>Construye y corre contenedores sin acceso al host</td></tr>
+    <tr><td>Registro privado</td><td><code>200.30.0.3:5000</code> (compartido, con login)</td><td>Donde publicas tu imagen — como Docker Hub, pero del curso</td></tr>
+    <tr><td>Puerto asignado</td><td><code>$LAB_PORT</code> (ej. 8007 para est07)</td><td>Publica tu app sin chocar con la de tus compañeros</td></tr>
+    <tr><td>Proyecto starter</td><td><code>~/hello-multicloud</code></td><td>App Node.js mínima + Dockerfile listos para construir</td></tr>
+  </table>
+</section>
+
+<!-- ============ PRESUPUESTO ============ -->
+<section>
+  <h2><span class="paso">TIEMPO</span> Presupuesto de tiempo</h2>
+  <table>
+    <tr><th>Parte</th><th>Contenido</th><th>Tiempo</th></tr>
+    <tr><td>A</td><td>Entrar a tu entorno y verificar</td><td>10 min</td></tr>
+    <tr><td>B</td><td>Construir la imagen (<code>build</code>)</td><td>20 min</td></tr>
+    <tr><td>C</td><td>Subir al registro privado (<code>push</code>)</td><td>15 min</td></tr>
+    <tr><td>D</td><td>Correr y verificar salud (<code>run</code> + <code>curl</code>)</td><td>15 min</td></tr>
+    <tr><td>E</td><td>Entregable (evidencias)</td><td>15 min</td></tr>
+    <tr><td>—</td><td>Margen para imprevistos</td><td>15 min</td></tr>
+  </table>
+  <div class="tip">Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — es mejor un entregable parcial completo que quedarte atascado en un solo paso.</div>
+</section>
+
+<!-- ============ PREVIO ============ -->
+<section>
+  <h2><span class="paso">PREVIO</span> Requisitos (verifícalos antes de empezar)</h2>
+  <ul>
+    <li>Un navegador web actualizado (Chrome / Firefox / Edge).</li>
+    <li>Las credenciales que entregó el docente en la hoja impresa/digital:
+      <ul>
+        <li><b>URL personal de tu terminal</b>: patrón <code>https://labs.proyectoasur.org/ios-estNN/</code>.</li>
+        <li><b>Usuario y clave de la terminal</b> (uno por estudiante).</li>
+        <li><b>Usuario y clave del registro Docker</b> (compartido con la clase, válido solo hoy).</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="warn"><b>Cambia <code>NN</code> por tu número real</b> en la URL. Si te tocó el 7, tu terminal es <code>https://labs.proyectoasur.org/ios-est07/</code>. Pegar la URL literal con <code>NN</code> da 404 — fue el error más visto en la primera sesión.</div>
+  <div class="tip">Este lab corre íntegramente en infraestructura del curso (servidores ASUR aprovisionados para esta clase). No instalas ni configuras nada en tu computador.</div>
+</section>
+
+<!-- ============ PARTE A ============ -->
+<section>
+  <h2><span class="paso">PARTE A</span> Entrar a tu entorno <span style="color:var(--ink-soft);font-size:14px">(~10 min)</span></h2>
+
+  <h3>A.1 — Abrir tu terminal web</h3>
+  <p>Entra a tu URL personal y autentícate con tu usuario y clave de terminal (el navegador las pide una sola vez por sesión). Debe aparecerte un banner como este:</p>
+<pre><code>============================================================
+ Lab: Sandbox de Contenedores — Integración de Soluciones
+ Usuario: ios-est07   |   Tu puerto: <span class="y">8007</span>   |   Registro: 200.30.0.3:5000
+------------------------------------------------------------
+ Flujo del lab (guía completa entregada en clase):
+   cd ~/hello-multicloud
+   docker build -t <span class="g">"$IMAGE"</span> .
+   docker login 200.30.0.3:5000          &lt;- usuario y clave del registro
+   docker push <span class="g">"$IMAGE"</span>
+   docker run -d --name hello -p <span class="y">8007</span>:3000 <span class="g">"$IMAGE"</span>
+   curl localhost:<span class="y">8007</span>/health            &lt;- ESTA ES TU EVIDENCIA
+============================================================</code></pre>
+  <div class="warn"><b>Apunta tu puerto</b> del banner: cada estudiante publica su app en un puerto distinto para no chocar con los demás.</div>
+
+  <h3>A.2 — Verificar tu entorno</h3>
+<pre><code><span class="k">whoami</span>
+<span class="k">docker</span> version
+<span class="k">ls</span> ~/hello-multicloud</code></pre>
+  <p>Resultado esperado:</p>
+  <ul>
+    <li><code>whoami</code> → tu usuario (<code>ios-estNN</code> o el asignado).</li>
+    <li><code>docker version</code> → muestra <b>Client</b> y <b>Server</b>; si Server da error, avisa al docente.</li>
+    <li>El proyecto starter con dos archivos: <code>server.js</code> y <code>Dockerfile</code>.</li>
+  </ul>
+
+  <h3>A.3 — Entender qué vas a desplegar</h3>
+<pre><code><span class="k">cat</span> ~/hello-multicloud/server.js
+<span class="k">cat</span> ~/hello-multicloud/Dockerfile</code></pre>
+  <p>Es un servidor HTTP mínimo con un endpoint de salud: <code>GET /health</code> responde JSON <code>{"status":"ok",...}</code> — <b>ese endpoint es tu evidencia final</b>. Cualquier otra ruta devuelve una página de bienvenida. El Dockerfile tiene 4 instrucciones: imagen base oficial (<code>node:22-alpine</code>), directorio de trabajo, copia del código y comando de arranque. Con eso basta para producción en este caso.</p>
+</section>
+
+<!-- ============ PARTE B ============ -->
+<section>
+  <h2><span class="paso">PARTE B</span> Construir la imagen <span style="color:var(--ink-soft);font-size:14px">(~20 min)</span></h2>
+
+  <h3>B.1 — Build</h3>
+<pre><code><span class="k">cd</span> ~/hello-multicloud
+<span class="k">docker</span> build -t <span class="g">"$IMAGE"</span> .</code></pre>
+  <p>La variable <code>$IMAGE</code> ya viene preconfigurada en tu sesión apuntando a tu propio repositorio dentro del registro del curso (<code>200.30.0.3:5000/hello-multicloud-ios-estNN:v1</code>). Compruébala con <code>echo $IMAGE</code>.</p>
+  <div class="tip"><b>Qué está pasando</b> (léelo una vez, cae en el quiz de U1): Docker descarga la capa base <code>node:22-alpine</code>, copia tu código y congela todo en una imagen inmutable identificada por un <i>digest</i> <code>sha256:...</code>. La segunda vez el build es casi instantáneo: solo se reconstruyen las capas que cambiaron (<i>caché de capas</i>).</div>
+
+  <h3>B.2 — Verificar la imagen construida</h3>
+<pre><code><span class="k">docker</span> images</code></pre>
+  <p>Debe listar <code>hello-multicloud-ios-estNN</code> con tag <code>v1</code> y tamaño ~55 MB.</p>
+</section>
+
+<!-- ============ PARTE C ============ -->
+<section>
+  <h2><span class="paso">PARTE C</span> Push al registro privado <span style="color:var(--ink-soft);font-size:14px">(~15 min)</span></h2>
+  <p>En producción nadie despliega desde el laptop: la imagen se publica en un registro y desde ahí se corre en cualquier nube. Aquí usamos un registro privado montado para el curso, con autenticación obligatoria.</p>
+
+  <h3>C.1 — Autenticarte</h3>
+<pre><code><span class="k">docker</span> login 200.30.0.3:5000</code></pre>
+  <p>Usuario y clave: los del <b>registro</b> que entregó el docente (no son los de tu terminal). La salida correcta termina en <code>Login Succeeded</code>.</p>
+  <div class="warn">Si te equivocas de usuario/clave tres veces, espera 30 segundos e inténtalo de nuevo — hay protección anti fuerza bruta y te puede bloquear temporalmente.</div>
+
+  <h3>C.2 — Publicar tu imagen</h3>
+<pre><code><span class="k">docker</span> push <span class="g">"$IMAGE"</span></code></pre>
+  <p>Salida esperada (captura esto para el entregable):</p>
+<pre><code>The push refers to repository [200.30.0.3:5000/hello-multicloud-ios-estNN]
+v1: digest: <span class="g">sha256:92907e84d135...</span> size: 856</code></pre>
+  <p>El <b>digest</b> es la prueba criptográfica de que TU imagen quedó almacenada en el registro.</p>
+
+  <h3>C.3 — Comprobar que vive en el registro <span style="color:var(--ink-soft);font-size:13px">(opcional pero recomendable)</span></h3>
+<pre><code><span class="k">docker</span> rmi <span class="g">"$IMAGE"</span>
+<span class="k">docker</span> pull <span class="g">"$IMAGE"</span></code></pre>
+  <div class="tip">Si puedes borrar tu copia local y re-descargarla desde el registro, la publicación fue perfecta.</div>
+</section>
+
+<!-- ============ PARTE D ============ -->
+<section>
+  <h2><span class="paso">PARTE D</span> Correr el contenedor y verificar salud <span style="color:var(--ink-soft);font-size:14px">(~15 min)</span></h2>
+
+  <h3>D.1 — Run</h3>
+<pre><code><span class="k">docker</span> run -d --name hello -p <span class="y">${LAB_PORT}</span>:3000 <span class="g">"$IMAGE"</span>
+<span class="k">docker</span> ps</code></pre>
+  <ul>
+    <li><code>-d</code>: en segundo plano (daemonizado).</li>
+    <li><code>--name hello</code>: nombre fijo para referenciarlo.</li>
+    <li><code>-p ${LAB_PORT}:3000</code>: publica el puerto interno 3000 del contenedor en <b>tu</b> puerto asignado.</li>
+  </ul>
+  <p><code>docker ps</code> debe mostrar tu contenedor con status <code>Up ...</code> y el mapeo de puertos.</p>
+
+  <h3>D.2 — Verificación de salud (LA EVIDENCIA)</h3>
+<pre><code><span class="k">curl</span> localhost:<span class="y">${LAB_PORT}</span>/health</code></pre>
+<p>Salida esperada:</p>
+<pre><code>{"status":"ok","app":"hello-multicloud","hostname":"abd43b2b9b2c","time":"2026-08-22T12:19:04Z"}</code></pre>
+  <div class="danger"><b>Captura de pantalla de este comando con su salida completa.</b> Es el requisito central del entregable: demuestra que un contenedor construido por ti, publicado en un registro y redeployado, está corriendo y respondiendo con un chequeo de salud automatizable — exactamente lo que haría un load balancer o un orquestador antes de enviar tráfico real.</div>
+  <p>Prueba también la raíz:</p>
+<pre><code><span class="k">curl</span> localhost:<span class="y">${LAB_PORT}</span>/</code></pre>
+</section>
+
+<!-- ============ PARTE E ============ -->
+<section>
+  <h2><span class="paso">PARTE E</span> Entregable <span style="color:var(--ink-soft);font-size:14px">(~15 min)</span></h2>
+  <p class="lead">Un solo documento (PDF) con estas 4 evidencias, en este orden:</p>
+  <ol>
+    <li><b>Push al registro</b>: captura de la salida de <code>docker push</code> donde se vea el <code>digest: sha256:...</code>.</li>
+    <li><b>Contenedor activo</b>: captura de <code>docker ps</code> mostrando <code>hello</code> con <code>Up</code> y el mapeo <code>${LAB_PORT}:3000</code>.</li>
+    <li><b>Chequeo de salud</b>: captura de <code>curl localhost:${LAB_PORT}/health</code> con el JSON completo.</li>
+    <li><b>Explicación de 3-5 líneas</b>: ¿por qué el flujo <code>build → push → run</code> es la base de un despliegue multicloud? <i>(Pista: la imagen es inmutable y portable — el mismo digest puede correrse en AWS, Azure, GCP o en un servidor propio; lo único que cambia es dónde está el registro y el runtime.)</i></li>
+  </ol>
+
+  <h3>Relación con la rúbrica (5% de la nota final)</h3>
+  <table>
+    <tr><th>Criterio</th><th>Peso</th></tr>
+    <tr><td>Imagen construida correctamente (build sin errores)</td><td>20%</td></tr>
+    <tr><td>Push exitoso al registro con digest visible</td><td>25%</td></tr>
+    <tr><td>Contenedor corriendo con puerto correcto</td><td>25%</td></tr>
+    <tr><td>Evidencia de health check + explicación del flujo</td><td>30%</td></tr>
+  </table>
+</section>
+
+<!-- ============ TROUBLESHOOTING ============ -->
+<section>
+  <h2><span class="paso">SOCORRO</span> Troubleshooting rápido</h2>
+  <table>
+    <tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr>
+    <tr><td><code>port is already allocated</code> al hacer <code>run</code></td><td>Usaste el puerto de otro estudiante</td><td>Usa TU <code>$LAB_PORT</code> del banner (variable ya configurada)</td></tr>
+    <tr><td><code>denied: requested access to the resource is denied</code> en <code>push</code></td><td>No estás autenticado o la sesión expiró</td><td>Repite <code>docker login 200.30.0.3:5000</code></td></tr>
+    <tr><td><code>network unreachable</code> o timeout al hacer login/push</td><td>Escribiste mal la dirección del registro</td><td>El registro es <code>200.30.0.3:5000</code> — ni <code>localhost</code> ni otra IP</td></tr>
+    <tr><td><code>docker version</code> no muestra sección Server</td><td>Tu daemon tardó en arrancar o se cayó</td><td>Avisa al docente (se reinicia con un comando)</td></tr>
+    <tr><td>Terminal web pide credenciales de nuevo</td><td>Sesión expirada</td><td>Vuelve a entrar a tu URL con tu usuario/clave</td></tr>
+  </table>
+
+  <h3>Checklist de advertencias durante el lab</h3>
+  <ul class="checklist">
+    <li>Tus credenciales son personales — no las compartas (la actividad es individual y la evidencia lleva tu usuario).</li>
+    <li>Todo corre remoto en los servidores del curso: no intentes instalar Docker en tu PC durante el lab.</li>
+    <li>Usa siempre <code>$IMAGE</code> y <code>${LAB_PORT}</code> de tu sesión en vez de tipear valores a mano — evitas el 90% de los errores.</li>
+    <li>Al terminar la clase el entorno se conserva unos días por si el docente pide evidencia adicional; después se limpia con el procedimiento de teardown.</li>
+  </ul>
+</section>
+
+<!-- ============ ANEXOS ============ -->
+<section>
+  <h2><span class="paso">ANEXOS</span> Material de referencia</h2>
+
+  <details><summary>Anexo A — Todos los comandos del lab, en orden (copiable)</summary>
+<pre><code><span class="c"># A — verificación inicial</span>
+whoami
+docker version
+ls ~/hello-multicloud
+echo <span class="g">$IMAGE</span>          <span class="c"># tu ruta completa en el registro</span>
+echo <span class="y">$LAB_PORT</span>       <span class="c"># tu puerto asignado</span>
+
+<span class="c"># B — build</span>
+cd ~/hello-multicloud
+docker build -t <span class="g">"$IMAGE"</span> .
+docker images
+
+<span class="c"># C — push</span>
+docker login 200.30.0.3:5000     <span class="c"># credenciales del REGISTRO</span>
+docker push <span class="g">"$IMAGE"</span>
+docker rmi <span class="g">"$IMAGE"</span> && docker pull <span class="g">"$IMAGE"</span>   <span class="c"># prueba opcional</span>
+
+<span class="c"># D — run + verify</span>
+docker run -d --name hello -p <span class="y">${LAB_PORT}</span>:3000 <span class="g">"$IMAGE"</span>
+docker ps
+curl localhost:<span class="y">${LAB_PORT}</span>/health
+curl localhost:<span class="y">${LAB_PORT}</span>/</code></pre>
+  </details>
+
+  <details><summary>Anexo B — El Dockerfile, línea por línea</summary>
+<pre><code><span class="k">FROM node:22-alpine</span>   <span class="c"># imagen base oficial: Node 22 sobre Alpine (~55 MB finales)</span>
+<span class="k">WORKDIR /app</span>          <span class="c"># directorio de trabajo DENTRO del contenedor</span>
+<span class="k">COPY server.js .</span>      <span class="c"># copia tu código desde el contexto de build hacia /app</span>
+<span class="k">EXPOSE 3000</span>           <span class="c"># documenta el puerto que la app escucha</span>
+<span class="k">CMD ["node", "server.js"]</span>  <span class="c"># proceso principal del contenedor</span></code></pre>
+  </details>
+
+  <details><summary>Anexo C — server.js completo (la app del starter)</summary>
+<pre><code><span class="k">const</span> http = require(<span class="g">"http"</span>);
+<span class="k">const</span> os = require(<span class="g">"os"</span>);
+
+<span class="k">const</span> port = process.env.PORT || 3000;
+
+<span class="k">const</span> server = http.createServer((req, res) =&gt; {
+  <span class="k">if</span> (req.url.startsWith(<span class="g">"/health"</span>)) {
+    res.writeHead(200, { <span class="g">"Content-Type"</span>: <span class="g">"application/json"</span> });
+    res.end(JSON.stringify({
+      status: <span class="g">"ok"</span>,
+      app: <span class="g">"hello-multicloud"</span>,
+      hostname: os.hostname(),
+      time: <span class="k">new</span> Date().toISOString(),
+    }));
+    <span class="k">return</span>;
+  }
+  res.writeHead(200, { <span class="g">"Content-Type"</span>: <span class="g">"text/html; charset=utf-8"</span> });
+  res.end(<span class="g">"&lt;h1&gt;hello-multicloud&lt;/h1&gt;&lt;p&gt;Sandbox de contenedores&lt;/p&gt;"</span>);
+});
+
+server.listen(port, () =&gt; console.log(<span class="g">`hello-multicloud escuchando en :${port}`</span>));</code></pre>
+  </details>
+
+  <details><summary>Anexo D — Versión Markdown cruda (descargable)</summary>
+    <p style="font-size:14px">La guía técnica completa en texto plano: <a href="lab-01-sandbox-contenedores.md" download>descargar lab-01-sandbox-contenedores.md</a></p>
+  </details>
+</section>
+
+<footer>
+  <p><b>Integración de Soluciones para Plataformas Cloud</b> · Ingeniería de Sistemas · Universidad de la Costa CUC · 2026-2</p>
+  <p>Ing. Rodolfo Cañas Cervantes — dirección académica y arquitectura<br>
+  Ejecución técnica, aprovisionamiento del sandbox y documentación: <b>ox-alpha</b>, modelo IA de lenguaje<br>
+  Validado en infraestructura real antes de publicarse</p>
+  <span class="ia-badge">🤖 × 🧑‍🏫 colaboración humano-IA verificada</span>
+</footer>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Laboratorio 2 — Sandbox de Contenedores: build → push → run en infraestructura propia
+# Laboratorio 1 — Sandbox de Contenedores: build → push → run en infraestructura propia
 
 **Curso:** Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas
 **Docente:** Ing. Rodolfo Cañas Cervantes — Universidad de la Costa (CUC)
