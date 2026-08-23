@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 2 — VPN Site-to-Site OPNsense · Integración de Soluciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+  header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  header.top img.logo{height:52px;margin-bottom:14px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,4vw,40px);margin:0 0 10px;line-height:1.15}
+  .sub{color:var(--ink-soft);margin:0;font-size:16px}
+  .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;margin:0}
+  .meta b{color:var(--ink)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-top:26px;box-shadow:var(--shadow)}
+  h2{font-family:var(--serif);font-size:24px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  h2 .paso{font-family:var(--mono);font-size:13px;background:var(--vino);color:#fff;border-radius:8px;padding:3px 11px;font-weight:500}
+  h3{font-size:16.5px;margin:26px 0 8px;color:var(--vino-strong)}
+  .lead{color:var(--ink-soft);margin-top:2px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:14px 0}
+  th{text-align:left;background:var(--surface-2);padding:9px 12px;border:1px solid var(--line);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+  td{padding:8px 12px;border:1px solid var(--line)}
+  code{font-family:var(--mono);font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  pre{background:#211D18;color:#EFE7D9;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;border:1px solid #3D362B}
+  pre code{background:none;border:none;padding:0;color:inherit}
+  pre .c{color:#8B95B0} pre .k{color:#F0748A} pre .g{color:#5BD69E} pre .y{color:#E4BC5C}
+  @media(prefers-color-scheme:light){ pre{background:#2A2A2A;} }
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .tip{border-color:var(--ok);background:var(--ok-tint)} .tip::before{content:"💡 TIP — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok)}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint)} .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado)}
+  .danger{border-color:var(--vino);background:var(--vino-tint)} .danger::before{content:"☠ CRÍTICO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino)}
+  figure.diagram{margin:22px 0;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+  figure.diagram svg{min-width:640px;width:100%;height:auto;display:block}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.04em}
+  details{border:1px solid var(--line);border-radius:10px;margin:14px 0;background:var(--surface-2)}
+  summary{cursor:pointer;padding:12px 16px;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--vino-strong)}
+  details pre{margin:12px;border-radius:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--bg)}
+  .card h4{margin:0 0 6px;font-size:14.5px}
+  .checklist{list-style:none;padding:0;margin:12px 0}
+  .checklist li{padding:7px 0 7px 30px;position:relative;border-bottom:1px dashed var(--line)}
+  .checklist li::before{content:"☐";position:absolute;left:4px;color:var(--vino);font-size:16px}
+  footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+  .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:8px}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa">
+  <p class="eyebrow">Laboratorio 2 · Unidad 1 — Redes e interconectividad</p>
+  <h1>VPN Site-to-Site entre dos OPNsense:<br>WordPress con base de datos remota</h1>
+  <p class="sub">Dos firewalls, dos redes privadas, un túnel cifrado — y una aplicación que no sabe que su base de datos está "en el otro lado del mundo"</p>
+  <div class="accent-bar"></div>
+  <p class="meta">
+    <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Duración estimada:</b> 150 minutos &nbsp;·&nbsp; <b>Modalidad:</b> VirtualBox local (4 VMs) &nbsp;·&nbsp; <b>Nivel:</b> intermedio<br><b>Tipo:</b> laboratorio práctico complementario — sin nota, para profundizar lo visto en clase
+  </p>
+  <span class="ia-badge">Construido y documentado por ox-alpha (IA) + Ing. Rodolfo Cañas — probado en producción real, no en teoría</span>
+</header>
+
+<div class="wrap">
+
+<!-- ============ OBJETIVOS ============ -->
+<section>
+  <h2><span class="paso">OBJETIVOS</span> Qué vas a aprender</h2>
+  <p class="lead">Al terminar este laboratorio serás capaz de:</p>
+  <ul>
+    <li>Desplegar <b>dos firewalls OPNsense</b> virtualizados e interconectar sus redes privadas mediante una <b>VPN site-to-site WireGuard</b>.</li>
+    <li>Aplicar reglas WAN seguras sin perder acceso administrativo (<i>anti-lockout</i>) y entender por qué <code>reply-to</code> rompe rutas asimétricas.</li>
+    <li>Operar el servidor DHCP <b>Kea</b> escribiendo su configuración JSON nativa.</li>
+    <li>Separar capas de una aplicación real: <b>WordPress (web/app)</b> en un sitio y <b>MariaDB (datos)</b> en otro, comunicándose exclusivamente por el túnel.</li>
+    <li>Diagnosticar problemas de red con <b>tcpdump, tablas de estados pf y filterlog</b> — la metodología que usamos cuando las cosas se rompen de verdad.</li>
+  </ul>
+  <div class="tip">Todo lo documentado aquí fue ejecutado y validado en un entorno real antes de escribirse. Cada comando funcionó; cada incidente descrito ocurrió de verdad.</div>
+</section>
+
+<!-- ============ ARQUITECTURA ============ -->
+<section>
+  <h2><span class="paso">ARQUITECTURA</span> El objetivo final, completo</h2>
+  <figure class="diagram">
+  <svg viewBox="0 0 960 560" role="img" aria-label="Topología completa del laboratorio">
+    <defs>
+      <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#A6192E"/></marker>
+      <marker id="arg" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#A9791C"/></marker>
+    </defs>
+    <!-- fondo zonas -->
+    <rect x="20" y="150" width="300" height="330" rx="12" fill="#FBEBEC33" stroke="#A6192E" stroke-dasharray="6 4"/>
+    <rect x="640" y="150" width="300" height="330" rx="12" fill="#FBF3DE33" stroke="#A9791C" stroke-dasharray="6 4"/>
+    <text x="170" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">SITIO A — red 10.0.0.0/24</text>
+    <text x="790" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#A9791C">SITIO B — red 20.0.0.0/24</text>
+    <text x="480" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#6B6259">Red de administración / Internet — 172.10.20.0/24</text>
+    <line x1="240" y1="130" x2="240" y2="200" stroke="#6B6259" stroke-width="2"/>
+    <line x1="720" y1="130" x2="720" y2="200" stroke="#6B6259" stroke-width="2"/>
+
+    <!-- PC admin -->
+    <rect x="380" y="88" width="200" height="42" rx="8" fill="#fff" stroke="#6B6259"/>
+    <text x="480" y="114" text-anchor="middle" font-size="13" fill="#2A2A2A">💻 Tu PC (admin + navegador)</text>
+
+    <!-- Router A -->
+    <rect x="90" y="200" width="160" height="96" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+    <text x="170" y="222" text-anchor="middle" font-size="14" font-weight="700" fill="#7E1223">ROUTER-A</text>
+    <text x="170" y="239" text-anchor="middle" font-size="11" fill="#6B6259">OPNsense 26.7</text>
+    <text x="170" y="256" text-anchor="middle" font-size="11" fill="#2A2A2A">WAN em0: .20.224</text>
+    <text x="170" y="271" text-anchor="middle" font-size="11" fill="#2A2A2A">LAN em1: 10.0.0.1</text>
+    <text x="170" y="286" text-anchor="middle" font-size="11" fill="#6D28D9">wg0: 10.99.0.1</text>
+
+    <!-- Router B -->
+    <rect x="710" y="200" width="160" height="96" rx="10" fill="#fff" stroke="#A9791C" stroke-width="2"/>
+    <text x="790" y="222" text-anchor="middle" font-size="14" font-weight="700" fill="#7E1223">ROUTER-B</text>
+    <text x="790" y="239" text-anchor="middle" font-size="11" fill="#6B6259">OPNsense 26.7</text>
+    <text x="790" y="256" text-anchor="middle" font-size="11" fill="#2A2A2A">WAN em0: .20.128</text>
+    <text x="790" y="271" text-anchor="middle" font-size="11" fill="#2A2A2A">LAN em1: 20.0.0.1</text>
+    <text x="790" y="286" text-anchor="middle" font-size="11" fill="#6D28D9">wg0: 10.99.0.2</text>
+
+    <!-- tunel -->
+    <rect x="330" y="216" width="300" height="64" rx="32" fill="#6D28D91A" stroke="#6D28D9" stroke-width="2" stroke-dasharray="8 5"/>
+    <text x="480" y="243" text-anchor="middle" font-size="13" font-weight="700" fill="#6D28D9">🔒 TÚNEL WireGuard</text>
+    <text x="480" y="261" text-anchor="middle" font-size="11" fill="#6D28D9">UDP 51820 · cifrado ChaCha20 · keepalive 25s</text>
+    <text x="480" y="276" text-anchor="middle" font-size="10" fill="#6D28D9">AllowedIPs: 10.0.0.0/24 ⇄ 20.0.0.0/24</text>
+    <line x1="250" y1="248" x2="330" y2="248" stroke="#6D28D9" stroke-width="2.5"/>
+    <line x1="630" y1="248" x2="710" y2="248" stroke="#6D28D9" stroke-width="2.5"/>
+
+    <!-- Server A -->
+    <rect x="95" y="380" width="250" height="86" rx="10" fill="#fff" stroke="#0E7A4B" stroke-width="2"/>
+    <text x="220" y="404" text-anchor="middle" font-size="14" font-weight="700" fill="#0E7A4B">SERVER-A · WordPress</text>
+    <text x="220" y="422" text-anchor="middle" font-size="11" fill="#6B6259">Ubuntu Server minimal</text>
+    <text x="220" y="438" text-anchor="middle" font-size="11" fill="#2A2A2A">IP: 10.0.0.101 (DHCP)</text>
+    <text x="220" y="454" text-anchor="middle" font-size="11" fill="#2A2A2A">Apache :80 · PHP 8 · wp-cli</text>
+
+    <!-- Server B -->
+    <rect x="615" y="380" width="250" height="86" rx="10" fill="#fff" stroke="#0E7A4B" stroke-width="2"/>
+    <text x="740" y="404" text-anchor="middle" font-size="14" font-weight="700" fill="#0E7A4B">SERVER-B · MariaDB</text>
+    <text x="740" y="422" text-anchor="middle" font-size="11" fill="#6B6259">Ubuntu Server minimal</text>
+    <text x="740" y="438" text-anchor="middle" font-size="11" fill="#2A2A2A">IP: 20.0.0.101 (DHCP)</text>
+    <text x="740" y="454" text-anchor="middle" font-size="11" fill="#2A2A2A">mysqld :3306 · BD wordpress</text>
+
+    <!-- flujos -->
+    <line x1="170" y1="296" x2="205" y2="380" stroke="#A6192E" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="790" y1="296" x2="755" y2="380" stroke="#A6192E" stroke-width="2" marker-end="url(#ar)"/>
+
+    <!-- flujo mysql cruzando -->
+    <path d="M 348 430 C 430 430 420 320 462 280" fill="none" stroke="#A9791C" stroke-width="3" stroke-dasharray="none" marker-end="url(#arg)"/>
+    <path d="M 612 430 C 530 430 540 320 498 280" fill="none" stroke="#A9791C" stroke-width="3" stroke-dasharray="none" marker-end="url(#arg)"/>
+    <rect x="355" y="330" width="250" height="34" rx="17" fill="#FBF3DE" stroke="#A9791C"/>
+    <text x="480" y="352" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7E1223">MySQL :3306 — SOLO por el túnel</text>
+
+    <!-- VIP nota -->
+    <rect x="90" y="505" width="780" height="40" rx="8" fill="#fff" stroke="#E5DCCB"/>
+    <text x="480" y="530" text-anchor="middle" font-size="11.5" fill="#6B6259">Exposición opcional: VIP 172.10.20.230 en WAN de ROUTER-A + redirect tcp/80 → 10.0.0.101 (para ver WordPress desde tu LAN)</text>
+  </svg>
+  <figcaption>FIG 1 — Arquitectura completa: dos sitios, túnel WireGuard y la app separada de su base de datos</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Componente</th><th>Interfaz</th><th>Dirección</th><th>Rol</th></tr>
+    <tr><td>ROUTER-A</td><td>em0 WAN / em1 LAN / wg0</td><td><code>172.10.20.224</code> / <code>10.0.0.1</code> / <code>10.99.0.1</code></td><td>Firewall sitio A · extremo VPN</td></tr>
+    <tr><td>SERVER-A</td><td>enp0s3</td><td><code>10.0.0.101</code></td><td>WordPress · Apache · PHP</td></tr>
+    <tr><td>ROUTER-B</td><td>em0 WAN / em1 LAN / wg0</td><td><code>172.10.20.128</code> / <code>20.0.0.1</code> / <code>10.99.0.2</code></td><td>Firewall sitio B · extremo VPN</td></tr>
+    <tr><td>SERVER-B</td><td>enp0s3</td><td><code>20.0.0.101</code></td><td>MariaDB <code>:3306</code></td></tr>
+    <tr><td>Túnel</td><td>wg0</td><td><code>10.99.0.0/30</code></td><td>Tránsito cifrado site-to-site</td></tr>
+  </table>
+
+  <div class="warn">En tu equipo los números WAN dependerán de tu red doméstica. Este lab usa <code>172.10.20.x</code>; sustituye por tu subred (ej. <code>192.168.1.x</code>) manteniendo la lógica intacta.</div>
+</section>
+
+<!-- ============ REQUISITOS ============ -->
+<section>
+  <h2><span class="paso">PREVIO</span> Requisitos y preparación</h2>
+  <h3>Software necesario</h3>
+  <table>
+    <tr><th>Elemento</th><th>Detalle</th><th>Descarga</th></tr>
+    <tr><td>VirtualBox ≥ 7.0</td><td>Hipervisor local — 4 VMs simultáneas</td><td><code>virtualbox.org/wiki/Downloads</code></td></tr>
+    <tr><td>OPNsense ISO (×2)</td><td>DVD amd64 — <b>vga</b> está bien para lab</td><td><code>opnsense.org/download</code></td></tr>
+    <tr><td>Ubuntu Server minimal (×2)</td><td>24.04 LTS o similar — 1 vCPU / 1 GB RAM c/u</td><td><code>ubuntu.com/download/server</code></td></tr>
+    <tr><td>RAM del host</td><td>Mínimo 8 GB (recomendado 16)</td><td>2 GB por firewall + 1 GB por server</td></tr>
+  </table>
+
+  <h3>Redes en VirtualBox — mapeo exacto</h3>
+  <figure class="diagram">
+  <svg viewBox="0 0 960 330" role="img" aria-label="Redes VirtualBox">
+    <!-- red WAN compartida -->
+    <rect x="30" y="30" width="900" height="70" rx="10" fill="#FBEBEC55" stroke="#A6192E" stroke-dasharray="5 4"/>
+    <text x="480" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#7E1223">RED NAT NETWORK "WANLAB" — 172.10.20.0/24 (crea una NatNetwork en VirtualBox)</text>
+    <text x="480" y="72" text-anchor="middle" font-size="11" fill="#6B6259">aquí viven las WANs de ambos firewalls y "tu PC" (la IP que use tu host en esa red)</text>
+    <!-- router A box -->
+    <rect x="120" y="130" width="280" height="150" rx="10" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
+    <text x="260" y="152" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">VM ROUTER-A (OPNsense)</text>
+    <line x1="200" y1="100" x2="200" y2="130" stroke="#A6192E" stroke-width="2"/>
+    <rect x="140" y="165" width="240" height="34" rx="6" fill="#FBEBEC"/><text x="260" y="187" text-anchor="middle" font-size="12">Adapter 1 → NAT Network WANLAB</text>
+    <rect x="140" y="207" width="240" height="34" rx="6" fill="#E8F5EE"/><text x="260" y="229" text-anchor="middle" font-size="12">Adapter 2 → Internal Net "LAN-A"</text>
+    <text x="140" y="262" font-size="11" fill="#6B6259">em0 = Adapter 1 · em1 = Adapter 2</text>
+    <!-- server A -->
+    <rect x="120" y="288" width="280" height="36" rx="8" fill="#fff" stroke="#0E7A4B"/>
+    <line x1="260" y1="241" x2="260" y2="288" stroke="#0E7A4B" stroke-width="2"/>
+    <text x="260" y="311" text-anchor="middle" font-size="12" fill="#0E7A4B">VM SERVER-A → Internal Net "LAN-A"</text>
+    <!-- router B box -->
+    <rect x="560" y="130" width="280" height="150" rx="10" fill="#fff" stroke="#A9791C" stroke-width="1.5"/>
+    <text x="700" y="152" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">VM ROUTER-B (OPNsense)</text>
+    <line x1="760" y1="100" x2="760" y2="130" stroke="#A9791C" stroke-width="2"/>
+    <rect x="580" y="165" width="240" height="34" rx="6" fill="#FBEBEC"/><text x="700" y="187" text-anchor="middle" font-size="12">Adapter 1 → NAT Network WANLAB</text>
+    <rect x="580" y="207" width="240" height="34" rx="6" fill="#E8F5EE"/><text x="700" y="229" text-anchor="middle" font-size="12">Adapter 2 → Internal Net "LAN-B"</text>
+    <text x="580" y="262" font-size="11" fill="#6B6259">em0 = Adapter 1 · em1 = Adapter 2</text>
+    <!-- server B -->
+    <rect x="560" y="288" width="280" height="36" rx="8" fill="#fff" stroke="#0E7A4B"/>
+    <line x1="700" y1="241" x2="700" y2="288" stroke="#0E7A4B" stroke-width="2"/>
+    <text x="700" y="311" text-anchor="middle" font-size="12" fill="#0E7A4B">VM SERVER-B → Internal Net "LAN-B"</text>
+    <!-- nota clave -->
+    <rect x="430" y="180" width="110" height="50" rx="8" fill="#FBF3DE" stroke="#A9791C"/>
+    <text x="485" y="201" text-anchor="middle" font-size="11" font-weight="600" fill="#7E1223">LAN-A ≠ LAN-B</text>
+    <text x="485" y="218" text-anchor="middle" font-size="10" fill="#6B6259">¡redes internas separadas!</text>
+  </svg>
+  <figcaption>FIG 2 — Cables virtuales: cada firewall une su LAN interna con la red WAN común. Sin el túnel, LAN-A y LAN-B son islas.</figcaption>
+  </figure>
+
+  <div class="tip">En VirtualBox: <b>Archivo → Herramientas → Red</b> crea la <i>NAT Network</i> llamada <code>WANLAB</code> con prefijo <code>172.10.20.0/24</code>. Las <i>Internal Networks</i> <code>LAN-A</code> y <code>LAN-B</code> se seleccionan directo en cada VM.</div>
+  <div class="danger">El error más común del lab: conectar los dos servers a la MISMA internal network "por si acaso". Si LAN-A y LAN-B se tocan, la VPN pierde todo el sentido y las pruebas darán falsos positivos.</div>
+</section>
+
+<!-- ============ PARTE A ============ -->
+<section>
+  <h2><span class="paso">PARTE A</span> Firewalls: instalación y acceso seguro <span style="color:var(--ink-soft);font-size:14px">(~30 min)</span></h2>
+
+  <h3>A.1 — Instalar OPNsense en ambas VMs</h3>
+  <ol>
+    <li>Arranca desde la ISO → login <code>installer</code> / password <code>opnsense</code>.</li>
+    <li>Acepta defaults: teclado, <b>ZFS stripe</b> (o UFS, indistinto en lab), disco completo.</li>
+    <li>Al terminar: apaga, retira la ISO, arranca desde disco.</li>
+    <li>Credenciales de consola: <code>root</code> / <code>opnsense</code>.</li>
+  </ol>
+
+  <h3>A.2 — Asignar interfaces correctamente</h3>
+  <pre><code>Opción 1) Assign Interfaces
+  LAN  → em1   (Adapter 2, la internal network)
+  WAN  → em0   (Adapter 1, la NAT network)
+Opción 2) Set interface(s) IP address
+  → LAN → DHCP: NO → 10.0.0.1/24   (Router-A)
+                     20.0.0.1/24   (Router-B)
+  → Habilita DHCP en LAN: NO por ahora (lo configuraremos bien después)</code></pre>
+
+  <div class="warn">Si inviertes WAN/LAN, el lab entero se comporta raro. Verifica siempre con la opción 1 que LAN sea <code>em1</code>.</div>
+
+  <h3>A.3 — El concepto anti-lockout (por qué este orden importa)</h3>
+  <figure class="diagram">
+  <svg viewBox="0 0 940 250" role="img" aria-label="Orden anti-lockout">
+    <rect x="20" y="40" width="270" height="170" rx="10" fill="#FBEBEC" stroke="#A6192E"/>
+    <text x="155" y="66" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">❌ ORDEN INCORRECTO</text>
+    <text x="155" y="92" text-anchor="middle" font-size="12">1. Habilitar firewall</text>
+    <text x="155" y="112" text-anchor="middle" font-size="12">2. Crear reglas…</text>
+    <rect x="95" y="128" width="120" height="30" rx="15" fill="#A6192E"/><text x="155" y="148" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">LOCKOUT 🔒</text>
+    <text x="155" y="185" text-anchor="middle" font-size="11" fill="#6B6259">default deny ya activo:</text>
+    <text x="155" y="200" text-anchor="middle" font-size="11" fill="#6B6259">todo queda bloqueado</text>
+
+    <rect x="340" y="40" width="270" height="170" rx="10" fill="#E8F5EE" stroke="#0E7A4B"/>
+    <text x="475" y="66" text-anchor="middle" font-size="13" font-weight="700" fill="#0E7A4B">✅ ORDEN CORRECTO</text>
+    <text x="475" y="92" text-anchor="middle" font-size="12">1. Crear reglas pass WAN</text>
+    <text x="475" y="112" text-anchor="middle" font-size="12">2. Aplicar (filter reload)</text>
+    <text x="475" y="132" text-anchor="middle" font-size="12">3. AHORA habilitar pf</text>
+    <text x="475" y="158" text-anchor="middle" font-size="12">4. Verificar acceso NUEVO</text>
+    <rect x="415" y="176" width="120" height="26" rx="13" fill="#0E7A4B"/><text x="475" y="194" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">acceso estable</text>
+
+    <path d="M 320 125 L 335 125 M 335 118 L 335 132" stroke="#6B6259" stroke-width="2"/>
+    <text x="700" y="80" text-anchor="middle" font-size="12" fill="#6B6259">En OPNsense el primer</text>
+    <text x="700" y="98" text-anchor="middle" font-size="12" fill="#6B6259"><tspan font-family="monospace">configctl filter reload</tspan></text>
+    <text x="700" y="116" text-anchor="middle" font-size="12" fill="#6B6259">habilita pf automáticamente.</text>
+    <text x="700" y="142" text-anchor="middle" font-size="12" fill="#6B6259">Truco pro: watchdog que ejecuta</text>
+    <text x="700" y="160" text-anchor="middle" font-size="12" fill="#6B6259"><tspan font-family="monospace">sleep 180; pfctl -d</tspan></text>
+    <text x="700" y="178" text-anchor="middle" font-size="12" fill="#6B6259>y lo cancelas al confirmar acceso.</text>
+  </svg>
+  <figcaption>FIG 3 — El lockout no es mala suerte: es un error de orden de operaciones</figcaption>
+  </figure>
+
+  <h3>A.4 — Reglas WAN de administración (ambos routers)</h3>
+  <p>Vía webGUI (<code>https://10.0.0.1</code> y <code>https://20.0.0.1</code> desde los servers, o consola opción 8 + <code>pfctl</code>):</p>
+  <table>
+    <tr><th>#</th><th>Action</th><th>Protocol</th><th>Source</th><th>Destination</th><th>Puerto</th></tr>
+    <tr><td>1</td><td>pass</td><td>TCP</td><td>any (o tu subred admin)</td><td>This Firewall (self)</td><td>22 SSH</td></tr>
+    <tr><td>2</td><td>pass</td><td>TCP</td><td>any (o tu subred admin)</td><td>This Firewall (self)</td><td>443 HTTPS</td></tr>
+  </table>
+  <ul>
+    <li><b>Edita la regla → Display Advanced → desactiva "Reply-to"</b> si administrarás desde otra subred distinta a la WAN. En producción real aprendimos esto a costa de dos lockouts.</li>
+    <li>Aplica con <b>Apply</b> y prueba SIEMPRE una conexión nueva antes de cerrar la sesión actual.</li>
+  </ul>
+  <div class="tip">Deja siempre UNA sesión SSH abierta mientras pruebas reglas nuevas. Es tu cuerda de seguridad.</div>
+</section>
+
+<!-- ============ PARTE B/C DHCP ============ -->
+<section>
+  <h2><span class="paso">PARTE B</span> DHCP con Kea: los servers obtienen su IP <span style="color:var(--ink-soft);font-size:14px">(~20 min)</span></h2>
+
+  <p>OPNsense moderno usa <b>Kea</b> (ISC retiró el dhcpd clásico). Dos caminos:</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>Camino GUI (recomendado para empezar)</h4>
+      <p style="font-size:14px;margin:6px 0">Interfaces → Kea DHCP → +Add<br>
+      Subnet <code>10.0.0.0/24</code>, pool <code>.100-.200</code>, router <code>10.0.0.1</code>, DNS <code>8.8.8.8,1.1.1.1</code></p>
+    </div>
+    <div class="card">
+      <h4>Camino JSON (lo que hicimos en producción)</h4>
+      <p style="font-size:14px;margin:6px 0">Escribir <code>/usr/local/etc/kea/kea-dhcp4.conf</code> directo y <code>service kea restart</code>. Ver anexo.</p>
+    </div>
+  </div>
+
+  <h3>B.1 — Configuración JSON completa (Router-A)</h3>
+  <pre><code>{
+  "Dhcp4": {
+    "interfaces-config": { "interfaces": ["em1"] },
+    "control-socket": { "socket-type": "unix",
+                        "socket-name": "/var/run/kea/kea4-ctrl-socket" },
+    "lease-database": { "type": "memfile",
+                        "name": "/var/db/kea/kea-leases4.csv", "persist": true },
+    "valid-lifetime": 7200, "renew-timer": 1800, "rebind-timer": 3600,
+    "subnet4": [ {
+      "id": 1,                          <span class="c">// ← obligatorio desde Kea 3.0</span>
+      "subnet": "10.0.0.0/24",
+      "pools": [ { "pool": "10.0.0.100 - 10.0.0.200" } ],
+      "option-data": [
+        { "name": "routers",             "data": "10.0.0.1" },
+        { "name": "domain-name-servers", "data": "8.8.8.8, 1.1.1.1" }
+      ]
+    } ],
+    "loggers": [ { "name": "kea-dhcp4",
+      "output-options": [ { "output": "/var/log/kea/kea-dhcp4.log" } ],
+      "severity": "INFO" } ]
+  }
+}</code></pre>
+
+  <table>
+    <tr><th>Error de schema Kea 3.0 que nos salió</th><th>Causa</th></tr>
+    <tr><td><code>missing parameter 'id'</code></td><td>cada subnet necesita su id numérico</td></tr>
+    <tr><td><code>invalid path: '/tmp'</code></td><td>control socket debe vivir en <code>/var/run/kea</code></td></tr>
+    <tr><td><code>invalid path in output</code></td><td>logs deben ir bajo <code>/var/log/kea</code></td></tr>
+  </table>
+
+  <h3>B.2 — Validación</h3>
+  <pre><code># en ROUTER-A:
+service kea restart && sockstat -l | grep '\.67'
+tail -f /var/log/kea/kea-dhcp4.log     <span class="c"># arranca SERVER-A → verás el lease .101</span>
+
+# en SERVER-A:
+ip -br addr        → 10.0.0.101
+ip route           → default via 10.0.0.1</code></pre>
+  <p>Repite en Router-B con <code>20.0.0.0/24</code>, pool <code>.100-.200</code>, gateway <code>20.0.0.1</code>.</p>
+  <div class="tip">Si el server no toma IP: revisa que su Adapter esté en la internal network correcta y que la VM de OPNsense tenga em1 UP (<code>ifconfig em1</code>).</div>
+</section>
+
+<!-- ============ PARTE D WIREGUARD ============ -->
+<section>
+  <h2><span class="paso">PARTE D</span> El túnel WireGuard site-to-site <span style="color:var(--ink-soft);font-size:14px">(~40 min)</span></h2>
+
+  <figure class="diagram">
+  <svg viewBox="0 0 940 300" role="img" aria-label="Flujo de establecimiento del túnel">
+    <rect x="30" y="30" width="380" height="240" rx="10" fill="#FBEBEC55" stroke="#A6192E"/>
+    <text x="220" y="54" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">ROUTER-A · wg0 · 10.99.0.1</text>
+    <text x="60" y="84" font-family="monospace" font-size="11.5">PrivateKey: PRIV_A   (nunca sale)</text>
+    <text x="60" y="102" font-family="monospace" font-size="11.5">PublicKey : PUB_A    (se intercambia)</text>
+    <text x="60" y="120" font-family="monospace" font-size="11.5">ListenPort: 51820</text>
+    <text x="60" y="146" font-family="monospace" font-size="11.5">[Peer]</text>
+    <text x="60" y="164" font-family="monospace" font-size="11.5">PublicKey = PUB_B</text>
+    <text x="60" y="182" font-family="monospace" font-size="11.5">Endpoint  = 172.10.20.128:51820</text>
+    <text x="60" y="200" font-family="monospace" font-size="11.5">AllowedIPs= 20.0.0.0/24, 10.99.0.2/32</text>
+    <text x="60" y="218" font-family="monospace" font-size="11.5">Keepalive = 25s</text>
+    <text x="220" y="250" text-anchor="middle" font-size="10.5" fill="#6B6259">route add -net 20.0.0.0/24 -interface wg0</text>
+
+    <rect x="530" y="30" width="380" height="240" rx="10" fill="#FBF3DE55" stroke="#A9791C"/>
+    <text x="720" y="54" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">ROUTER-B · wg0 · 10.99.0.2</text>
+    <text x="560" y="84" font-family="monospace" font-size="11.5">PrivateKey: PRIV_B   PublicKey: PUB_B</text>
+    <text x="560" y="110" font-family="monospace" font-size="11.5">[Peer]</text>
+    <text x="560" y="128" font-family="monospace" font-size="11.5">PublicKey = PUB_A</text>
+    <text x="560" y="146" font-family="monospace" font-size="11.5">Endpoint  = 172.10.20.224:51820</text>
+    <text x="560" y="164" font-family="monospace" font-size="11.5">AllowedIPs= 10.0.0.0/24, 10.99.0.1/32</text>
+    <text x="560" y="190" font-family="monospace" font-size="11.5">Keepalive = 25s</text>
+    <text x="720" y="222" text-anchor="middle" font-size="11" fill="#6B6259">La regla de oro de AllowedIPs:</text>
+    <text x="720" y="238" text-anchor="middle" font-size="11" fill="#6B6259">"qué redes vive AL OTRO LADO de este peer"</text>
+
+    <!-- flechas handshake -->
+    <path d="M 415 130 L 525 130" stroke="#A6192E" stroke-width="2.5" marker-end="url(#ar)"/>
+    <text x="470" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#7E1223">Initiation 🔑</text>
+    <path d="M 525 155 L 415 155" stroke="#A9791C" stroke-width="2.5" marker-end="url(#arg)"/>
+    <text x="470" y="172" text-anchor="middle" font-size="11" font-weight="600" fill="#A9791C">Response 🔑</text>
+    <path d="M 415 180 L 525 180" stroke="#6B6259" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+    <text x="470" y="196" text-anchor="middle" font-size="10.5" fill="#6B6259">Cookie/Keepalive… túnel vivo</text>
+  </svg>
+  <figcaption>FIG 4 — Intercambio de claves públicas y negociación del túnel (Noise IK)</figcaption>
+  </figure>
+
+  <h3>D.1 — Generar las claves (en cada router, opción 8 shell)</h3>
+  <pre><code># ROUTER-A
+wg genkey > /tmp/priv_a && wg pubkey &lt; /tmp/priv_a &gt; /tmp/pub_a
+cat /tmp/pub_a        <span class="c"># ← esta es la que viaja al otro router</span>
+
+# ROUTER-B
+wg genkey > /tmp/priv_b && wg pubkey &lt; /tmp/priv_b &gt; /tmp/pub_b
+cat /tmp/pub_b</code></pre>
+
+  <div class="danger">Nunca compartas PrivateKey en chats, capturas o repositorios. Solo las PÚBLICAS cruzan equipos.</div>
+
+  <h3>D.2 — Crear la interfaz wg0 (Router-A)</h3>
+  <p>Vía GUI: VPN → WireGuard → pestaña Servers/Peers, o directamente el conf:</p>
+  <pre><code>mkdir -p /usr/local/etc/wireguard
+cat > /usr/local/etc/wireguard/wg0.conf <<'WG'
+[Interface]
+PrivateKey = CONTENIDO_DE_PRIV_A
+ListenPort = 51820
+
+[Peer]
+PublicKey = CONTENIDO_DE_PUB_B
+Endpoint = 172.10.20.128:51820
+AllowedIPs = 20.0.0.0/24, 10.99.0.2/32
+PersistentKeepalive = 25
+WG
+chmod 600 /usr/local/etc/wireguard/wg0.conf
+
+# crear interfaz y aplicar
+ifconfig wg0 create name wg0
+wg syncconf wg0 /usr/local/etc/wireguard/wg0.conf
+ifconfig wg0 inet 10.99.0.1/30 alias
+ifconfig wg0 up
+route -n add -net 20.0.0.0/24 -interface wg0</code></pre>
+
+  <h3>D.3 — Espejo en Router-B</h3>
+  <pre><code>[Interface]  PrivateKey = PRIV_B · ListenPort = 51820
+[Peer]       PublicKey = PUB_A · Endpoint = 172.10.20.224:51820
+             AllowedIPs = 10.0.0.0/24, 10.99.0.1/32 · Keepalive = 25
+
+ifconfig wg0 create name wg0 && wg syncconf wg0 /usr/local/etc/wireguard/wg0.conf
+ifconfig wg0 inet 10.99.0.2/30 alias && ifconfig wg0 up
+route -n add -net 10.0.0.0/24 -interface wg0</code></pre>
+
+  <h3>D.4 — Reglas firewall sobre wg0 (¡sin esto no pasa nada!)</h3>
+  <figure class="diagram">
+  <svg viewBox="0 0 940 210" role="img" aria-label="Reglas necesarias en la interfaz WG">
+    <rect x="30" y="25" width="400" height="160" rx="10" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
+    <text x="230" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">pf ROUTER-A — interfaz wg0</text>
+    <line x1="50" y1="62" x2="410" y2="62" stroke="#E5DCCB"/>
+    <text x="50" y="86" font-family="monospace" font-size="12">pass in quick on wg0 from 20.0.0.0/24 to any ✓</text>
+    <text x="50" y="108" font-family="monospace" font-size="12">pass in quick on wg0 from any to 20.0.0.0/24 ✓</text>
+    <text x="50" y="136" font-size="11.5" fill="#6B6259">WAN además necesita:</text>
+    <text x="50" y="154" font-family="monospace" font-size="12">pass in on em0 proto udp from .20.128 to self port 51820</text>
+    <text x="50" y="174" font-size="11" fill="#A6192E">↑ sin ella, NINGÚN paquete del túnel entra</text>
+
+    <rect x="510" y="25" width="400" height="160" rx="10" fill="#fff" stroke="#A9791C" stroke-width="1.5"/>
+    <text x="710" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#7E1223">pf ROUTER-B — interfaz wg0</text>
+    <line x1="530" y1="62" x2="890" y2="62" stroke="#E5DCCB"/>
+    <text x="530" y="86" font-family="monospace" font-size="12">pass in quick on wg0 from 10.0.0.0/24 to any ✓</text>
+    <text x="530" y="108" font-family="monospace" font-size="12">pass in quick on wg0 from any to 10.0.0.0/24 ✓</text>
+    <text x="530" y="136" font-size="11.5" fill="#6B6259">WAN además necesita:</text>
+    <text x="530" y="154" font-family="monospace" font-size="12">pass in on em0 proto udp from .20.224 to self port 51820</text>
+    <text x="530" y="174" font-size="11" fill="#A9791C">↑ espejo exacto del sitio A</text>
+  </svg>
+  <figcaption>FIG 5 — Cuatro reglas inter-LAN + dos WAN UDP: el mínimo vital del site-to-site</figcaption>
+  </figure>
+
+  <h3>D.5 — Validación del túnel</h3>
+  <pre><code>wg show                     <span class="c"># latest handshake debe ser reciente (&lt; 25s con keepalive)</span>
+ping -S 10.0.0.1 20.0.0.101 <span class="c"># ping LAN-A → Server-B cruzando el túnel (-S fija origen)</span></code></pre>
+  <div class="tip">El ping SIN <code>-S</code> entre routers usa la IP del túnel (10.99.0.x) — si tus reglas solo cubren las redes LAN, ese ping fallará aunque el túnel esté perfecto. No te engañes a ti mismo: prueba siempre con IPs reales de servidor.</div>
+</section>
+
+<!-- ============ PARTE E SERVIDORES ============ -->
+<section>
+  <h2><span class="paso">PARTE E</span> MariaDB remoto + WordPress <span style="color:var(--ink-soft);font-size:14px">(~40 min)</span></h2>
+
+  <h3>E.1 — SERVER-B: la base de datos</h3>
+  <pre><code>sudo apt update && sudo apt install -y mariadb-server
+
+# escuchar en todas las interfaces (el tráfico llega por la LAN)
+sudo sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' \
+     /etc/mysql/mariadb.conf.d/50-server.cnf
+sudo systemctl enable --now mariadb && sudo systemctl restart mariadb
+
+# base de datos y usuario SOLO para la red remota
+sudo mysql -e "CREATE DATABASE wordpress CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+sudo mysql -e "CREATE USER 'wpuser'@'10.0.0.%' IDENTIFIED BY 'WPLab2026!';"
+sudo mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO 'wpuser'@'10.0.0.%';"
+sudo mysql -e "FLUSH PRIVILEGES;"
+ss -tln | grep 3306      <span class="c">→ LISTEN 0.0.0.0:3306 ✓</span></code></pre>
+
+  <figure class="diagram">
+  <svg viewBox="0 0 940 190" role="img" aria-label="Seguridad del usuario MySQL">
+    <rect x="30" y="30" width="880" height="130" rx="10" fill="#fff" stroke="#E5DCCB"/>
+    <!-- intentos -->
+    <text x="70" y="70" font-size="13" font-weight="700" fill="#2A2A2A">¿Quién puede conectarse como wpuser?</text>
+    <rect x="60" y="88" width="240" height="52" rx="8" fill="#E8F5EE" stroke="#0E7A4B"/>
+    <text x="180" y="110" text-anchor="middle" font-size="12" font-weight="600" fill="#0E7A4B">10.0.0.101 (WordPress)</text>
+    <text x="180" y="128" text-anchor="middle" font-size="11" fill="#6B6259">llega como 10.0.0.x → PERMITIDO ✓</text>
+    <rect x="350" y="88" width="240" height="52" rx="8" fill="#FBEBEC" stroke="#A6192E"/>
+    <text x="470" y="110" text-anchor="middle" font-size="12" font-weight="600" fill="#7E1223">Internet / WAN</text>
+    <text x="470" y="128" text-anchor="middle" font-size="11" fill="#6B6259">'wpuser'@'10.0.0.%' → RECHAZADO ✗</text>
+    <rect x="640" y="88" width="240" height="52" rx="8" fill="#FBF3DE" stroke="#A9791C"/>
+    <text x="760" y="110" text-anchor="middle" font-size="12" font-weight="600" fill="#7E1223">20.0.0.x local</text>
+    <text x="760" y="128" text-anchor="middle" font-size="11" fill="#6B6259">sin grant → RECHAZADO ✗ (mínimo privilegio)</text>
+  </svg>
+  <figcaption>FIG 6 — El patrón 'usuario'@'red-remota' convierte el túnel en el único camino hacia los datos</figcaption>
+  </figure>
+
+  <div class="tip"><code>'wpuser'@'10.0.0.%'</code> significa "este usuario solo existe si viene desde la red del sitio A". Aunque alguien abriera el 3306 hacia internet, no tendría usuario válido. Defensa en profundidad: firewall + bind + grants.</div>
+
+  <h3>E.2 — SERVER-A: WordPress apuntando a la BD remota</h3>
+  <pre><code>sudo apt update && sudo apt install -y apache2 libapache2-mod-php php php-mysql \
+    php-curl php-gd php-mbstring php-xml php-intl php-zip wget curl
+cd /tmp && wget https://wordpress.org/latest.tar.gz && tar xzf latest.tar.gz
+sudo cp -r wordpress /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/wordpress
+
+cd /var/www/html/wordpress
+sudo cp wp-config-sample.php wp-config.php
+sudo sed -i "s/database_name_here/wordpress/"   wp-config.php
+sudo sed -i "s/username_here/wpuser/"           wp-config.php
+sudo sed -i "s/password_here/WPLab2026!/"       wp-config.php
+<span class="k"># LA LÍNEA DE LA DEMO — la BD está en la OTRA red:</span>
+sudo sed -i "s/'DB_HOST', 'localhost'/'DB_HOST', '20.0.0.101'/" wp-config.php</code></pre>
+
+  <h3>E.3 — Instalación headless con wp-cli (sin wizard)</h3>
+  <pre><code>curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+sudo -u www-data php wp-cli.phar core install \
+  --url=http://172.10.20.230/wordpress \
+  --title="Demo VPN Site-to-Site" --admin_user=admin \
+  --admin_password=WPLab2026! --admin_email=admin@lab.local \
+  --skip-email --path=/var/www/html/wordpress
+
+<span class="g">Success: WordPress installed successfully.</span>  <span class="c">← creó sus 12 tablas EN LA BD REMOTA</span></code></pre>
+
+</section>
+
+<!-- ============ PARTE F VALIDACIÓN ============ -->
+<section>
+  <h2><span class="paso">PARTE F</span> Validación final y evidencias <span style="color:var(--ink-soft);font-size:14px">(~20 min)</span></h2>
+
+  <figure class="diagram">
+  <svg viewBox="0 0 940 420" role="img" aria-label="Flujo completo de una consulta SQL">
+    <text x="470" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#2A2A2A">Anatomía de UNA consulta SQL en esta demo</text>
+    <!-- pasos numerados -->
+    <circle cx="80" cy="90" r="16" fill="#A6192E"/><text x="80" y="95" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">1</text>
+    <text x="108" y="86" font-size="12.5">PHP ejecuta <tspan font-family="monospace">mysql_query()</tspan> → dst 20.0.0.101:3306</text>
+    <text x="108" y="104" font-size="11" fill="#6B6259">SERVER-A no sabe ni le importa dónde está esa IP físicamente</text>
+
+    <circle cx="80" cy="150" r="16" fill="#A6192E"/><text x="80" y="155" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">2</text>
+    <text x="108" y="146" font-size="12.5">ROUTER-A consulta su tabla de rutas</text>
+    <text x="108" y="164" font-size="11" fill="#6B6259">20.0.0.0/24 → interface wg0 (la ruta que agregamos) — NO sale a internet</text>
+
+    <circle cx="80" cy="210" r="16" fill="#6D28D9"/><text x="80" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">3</text>
+    <text x="108" y="206" font-size="12.5">WireGuard encapsula el paquete TCP dentro de UDP :51820 cifrado</text>
+    <text x="108" y="224" font-size="11" fill="#6B6259">src visible en internet: 172.10.20.224 → dst 172.10.20.128 · contenido ilegible</text>
+
+    <circle cx="80" cy="270" r="16" fill="#6D28D9"/><text x="80" y="275" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">4</text>
+    <text x="108" y="266" font-size="12.5">ROUTER-B recibe UDP 51820, descifra, obtiene el paquete original</text>
+    <text x="108" y="284" font-size="11" fill="#6B6259">ahora es src 10.0.0.101 → dst 20.0.0.101:3306 otra vez, y lo entrega por em1</text>
+
+    <circle cx="80" cy="330" r="16" fill="#0E7A4B"/><text x="80" y="335" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">5</text>
+    <text x="108" y="326" font-size="12.5">MariaDB valida 'wpuser' desde 10.0.0.101 → GRANT aceptado → responde</text>
+    <text x="108" y="344" font-size="11" fill="#6B6259">la respuesta hace el viaje inverso por el mismo túnel (estado pf bidireccional)</text>
+
+    <rect x="540" y="60" width="370" height="300" rx="10" fill="#211D18"/>
+    <text x="565" y="90" font-family="monospace" font-size="12" fill="#5BD69E">$ wg show wg0</text>
+    <text x="565" y="112" font-family="monospace" font-size="11.5" fill="#EFE7D9">interface: wg0</text>
+    <text x="565" y="130" font-family="monospace" font-size="11.5" fill="#EFE7D9">  listening port: 51820</text>
+    <text x="565" y="148" font-family="monospace" font-size="11.5" fill="#EFE7D9">peer: roLBQ8TS…(PUB_B)</text>
+    <text x="565" y="166" font-family="monospace" font-size="11.5" fill="#EFE7D9">  endpoint: 172.10.20.128:51820</text>
+    <text x="565" y="184" font-family="monospace" font-size="11.5" fill="#EFE7D9">  allowed ips: 20.0.0.0/24, 10.99.0.2/32</text>
+    <text x="565" y="202" font-family="monospace" font-size="11.5" fill="#F0748A">  latest handshake: 8 seconds ago ✓</text>
+    <text x="565" y="220" font-family="monospace" font-size="11.5" fill="#EFE7D9">  transfer: 272 KiB received,</text>
+    <text x="565" y="238" font-family="monospace" font-size="11.5" fill="#EFE7D9">            351 KiB sent</text>
+    <line x1="565" y1="255" x2="885" y2="255" stroke="#3D362B"/>
+    <text x="565" y="280" font-family="monospace" font-size="12" fill="#5BD69E">$ mysql -h 20.0.0.101 -u wpuser -p wordpress</text>
+    <text x="565" y="302" font-family="monospace" font-size="11.5" fill="#EFE7D9">mysql&gt; SHOW TABLES;</text>
+    <text x="565" y="320" font-family="monospace" font-size="11.5" fill="#E4BC5C">wp_posts  wp_users  wp_options … (12)</text>
+    <text x="565" y="340" font-family="monospace" font-size="11.5" fill="#EFE7D9">mysql&gt; SELECT 1;</text>
+    <text x="565" y="358" font-family="monospace" font-size="11.5" fill="#5BD69E">1</text>
+  </svg>
+  <figcaption>FIG 7 — Del PHP al disco duro del otro sitio: cinco saltos, un solo túnel</figcaption>
+  </figure>
+
+  <h3>F.1 — Checklist de evidencias para tu entregable</h3>
+  <ul class="checklist">
+    <li>Captura de <code>wg show</code> en AMBOS routers mostrando handshake reciente y transfer &gt; 0</li>
+    <li>Ping cruzado con origen forzado: <code>ping -S 10.0.0.101 20.0.0.101</code> y viceversa</li>
+    <li>Salida de <code>SHOW TABLES;</code> desde ServerA contra la IP remota</li>
+    <li>Captura del navegador cargando <code>http://&lt;VIP&gt;/wordpress/</code></li>
+    <li>(Nivel pro) tcpdump en Router-B demostrando que el puerto 3306 llega por wg0, no por em0</li>
+  </ul>
+
+  <h3>F.2 — Prueba negativa (demuestra que la dependencia es real)</h3>
+  <pre><code># en ROUTER-B, baja el túnel:
+ifconfig wg0 down
+# en SERVER-A, refresca el sitio → error "Error establishing a database connection" ✓
+# sube el túnel:
+ifconfig wg0 up    <span class="c"># keepalive re-negocia solo</span></code></pre>
+  <p>Si tu app sigue funcionando sin túnel, tu demo no demuestra nada — esta prueba negativa es la que convierte una captura bonita en evidencia científica.</p>
+</section>
+
+<!-- ============ TROUBLESHOOTING ============ -->
+<section>
+  <h2><span class="paso">TROUBLESHOOT</span> Los 6 incidentes que vivimos en producción <span style="color:var(--ink-soft);font-size:14px">— y cómo se diagnostican</span></h2>
+  <p class="lead">Estos NO son hipotéticos: ocurrieron construyendo esta misma demo. Si algo falla, busca tu síntoma aquí — el método importa más que la respuesta.</p>
+
+  <h3>#1 — Pierdo SSH al habilitar el firewall</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>SSH muere justo tras aplicar reglas nuevas</td></tr>
+    <tr><td><b>Causa</b></td><td>Reglas con origen restringido a la red WAN local, administrando desde otra subred</td></tr>
+    <tr><td><b>Diagnóstico</b></td><td>¿El SYN llega? (tcpdump) ¿Qué regla lo procesa? (contadores <code>pfctl -vvsr</code>)</td></tr>
+    <tr><td><b>Fix</b></td><td><code>source = any</code> o incluir tu subred admin · sesión vieja abierta como cuerda de seguridad</td></tr>
+  </table>
+
+  <h3>#2 — Reglas correctas pero sin retorno (reply-to)</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>tcpdump ve los SYNs llegar; pf no crea estados ni responde; todo "muere en silencio"</td></tr>
+    <tr><td><b>Causa</b></td><td>OPNsense agrega <code>reply-to (em0 gateway)</code> a las reglas WAN → las respuestas salen forzadas por el gateway WAN aunque entraran por otro camino (ruteo asimétrico)</td></tr>
+    <tr><td><b>Diagnóstico</b></td><td>Contadores de la regla suben pero Packets=0 · filterlog vacío para ese flujo · <code>pfctl -sr</code> muestra el reply-to clavado</td></tr>
+    <tr><td><b>Fix</b></td><td>Editar cada regla WAN → avanzado → <b>deshabilitar reply-to</b></td></tr>
+  </table>
+
+  <h3>#3 — La IP estática del firewall "revierte sola"</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>La LAN del firewall cambia a una IP del pool DHCP sin que nadie la toque</td></tr>
+    <tr><td><b>Causa</b></td><td>Proceso dhclient residual de una configuración previa, relanzado por ciclos de interfaces</td></tr>
+    <tr><td><b>Diagnóstico</b></td><td><code>ps aux | grep dhclient</code> + leases del propio Kea mostrando hostname del router</td></tr>
+    <tr><td><b>Fix</b></td><td>Matar dhclient, limpiar <code>/var/etc/dhclient.*.conf</code>, re-fijar IP y verificarla tras cada reload</td></tr>
+  </table>
+
+  <h3>#4 — apt dice "network unreachable" pero el internet funciona</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>apt update falla en los servers; ping a IPs públicas tampoco</td></tr>
+    <tr><td><b>Causa</b></td><td>NO era el cliente: <b>el gateway había perdido su ruta default</b> y respondía ICMP host-unreachable a cada SYN</td></tr>
+    <tr><td><b>Diagnóstico</b></td><td>tcpdump en la LAN del gateway: ves SYNs correctos y respuestas ICMP-unreachable generadas POR EL ROUTER · <code>netstat -rn | grep default</code></td></tr>
+    <tr><td><b>Fix</b></td><td><code>route add default &lt;gw&gt;</code> + persistir el gateway en config.xml</td></tr>
+  </table>
+  <div class="tip">Método general: captura en AMBOS extremos del enlace sospechoso. Lo que entra y no sale localiza el problema en un solo dispositivo.</div>
+
+  <h3>#5 — Kea rechaza la configuración completa</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>kea-dhcp4 no arranca; errores de schema en el log</td></tr>
+    <tr><td><b>Causa</b></td><td>Kea 3.0 endureció validaciones: id obligatorio, paths de socket/log restringidos</td></tr>
+    <tr><td><b>Fix</b></td><td><code>id</code> numérico por subnet · socket bajo <code>/var/run/kea</code> · logs bajo <code>/var/log/kea</code></td></tr>
+  </table>
+
+  <h3>#6 — El port forward "no funciona" aunque pf parece bien configurado</h3>
+  <table>
+    <tr><td width="22%"><b>Síntoma</b></td><td>RDR activo, regla pass presente, contadores evaluando… cero conexiones y cero estados</td></tr>
+    <tr><td><b>Causa</b></td><td>Tras el redirect, el paquete tiene destino POST-NAT (<code>10.0.0.101</code>) y la regla pass solo cubría la IP virtual (<code>.230</code>) → cae al bloqueo default. La GUI genera esa regla asociada automáticamente; manualmente hay que crearla aparte.</td></tr>
+    <tr><td><b>Diagnóstico estrella</b></td><td><code>/var/log/filter/latest.log</code>: el paquete aparece YA TRADUCIDO siendo bloqueado. El log te muestra el paquete tal como pf lo ve después del NAT.</td></tr>
+    <tr><td><b>Fix</b></td><td>Segunda regla pass contra el destino post-NAT (asociada al rdr)</td></tr>
+  </table>
+  <div class="danger">Lección transversal: cuando pf "ignora" paquetes, la respuesta casi siempre está en el filterlog o en los contadores por-regla — nunca en adivinar más reglas.</div>
+</section>
+
+<!-- ============ ENTREGABLE ============ -->
+<section>
+  <h2><span class="paso">AUTO-CHECK</span> ¿Dominas esto? — verificación libre, sin nota</h2>
+  <p class="lead">Este lab es complementario: nada se entrega ni se califica. Pero si puedes tachar esta lista completa, tienes un nivel de redes/firewalls que muchos ingenieros senior no tienen.</p>
+  <ul class="checklist">
+    <li>Explicar SIN mirar la guía por qué las reglas WAN necesitan <code>disablereplyto</code></li>
+    <li>Túnel arriba: <code>wg show</code> con handshake reciente y transfer &gt; 0 en ambos routers</li>
+    <li>Ping cruzado entre LANs usando IPs de servidor (no las del túnel)</li>
+    <li>WordPress instalado y creando tablas en la BD del OTRO sitio — <code>SHOW TABLES</code> desde ServerA</li>
+    <li>Prueba negativa: bajar wg0 → WordPress falla → subir → funciona. Sabes explicar por qué eso demuestra la dependencia</li>
+    <li>Sabes decir qué protocolo/puerto viaja cifrado dentro de qué otro (3306/TCP dentro de 51820/UDP)</li>
+  </ul>
+  <div class="tip">Reto adicional si quieres más: agrega un tercer sitio (ROUTER-C, red 30.0.0.0/24) al túnel hub-and-spoke, o sustituye WireGuard por IPsec IKEv2 y compara overhead con iperf3.</div>
+</section>
+
+<!-- ============ ANEXOS ============ -->
+<section>
+  <h2><span class="paso">ANEXO</span> Configuraciones íntegras usadas en producción</h2>
+  <details open><summary>Anexo A — wg0.conf Router-A (completo)</summary>
+<pre><code>[Interface]
+PrivateKey = QKjSr7C9Se9CXXF3idg+06cTca/98KR3Mz9r+hZv5k4=
+ListenPort = 51820
+
+[Peer]
+PublicKey = roLBQ8TSZ5PKPxtdFG0bnue+sqFIHQuR2Q25lxLJiCY=
+Endpoint = 172.10.20.128:51820
+AllowedIPs = 20.0.0.0/24,10.99.0.2/32
+PersistentKeepalive = 25
+
+<span class="c"># NOTA: estas claves son de lab ya destruido — genera las tuyas SIEMPRE</span></code></pre>
+  </details>
+
+  <details><summary>Anexo B — Comandos de activación manual WireGuard</summary>
+<pre><code><span class="c"># ROUTER-A (en B: espejo con .2/30 y ruta a 10.0.0.0/24)</span>
+ifconfig wg0 create name wg0
+wg syncconf wg0 /usr/local/etc/wireguard/wg0.conf
+ifconfig wg0 inet 10.99.0.1/30 alias
+ifconfig wg0 up
+route -n add -net 20.0.0.0/24 -interface wg0
+wg show</code></pre>
+  </details>
+
+  <details><summary>Anexo C — SQL completo de la base de datos</summary>
+<pre><code>CREATE DATABASE wordpress CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'wpuser'@'10.0.0.%' IDENTIFIED BY 'WPLab2026!';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wpuser'@'10.0.0.%';
+FLUSH PRIVILEGES;
+<span class="c">-- verificación desde SERVER-A (requiere mariadb-client):</span>
+-- mysql -h 20.0.0.101 -u wpuser -p'WPLab2026!' wordpress -e "SELECT 1; SHOW TABLES;"</code></pre>
+  </details>
+
+  <details><summary>Anexo D — Reglas pf finales (resumen operativa)</summary>
+<pre><code><span class="c"># WAN ambos routers:</span>
+pass in quick on em0 proto tcp from any to (self) port {22,443} keep state
+pass in quick on em0 proto udp from &lt;IP_PEER&gt; to (self) port 51820 keep state   <span class="c">(disablereplyto)</span>
+<span class="c"># wg0 ambos routers (red_remota = la del otro sitio):</span>
+pass in quick on wg0 inet from &lt;red_remota&gt;/24 to any keep state
+pass in quick on wg0 inet from any to &lt;red_remota&gt;/24 keep state
+<span class="c"># Router-A adicional por la VIP WordPress:</span>
+rdr on em0 proto tcp from any to 172.10.20.230 port 80 -> 10.0.0.101 port 80
+pass in quick on em0 proto tcp from any to 172.10.20.230 port 80 keep state
+pass in quick on em0 proto tcp from any to 10.0.0.101  port 80 keep state       <span class="c">← post-NAT!</span></code></pre>
+  </details>
+
+  <details><summary>Anexo E — Versión Markdown cruda (descargable)</summary>
+    <p style="font-size:14px">La guía técnica completa en texto plano vive junto a este archivo:<br>
+    <code>laboratorios/lab-02-vpn-site-to-site.md</code></p>
+  </details>
+</section>
+
+<footer>
+  <p><b>Integración de Soluciones para Plataformas Cloud</b> · Ingeniería de Sistemas · Universidad de la Costa CUC · 2026-2</p>
+  <p>Ing. Rodolfo Cañas Cervantes — dirección académica y arquitectura<br>
+  Ejecución técnica, diagnóstico de incidentes y documentación: <b>ox-alpha</b>, modelo IA de lenguaje<br>
+  Validado en infraestructura real antes de publicarse</p>
+  <span class="ia-badge">🤖 × 🧑‍🏫 colaboración humano-IA verificada</span>
+</footer>
+</div>
+</body>
+</html>
