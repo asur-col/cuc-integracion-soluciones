@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integración de Soluciones — Semana 1 · Introducción a multicloud</title>
+<style>
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:44px 56px 64px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:14px;padding-right:120px;}
+  .s-head h2{font-size:34px;font-weight:700;color:var(--vino);line-height:1.15;}
+  .s-head .rule{width:120px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:8px;}
+  .logo-corner{position:absolute;top:0;right:0;height:52px;}
+  .s-foot{position:absolute;left:56px;right:56px;bottom:18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:8px;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:52px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:128px;margin-bottom:30px;}
+  .cover h1{font-size:44px;color:var(--vino);font-weight:700;letter-spacing:.5px;}
+  .cover h3{font-size:22px;font-weight:400;color:var(--texto);margin-top:12px;}
+  .cover .bar{width:250px;height:6px;border-radius:3px;margin:26px auto 28px;background:var(--dorado);}
+  .cover .author{font-size:17px;line-height:1.65;}
+  .cover .author b{color:var(--vino);}
+  .cover .providers{display:flex;gap:26px;justify-content:center;margin-top:46px;}
+  .cover .pchip{border:1.5px solid #ddb9bf;border-radius:12px;padding:14px 32px;display:flex;align-items:center;background:#fff;}
+  .cover .pchip img{height:32px;display:block;}
+
+  .chips{display:flex;flex-direction:column;gap:14px;}
+  .chip{background:var(--vino-tint);border-left:6px solid var(--dorado);border-radius:8px;padding:13px 18px;font-size:17px;line-height:1.4;}
+  .chip b{color:var(--vino);}
+  .fact{margin-top:16px;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:12px 18px;font-size:16px;}
+  .fact b{color:var(--vino);}
+  .cols{display:flex;gap:36px;align-items:center;}
+  .cols .diagram{flex:0 0 640px;}
+  .cols .side{flex:1;}
+
+  table.cmp{width:100%;border-collapse:collapse;font-size:16px;}
+  table.cmp th{background:var(--vino);color:#fff;padding:11px 14px;text-align:left;font-size:17px;}
+  table.cmp td{padding:10px 14px;border-bottom:1.5px solid #ead9bc;vertical-align:middle;line-height:1.35;}
+  table.cmp tr td:first-child{font-weight:700;color:var(--vino);}
+  table.cmp tr:nth-child(even) td{background:var(--dorado-tint);}
+  table.cmp td b{color:var(--vino);}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  @media print{
+    body{display:block;}
+    #stage{transform:none!important;box-shadow:none;}
+    .slide{display:block!important;position:relative;page-break-after:always;}
+    #nav,#progress{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="stage">
+
+  <!-- ============ 1 · PORTADA ============ -->
+  <section class="slide cover active">
+    <div class="topline-g"></div><div class="topline-v"></div>
+    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <h1>Integración de Soluciones para Plataformas Cloud</h1>
+    <h3>Semana 1 · Introducción a multicloud: estrategias, casos de uso e identidad</h3>
+    <div class="bar"></div>
+    <div class="author">
+      <b>Ing. Rodolfo Cañas Cervantes</b><br>
+      Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>
+      Semana 1 · Periodo 2026-2 · Barranquilla, Colombia
+    </div>
+    <div class="providers">
+      <div class="pchip"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" onerror="this.parentNode.style.display='none'"></div>
+      <div class="pchip"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Microsoft Azure" onerror="this.parentNode.style.display='none'"></div>
+      <div class="pchip"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud" onerror="this.parentNode.style.display='none'"></div>
+      <div class="pchip"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Oracle_logo.svg" alt="Oracle" onerror="this.parentNode.style.display='none'"></div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · QUÉ ES MULTICLOUD ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>¿Qué es una arquitectura multicloud?</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="cols">
+      <div class="side">
+        <div class="chips">
+          <div class="chip"><b>Definición (Oracle, 2026):</b> estrategia de adopción que usa servicios de <b>varios proveedores de nube</b> en lugar de depender de uno solo — para aprovechar lo mejor de cada uno, aumentar resiliencia y reducir costo.</div>
+          <div class="chip">No es "tener varias suscripciones": es diseñar cargas que <b>viven, se comunican y se gobiernan</b> a través de más de un proveedor.</div>
+          <div class="chip">La clave del curso: multicloud <b>interconectado</b> — conexión privada real entre proveedores, no islas separadas.</div>
+        </div>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 560 330" style="width:100%;height:330px;">
+          <rect x="10" y="10" width="160" height="130" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="90" y="38" text-anchor="middle" font-size="15" font-weight="bold" fill="#A6192E">AWS</text>
+          <rect x="30" y="55" width="120" height="24" rx="5" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
+          <text x="90" y="72" text-anchor="middle" font-size="12" fill="#2A2A2A">cómputo / apps</text>
+          <rect x="30" y="88" width="120" height="24" rx="5" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
+          <text x="90" y="105" text-anchor="middle" font-size="12" fill="#2A2A2A">colas y eventos</text>
+          <rect x="200" y="10" width="160" height="130" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="280" y="38" text-anchor="middle" font-size="15" font-weight="bold" fill="#A6192E">Azure</text>
+          <rect x="220" y="55" width="120" height="24" rx="5" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
+          <text x="280" y="72" text-anchor="middle" font-size="12" fill="#2A2A2A">identidad / SaaS</text>
+          <rect x="220" y="88" width="120" height="24" rx="5" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
+          <text x="280" y="105" text-anchor="middle" font-size="12" fill="#2A2A2A">analytics</text>
+          <rect x="390" y="10" width="160" height="130" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="470" y="38" text-anchor="middle" font-size="15" font-weight="bold" fill="#A6192E">Google Cloud</text>
+          <rect x="410" y="55" width="120" height="24" rx="5" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
+          <text x="470" y="72" text-anchor="middle" font-size="12" fill="#2A2A2A">datos / ML</text>
+          <rect x="150" y="185" width="260" height="110" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.5"/>
+          <text x="280" y="215" text-anchor="middle" font-size="15" font-weight="bold" fill="#A6192E">Gobernanza común</text>
+          <text x="280" y="242" text-anchor="middle" font-size="13" fill="#2A2A2A">identidad federada · redes privadas</text>
+          <text x="280" y="264" text-anchor="middle" font-size="13" fill="#2A2A2A">observabilidad · FinOps</text>
+          <line x1="90" y1="140" x2="230" y2="185" stroke="#A6192E" stroke-width="2.5"/>
+          <line x1="280" y1="140" x2="280" y2="185" stroke="#A6192E" stroke-width="2.5"/>
+          <line x1="470" y1="140" x2="330" y2="185" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="280" y="322" text-anchor="middle" font-size="13" fill="#2A2A2A">Un sistema distribuido sobre varios proveedores — con un solo modelo operativo.</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · MULTICLOUD VS HÍBRIDO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Multicloud vs. nube híbrida: no son sinónimos</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <table class="cmp" style="margin-top:16px;">
+      <tr><th style="width:24%;">Criterio</th><th>Multicloud</th><th>Nube híbrida</th></tr>
+      <tr><td>¿Qué combina?</td><td>Dos o más nubes <b>públicas distintas</b> (AWS + Azure + GCP + OCI)</td><td>Nube pública + infraestructura <b>on-premises / privada</b></td></tr>
+      <tr><td>Motor principal</td><td>Evitar dependencia de un vendor, elegir el mejor servicio de cada uno</td><td>Aprovechar inversión existente y migrar por partes</td></tr>
+      <tr><td>Riesgo que ataca</td><td><b>Vendor lock-in</b>, interrupciones regionales de un proveedor</td><td>Salto total al cloud; pérdida de control local</td></tr>
+      <tr><td>Retos típicos</td><td>Identidad, red privada entre proveedores, costos duplicados de datos</td><td>Conectividad segura, consistencia operativa, latencia</td></tr>
+      <tr><td>Pueden combinarse</td><td colspan="2"><b>Sí:</b> una empresa híbrida puede además ser multicloud (datacenter propio + AWS + Azure) — los conceptos son ortogonales</td></tr>
+    </table>
+    <div class="fact" style="margin-top:20px;">Regla mental para la actividad: pregunta <b>"¿son proveedores distintos?"</b> → multicloud · pregunta <b>"¿incluye infraestructura propia/on-prem?"</b> → híbrido.</div>
+  </section>
+
+  <!-- ============ 4 · POR QUÉ IMPORTA ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>¿Por qué importa multicloud hoy?</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:24px;margin-top:20px;">
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;border-top:8px solid var(--vino);padding:22px 18px;text-align:center;">
+        <div style="font-size:52px;font-weight:800;color:var(--vino);">76%</div>
+        <p style="font-size:15px;line-height:1.45;margin-top:8px;">de las empresas ya usa <b>dos o más nubes públicas</b> (estimación de analistas citada por Oracle)</p>
+      </div>
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;border-top:8px solid var(--vino);padding:22px 18px;text-align:center;">
+        <div style="font-size:52px;font-weight:800;color:var(--vino);">2.3</div>
+        <p style="font-size:15px;line-height:1.45;margin-top:8px;">nubes públicas <b>en promedio</b> por organización — multicloud es el estándar, no la excepción</p>
+      </div>
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;border-top:8px solid var(--vino);padding:22px 18px;text-align:center;">
+        <div style="font-size:52px;font-weight:800;color:var(--vino);">3/3</div>
+        <p style="font-size:15px;line-height:1.45;margin-top:8px;">los tres hyperscalers ya ofrecen <b>servicios ancla ajenos dentro de su propia nube</b> (Oracle Database@AWS/@Azure/@Google Cloud)</p>
+      </div>
+    </div>
+    <div class="chips" style="margin-top:22px;">
+      <div class="chip"><b>Drivers reales de negocio:</b> regulación y soberanía del dato · resiliencia ante caídas de un proveedor · capacidades exclusivas (IA/ML de un vendor específico) · poder de negociación en renovaciones.</div>
+    </div>
+    <div class="fact">Para ustedes como ingenieros: el perfil que entiende <b>cómo integrar</b> varias nubes vale más que el perfil experto en una sola.</div>
+  </section>
+
+  <!-- ============ 5 · CASOS DE USO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Casos de uso reales (2026)</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <table class="cmp" style="margin-top:14px;">
+      <tr><th style="width:26%;">Caso de uso</th><th>¿Cómo funciona?</th><th>Ejemplo típico</th></tr>
+      <tr><td>Split stack</td><td>App en una nube, base de datos en otra, conectadas por interconnect privado</td><td>Apps en Azure + Oracle Database en OCI (patrón más común del mercado)</td></tr>
+      <tr><td>Single stack co-ubicado</td><td>El servicio ancla corre físicamente dentro del datacenter del otro proveedor</td><td>Oracle Exadata dentro de AWS/Azure/GCP → latencia mínima sin salir de la nube</td></tr>
+      <tr><td>App to app</td><td>Servicios de nubes distintas se consumen directamente vía API/eventos</td><td>Función serverless en AWS invocando servicio de IA en Google Cloud</td></tr>
+      <tr><td>Pipeline analítico</td><td>Datos operativos en una nube, analítica/ML especializado en otra</td><td>Transacciones en AWS → BigQuery en GCP para ML</td></tr>
+      <tr><td>Carga distribuida / DR</td><td>Mismo servicio replicado en dos nubes por continuidad o jurisdicción</td><td>Frontal en región local + recuperación en segunda nube</td></tr>
+    </table>
+    <div class="fact" style="margin-top:16px;">Fuente: catálogo oficial de casos de uso multicloud de Oracle (oracle.com/cloud/multicloud, consultado 2026) — los retomamos en la semana 2 con el caso Database@X en detalle.</div>
+  </section>
+
+  <!-- ============ 6 · ESTRATEGIA: QUÉ SER CONSISTENTE ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Crear una estrategia multicloud: ¿qué debe ser consistente?</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="cols" style="margin-top:14px;">
+      <div class="diagram" style="flex-basis:600px;">
+        <svg viewBox="0 0 560 300" style="width:100%;height:300px;">
+          <rect x="180" y="8" width="200" height="56" rx="10" fill="#A6192E"/>
+          <text x="280" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">Capa de gestión</text>
+          <text x="280" y="52" text-anchor="middle" font-size="12" fill="#fbf6e7">(consistente en todas las nubes)</text>
+          <g font-size="13" fill="#2A2A2A">
+            <rect x="15" y="110" width="165" height="76" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+            <text x="97" y="140" text-anchor="middle" font-weight="bold" fill="#A6192E">Redes privadas</text>
+            <text x="97" y="162" text-anchor="middle" font-size="12">interconnect · VPN · DNS</text>
+            <rect x="198" y="110" width="165" height="76" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+            <text x="280" y="140" text-anchor="middle" font-weight="bold" fill="#A6192E">Identidad (IAM)</text>
+            <text x="280" y="162" text-anchor="middle" font-size="12">federación · mínimo privilegio</text>
+            <rect x="381" y="110" width="165" height="76" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+            <text x="463" y="140" text-anchor="middle" font-weight="bold" fill="#A6192E">Operación</text>
+            <text x="463" y="162" text-anchor="middle" font-size="12">observabilidad · IaC · costos</text>
+          </g>
+          <g font-size="13">
+            <rect x="60" y="228" width="135" height="54" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+            <text x="127" y="251" text-anchor="middle" font-weight="bold" fill="#A6192E">Nube A</text>
+            <text x="127" y="270" text-anchor="middle" font-size="11" fill="#2A2A2A">ej. AWS</text>
+            <rect x="212" y="228" width="135" height="54" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+            <text x="279" y="251" text-anchor="middle" font-weight="bold" fill="#A6192E">Nube B</text>
+            <text x="279" y="270" text-anchor="middle" font-size="11" fill="#2A2A2A">ej. Azure</text>
+            <rect x="365" y="228" width="135" height="54" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+            <text x="432" y="251" text-anchor="middle" font-weight="bold" fill="#A6192E">Nube C</text>
+            <text x="432" y="270" text-anchor="middle" font-size="11" fill="#2A2A2A">ej. GCP</text>
+          </g>
+          <line x1="97" y1="186" x2="127" y2="228" stroke="#2A2A2A" stroke-width="2"/>
+          <line x1="280" y1="186" x2="279" y2="228" stroke="#2A2A2A" stroke-width="2"/>
+          <line x1="463" y1="186" x2="432" y2="228" stroke="#2A2A2A" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="side">
+        <div class="chips">
+          <div class="chip"><b>Fundación (según Oracle, 2026):</b> networking segmentado, IAM federado y landing zones estandarizadas — lo primero que debe replicarse bien en cada nube.</div>
+          <div class="chip"><b>Preguntas del arquitecto:</b> ¿qué debe ser idéntico en todas las nubes? ¿qué puede diferir? ¿quién paga y opera cada parte?</div>
+          <div class="chip">Sin esta capa común, multicloud degenera en <b>N silos desconectados</b> con N credenciales, N facturas y N puntos de falla.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7 · IAM MULTICLOUD: CADA NUBE SU MODELO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Identidad: el primer dolor real del multicloud</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <table class="cmp" style="margin-top:14px;">
+      <tr><th style="width:18%;">Proveedor</th><th style="width:30%;">Servicio de identidad</th><th style="width:26%;">Modelo de organización</th><th>Concepto distintivo</th></tr>
+      <tr><td>AWS</td><td>IAM + IAM Identity Center</td><td>Cuentas / Organizations</td><td>Roles temporales, políticas JSON</td></tr>
+      <tr><td>Azure</td><td>Microsoft Entra ID</td><td>Subscripciones / Management Groups</td><td>RBAC heredable por scopes</td></tr>
+      <tr><td>Google Cloud</td><td>Cloud IAM</td><td>Organización / Proyectos</td><td>Service accounts por workload</td></tr>
+      <tr><td>OCI</td><td>OCI IAM</td><td>Tenancy / Compartments</td><td>Identity domains + dynamic groups</td></tr>
+    </table>
+    <div class="chips" style="margin-top:16px;">
+      <div class="chip"><b>Problema:</b> cuatro terminologías, cuatro consolas, cuatro auditorías — "gestionar identidades entre nubes es como pastorear gatos".</div>
+      <div class="chip"><b>Solución de la industria:</b> federar todo hacia <b>un IdP corporativo único</b> (Entra ID, Okta, AD) vía SAML/OIDC — un solo login, una sola política MFA, un solo rastro de auditoría.</div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · IDENTITY DOMAINS Y FEDERACIÓN EN OCI ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Identity domains y federación en OCI (Módulo 1 Oracle)</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="cols" style="margin-top:10px;">
+      <div class="diagram" style="flex-basis:640px;">
+        <svg viewBox="0 0 600 320" style="width:100%;height:320px;">
+          <rect x="20" y="20" width="240" height="280" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="140" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#A6192E">Empresa (on-prem)</text>
+          <rect x="45" y="70" width="190" height="58" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="2"/>
+          <text x="140" y="94" text-anchor="middle" font-size="13" font-weight="bold" fill="#2A2A2A">IdP corporativo</text>
+          <text x="140" y="114" text-anchor="middle" font-size="11" fill="#2A2A2A">Active Directory / Okta</text>
+          <rect x="45" y="150" width="190" height="46" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="2"/>
+          <text x="140" y="170" text-anchor="middle" font-size="12" fill="#2A2A2A">Usuarios · grupos · MFA</text>
+          <text x="140" y="187" text-anchor="middle" font-size="11" fill="#6b6b6b">fuente única de verdad</text>
+          <rect x="340" y="20" width="240" height="280" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.5"/>
+          <text x="460" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#A6192E">OCI Tenancy</text>
+          <rect x="365" y="66" width="190" height="64" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+          <text x="460" y="90" text-anchor="middle" font-size="13" font-weight="bold" fill="#A6192E">Identity domains</text>
+          <text x="460" y="110" text-anchor="middle" font-size="11" fill="#2A2A2A">default · custom (dev/prod/socios)</text>
+          <rect x="365" y="146" width="190" height="42" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+          <text x="460" y="172" text-anchor="middle" font-size="12" fill="#2A2A2A">compartments + políticas</text>
+          <rect x="365" y="204" width="190" height="42" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+          <text x="460" y="230" text-anchor="middle" font-size="12" fill="#2A2A2A">dynamic groups (workloads)</text>
+          <path d="M235 99 C 290 99, 290 98, 365 98" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#arr)"/>
+          <defs><marker id="arr" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="#A6192E"/></marker></defs>
+          <text x="300" y="86" text-anchor="middle" font-size="12" font-weight="bold" fill="#A6192E">SAML / OIDC</text>
+          <text x="300" y="126" text-anchor="middle" font-size="11" fill="#2A2A2A">federación de identidades</text>
+          <text x="460" y="282" text-anchor="middle" font-size="11" fill="#6b6b6b">el usuario nunca crea cuenta local en OCI</text>
+        </svg>
+      </div>
+      <div class="side">
+        <div class="chips">
+          <div class="chip"><b>Identity domain:</b> contenedor de usuarios/grupos/configuración dentro de la tenancy — permite aislar dev, prod y socios externos.</div>
+          <div class="chip"><b>Federación:</b> OCI confía en el IdP corporativo → acceso SSO con credenciales de la empresa, MFA centralizada.</div>
+          <div class="chip"><b>Mínimo privilegio:</b> políticas por compartment + dynamic groups para workloads (sin claves largas).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9 · ENCUDRE DEL CURSO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Encuadre del curso: qué viene después de hoy</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:22px;margin-top:20px;">
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;padding:20px 18px;border-top:8px solid var(--vino);">
+        <h3 style="color:var(--vino);font-size:19px;">U1 · Concepto (semanas 1-5)</h3>
+        <p style="font-size:14.5px;line-height:1.5;margin-top:10px;">Multicloud con ancla Oracle: estrategias, integración (Database@X), redes e interconectividad, gobierno y migración. Prácticas reales en AWS Learner Lab.</p>
+      </div>
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;padding:20px 18px;border-top:8px solid var(--vino);">
+        <h3 style="color:var(--vino);font-size:19px;">U2 · Construcción (semanas 6-10)</h3>
+        <p style="font-size:14.5px;line-height:1.5;margin-top:10px;">Lab oficial AWS Academy: monolito → microservicios con Docker, ECR, ECS Fargate, ALB y pipeline CI/CD (CodeCommit → CodeDeploy, Blue/Green).</p>
+      </div>
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;padding:20px 18px;border-top:8px solid var(--vino);">
+        <h3 style="color:var(--vino);font-size:19px;">U3 · Frontera (semanas 11-16)</h3>
+        <p style="font-size:14.5px;line-height:1.5;margin-top:10px;">IA aplicada al pipeline (Q Developer, AIOps, seguridad asistida) + despliegue también en infraestructura propia ASUR: multicloud real, no simulado.</p>
+      </div>
+    </div>
+    <table class="cmp" style="margin-top:20px;font-size:15px;">
+      <tr><th style="width:34%;">Evaluación</th><th>Peso</th></tr>
+      <tr><td>Cada unidad (proyecto con rúbrica)</td><td>3 × 30%</td></tr>
+      <tr><td>Actividades de clase (2 por unidad, prácticas reales)</td><td>10% por unidad (dentro del corte)</td></tr>
+      <tr><td>Prueba de Competencia Genérica institucional</td><td>10%</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 10 · ACTIVIDAD DIAGNÓSTICA ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Actividad diagnóstica en vivo (no cuenta nota)</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="fact" style="margin-top:6px;">Clasifiquen cada caso como <b>MULTICLOUD</b>, <b>HÍBRIDO</b>, <b>AMBOS</b> o <b>NINGUNO</b> — y justifiquen en una frase.</div>
+    <table class="cmp" style="margin-top:14px;">
+      <tr><th style="width:62%;">Caso</th><th>¿Por qué?</th></tr>
+      <tr><td>1. Banco con Oracle Database en OCI y analítica en Azure, unidos por Interconnect privado</td><td></td></tr>
+      <tr><td>2. Retail con servidores VMware propios para ERP y tienda web en AWS</td><td></td></tr>
+      <tr><td>3. Startup que usa solo Google Cloud para todo su producto</td><td></td></tr>
+      <tr><td>4. Universidad con datacenter propio, correo en Microsoft 365 y laboratorios en AWS Academy</td><td></td></tr>
+      <tr><td>5. Empresa con Exadata de Oracle corriendo dentro de un datacenter de AWS</td><td></td></tr>
+    </table>
+    <div class="fact" style="margin-top:14px;">Discusión final: en el caso 5 — ¿el dato "salió" de la nube de AWS? ¿Qué implica eso para latencia, facturación y cumplimiento? Lo retomamos en la semana 2.</div>
+  </section>
+
+  <!-- ============ 11 · CONCLUSIONES ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Conclusiones clave de la semana</h2>
+      <div class="rule"></div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="chips" style="margin-top:16px;gap:16px;">
+      <div class="chip"><b>1.</b> Multicloud = varias nubes públicas coordinadas; híbrido = pública + propia. Son decisiones independientes que pueden combinarse.</div>
+      <div class="chip"><b>2.</b> Ya es el estándar del mercado (≈3 de cada 4 empresas con 2+ nubes): no es "si", sino "cómo hacerlo bien".</div>
+      <div class="chip"><b>3.</b> La capa que decide el éxito es la <b>fundación compartida</b>: redes privadas, identidad federada y operación estandarizada.</div>
+      <div class="chip"><b>4.</b> En identidad, el patrón ganador es federar todas las nubes a un IdP corporativo único (SAML/OIDC) con mínimo privilegio.</div>
+      <div class="chip"><b>5.</b> Los proveedores mismos ya se integran entre sí (Database@AWS/@Azure/@Google Cloud) — la semana 2 lo demuestra con números de 2026.</div>
+    </div>
+    <div class="fact">Próxima semana: <b>patrones de integración</b> — API, mensajería y eventos — y práctica real de colas/tópicos en tu Learner Lab de AWS.</div>
+  </section>
+
+</div>
+
+<div id="nav">
+  <button id="prev" title="Anterior">‹</button>
+  <span id="counter"></span>
+  <button id="next" title="Siguiente">›</button>
+</div>
+
+<script>
+  const DOCENTE   = "Ing. Rodolfo Cañas Cervantes";
+  const ASIGNATURA= "Integración de Soluciones para Plataformas Cloud";
+  const PERIODO   = "2026-2";
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let i = 0;
+
+  slides.forEach((s, idx) => {
+    if (s.classList.contains('cover')) return;
+    const f = document.createElement('div');
+    f.className = 's-foot';
+    f.innerHTML = `<span>${DOCENTE} | ${ASIGNATURA} — ${PERIODO}</span><span class="pg">${idx + 1} / ${slides.length}</span>`;
+    s.appendChild(f);
+  });
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    document.getElementById('counter').textContent = `${i + 1} / ${slides.length}`;
+    document.getElementById('progress').style.width = ((i + 1) / slides.length * 100) + '%';
+  }
+  function fit(){
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    document.getElementById('stage').style.transform = `scale(${s})`;
+  }
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)) show(i + 1);
+    if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) show(i - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  window.addEventListener('resize', fit);
+  fit(); show(0);
+</script>
+</body>
+</html>

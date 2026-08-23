@@ -1,0 +1,355 @@
+<title>Integración de Soluciones para Plataformas Cloud</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #FBF8F3;
+    --surface: #FFFFFF;
+    --surface-2: #F4EEE3;
+    --ink: #2A2A2A;
+    --ink-soft: #6B6259;
+    --vino: #A6192E;
+    --vino-strong: #7E1223;
+    --vino-tint: #FBEBEC;
+    --dorado: #A9791C;
+    --dorado-tint: #FBF3DE;
+    --line: #E5DCCB;
+    --shadow: 0 1px 2px rgba(42,26,20,.04), 0 6px 20px rgba(42,26,20,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+      --ink: #EFE7D9; --ink-soft: #B3A896;
+      --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+      --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+    --ink: #EFE7D9; --ink-soft: #B3A896;
+    --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+    --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15.5px; line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+  a { color: var(--vino); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header.top {
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 54px 24px 40px; text-align: center; margin-bottom: 8px;
+  }
+  header.top .logo { height: 64px; width: auto; margin: 0 auto 26px; display: block; }
+  header.top .eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: var(--dorado); font-weight: 700; margin: 0 0 6px; }
+  header.top h1 { color: var(--vino); font-size: clamp(28px, 4vw, 38px); margin: 0 0 8px; }
+  header.top .sub { color: var(--ink-soft); font-size: 16px; margin: 0 0 20px; }
+  .accent-bar { width: 200px; height: 4px; margin: 0 auto 20px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--vino), var(--dorado)); }
+  header.top .meta { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+  header.top .meta b { color: var(--ink); font-size: 15px; }
+
+  section { margin-top: 44px; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .section-head h2 { font-size: 20px; margin: 0; }
+  .section-head .count { font-size: 12.5px; color: var(--ink-soft); font-family: 'IBM Plex Mono'; }
+  .section-note { font-size: 13.5px; color: var(--ink-soft); margin: -8px 0 18px; max-width: 62ch; }
+
+  .card-grid { display: grid; gap: 10px; }
+
+  .week-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px; text-decoration: none; color: inherit; box-shadow: var(--shadow);
+    transition: border-color .15s;
+  }
+  .week-card:hover { border-color: var(--vino); }
+  .week-card .num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--vino-tint); color: var(--vino);
+    display: grid; place-items: center; font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .week-card .title { font-weight: 600; font-size: 15px; color: var(--ink); }
+  .week-card .desc { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .week-card .go { margin-left: auto; color: var(--ink-soft); font-size: 13px; white-space: nowrap; }
+
+  .week-card.pending { opacity: .55; }
+  .week-card.pending .num { background: var(--surface-2); color: var(--ink-soft); }
+  .week-card.pending .go { font-style: italic; }
+
+  .lab-list { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .lab-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 18px;
+    border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; font-size: 13.5px;
+  }
+  .lab-row:last-child { border-bottom: none; }
+  .lab-row:hover { background: var(--dorado-tint); }
+  .lab-row .play {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--dorado-tint); color: var(--dorado);
+    display: grid; place-items: center; font-size: 10px; flex-shrink: 0;
+  }
+  .lab-row .name { color: var(--ink); font-weight: 500; }
+  .lab-row .size { margin-left: auto; color: var(--ink-soft); font-family: 'IBM Plex Mono'; font-size: 11.5px; }
+
+  .tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table.calendar { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+  table.calendar th { background: var(--vino); color: #fff; text-align: left; padding: 10px 12px; font-weight: 600; white-space: nowrap; }
+  table.calendar td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.calendar tr:last-child td { border-bottom: none; }
+  table.calendar tr:nth-child(even) td { background: var(--surface-2); }
+  table.calendar tr.receso td { background: var(--dorado-tint); font-style: italic; color: var(--ink-soft); }
+  table.calendar .sem { font-family: 'IBM Plex Mono'; font-weight: 700; color: var(--vino); white-space: nowrap; }
+  table.calendar .fechas, table.calendar .unidad { white-space: nowrap; color: var(--ink-soft); }
+  table.calendar .act { color: var(--ink-soft); }
+
+  footer.page { max-width: 1140px; margin: 60px auto 0; padding: 20px 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
+
+  .scroll-hint { display: none; font-size: 11.5px; color: var(--ink-soft); padding: 8px 12px 0; margin: 0; }
+
+  @media (max-width: 640px) {
+    body { font-size: 14.5px; }
+    .wrap { padding: 0 16px 70px; }
+    header.top { padding: 40px 16px 32px; }
+    header.top .logo { height: 52px; margin-bottom: 20px; }
+    header.top .meta { font-size: 13px; }
+
+    .week-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px 14px; }
+    .week-card .go { margin-left: 56px; font-size: 12.5px; }
+
+    table.calendar { min-width: 620px; font-size: 12px; }
+    .scroll-hint { display: block; }
+
+    .lab-row { padding: 10px 14px; font-size: 12.5px; }
+  }
+
+  @media (max-width: 420px) {
+    header.top h1 { font-size: 24px; }
+    .week-card .num { width: 34px; height: 34px; font-size: 12.5px; }
+    .week-card .title { font-size: 14px; }
+  }
+</style>
+
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" />
+  <p class="eyebrow">Curso</p>
+  <h1>Integración de Soluciones para Plataformas Cloud</h1>
+  <p class="sub">Material del curso — Ingeniería de Sistemas · Nivel 8</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Ing. Rodolfo Cañas Cervantes</b><br>Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>Periodo 2026-2 · Barranquilla, Colombia</p>
+</header>
+
+<div class="wrap">
+  <section>
+    <div class="section-head"><h2>Semanas</h2><span class="count">3 de 14 publicadas</span></div>
+    <div class="card-grid">
+      <a class="week-card" href="2026-2-S01-integracion-soluciones-introduccion-multicloud.html" target="_blank">
+        <div class="num">1</div>
+        <div>
+          <div class="title">Introducción a multicloud</div>
+          <div class="desc">Qué es una arquitectura multicloud · multicloud vs. nube híbrida · casos de uso reales · estrategias e identidad (Oracle Módulo 1)</div>
+        </div>
+        <div class="go">Ver presentación →</div>
+      </a>
+      <a class="week-card" href="2026-2-S02-integracion-soluciones-patrones-integracion.html" target="_blank">
+        <div class="num">2</div>
+        <div>
+          <div class="title">Patrones de integración</div>
+          <div class="desc">API síncrona · mensajería con colas · eventos pub/sub · caso real Oracle Database@AWS/@Azure/@Google Cloud</div>
+        </div>
+        <div class="go">Ver presentación →</div>
+      </a>
+      <a class="week-card" href="2026-2-S03-integracion-soluciones-redes-interconectividad.html" target="_blank">
+        <div class="num">3</div>
+        <div>
+          <div class="title">Redes e interconectividad multicloud</div>
+          <div class="desc">VCN y gateways · peering · VPN y FastConnect/Interconnect · soberanía de datos + laboratorio de contenedores</div>
+        </div>
+        <div class="go">Ver presentación →</div>
+      </a>
+      <div class="week-card pending">
+        <div class="num">4</div>
+        <div>
+          <div class="title">Gobierno multicloud y migración</div>
+          <div class="desc">IAM federado, vendor lock-in, estrategias 6/7 Rs</div>
+        </div>
+        <div class="go">Próximamente</div>
+      </div>
+      <div class="week-card pending">
+        <div class="num">6+</div>
+        <div>
+          <div class="title">Resto del curso</div>
+          <div class="desc">Semanas 6 a 15-16 — microservicios y CI/CD en AWS, IA aplicada e integración ASUR — se publican a medida que se terminan</div>
+        </div>
+        <div class="go">Próximamente</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Laboratorios</h2><span class="count">Unidad 1</span></div>
+    <p class="section-note">Actividades prácticas calificables del curso. Los entornos en vivo son efímeros (se despliegan para la sesión y se limpian después) — aquí queda documentado qué consistió cada uno y con qué evidencia se evaluó.</p>
+    <div class="card-grid">
+      <a class="week-card" href="laboratorios/lab-01-sandbox-contenedores.md" target="_blank">
+        <div class="num">L1</div>
+        <div>
+          <div class="title">Laboratorio 1 — Sandbox de contenedores (semana 3)</div>
+          <div class="desc">Build → push a registro privado → run → verificación de salud, en un entorno Docker personal por estudiante sobre infraestructura propia del curso. Actividad 2 · Unidad 1 · 5%</div>
+        </div>
+        <div class="go">Ver guía →</div>
+      </a>
+      <div class="week-card pending">
+        <div class="num">L2+</div>
+        <div>
+          <div class="title">Próximas actividades</div>
+          <div class="desc">Site-to-Site VPN / VPC Peering (semana 3, Learner Lab) y las de Unidades 2-3 — se documentan al realizarse</div>
+        </div>
+        <div class="go">Próximamente</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Calendario</h2><span class="count">Periodo 2026-2</span></div>
+    <p class="section-note">Evaluación: 3 unidades → 3 cortes de 30% cada uno (dentro de cada corte: 10% actividades de clase prácticas + 20% proyecto con rúbrica) · 10% Prueba de Competencia Genérica institucional.</p>
+    <div class="tbl-wrap">
+      <p class="scroll-hint">↔ Desliza para ver la tabla completa</p>
+      <table class="calendar">
+        <thead>
+          <tr><th>Semana</th><th>Fechas</th><th>Unidad</th><th>Tema</th><th>Actividad / Evaluación</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="sem">1</td>
+            <td class="fechas">3–9 ago</td>
+            <td class="unidad">U1</td>
+            <td>Introducción a multicloud: qué es una arquitectura multicloud, multicloud vs. nube híbrida, casos de uso reales, conclusiones clave (Oracle Módulo 1: estrategias multicloud + IAM). Encuadre del curso</td>
+            <td class="act">Actividad diagnóstica (no cuenta nota)</td>
+          </tr>
+          <tr>
+            <td class="sem">2</td>
+            <td class="fechas">10–16 ago</td>
+            <td class="unidad">U1</td>
+            <td>Patrones de integración: API, mensajería, eventos — anclado a Oracle Módulo 3 (Database@Azure / Database@Google Cloud como caso real de servicio ancla multi-nube)</td>
+            <td class="act">5% · Actividad 1 (U1): cola SQS + tópico SNS conectando 2 servicios en el Learner Lab</td>
+          </tr>
+          <tr>
+            <td class="sem">3</td>
+            <td class="fechas">17–23 ago</td>
+            <td class="unidad">U1</td>
+            <td>Redes e interconectividad multicloud: VPN, FastConnect/Interconnect (Oracle Módulo 2) + soberanía de datos y cumplimiento regional</td>
+            <td class="act">5% · Actividad 2 (U1): sandbox de contenedores (build/push/run/verify) + Site-to-Site VPN o VPC Peering en Learner Lab</td>
+          </tr>
+          <tr>
+            <td class="sem">4</td>
+            <td class="fechas">24–30 ago</td>
+            <td class="unidad">U1</td>
+            <td>Gobierno multicloud: IAM federado, vendor lock-in y estrategias de migración entre proveedores (los 6/7 Rs)</td>
+            <td class="act">—</td>
+          </tr>
+          <tr>
+            <td class="sem">5</td>
+            <td class="fechas">31 ago–6 sep</td>
+            <td class="unidad">U1</td>
+            <td>Repaso Unidad 1</td>
+            <td class="act">Rúbrica U1 — 20% proyecto</td>
+          </tr>
+          <tr>
+            <td class="sem">6</td>
+            <td class="fechas">7–13 sep</td>
+            <td class="unidad">U2</td>
+            <td>Arquitecturas de microservicios: descomposición de monolitos, comunicación síncrona/asíncrona, API Gateway</td>
+            <td class="act">—</td>
+          </tr>
+          <tr>
+            <td class="sem">7</td>
+            <td class="fechas">14–20 sep</td>
+            <td class="unidad">U2</td>
+            <td>Contenedores y registro de imágenes: Docker, Amazon ECR — arranque del lab AWS</td>
+            <td class="act">5% · Actividad 1 (U2): checkpoint del lab AWS Vocareum #2029442 (imagen en ECR corriendo)</td>
+          </tr>
+          <tr>
+            <td class="sem">8</td>
+            <td class="fechas">21–27 sep</td>
+            <td class="unidad">U2</td>
+            <td>Amazon ECR + ECS Fargate + Application Load Balancer + AWS CodeDeploy: clúster serverless, enrutamiento por path y despliegue Blue/Green — continuación del lab AWS</td>
+            <td class="act">—</td>
+          </tr>
+          <tr>
+            <td class="sem">9</td>
+            <td class="fechas">28 sep–4 oct</td>
+            <td class="unidad">U2</td>
+            <td>Cierre del lab AWS: CodePipeline conectando CodeCommit→CodeDeploy + FinOps: estimación (Pricing Calculator) vs. costo real observado</td>
+            <td class="act">5% · Actividad 2 (U2): entrega completa del lab AWS Vocareum #2029442</td>
+          </tr>
+          <tr class="receso">
+            <td class="sem">Receso</td>
+            <td class="fechas">5–11 oct</td>
+            <td class="unidad">—</td>
+            <td>Sin clase</td>
+            <td class="act"></td>
+          </tr>
+          <tr>
+            <td class="sem">10</td>
+            <td class="fechas">12–18 oct</td>
+            <td class="unidad">U2</td>
+            <td>Repaso Unidad 2</td>
+            <td class="act">Rúbrica U2 — 20% proyecto</td>
+          </tr>
+          <tr>
+            <td class="sem">11</td>
+            <td class="fechas">19–25 oct</td>
+            <td class="unidad">U3</td>
+            <td>IA aplicada a DevOps y pipelines: Amazon Q Developer como agente — qué automatiza y qué exige supervisión humana</td>
+            <td class="act">5% · Actividad 1 (U3): usar Q Developer para revisar/optimizar el pipeline de U2 y documentar 2 mejoras reales</td>
+          </tr>
+          <tr>
+            <td class="sem">12</td>
+            <td class="fechas">26 oct–1 nov</td>
+            <td class="unidad">U3</td>
+            <td>Integrando el pipeline con infraestructura ASUR (segundo destino real) — service mesh multicloud (Istio multi-primary / Linkerd multicluster) como el "cómo"</td>
+            <td class="act">5% · Actividad 2 (U3): milestone integración AWS↔ASUR · Último día retiro: 1 nov</td>
+          </tr>
+          <tr>
+            <td class="sem">13</td>
+            <td class="fechas">2–8 nov</td>
+            <td class="unidad">U3</td>
+            <td>Observabilidad multicloud con IA (AIOps): CloudWatch anomaly detection, DevOps Guru, X-Ray Insights frente al monitoreo tradicional</td>
+            <td class="act">—</td>
+          </tr>
+          <tr>
+            <td class="sem">14</td>
+            <td class="fechas">9–15 nov</td>
+            <td class="unidad">U3</td>
+            <td>Seguridad multicloud asistida por IA: CrowdStrike Falcon XDR, Microsoft Sentinel + Copilot for Security, SentinelOne — límites honestos (human-augmented)</td>
+            <td class="act">—</td>
+          </tr>
+          <tr>
+            <td class="sem">15–16</td>
+            <td class="fechas">16–29 nov</td>
+            <td class="unidad">U3</td>
+            <td>Repaso + entrega/sustentación del proyecto final</td>
+            <td class="act">Rúbrica U3 — proyecto documentado. Fin de clases: 30 nov</td>
+          </tr>
+          <tr class="receso">
+            <td class="sem">—</td>
+            <td class="fechas">30 nov–13 dic</td>
+            <td class="unidad">—</td>
+            <td>Sin clase — cierre académico administrativo: corrección de notas (1–4 dic) · cierre (9–10 dic) · grados (11 dic)</td>
+            <td class="act"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<footer class="page">
+  Integración de Soluciones para Plataformas Cloud · Universidad de la Costa (CUC) · Periodo 2026-2
+</footer>
