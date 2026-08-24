@@ -4,7 +4,7 @@
 **Docente:** Ing. Rodolfo Cañas Cervantes — Universidad de la Costa (CUC) · 2026-2
 **Duración estimada:** 120 min · **Modalidad:** VirtualBox local (4 VMs)
 **Tipo:** laboratorio práctico complementario — **sin nota**; se valida con el auto-check de la sección 10
-**Guía visual:** esta es la versión técnica cruda; la guía ilustrada con diagramas es `lab-02-vpn-site-to-site-opnsense.html`
+**Guía visual:** esta es la versión técnica cruda; la guía ilustrada con diagramas y botones de copiado es `lab-02-vpn-site-to-site-opnsense.html`
 
 > Ejecución técnica, diagnóstico y documentación: **ox-alpha**, modelo IA de lenguaje.
 > Dirección académica y arquitectura: **Ing. Rodolfo Cañas Cervantes**.
@@ -14,6 +14,9 @@
 > escritorio ligero), los firewalls se administran desde el navegador de los propios servers
 > (nada de administrar desde "tu PC" dentro de la red WAN), y todos los bloques de comandos
 > son copiar-pegar gracias al portapapeles bidireccional de VirtualBox.
+>
+> **v3:** SSH también desde la consola del firewall (sin webGUI) + nota de que al entrar por
+> SSH caes en el menú de OPNsense (presiona `8` para shell) + flujo de trabajo consola-primero.
 
 ---
 
@@ -142,22 +145,36 @@ Acepta el certificado autofirmado. Login: `root` / `opnsense`.
 > esta versión del lab — quedan como anexo D opcional. La lección de `reply-to` sigue viva:
 > la necesitarás para la regla UDP 51820 del túnel (fase 6.4).
 
-### 3.4 Habilitar SSH en cada firewall (para copiar-pegar por terminal)
+### 3.4 Habilitar SSH en cada firewall (gráfico o consola) y entrar por SSH
 
-Desde el navegador del server correspondiente:
+Hay dos caminos equivalentes; el resultado es el mismo: una terminal SSH desde tu server hacia SU firewall, donde pegarás todos los comandos del lab.
 
-1. **System → Settings → Administration → Secure Shell**: marca **Enable Secure Shell** y **Permit password login** → Save.
-2. En el server abre una terminal (LXTerminal) y conéctate:
+**Camino 1 — Gráfico (webGUI, 3 clics):** en el navegador de SERVER-A abre `https://10.0.0.1` (en SERVER-B: `https://20.0.0.1`), acepta el certificado, entra con `root` / `opnsense` y ve a **System → Settings → Administration → Secure Shell**: marca **Enable Secure Shell**, **Permit password login** y **Permit root user login** → **Save**.
+
+**Camino 2 — Consola de la VM (sin webGUI):** en la consola de VirtualBox del firewall, entra como `root` / `opnsense` y elige la opción **8) Shell**:
 
 ```bash
-# desde SERVER-A:
-ssh root@10.0.0.1        # acepta el fingerprint · password: opnsense
-
-# desde SERVER-B:
-ssh root@20.0.0.1
+configctl openssh start        # inicia sshd ya, sin tocar la webGUI
+sockstat -l | grep ':22 '      # verifica: sshd escuchando ✓
+# (si el comando no existe en tu versión: service openssh onestart)
+# Nota: este arranque es inmediato pero NO persiste tras reboot;
+# para dejarlo fijo (y permitir root+password) usa el Camino 1 una vez.
 ```
 
-A partir de aquí, todo lo que hagas en los routers es copiar-pegar dentro de esa sesión SSH.
+**Entra por SSH desde tu server** (aquí convergen los dos caminos):
+
+```bash
+# Terminal de SERVER-A:
+ssh root@10.0.0.1        # acepta el fingerprint · password: opnsense
+# → verás el MENÚ de OPNsense: presiona 8 para entrar al shell
+
+# Terminal de SERVER-B:
+ssh root@20.0.0.1        # igual: opción 8 para shell
+```
+
+> 💡 Si SSH rechaza la contraseña de root, falta una casilla: entra una vez por el Camino 1
+> y marca **Permit root user login** + **Permit password login**. Deja siempre UNA sesión
+> abierta mientras pruebas reglas nuevas: es tu cuerda de seguridad.
 
 ---
 
@@ -195,6 +212,11 @@ ip -br addr        # SERVER-A debe mostrar 10.0.0.1xx · SERVER-B 20.0.0.1xx
 ip route           # default via 10.0.0.1   (o 20.0.0.1 en B)
 ping -c2 10.0.0.1  # el firewall responde  (20.0.0.1 en B)
 ```
+
+> 💡 Flujo de trabajo: abre ESTA guía (la versión HTML) en el navegador de cada server —
+> tienen Internet a través de su firewall. Cada bloque de comandos tiene botón **Copiar**
+> y su comentario inicial dice en qué máquina se pega (ROUTER-A/B · SERVER-A/B).
+> Lee la etiqueta ANTES de pegar: el mismo comando en la VM equivocada es el incidente #7.
 
 > 💡 Si un server no toma IP: revisa que su adaptador esté en la internal network correcta y
 > que en la consola del firewall la opción 1 muestre `em1 UP`.
@@ -266,7 +288,7 @@ cat > /usr/local/etc/kea/kea-dhcp4.conf <<'KEA'
       ]
     } ],
     "loggers": [ { "name": "kea-dhcp4",
-      "output-options": [ { "output": "/var/log/kea/kea-dhcp4.log" } ],
+      "output-options": [ { "output": "/var/log/kea/kea4-dhcp4.log" } ],
       "severity": "INFO" } ]
   }
 }
@@ -628,3 +650,4 @@ La NAT Network de VirtualBox no es alcanzable desde el host por defecto. Para ex
 - Dirección académica y arquitectura: **Ing. Rodolfo Cañas Cervantes** (CUC)
 - Validado end-to-end en infraestructura real antes de publicarse — agosto 2026
 - v2: servers OSBoxes + administración desde los servers + bloques copiar-pegar — agosto 2026
+- v3: SSH por consola o webGUI + flujo consola-primero + botones Copiar en la guía HTML — agosto 2026
