@@ -34,8 +34,8 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
 2. Las credenciales que entregó el docente:
    - **URL única de entrada**: `https://labs.proyectoasur.org/` — es la misma para todo el curso, no hay una URL distinta por estudiante.
    - **Usuario de terminal**: cada estudiante tiene un usuario **asignado y fijo** entre `ios-est01` y `ios-est20` — el tuyo está en la tabla de abajo. Ese usuario es tu identidad en la evidencia del entregable.
-   - **Clave de terminal**: `cuc2026lab` (la misma para las 20 cuentas — solo válida hoy, en esta sesión).
-   - **Usuario y clave del registro Docker** (compartido, válido solo hoy) — te los da el docente aparte, no son los mismos de la terminal.
+   - **Clave de terminal**: `cuc2026lab` (la misma para las 20 cuentas).
+   - **Usuario y clave del registro Docker** (compartido) — te los da el docente aparte, no son los mismos de la terminal.
 
 > Este lab corre íntegramente en infraestructura del curso. Nada se instala ni se configura en tu computador.
 
