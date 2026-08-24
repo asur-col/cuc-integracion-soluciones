@@ -234,6 +234,7 @@ Un solo documento (PDF) con estas 4 evidencias, en este orden:
 | `network unreachable` o timeout al hacer login/push | Escribiste mal la dirección del registro | El registro es `200.30.0.3:5000`, ni `localhost` ni otra IP |
 | `docker version` no muestra sección Server | Tu daemon tardó en arrancar o se cayó | Avisa al docente (se reinicia con un comando) |
 | Terminal web pide credenciales de nuevo | Sesión expirada | Vuelve a entrar a https://labs.proyectoasur.org/ con tu usuario y la clave `cuc2026lab` |
+| Al abrir `https://labs.proyectoasur.org/` te manda directo a la terminal de otro compañero | Ese usuario quedó logueado en esta compu (es compartida) | Verás un panel "Sesión activa" — haz clic en **"Cerrar sesión y entrar con otro usuario"** y entra con el tuyo |
 
 ## Checklist de advertencias (revisar durante el lab)
 
@@ -241,3 +242,4 @@ Un solo documento (PDF) con estas 4 evidencias, en este orden:
 - Todo corre remoto en los servidores del curso: no intentes instalar Docker en tu PC durante el lab.
 - Usa siempre `$IMAGE` y `${LAB_PORT}` de tu sesión en vez de tipear valores a mano — evitas el 90% de los errores.
 - Al terminar la clase el entorno se conserva unos días por si el docente pide evidencia adicional; después se limpia con el procedimiento de teardown.
+- **Cierra tu sesión al terminar** (botón "Cerrar sesión y entrar con otro usuario" en `https://labs.proyectoasur.org/`) si compartes la computadora con un compañero — si no, el siguiente entra directo a tu terminal.
