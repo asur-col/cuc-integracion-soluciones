@@ -33,11 +33,38 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
 1. Un navegador web (Chrome/Firefox/Edge actualizado).
 2. Las credenciales que entregó el docente:
    - **URL única de entrada**: `https://labs.proyectoasur.org/` — es la misma para todo el curso, no hay una URL distinta por estudiante.
-   - **Usuario de terminal**: cualquiera de `ios-est01` a `ios-est20` **que esté libre** — no tienes uno asignado, elige uno que ningún compañero esté usando y avisa cuál tomaste (ese usuario queda como tu identidad en la evidencia del entregable).
+   - **Usuario de terminal**: cada estudiante tiene un usuario **asignado y fijo** entre `ios-est01` y `ios-est20` — el tuyo está en la tabla de abajo. Ese usuario es tu identidad en la evidencia del entregable.
    - **Clave de terminal**: `cuc2026lab` (la misma para las 20 cuentas — solo válida hoy, en esta sesión).
    - **Usuario y clave del registro Docker** (compartido, válido solo hoy) — te los da el docente aparte, no son los mismos de la terminal.
 
 > Este lab corre íntegramente en infraestructura del curso. Nada se instala ni se configura en tu computador.
+
+### Tabla de asignación — tu usuario del lab
+
+Busca tu nombre y usa **exclusivamente** ese usuario durante todo el lab (orden alfabético por apellidos, según la lista oficial de clase del grupo PRESENCIAL-24801):
+
+| Estudiante | Usuario asignado |
+|---|---|
+| ARRIETA RICARDO KEVIN ALFONSO | `ios-est01` |
+| BARBOSA FERNANDEZ ARNOOLD | `ios-est02` |
+| CARO MOLINA JUAN SEBASTIAN | `ios-est03` |
+| DE LA HOZ GONZALEZ DAVID ANDRES | `ios-est04` |
+| DOUGLAS ROMERO LUIS DAVID | `ios-est05` |
+| ECHEVERRIA VERGARA ALEJANDRO | `ios-est06` |
+| GOMEZ PINEDA ISABELLA MARIA | `ios-est07` |
+| GUEVARA CARABALLO MARLENE DEL PILAR | `ios-est08` |
+| JIMENEZ TERAN MELANY LORAINE | `ios-est09` |
+| LIZARAZO DUARTE JUAN DAVID | `ios-est10` |
+| LOPEZ ARIZA GIAN LUCAS | `ios-est11` |
+| MONTERROZA CONTRERAS ALAN MANUEL | `ios-est12` |
+| NARVAEZ VARELA ISAAC DANIEL | `ios-est13` |
+| NIÑO CABRERA JUAN MANUEL | `ios-est14` |
+| PARRA JESSURUM ISABELLA MAIGRET | `ios-est15` |
+| PEDRAZA GRANADOS BRANDON DANIEL | `ios-est16` |
+| PEREZ HADECHINI JUAN FRANCISCO | `ios-est17` |
+| PEÑA DE LA TORRE JUAN DAVID | `ios-est18` |
+| SUAREZ DIAZ SARAY PAOLA | `ios-est19` |
+| SUAREZ NAVARRO ANDRES FELIPE | `ios-est20` |
 
 ***
 
@@ -46,7 +73,7 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
 ### A.1 — Abrir tu terminal web
 
 1. Abre en el navegador `https://labs.proyectoasur.org/`.
-2. En la página de login, escribe el usuario que elegiste (ej. `ios-est07`) y la clave `cuc2026lab`. Si el usuario ya está en uso por otro compañero, elige otro número libre.
+2. En la página de login, escribe tu usuario asignado (ej. `ios-est07`, mira la tabla anterior) y la clave `cuc2026lab`. Nadie más usará tu usuario — si el login te rechaza, revisa que hayas escrito bien tu número.
 3. Debe aparecer un banner como este:
 
 ```
@@ -78,7 +105,7 @@ ls ~/hello-multicloud
 
 Resultado esperado:
 
-- `whoami` → tu usuario (`ios-estNN` o el asignado).
+- `whoami` → tu usuario (`ios-estNN` asignado).
 - `docker version` → **Client** y **Server** con versión; si Server da error, avisa al docente.
 - El proyecto starter con dos archivos: `server.js` y `Dockerfile`.
 
@@ -238,7 +265,7 @@ Un solo documento (PDF) con estas 4 evidencias, en este orden:
 
 ## Checklist de advertencias (revisar durante el lab)
 
-- La clave es compartida, pero el **usuario que elegiste** es tu identidad para la evidencia — no lo cambies a mitad del lab ni uses uno que ya vieras ocupado por otro compañero.
+- La clave es compartida, pero tu **usuario asignado** (tabla de arriba) es tu identidad para la evidencia — entra siempre con él, nunca con el de otro compañero.
 - Todo corre remoto en los servidores del curso: no intentes instalar Docker en tu PC durante el lab.
 - Usa siempre `$IMAGE` y `${LAB_PORT}` de tu sesión en vez de tipear valores a mano — evitas el 90% de los errores.
 - Al terminar la clase el entorno se conserva unos días por si el docente pide evidencia adicional; después se limpia con el procedimiento de teardown.
