@@ -66,6 +66,12 @@
   .checklist li::before{content:"☐";position:absolute;left:4px;color:var(--vino);font-size:16px}
   footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
   .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:8px}
+  /* Móvil: las tablas anchas (min-content por tokens de código largos) se vuelven bloques con scroll propio
+     y los tokens largos dentro de listas pueden romper — evita que empujen el ancho del documento */
+  @media(max-width:700px){
+    table{display:block;overflow-x:auto}
+    li{overflow-wrap:anywhere}
+  }
 </style>
 </head>
 <body>
@@ -247,7 +253,8 @@
         <li><b>URL única de entrada</b>: <code>https://labs.proyectoasur.org/</code> — la misma para todo el curso, no hay una distinta por estudiante.</li>
         <li><b>Usuario</b>: cada estudiante tiene uno <b>asignado y fijo</b> entre <code>ios-est01</code> y <code>ios-est20</code> — el tuyo está en la tabla de abajo.</li>
         <li><b>Clave de terminal</b>: <code>cuc2026lab</code> (la misma para las 20 cuentas).</li>
-        <li><b>Usuario y clave del registro Docker</b> (compartido con la clase) — distintos de los de la terminal.</li>
+        <li><b>Usuario del registro Docker</b>: <code>ios-lab</code> — <b>OJO, no es tu usuario de terminal</b> (<code>ios-estNN</code>), es un usuario único para todos.</li>
+        <li><b>Clave del registro Docker</b>: <code>cuc2026lab</code> — la misma que usaste para entrar a la terminal.</li>
       </ul>
     </li>
   </ul>
@@ -330,7 +337,7 @@
 
   <h3>C.1 — Autenticarte</h3>
 <pre><code><span class="k">docker</span> login 200.30.0.3:5000</code></pre>
-  <p>Usuario y clave: los del <b>registro</b> que entregó el docente (no son los de tu terminal). La salida correcta termina en <code>Login Succeeded</code>.</p>
+  <p>Usuario: <code>ios-lab</code> (<b>no</b> tu usuario de terminal <code>ios-estNN</code>). Clave: <code>cuc2026lab</code> (la misma de tu terminal). La salida correcta termina en <code>Login Succeeded</code>.</p>
   <div class="warn">Si te equivocas de usuario/clave tres veces, espera 30 segundos e inténtalo de nuevo — hay protección anti fuerza bruta y te puede bloquear temporalmente.</div>
 
   <h3>C.2 — Publicar tu imagen</h3>
@@ -397,6 +404,7 @@ v1: digest: <span class="g">sha256:92907e84d135...</span> size: 856</code></pre>
     <tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr>
     <tr><td><code>port is already allocated</code> al hacer <code>run</code></td><td>Usaste el puerto de otro estudiante</td><td>Usa TU <code>$LAB_PORT</code> del banner (variable ya configurada)</td></tr>
     <tr><td><code>denied: requested access to the resource is denied</code> en <code>push</code></td><td>No estás autenticado o la sesión expiró</td><td>Repite <code>docker login 200.30.0.3:5000</code></td></tr>
+    <tr><td><code>401 Unauthorized</code> al hacer <code>login</code></td><td>Usaste tu usuario de terminal (<code>ios-estNN</code>) en vez del usuario del registro</td><td>El registro se autentica con usuario <b><code>ios-lab</code></b>, no con tu <code>ios-estNN</code>. Clave: <code>cuc2026lab</code></td></tr>
     <tr><td><code>network unreachable</code> o timeout al hacer login/push</td><td>Escribiste mal la dirección del registro</td><td>El registro es <code>200.30.0.3:5000</code> — ni <code>localhost</code> ni otra IP</td></tr>
     <tr><td><code>docker version</code> no muestra sección Server</td><td>Tu daemon tardó en arrancar o se cayó</td><td>Avisa al docente (se reinicia con un comando)</td></tr>
     <tr><td>Terminal web pide credenciales de nuevo</td><td>Sesión expirada</td><td>Vuelve a entrar a <code>https://labs.proyectoasur.org/</code> con tu usuario y la clave <code>cuc2026lab</code></td></tr>

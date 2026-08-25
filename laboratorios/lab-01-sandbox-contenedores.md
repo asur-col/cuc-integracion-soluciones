@@ -35,7 +35,8 @@ Si te atrasas en una parte, sigue adelante y documenta hasta donde llegaste — 
    - **URL única de entrada**: `https://labs.proyectoasur.org/` — es la misma para todo el curso, no hay una URL distinta por estudiante.
    - **Usuario de terminal**: cada estudiante tiene un usuario **asignado y fijo** entre `ios-est01` y `ios-est20` — el tuyo está en la tabla de abajo. Ese usuario es tu identidad en la evidencia del entregable.
    - **Clave de terminal**: `cuc2026lab` (la misma para las 20 cuentas).
-   - **Usuario y clave del registro Docker** (compartido) — te los da el docente aparte, no son los mismos de la terminal.
+   - **Usuario del registro Docker**: `ios-lab` — **ojo, NO es tu usuario de terminal** (`ios-estNN`), es un usuario distinto y único, igual para todos.
+   - **Clave del registro Docker**: `cuc2026lab` — la misma clave que usaste para entrar a la terminal.
 
 > Este lab corre íntegramente en infraestructura del curso. Nada se instala ni se configura en tu computador.
 
@@ -165,7 +166,7 @@ En producción nadie despliega desde el laptop: la imagen se publica en un regis
 docker login 200.30.0.3:5000
 ```
 
-Usuario y clave: los que entregó el docente para el **registro** (no son los de tu terminal). La salida correcta termina en `Login Succeeded`.
+Usuario: `ios-lab` (**no** tu usuario de terminal `ios-estNN`). Clave: `cuc2026lab` (la misma de tu terminal). La salida correcta termina en `Login Succeeded`.
 
 > Si te equivocas de usuario/clave tres veces, espera 30 segundos e inténtalo de nuevo.
 
@@ -258,6 +259,7 @@ Un solo documento (PDF) con estas 4 evidencias, en este orden:
 |---|---|---|
 | `port is already allocated` al hacer `run` | Usaste el puerto de otro estudiante | Usa TU `$LAB_PORT` del banner (variable ya configurada) |
 | `denied: requested access to the resource is denied` en `push` | No estás autenticado o sesión expiró | Repite `docker login 200.30.0.3:5000` |
+| `401 Unauthorized` al hacer `login` | Usaste tu usuario de terminal (`ios-estNN`) en vez del usuario del registro | El registro se autentica con usuario **`ios-lab`**, no con tu `ios-estNN`. Clave: `cuc2026lab` |
 | `network unreachable` o timeout al hacer login/push | Escribiste mal la dirección del registro | El registro es `200.30.0.3:5000`, ni `localhost` ni otra IP |
 | `docker version` no muestra sección Server | Tu daemon tardó en arrancar o se cayó | Avisa al docente (se reinicia con un comando) |
 | Terminal web pide credenciales de nuevo | Sesión expirada | Vuelve a entrar a https://labs.proyectoasur.org/ con tu usuario y la clave `cuc2026lab` |
