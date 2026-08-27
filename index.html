@@ -84,6 +84,14 @@
   .week-card.pending .num { background: var(--surface-2); color: var(--ink-soft); }
   .week-card.pending .go { font-style: italic; }
 
+  .week-card.multi .go-group { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .week-card.multi .go-group .go {
+    margin-left: 0; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface-2); font-family: 'IBM Plex Mono'; font-size: 12px; text-decoration: none;
+    transition: border-color .15s, color .15s;
+  }
+  .week-card.multi .go-group .go:hover { border-color: var(--vino); color: var(--vino); }
+
   .lab-list { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
   .lab-row {
     display: flex; align-items: center; gap: 12px; padding: 11px 18px;
@@ -149,30 +157,42 @@
   <section>
     <div class="section-head"><h2>Semanas</h2><span class="count">3 de 14 publicadas</span></div>
     <div class="card-grid">
-      <a class="week-card" href="2026-2-S01-integracion-soluciones-introduccion-multicloud.pdf" target="_blank">
+      <div class="week-card multi">
         <div class="num">1</div>
         <div>
           <div class="title">Introducción a multicloud</div>
           <div class="desc">Qué es una arquitectura multicloud · multicloud vs. nube híbrida · casos de uso reales · estrategias e identidad (Oracle Módulo 1)</div>
         </div>
-        <div class="go">Ver presentación →</div>
-      </a>
-      <a class="week-card" href="2026-2-S02-integracion-soluciones-patrones-integracion.pdf" target="_blank">
+        <div class="go-group">
+          <a class="go" href="2026-2-S01-integracion-soluciones-introduccion-multicloud.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S01-integracion-soluciones-introduccion-multicloud.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S01-integracion-soluciones-introduccion-multicloud.mp4" target="_blank">Ver video →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
         <div class="num">2</div>
         <div>
           <div class="title">Patrones de integración</div>
           <div class="desc">API síncrona · mensajería con colas · eventos pub/sub · caso real Oracle Database@AWS/@Azure/@Google Cloud</div>
         </div>
-        <div class="go">Ver presentación →</div>
-      </a>
-      <a class="week-card" href="2026-2-S03-integracion-soluciones-redes-interconectividad.pdf" target="_blank">
+        <div class="go-group">
+          <a class="go" href="2026-2-S02-integracion-soluciones-patrones-integracion.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S02-integracion-soluciones-patrones-integracion.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S02-integracion-soluciones-patrones-integracion.mp4" target="_blank">Ver video →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
         <div class="num">3</div>
         <div>
           <div class="title">Redes e interconectividad multicloud</div>
           <div class="desc">VCN y gateways · peering · VPN y FastConnect/Interconnect · soberanía de datos + laboratorio de contenedores</div>
         </div>
-        <div class="go">Ver presentación →</div>
-      </a>
+        <div class="go-group">
+          <a class="go" href="2026-2-S03-integracion-soluciones-redes-interconectividad.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S03-integracion-soluciones-redes-interconectividad.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S03-integracion-soluciones-redes-interconectividad.mp4" target="_blank">Ver video →</a>
+        </div>
+      </div>
       <div class="week-card pending">
         <div class="num">4</div>
         <div>
