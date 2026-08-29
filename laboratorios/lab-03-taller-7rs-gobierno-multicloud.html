@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 3 — Taller 7 Rs y calculadora de egress · Integración de Soluciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+  header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  header.top img.logo{height:52px;margin-bottom:14px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,4vw,40px);margin:0 0 10px;line-height:1.15}
+  .sub{color:var(--ink-soft);margin:0;font-size:16px}
+  .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;margin:0}
+  .meta b{color:var(--ink)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-top:26px;box-shadow:var(--shadow)}
+  h2{font-family:var(--serif);font-size:24px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  h2 .paso{font-family:var(--mono);font-size:13px;background:var(--vino);color:#fff;border-radius:8px;padding:3px 11px;font-weight:500}
+  h3{font-size:16.5px;margin:26px 0 8px;color:var(--vino-strong)}
+  .lead{color:var(--ink-soft);margin-top:2px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:14px 0}
+  th{text-align:left;background:var(--surface-2);padding:9px 12px;border:1px solid var(--line);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+  td{padding:8px 12px;border:1px solid var(--line)}
+  code{font-family:var(--mono);font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .tip,.warn{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .tip{border-color:var(--ok);background:var(--ok-tint)} .tip::before{content:"💡 TIP — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok)}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint)} .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado)}
+  .checklist{list-style:none;padding:0;margin:12px 0}
+  .checklist li{padding:7px 0 7px 30px;position:relative;border-bottom:1px dashed var(--line)}
+  .checklist li::before{content:"☐";position:absolute;left:4px;color:var(--vino);font-size:16px}
+  footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+  .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:8px}
+
+  /* --- taller 7 Rs --- */
+  .rs-wheel{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:18px 0}
+  @media(max-width:820px){.rs-wheel{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:520px){.rs-wheel{grid-template-columns:repeat(2,1fr)}}
+  .rs-chip{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 6px;text-align:center;font-size:12px}
+  .rs-chip b{display:block;font-family:var(--mono);font-size:16px;color:var(--vino-strong);margin-bottom:2px}
+  .scenario{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--surface-2)}
+  .scenario h4{margin:0 0 6px;font-size:16px;font-family:var(--serif)}
+  .scenario p{margin:0 0 12px;color:var(--ink-soft)}
+  .rs-options{display:flex;flex-wrap:wrap;gap:8px}
+  .rs-btn{font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:7px 14px;cursor:pointer;transition:.15s}
+  .rs-btn:hover{border-color:var(--vino);color:var(--vino)}
+  .rs-btn.correct{background:var(--ok-tint);border-color:var(--ok);color:var(--ok);font-weight:600}
+  .rs-btn.wrong{background:var(--vino-tint);border-color:var(--vino);color:var(--vino);text-decoration:line-through}
+  .rs-btn[disabled]{cursor:default}
+  .reveal{margin-top:12px;padding:12px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:14px;display:none}
+  .reveal.show{display:block}
+
+  /* --- calculadora egress --- */
+  .calc{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px}
+  @media(max-width:720px){.calc{grid-template-columns:1fr}}
+  .calc label{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em}
+  .calc input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:var(--mono);font-size:15px;margin-bottom:16px}
+  .provider-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .provider-row:last-child{border-bottom:none}
+  .provider-row .name{font-weight:600}
+  .provider-row .cost{font-family:var(--mono);font-size:20px;color:var(--vino-strong)}
+  .provider-row.win{background:var(--ok-tint);margin:0 -10px;padding:10px;border-radius:8px;border-bottom:none}
+  .provider-row.win .cost{color:var(--ok)}
+  .hero-out{text-align:center;padding:20px;background:var(--surface-2);border-radius:12px;margin-top:10px}
+  .hero-out .num{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6vw,52px);color:var(--vino-strong);line-height:1}
+  .hero-out .lbl{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa">
+  <p class="eyebrow">Laboratorio 3 · Unidad 1 — Gobierno multicloud (semana 4)</p>
+  <h1>Taller de las 7 Rs<br>y calculadora de egress</h1>
+  <p class="sub">Sin infraestructura que desplegar: decisiones reales de migración y el costo real de salir de un proveedor</p>
+  <div class="accent-bar"></div>
+  <p class="meta">
+    <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Duración estimada:</b> 40 minutos &nbsp;·&nbsp; <b>Modalidad:</b> en clase, por grupos, navegador &nbsp;·&nbsp; <b>Nivel:</b> introductorio<br><b>Tipo:</b> actividad práctica de clase — semana 4, sin infraestructura previa requerida
+  </p>
+  <span class="ia-badge">Construido por Claude + Ing. Rodolfo Cañas — cifras verificadas (ver fuentes en cada sección)</span>
+</header>
+
+<div class="wrap">
+
+<!-- ============ OBJETIVOS ============ -->
+<section>
+  <h2><span class="paso">OBJETIVOS</span> Qué vas a practicar hoy</h2>
+  <p class="lead">Al terminar este taller serás capaz de:</p>
+  <ul>
+    <li>Aplicar el <b>árbol de decisión de las 7 Rs</b> a escenarios reales de migración, no solo memorizar sus nombres.</li>
+    <li>Justificar por qué una app se migra tal cual (<code>Rehost</code>), se reescribe (<code>Refactor</code>) o simplemente se apaga (<code>Retire</code>).</li>
+    <li>Calcular con cifras reales de 2026 cuánto cuesta sacar datos de AWS, Azure y GCP — el argumento más concreto contra el vendor lock-in.</li>
+  </ul>
+  <div class="tip">No hay AWS Learner Lab ni consola que abrir hoy: todo el ejercicio corre en esta página, en grupos de 3-4 estudiantes.</div>
+</section>
+
+<!-- ============ PARTE 1: TALLER 7 RS ============ -->
+<section>
+  <h2><span class="paso">PARTE 1</span> ¿Qué R le toca a esta app?</h2>
+  <p class="lead">Antes de responder cada escenario, revisa las 7 estrategias:</p>
+  <div class="rs-wheel">
+    <div class="rs-chip"><b>Retire</b>apagar</div>
+    <div class="rs-chip"><b>Retain</b>dejar igual</div>
+    <div class="rs-chip"><b>Repurchase</b>comprar SaaS</div>
+    <div class="rs-chip"><b>Relocate</b>mover hipervisor</div>
+    <div class="rs-chip"><b>Rehost</b>lift &amp; shift</div>
+    <div class="rs-chip"><b>Replatform</b>lift &amp; reshape</div>
+    <div class="rs-chip"><b>Refactor</b>reescribir cloud-native</div>
+  </div>
+
+  <div class="scenario" data-answer="Retain">
+    <h4>Escenario 1</h4>
+    <p>Un sistema de nómina que corre on-prem, actualizado hace 3 meses, sujeto a una regulación local que exige que los datos de empleados no salgan del país.</p>
+    <div class="rs-options"></div>
+    <div class="reveal"><b>Retain.</b> No hay ganancia migrando algo reciente y con una restricción regulatoria real de residencia de datos — el costo de migrar supera el beneficio.</div>
+  </div>
+
+  <div class="scenario" data-answer="Repurchase">
+    <h4>Escenario 2</h4>
+    <p>Un CRM interno construido hace 8 años que hace exactamente lo mismo que un SaaS líder del mercado, sin ninguna personalización crítica.</p>
+    <div class="rs-options"></div>
+    <div class="reveal"><b>Repurchase.</b> Si un SaaS maduro ya resuelve el problema sin diferenciación real, seguir manteniendo la versión propia es costo sin retorno.</div>
+  </div>
+
+  <div class="scenario" data-answer="Relocate">
+    <h4>Escenario 3</h4>
+    <p>Un clúster VMware crítico, sano y bien gestionado, cuyo contrato de datacenter vence en 60 días y debe salir sí o sí.</p>
+    <div class="rs-options"></div>
+    <div class="reveal"><b>Relocate.</b> Mueve el hipervisor completo a un servicio como VMware Cloud on AWS sin tocar la app — la única R diseñada para "salir ya" sin re-arquitectura.</div>
+  </div>
+
+  <div class="scenario" data-answer="Rehost">
+    <h4>Escenario 4</h4>
+    <p>Un e-commerce mediano en servidores propios; el equipo necesita salir del datacenter este trimestre y no tiene tiempo de re-arquitecturar nada.</p>
+    <div class="rs-options"></div>
+    <div class="reveal"><b>Rehost.</b> "Lift and shift" puro: mover las VMs tal cual a instancias cloud. Es la R más común (40-50% de los portafolios reales) precisamente por esto.</div>
+  </div>
+
+  <div class="scenario" data-answer="Refactor">
+    <h4>Escenario 5</h4>
+    <p>La aplicación insignia de la empresa, con presupuesto asignado y el mandato explícito de convertirla en una ventaja competitiva a 3 años.</p>
+    <div class="rs-options"></div>
+    <div class="reveal"><b>Refactor.</b> Vale la pena re-arquitecturar a cloud-native (serverless, microservicios) solo cuando hay presupuesto y una razón estratégica real — y AWS recomienda hacerlo <em>después</em> de la migración masiva, no durante.</div>
+  </div>
+
+  <div class="warn">Discusión final en grupo: ¿qué R le darían a un monolito contable de 15 años, sin dueño claro y que nadie quiere tocar?</div>
+</section>
+
+<!-- ============ PARTE 2: CALCULADORA EGRESS ============ -->
+<section>
+  <h2><span class="paso">PARTE 2</span> Calculadora de egress — el peaje de salida</h2>
+  <p class="lead">Tarifas reales por GB de salida a internet (2026). Prueba con distintos volúmenes y observa cómo cambia el "costo de salir".</p>
+  <div class="calc">
+    <div>
+      <label for="gbInput">Volumen de datos a mover (GB)</label>
+      <input type="number" id="gbInput" value="1000" min="0" step="100">
+      <div class="tip" style="margin:0">Nivel gratuito ya descontado: AWS 100&nbsp;GB · Azure 100&nbsp;GB · GCP 200&nbsp;GiB/mes.</div>
+    </div>
+    <div>
+      <div id="providerList"></div>
+    </div>
+  </div>
+  <div class="hero-out">
+    <div class="num" id="heroNum">$0</div>
+    <div class="lbl">costo estimado del proveedor más caro vs. el más barato, para el volumen indicado</div>
+  </div>
+  <table style="margin-top:20px">
+    <thead><tr><th>Proveedor</th><th>$/GB (por volumen)</th><th>Nivel gratuito</th></tr></thead>
+    <tbody>
+      <tr><td>AWS</td><td>~$0.09</td><td>100 GB/mes</td></tr>
+      <tr><td>Azure</td><td>~$0.087</td><td>100 GB/mes</td></tr>
+      <tr><td>Google Cloud</td><td>$0.12 → $0.08 (por volumen)</td><td>200 GiB/mes</td></tr>
+    </tbody>
+  </table>
+  <p class="lead" style="margin-top:14px">Referencia de escala: <b>100 TB de salida ≈ $9,000 USD</b>. Desde enero de 2027, el <i>EU Data Act</i> prohíbe cobrar por el egress asociado a un cambio de proveedor dentro de la UE — pero el egress operativo del día a día sigue facturándose igual.</p>
+</section>
+
+<footer>
+  Integración de Soluciones para Plataformas Cloud · Universidad de la Costa (CUC) · Periodo 2026-2 · Semana 4
+</footer>
+</div>
+
+<script>
+(function(){
+  var providers = [
+    {name:'AWS', free:100, rate:0.09},
+    {name:'Azure', free:100, rate:0.087},
+    {name:'Google Cloud', free:200, rate:0.10}
+  ];
+
+  document.querySelectorAll('.scenario').forEach(function(sc){
+    var answer = sc.getAttribute('data-answer');
+    var opts = ['Retire','Retain','Repurchase','Relocate','Rehost','Replatform','Refactor'];
+    var container = sc.querySelector('.rs-options');
+    var reveal = sc.querySelector('.reveal');
+    opts.forEach(function(o){
+      var btn = document.createElement('button');
+      btn.className = 'rs-btn';
+      btn.textContent = o;
+      btn.addEventListener('click', function(){
+        if (container.dataset.answered) return;
+        container.dataset.answered = '1';
+        container.querySelectorAll('.rs-btn').forEach(function(b){
+          b.disabled = true;
+          if (b.textContent === answer) b.classList.add('correct');
+          else if (b === btn) b.classList.add('wrong');
+        });
+        reveal.classList.add('show');
+      });
+      container.appendChild(btn);
+    });
+  });
+
+  function fmt(n){ return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0}); }
+
+  function recalc(){
+    var gb = parseFloat(document.getElementById('gbInput').value) || 0;
+    var list = document.getElementById('providerList');
+    list.innerHTML = '';
+    var costs = providers.map(function(p){
+      var billable = Math.max(0, gb - p.free);
+      var cost = billable * p.rate;
+      return {name:p.name, cost:cost};
+    });
+    var min = Math.min.apply(null, costs.map(function(c){return c.cost;}));
+    var max = Math.max.apply(null, costs.map(function(c){return c.cost;}));
+    costs.forEach(function(c){
+      var row = document.createElement('div');
+      row.className = 'provider-row' + (c.cost === min ? ' win' : '');
+      row.innerHTML = '<span class="name">' + c.name + '</span><span class="cost">' + fmt(c.cost) + '</span>';
+      list.appendChild(row);
+    });
+    document.getElementById('heroNum').textContent = fmt(max - min);
+  }
+
+  document.getElementById('gbInput').addEventListener('input', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>
