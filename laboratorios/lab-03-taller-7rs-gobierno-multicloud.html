@@ -74,6 +74,14 @@
   .reveal{margin-top:12px;padding:12px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:14px;display:none}
   .reveal.show{display:block}
 
+  /* --- instructivo --- */
+  .steps{list-style:none;counter-reset:step;padding:0;margin:14px 0}
+  .steps li{counter-increment:step;position:relative;padding:10px 0 10px 44px;border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{content:counter(step);position:absolute;left:0;top:8px;width:28px;height:28px;border-radius:50%;background:var(--vino);color:#fff;font-family:var(--mono);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps b{color:var(--vino-strong)}
+  .steps .when{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);display:block;margin-top:2px}
+
   /* --- calculadora egress --- */
   .calc{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px}
   @media(max-width:720px){.calc{grid-template-columns:1fr}}
@@ -100,12 +108,26 @@
   <p class="meta">
     <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
     <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
-    <b>Duración estimada:</b> 40 minutos &nbsp;·&nbsp; <b>Modalidad:</b> en clase, por grupos, navegador &nbsp;·&nbsp; <b>Nivel:</b> introductorio<br><b>Tipo:</b> actividad práctica de clase — semana 4, sin infraestructura previa requerida
+    <b>Duración estimada:</b> 40 minutos &nbsp;·&nbsp; <b>Modalidad:</b> en clase, individual, navegador &nbsp;·&nbsp; <b>Nivel:</b> introductorio<br><b>Tipo:</b> actividad práctica de clase — semana 4, sin infraestructura previa requerida
   </p>
   <span class="ia-badge">Construido por Claude + Ing. Rodolfo Cañas — cifras verificadas (ver fuentes en cada sección)</span>
 </header>
 
 <div class="wrap">
+
+<!-- ============ INSTRUCTIVO ============ -->
+<section>
+  <h2><span class="paso">INSTRUCTIVO</span> Cómo se corre esta actividad</h2>
+  <p class="lead">Guía para el docente y para el estudiante — cada quien trabaja en su propio equipo, a su ritmo.</p>
+  <ol class="steps">
+    <li><b>Encuadre (3 min).</b> El docente presenta el objetivo: decidir qué estrategia de migración (de las 7 Rs) le corresponde a una aplicación, con criterio, no de memoria.<span class="when">Todo el curso, en plenaria</span></li>
+    <li><b>Lectura de las 7 estrategias (2 min).</b> Cada estudiante revisa individualmente la rueda de conceptos antes de empezar los escenarios.<span class="when">Individual, en esta misma página</span></li>
+    <li><b>Resolver los 5 escenarios (15 min).</b> Cada estudiante lee el escenario, elige una R haciendo clic, y la página revela al instante si acertó y por qué. Sin límite de tiempo por escenario — el objetivo es razonar, no adivinar rápido.<span class="when">Individual</span></li>
+    <li><b>Calculadora de egress (10 min).</b> Cada estudiante prueba distintos volúmenes de datos y observa cómo cambia el costo de salir de cada proveedor.<span class="when">Individual</span></li>
+    <li><b>Discusión final (10 min).</b> El docente retoma la pregunta de cierre ("¿qué R le darían a un monolito contable de 15 años?") y pide 3-4 respuestas voluntarias, contrastando los argumentos.<span class="when">Plenaria</span></li>
+  </ol>
+  <div class="tip">No hay una sola respuesta "oficial" en la discusión final — el objetivo es que cada estudiante defienda su elección con el criterio del árbol de decisión, no que adivine la R que el docente tiene en mente.</div>
+</section>
 
 <!-- ============ OBJETIVOS ============ -->
 <section>
@@ -116,7 +138,6 @@
     <li>Justificar por qué una app se migra tal cual (<code>Rehost</code>), se reescribe (<code>Refactor</code>) o simplemente se apaga (<code>Retire</code>).</li>
     <li>Calcular con cifras reales de 2026 cuánto cuesta sacar datos de AWS, Azure y GCP — el argumento más concreto contra el vendor lock-in.</li>
   </ul>
-  <div class="tip">No hay AWS Learner Lab ni consola que abrir hoy: todo el ejercicio corre en esta página, en grupos de 3-4 estudiantes.</div>
 </section>
 
 <!-- ============ PARTE 1: TALLER 7 RS ============ -->
@@ -168,7 +189,7 @@
     <div class="reveal"><b>Refactor.</b> Vale la pena re-arquitecturar a cloud-native (serverless, microservicios) solo cuando hay presupuesto y una razón estratégica real — y AWS recomienda hacerlo <em>después</em> de la migración masiva, no durante.</div>
   </div>
 
-  <div class="warn">Discusión final en grupo: ¿qué R le darían a un monolito contable de 15 años, sin dueño claro y que nadie quiere tocar?</div>
+  <div class="warn">Discusión final en plenaria: ¿qué R le darías a un monolito contable de 15 años, sin dueño claro y que nadie quiere tocar?</div>
 </section>
 
 <!-- ============ PARTE 2: CALCULADORA EGRESS ============ -->
