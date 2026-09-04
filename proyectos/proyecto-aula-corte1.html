@@ -70,6 +70,9 @@
   .danger{border-color:var(--vino);background:var(--vino-tint)} .danger::before{content:"☠ DECISIÓN DE LA JUNTA — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino)}
   ul,ol{padding-left:22px}
   li{margin:6px 0}
+  figure.diagram{margin:22px 0;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+  figure.diagram svg{min-width:640px;width:100%;height:auto;display:block}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.03em}
   .rubrica td:first-child, .rubrica th:first-child{font-family:var(--mono);text-align:center;width:28px}
   .rubrica td.crit{font-weight:600;color:var(--vino-strong)}
   footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
@@ -104,10 +107,6 @@
   <a href="#s9">9. Recomendaciones</a>
 </nav>
 <div class="wrap">
-
-<section>
-  <blockquote><b>Nota de alcance</b> (documento ajustado contra el contenido real de S01-S04): cada requisito de este proyecto corresponde a algo efectivamente enseñado en las semanas 1-4. Se agregó <b>Oracle Cloud Infrastructure (OCI)</b> como cuarto proveedor porque es el eje real de las semanas 1-3 (patrón <i>Database@Azure/@Google Cloud</i>, interconectividad OCI–Azure, FastConnect), y se retiraron o generalizaron los ítems sin respaldo en el material del curso — ver el anexo de cambios al final del documento.</p>
-</section>
 
 <!-- ============ 1. INFO GENERAL ============ -->
 <section id="s1">
@@ -150,8 +149,11 @@
     <li><b>Riesgo de dependencia de proveedor (lock-in):</b> la junta exige explícitamente una estrategia que no ate a la compañía a un único proveedor de nube.</li>
   </ol>
 
+  <h3>El mandato explícito de la junta (léase con cuidado, es el criterio que más pesa en la evaluación)</h3>
+  <div class="danger">"Ya nos quemamos una vez apostándole todo a un solo proveedor de hosting y quedando atados quince años a un contrato que no nos convenía. No queremos volver a eso. Necesitamos que el negocio no dependa de una sola nube ni de un solo proveedor — pero tampoco queremos terminar con cuatro islas desconectadas que nadie sabe cómo gobernar. Si al final del proyecto seguimos sin saber quién tiene acceso a qué, cuánto nos cuesta salir de cada nube, y cómo se comunican entre sí, no resolvieron el problema, solo lo repartieron en cuatro proveedores en vez de uno."</div>
+
   <h3>La decisión estratégica</h3>
-  <div class="danger">La junta directiva aprobó una estrategia <b>multicloud</b> con la siguiente asignación preliminar de cargas — es el punto de partida que el equipo no inventa ni modifica.</div>
+  <p>La junta directiva aprobó una estrategia <b>multicloud</b> con la siguiente asignación preliminar de cargas — es el punto de partida que el equipo no inventa ni modifica.</p>
   <div class="tbl-wrap"><table>
     <tr><th>Plataforma</th><th>Nube asignada</th></tr>
     <tr><td>E-commerce y cargas elásticas</td><td>Amazon Web Services (AWS)</td></tr>
@@ -194,6 +196,58 @@
 <section id="s5">
   <h2><span class="paso">5</span> Contenido mínimo del documento técnico</h2>
 
+  <h3>Capítulo 0 — ¿Multicloud fragmentado o un solo proveedor bien diseñado? (el corazón del documento)</h3>
+  <p>La pregunta que este capítulo obliga a responder, antes de aceptar la tabla de la junta tal cual: <b>¿de verdad se necesitan 4 proveedores distintos, o el mismo objetivo (no depender de un solo proveedor) se puede lograr con menos fragmentación?</b></p>
+  <p>Presentar y comparar 2 vías:</p>
+  <ul>
+    <li><b>Vía A — un solo proveedor, arquitectura multi-cuenta bien diseñada</b>: consolidar todo en un único proveedor (ej. AWS), usando múltiples cuentas/proyectos separados por función (producción, analítica, identidad) para aislar riesgos y costos, con Reserved Instances/Savings Plans para bajar el gasto. Es más simple de gobernar (una sola consola, un solo modelo de facturación, un solo equipo especializado), pero no resuelve el mandato explícito de la junta: seguir atado a un único proveedor.</li>
+    <li><b>Vía B — multicloud real, la que pide la junta</b>: 4 proveedores distintos, cada uno donde tiene ventaja real (AWS para elasticidad, GCP para IA/analítica, Azure para identidad/Microsoft 365, OCI porque ahí vive la base de datos Oracle que no se puede migrar). Resuelve el mandato de no-dependencia, pero <b>solo si viene acompañada de gobierno centralizado</b> — si cada nube queda administrada por separado, el resultado es igual de frágil que depender de un solo proveedor, con el agravante de que ahora hay 4 puntos de falla y 4 consolas que vigilar en vez de una.</li>
+  </ul>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 820 220" role="img" aria-label="Comparación entre 4 nubes sin gobierno central, cada una con su propia credencial y sin visibilidad de gasto, contra 4 nubes conectadas por una capa de identidad federada y gobierno centralizado">
+      <text x="205" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">SIN GOBIERNO CENTRAL (shadow IT actual)</text>
+      <text x="615" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ok)">CON GOBIERNO CENTRAL (lo que este proyecto diseña)</text>
+      <g font-family="var(--mono)" font-size="12" font-weight="700" fill="var(--ink)">
+        <rect x="30" y="45" width="80" height="36" rx="6" fill="#fff" stroke="var(--vino)" stroke-width="2"/><text x="70" y="68" text-anchor="middle">AWS</text>
+        <rect x="140" y="45" width="80" height="36" rx="6" fill="#fff" stroke="var(--vino)" stroke-width="2"/><text x="180" y="68" text-anchor="middle">GCP</text>
+        <rect x="250" y="45" width="80" height="36" rx="6" fill="#fff" stroke="var(--vino)" stroke-width="2"/><text x="290" y="68" text-anchor="middle">Azure</text>
+        <rect x="360" y="45" width="70" height="36" rx="6" fill="#fff" stroke="var(--vino)" stroke-width="2"/><text x="395" y="68" text-anchor="middle">OCI</text>
+      </g>
+      <g stroke="var(--vino)" stroke-width="2">
+        <line x1="70" y1="81" x2="70" y2="110"/><line x1="180" y1="81" x2="180" y2="110"/>
+        <line x1="290" y1="81" x2="290" y2="110"/><line x1="395" y1="81" x2="395" y2="110"/>
+      </g>
+      <g font-family="var(--mono)" font-size="18" font-weight="700" fill="var(--vino)" text-anchor="middle">
+        <text x="70" y="122">✕</text><text x="180" y="122">✕</text><text x="290" y="122">✕</text><text x="395" y="122">✕</text>
+      </g>
+      <text x="215" y="155" text-anchor="middle" font-size="12" fill="var(--ink-soft)">4 credenciales · 4 políticas</text>
+      <text x="215" y="172" text-anchor="middle" font-size="12" fill="var(--ink-soft)">0 visibilidad de gasto</text>
+      <text x="215" y="189" text-anchor="middle" font-size="12" fill="var(--ink-soft)">0 forma de saber quién accede a qué</text>
+
+      <path d="M450 120 L560 120" stroke="var(--ink-soft)" stroke-width="2" marker-end="url(#arrcm)"/>
+      <defs><marker id="arrcm" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="var(--ink-soft)"/></marker></defs>
+
+      <g font-family="var(--mono)" font-size="12" font-weight="700" fill="var(--ink)">
+        <rect x="580" y="45" width="70" height="36" rx="6" fill="#fff" stroke="var(--ok)" stroke-width="2"/><text x="615" y="68" text-anchor="middle">AWS</text>
+        <rect x="660" y="45" width="70" height="36" rx="6" fill="#fff" stroke="var(--ok)" stroke-width="2"/><text x="695" y="68" text-anchor="middle">GCP</text>
+        <rect x="740" y="45" width="70" height="36" rx="6" fill="#fff" stroke="var(--ok)" stroke-width="2"/><text x="775" y="68" text-anchor="middle">Azure/OCI</text>
+      </g>
+      <g stroke="var(--ok)" stroke-width="2">
+        <line x1="615" y1="81" x2="695" y2="110"/><line x1="695" y1="81" x2="695" y2="110"/><line x1="775" y1="81" x2="695" y2="110"/>
+      </g>
+      <rect x="600" y="110" width="190" height="40" rx="8" fill="var(--ok-tint)" stroke="var(--ok)" stroke-width="2"/>
+      <text x="695" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ok)">Identidad federada +</text>
+      <text x="695" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ok)">gobierno centralizado</text>
+      <text x="695" y="168" text-anchor="middle" font-size="12" fill="var(--ink-soft)">Un solo lugar para ver acceso,</text>
+      <text x="695" y="184" text-anchor="middle" font-size="12" fill="var(--ink-soft)">gasto y riesgo de las 4 nubes</text>
+    </svg>
+    <figcaption>4 nubes aisladas sin gobierno (izquierda) vs. 4 nubes con una capa de identidad y gobierno centralizado (derecha) — el problema no es multicloud, es multicloud sin gobierno</figcaption>
+  </figure>
+
+  <p><b>Decisión final justificada</b>: por qué la Vía B (multicloud con gobierno centralizado) es la que se lleva al resto del documento, y qué la diferencia de simplemente "tener 4 nubes sin conectarlas" — la justificación debe conectar con el mandato de la junta (sección 2), no con "es lo más moderno".</p>
+  <div class="tip">La primera respuesta de un asistente de IA a "¿cómo organizo esto en multicloud?" casi siempre da por sentada la tabla de asignación sin cuestionar si la fragmentación en sí es un riesgo nuevo. Este capítulo existe para que esa pregunta se haga explícita antes de diseñar nada.</div>
+
   <h3>Capítulo 1 — Estrategia y justificación multicloud (Semana 1)</h3>
   <ul>
     <li><b>Matriz de decisión de cargas de trabajo:</b> tabla que asigne cada carga (e-commerce, ERP/POS, CRM, analítica/IA, base de datos Oracle, identidad, respaldos, etc.) a una nube o al datacenter, indicando modelo de servicio y justificando la decisión con base en fortalezas del proveedor, costos y riesgo de lock-in.</li>
@@ -235,7 +289,7 @@
 <section id="s6">
   <h2><span class="paso">6</span> Entregables</h2>
   <ol>
-    <li><b>Documento técnico</b> en PDF con los cuatro capítulos y anexos (máximo 20 páginas sin contar anexos).</li>
+    <li><b>Documento técnico</b> en PDF con los cinco capítulos (0 a 4) y anexos (máximo 20 páginas sin contar anexos).</li>
     <li><b>Diagramas de arquitectura e interconexión</b> en formato editable (draw.io o similar), adjuntando los archivos fuente.</li>
     <li><b>Matriz de decisión de cargas de trabajo</b> y <b>matriz de migración 7 R's</b> (pueden entregarse como anexos en hoja de cálculo o Markdown).</li>
     <li><b>Sustentación oral</b> de 15 minutos por equipo, con 5 minutos de preguntas.</li>
@@ -244,15 +298,15 @@
 
 <!-- ============ 7. RÚBRICA ============ -->
 <section id="s7">
-  <h2><span class="paso">7</span> Rúbrica de evaluación</h2>
-  <p class="lead">Cada criterio se califica de 0.0 a 5.0. La nota del proyecto es la suma ponderada: <code>Nota = Σ (peso × calificación del criterio)</code>.</p>
+  <h2><span class="paso">7</span> Rúbrica de evaluación — 5 criterios, nota final de 0.0 a 5.0</h2>
+  <p class="lead">Cada criterio vale <b>hasta 1.0 punto</b>. La suma de los 5 da la nota final del proyecto (máximo 5.0).</p>
   <div class="tbl-wrap"><table class="rubrica">
-    <tr><th>#</th><th>Criterio</th><th>Semana</th><th>Peso</th><th>Nivel sobresaliente (5.0)</th></tr>
-    <tr><td class="crit">1</td><td>Estrategia y justificación multicloud</td><td>S1</td><td>20%</td><td>Distribución de cargas completa (incluyendo OCI), justificada con fortalezas reales de cada proveedor, modelos de servicio y análisis de riesgo de lock-in</td></tr>
-    <tr><td class="crit">2</td><td>Patrones de integración</td><td>S2</td><td>25%</td><td>Flujos de integración identificados sin omisiones; patrones vistos en clase correctamente seleccionados, justificados y diagramados</td></tr>
-    <tr><td class="crit">3</td><td>Redes e interconectividad</td><td>S3</td><td>25%</td><td>Diseño de red completo y coherente (VPN S2S, FastConnect/Interconnect, BGP, CIDR sin solapamientos), conectado con lo aprendido en el Lab 02</td></tr>
-    <tr><td class="crit">4</td><td>Gobierno multicloud y migración 7 R's</td><td>S4</td><td>20%</td><td>Identidad federada bien planteada, análisis de lock-in/egress con cifras del Lab 03, y matriz 7 R's consistente con el caso</td></tr>
-    <tr><td class="crit">5</td><td>Calidad documental y sustentación</td><td>Transversal</td><td>10%</td><td>Documento claro, diagramas legibles, sustentación dominada por todo el equipo</td></tr>
+    <tr><th>#</th><th>Criterio</th><th>Qué mide</th><th>1.0 (pleno)</th><th>0.6 (parcial)</th><th>0.2 (mínimo)</th><th>0.0</th></tr>
+    <tr><td class="crit">1</td><td><b>Estrategia y justificación multicloud (Cap. 1)</b></td><td>Que la distribución de cargas esté bien fundamentada, no solo copiada de la tabla de la junta</td><td>Matriz de decisión completa (incluye OCI), cada carga justificada con fortalezas reales del proveedor, modelo de servicio y riesgo de lock-in</td><td>Matriz completa pero 2-3 justificaciones débiles o genéricas</td><td>Matriz incompleta o con justificaciones tipo "porque sí es mejor"</td><td>No hay matriz o está copiada sin adaptar al caso</td></tr>
+    <tr><td class="crit">2</td><td><b>Exploración de rutas alternativas (Cap. 0)</b></td><td>Que el equipo no aceptó la fragmentación en 4 nubes sin cuestionarla</td><td>Compara de verdad la Vía A (un solo proveedor multi-cuenta) contra la Vía B (multicloud con gobierno centralizado), y justifica por qué B resuelve el mandato de la junta sin caer en 4 islas desconectadas</td><td>Presenta las 2 vías pero la comparación es superficial</td><td>Solo menciona que "podría ser un solo proveedor" sin desarrollar la comparación</td><td>No hay Capítulo 0 o es un párrafo genérico</td></tr>
+    <tr><td class="crit">3</td><td><b>Patrones de integración y redes (Cap. 2-3)</b></td><td>Calidad técnica del diseño de integración y conectividad</td><td>Flujos de integración completos con patrones correctamente justificados; diseño de red coherente (VPN S2S, FastConnect/Interconnect, BGP, CIDR sin solapamientos), conectado con el Lab 02</td><td>Uno de los dos capítulos (2 o 3) está incompleto o con errores menores</td><td>Ambos capítulos superficiales, o CIDR con solapamientos</td><td>No hay diseño técnico o está copiado sin adaptar</td></tr>
+    <tr><td class="crit">4</td><td><b>Gobierno multicloud y migración 7 R's (Cap. 4)</b></td><td>Que el diseño resuelva de verdad el mandato de gobierno centralizado, no solo lo mencione</td><td>Identidad federada bien planteada, análisis de lock-in/egress con cifras reales del Lab 03, matriz 7 R's consistente con el caso (justifica por qué Oracle no se refactoriza)</td><td>Cubre identidad y 7 R's pero el análisis de egress usa cifras inventadas o no usa el Lab 03</td><td>Cubre solo 1-2 de los 3 elementos (identidad, egress, 7 R's)</td><td>No hay diseño de gobierno ni de migración</td></tr>
+    <tr><td class="crit">5</td><td><b>Coherencia, trazabilidad y sustentación</b></td><td>Que todo el documento cuente una sola historia y el equipo la domine</td><td>La decisión del Capítulo 0 es la que efectivamente se implementa en los capítulos 1-4; cada decisión traza a un desafío del caso; todo el equipo sustenta cualquier parte</td><td>1 inconsistencia menor entre capítulos, o un integrante no domina alguna parte</td><td>Varias inconsistencias, o la sustentación depende de 1 sola persona</td><td>El documento se contradice entre capítulos</td></tr>
   </table></div>
 </section>
 
@@ -260,7 +314,7 @@
 <section id="s8">
   <h2><span class="paso">8</span> Condiciones de entrega</h2>
   <ul>
-    <li>Los equipos (máximo 2 integrantes, se permite individual) deben quedar registrados con el docente a más tardar en la <b>semana 3</b>.</li>
+    <li>Los equipos (máximo 2 integrantes, se permite individual) deben quedar registrados con el docente a más tardar el <b>martes 9 de septiembre de 2026</b>.</li>
     <li>El documento se entrega en PDF con la nomenclatura <code>ProyectoC1_Equipo#_Apellidos.pdf</code>.</li>
     <li>Entrega tardía: penalización del 10% de la nota por cada día de retraso, hasta un máximo de 2 días calendario.</li>
     <li><b>Originalidad:</b> el trabajo está sujeto a revisión por similitud. Se permite el uso de herramientas de IA generativa como apoyo, siempre que se declare en una sección del documento qué herramientas se usaron y para qué secciones; el equipo es responsable de la exactitud técnica de todo el contenido entregado.</li>
@@ -272,6 +326,7 @@
 <section id="s9">
   <h2><span class="paso">9</span> Recomendaciones</h2>
   <ul>
+    <li>Empiecen por el Capítulo 0, no por la matriz de decisión: si no tienen claro por qué la fragmentación en 4 nubes necesita gobierno centralizado, todo lo que construyan después hereda el mismo punto ciego.</li>
     <li>Apóyense en el material de las semanas 1 a 4 del aula y en los laboratorios 01 a 03; el proyecto fue diseñado para que cada semana alimente un capítulo.</li>
     <li>Usen la documentación oficial de AWS, Microsoft Azure, Google Cloud y Oracle Cloud para fundamentar las decisiones (no se aceptan afirmaciones sin fuente técnica).</li>
     <li>Reutilicen el esquema de red del <b>Lab 02 (OPNsense)</b> como punto de partida del capítulo de conectividad, y la dinámica del <b>Lab 03</b> para construir la matriz de las 7 R's y el análisis de egress.</li>
