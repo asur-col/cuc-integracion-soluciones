@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto de Aula Corte 1 — Estrategia Multicloud de CaribeMart · Integración de Soluciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --warn:#B23A3A; --warn-tint:#FBE9E7;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --warn:#F0748A; --warn-tint:#3A1E22;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
+  .layout{display:flex;align-items:flex-start;max-width:1400px;margin:0 auto;gap:0}
+  .wrap{flex:1 1 auto;min-width:0;max-width:1140px;margin:0 auto;padding:0 20px 80px}
+  .sidenav{position:sticky;top:0;flex:0 0 220px;padding:32px 12px 32px 20px;display:flex;flex-direction:column;gap:4px;align-self:flex-start;max-height:100vh;overflow-y:auto}
+  .sidenav a{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-decoration:none;padding:8px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+  .sidenav a:hover{color:var(--vino);background:var(--surface-2)}
+  .sidenav a.active{color:var(--vino-strong);border-left-color:var(--vino);background:var(--vino-tint);font-weight:600}
+  @media(max-width:960px){
+    .layout{display:block}
+    .sidenav{position:static;flex-direction:row;flex-wrap:wrap;max-height:none;overflow-y:visible;padding:14px 20px 6px;gap:8px}
+    .sidenav a{border:1px solid var(--line);border-left:1px solid var(--line);background:var(--surface-2);border-radius:20px;padding:6px 13px}
+    .sidenav a.active{border-color:var(--vino)}
+    .wrap{max-width:100%}
+  }
+  header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  header.top img.logo{height:52px;margin-bottom:14px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(24px,4vw,38px);margin:0 0 10px;line-height:1.15}
+  .sub{color:var(--ink-soft);margin:0;font-size:16px;max-width:680px;margin-left:auto;margin-right:auto}
+  .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;margin:0}
+  .meta b{color:var(--ink)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-top:26px;box-shadow:var(--shadow)}
+  h2{font-family:var(--serif);font-size:23px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  h2 .paso{font-family:var(--mono);font-size:13px;background:var(--vino);color:#fff;border-radius:8px;padding:3px 11px;font-weight:500;flex:none}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--vino-strong);font-family:var(--serif)}
+  h4{font-size:15px;margin:18px 0 6px;color:var(--ink)}
+  .lead{color:var(--ink-soft);margin-top:2px}
+  table{border-collapse:collapse;width:100%;font-size:13.8px;margin:14px 0}
+  th{text-align:left;background:var(--surface-2);padding:9px 12px;border:1px solid var(--line);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+  td{padding:8px 12px;border:1px solid var(--line);vertical-align:top}
+  .tbl-wrap{overflow-x:auto}
+  code{font-family:var(--mono);font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  blockquote{margin:14px 0;padding:14px 18px;border-left:4px solid var(--dorado);background:var(--dorado-tint);border-radius:0 8px 8px 0;font-style:italic;color:var(--ink)}
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .tip{border-color:var(--ok);background:var(--ok-tint)} .tip::before{content:"💡 TIP — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok)}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint)} .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado)}
+  .danger{border-color:var(--vino);background:var(--vino-tint)} .danger::before{content:"☠ DECISIÓN DE LA JUNTA — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino)}
+  ul,ol{padding-left:22px}
+  li{margin:6px 0}
+  .rubrica td:first-child, .rubrica th:first-child{font-family:var(--mono);text-align:center;width:28px}
+  .rubrica td.crit{font-weight:600;color:var(--vino-strong)}
+  footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+  a.ext{color:var(--vino);text-decoration:none;border-bottom:1px dotted var(--vino)}
+  a.ext:hover{color:var(--vino-strong);border-bottom-style:solid}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+  <p class="eyebrow">Proyecto de Aula · Primer Corte · Unidad 1</p>
+  <h1>Estrategia Multicloud de "CaribeMart"</h1>
+  <p class="sub">La junta ya decidió repartir las cargas entre 4 proveedores y exige que ningún proveedor la ate — el equipo debe convertir esa decisión en un diseño técnico coherente, conectado y gobernado</p>
+  <div class="accent-bar"></div>
+  <p class="meta">
+    <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Modalidad:</b> equipo de máximo 2 estudiantes (se permite individual) &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 1 (semanas 1 a 4)
+  </p>
+</header>
+
+<div class="layout">
+<nav class="sidenav">
+  <a href="#s1">1. Info general</a>
+  <a href="#s2">2. Caso de estudio</a>
+  <a href="#s3">3. Objetivos</a>
+  <a href="#s4">4. Alcance</a>
+  <a href="#s5">5. Contenido mínimo</a>
+  <a href="#s6">6. Entregables</a>
+  <a href="#s7">7. Rúbrica</a>
+  <a href="#s8">8. Condiciones</a>
+  <a href="#s9">9. Recomendaciones</a>
+</nav>
+<div class="wrap">
+
+<section>
+  <blockquote><b>Nota de alcance</b> (documento ajustado contra el contenido real de S01-S04): cada requisito de este proyecto corresponde a algo efectivamente enseñado en las semanas 1-4. Se agregó <b>Oracle Cloud Infrastructure (OCI)</b> como cuarto proveedor porque es el eje real de las semanas 1-3 (patrón <i>Database@Azure/@Google Cloud</i>, interconectividad OCI–Azure, FastConnect), y se retiraron o generalizaron los ítems sin respaldo en el material del curso — ver el anexo de cambios al final del documento.</p>
+</section>
+
+<!-- ============ 1. INFO GENERAL ============ -->
+<section id="s1">
+  <h2><span class="paso">1</span> Información general</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>Campo</th><th>Detalle</th></tr>
+    <tr><td>Asignatura</td><td>Integración de Soluciones para Plataformas Cloud (Soluciones Multicloud)</td></tr>
+    <tr><td>Corte evaluado</td><td>Primer corte</td></tr>
+    <tr><td>Unidad evaluada</td><td>Unidad 1 (semanas 1 a 4)</td></tr>
+    <tr><td>Temas de la unidad</td><td>Introducción a las soluciones multicloud · Patrones de integración · Redes e interconectividad · Gobierno multicloud</td></tr>
+    <tr><td>Laboratorios relacionados</td><td>Lab 01 — Sandbox de contenedores (semana 3) · Lab 02 — VPN site-to-site con OPNsense (complementario, semana 3) · Lab 03 — Taller de las 7 R's y calculadora de egress (semana 4)</td></tr>
+    <tr><td>Modalidad</td><td><b>Máximo 2 estudiantes</b> (se permite individual)</td></tr>
+    <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
+    <tr><td><b>Fecha límite de entrega</b></td><td><b>Sábado 12 de septiembre de 2026</b> (deja el domingo 13 para calificar antes del plazo oficial de ingreso de notas del corte 1)</td></tr>
+    <tr><td>Medio de entrega</td><td>Microsoft Teams</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 2. CASO DE ESTUDIO ============ -->
+<section id="s2">
+  <h2><span class="paso">2</span> Caso de estudio: Estrategia multicloud de "CaribeMart"</h2>
+
+  <h3>Perfil de la empresa</h3>
+  <p>CaribeMart es una cadena colombiana de retail con 25 años de trayectoria. Opera 60 almacenes físicos distribuidos en las principales ciudades del país, un canal de venta por catálogo y una tienda en línea que crece entre 35% y 40% anual. Emplea a más de 8.000 personas y consolida su operación tecnológica en un datacenter principal en Barranquilla y un sitio de respaldo pasivo en Bogotá.</p>
+  <p>Sus plataformas actuales son:</p>
+  <ul>
+    <li><b>ERP y POS legados</b> (on-premise, base de datos relacional), que soportan inventarios, compras, contabilidad y facturación. Son estables, pero costosos de escalar y difíciles de integrar.</li>
+    <li><b>E-commerce monolítico</b> alojado en un hosting tradicional contratado por capacidad fija.</li>
+    <li><b>CRM comercial</b> utilizado por la fuerza de ventas.</li>
+    <li><b>Data warehouse limitado</b>, usado únicamente para reportes históricos de ventas, corriendo sobre una base de datos Oracle heredada que la empresa no quiere reescribir.</li>
+  </ul>
+
+  <h3>Situación actual y desafíos</h3>
+  <ol>
+    <li><b>Picos de demanda inmanejables:</b> en eventos de alto tráfico como el Día sin IVA o Black Friday, la tienda en línea se degrada o se cae. El hosting actual no escala elásticamente.</li>
+    <li><b>Decisiones sin datos:</b> la junta quiere analítica avanzada e inteligencia artificial (pronóstico de demanda, recomendaciones personalizadas, detección de fraude), pero el data warehouse actual no lo soporta — y su base de datos Oracle no se puede migrar en este corte sin arriesgar la continuidad del negocio.</li>
+    <li><b>Identidad fragmentada:</b> cada sistema administra sus propios usuarios y contraseñas. La empresa adoptó Microsoft 365, pero nunca lo integró con el resto de plataformas.</li>
+    <li><b>Conectividad improvisada:</b> la comunicación entre sedes, datacenter y servicios externos depende de túneles VPN ad hoc sobre Internet, sin redundancia, sin monitoreo y con el datacenter como punto único de falla.</li>
+    <li><b>Ausencia de gobierno cloud:</b> existen suscripciones creadas por iniciativa propia (<i>shadow IT</i>), sin políticas de seguridad consistentes y sin visibilidad del gasto ni del riesgo de depender de un solo proveedor.</li>
+    <li><b>Riesgo de dependencia de proveedor (lock-in):</b> la junta exige explícitamente una estrategia que no ate a la compañía a un único proveedor de nube.</li>
+  </ol>
+
+  <h3>La decisión estratégica</h3>
+  <div class="danger">La junta directiva aprobó una estrategia <b>multicloud</b> con la siguiente asignación preliminar de cargas — es el punto de partida que el equipo no inventa ni modifica.</div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Plataforma</th><th>Nube asignada</th></tr>
+    <tr><td>E-commerce y cargas elásticas</td><td>Amazon Web Services (AWS)</td></tr>
+    <tr><td>Analítica de datos e inteligencia artificial</td><td>Google Cloud Platform (GCP)</td></tr>
+    <tr><td>Identidad corporativa, productividad y aplicaciones empresariales .NET</td><td>Microsoft Azure</td></tr>
+    <tr><td>Base de datos Oracle del data warehouse (sin migrar, pero accesible desde Azure y GCP)</td><td>Oracle Cloud Infrastructure (OCI), interconectado como servicio ancla — patrón <i>Database@Azure</i> / <i>Database@Google Cloud</i></td></tr>
+    <tr><td>ERP / POS legado</td><td>Datacenter on-premise (por ahora)</td></tr>
+  </table></div>
+  <p>El equipo de estudiantes actuará como la <b>firma de arquitectos de soluciones contratada</b> para producir el <i>Documento de Arquitectura Multicloud</i> que convierta esta decisión estratégica en un diseño técnico coherente, seguro, gobernado y justificado.</p>
+</section>
+
+<!-- ============ 3. OBJETIVOS ============ -->
+<section id="s3">
+  <h2><span class="paso">3</span> Objetivos del proyecto</h2>
+  <h3>Objetivo general</h3>
+  <p>Diseñar una arquitectura multicloud integral para CaribeMart que distribuya las cargas de trabajo entre AWS, GCP, Azure, OCI y el datacenter on-premise, garantizando integración, interconectividad segura y un modelo de gobierno corporativo, aplicando exclusivamente los conceptos de la Unidad 1.</p>
+  <h3>Objetivos específicos</h3>
+  <ol>
+    <li><b>(Semana 1)</b> Justificar la distribución de cargas de trabajo entre proveedores según las fortalezas de cada nube, los modelos de servicio (IaaS, PaaS, SaaS) y los criterios de riesgo de dependencia tecnológica.</li>
+    <li><b>(Semana 2)</b> Seleccionar y aplicar patrones de integración (API síncrona, mensajería con colas, eventos pub/sub) que permitan la interoperabilidad entre las nubes públicas y el sistema legado on-premise.</li>
+    <li><b>(Semana 3)</b> Diseñar la red de interconexión entre el datacenter y las nubes (VPN site-to-site, interconectividad dedicada tipo FastConnect/Interconnect y enrutamiento BGP), garantizando seguridad, latencia controlada y alta disponibilidad.</li>
+    <li><b>(Semana 4)</b> Definir el modelo de gobierno multicloud: identidad federada (SAML/OIDC), vendor lock-in, costo real de salida (egress) y estrategia de migración bajo el marco de las 7 R's.</li>
+  </ol>
+</section>
+
+<!-- ============ 4. ALCANCE ============ -->
+<section id="s4">
+  <h2><span class="paso">4</span> Alcance: temas de la Unidad 1</h2>
+  <p>El proyecto evalúa <b>únicamente la Unidad 1</b>. No se exige implementación productiva ni despliegues reales; se evalúa la calidad y fundamentación del <b>diseño arquitectónico</b>.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Semana</th><th>Tema</th><th>Laboratorio de apoyo</th><th>Aplicación esperada</th></tr>
+    <tr><td>1</td><td>Introducción a las soluciones multicloud</td><td>—</td><td>Capítulo 1: estrategia y justificación multicloud</td></tr>
+    <tr><td>2</td><td>Patrones de integración</td><td>—</td><td>Capítulo 2: patrones seleccionados y aplicados</td></tr>
+    <tr><td>3</td><td>Redes e interconectividad</td><td>Lab 01 — Sandbox de contenedores · Lab 02 — VPN site-to-site con OPNsense</td><td>Capítulo 3: diseño de conectividad y enrutamiento</td></tr>
+    <tr><td>4</td><td>Gobierno multicloud</td><td>Lab 03 — Taller de las 7 R's y calculadora de egress</td><td>Capítulo 4: identidad, lock-in, costos y plan de migración</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 5. CONTENIDO MÍNIMO ============ -->
+<section id="s5">
+  <h2><span class="paso">5</span> Contenido mínimo del documento técnico</h2>
+
+  <h3>Capítulo 1 — Estrategia y justificación multicloud (Semana 1)</h3>
+  <ul>
+    <li><b>Matriz de decisión de cargas de trabajo:</b> tabla que asigne cada carga (e-commerce, ERP/POS, CRM, analítica/IA, base de datos Oracle, identidad, respaldos, etc.) a una nube o al datacenter, indicando modelo de servicio y justificando la decisión con base en fortalezas del proveedor, costos y riesgo de lock-in.</li>
+    <li>Análisis de ventajas, desventajas y riesgos del enfoque multicloud para el caso.</li>
+  </ul>
+  <p>Ejemplo de una fila de la matriz (el equipo debe completar el resto):</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Carga de trabajo</th><th>Destino</th><th>Modelo de servicio</th><th>Justificación</th></tr>
+    <tr><td>E-commerce</td><td>AWS</td><td>PaaS / contenedores</td><td>Escalado elástico ante picos de demanda (Día sin IVA, Black Friday)</td></tr>
+  </table></div>
+
+  <h3>Capítulo 2 — Patrones de integración (Semana 2)</h3>
+  <ul>
+    <li>Identificación de los flujos de integración del caso: e-commerce ↔ ERP (inventario y facturación), e-commerce → analítica (datos de ventas), identidad corporativa ↔ aplicaciones, CRM ↔ analítica, analítica ↔ base de datos Oracle.</li>
+    <li>Selección y justificación de los patrones de integración vistos en clase (API síncrona vía gateway, mensajería con colas, eventos pub/sub tipo SNS/EventBridge) para cada flujo.</li>
+    <li>Diagrama de integración que muestre los flujos y los patrones aplicados.</li>
+  </ul>
+
+  <h3>Capítulo 3 — Redes e interconectividad (Semana 3)</h3>
+  <ul>
+    <li><b>Diagrama de red completo:</b> datacenter on-premise, AWS, GCP, Azure y OCI, con sus componentes de borde y enlaces.</li>
+    <li><b>Diseño de conectividad:</b> VPN site-to-site como capa base; propuesta de interconectividad dedicada usando el criterio visto en clase (<b>FastConnect</b> para OCI, <b>Interconnect</b> entre proveedores) indicando en qué escenario se justificaría pagar por línea dedicada en vez de VPN sobre Internet.</li>
+    <li><b>Enrutamiento:</b> uso de BGP para convergencia dinámica y redundancia (diferenciar qué hace BGP frente a lo que hace el cifrado IPsec); propuesta de esquema de direccionamiento IP (CIDR) sin solapamientos entre nubes y on-premise.</li>
+    <li><b>Seguridad de la conectividad:</b> cifrado de túneles y monitoreo básico. Relacionar el diseño con lo implementado en el <b>Lab 02 (VPN site-to-site con OPNsense)</b>.</li>
+  </ul>
+
+  <h3>Capítulo 4 — Gobierno multicloud y migración (Semana 4)</h3>
+  <ul>
+    <li><b>Identidad federada:</b> propuesta de un IdP central (SAML 2.0 u OIDC, según el caso) para unificar el acceso a las distintas nubes, tomando como referencia el modelo visto en S04 (Entra ID como IdP, AWS IAM Identity Center, brokers de identidad).</li>
+    <li><b>Vendor lock-in y costo de salida:</b> análisis de qué ata a CaribeMart a cada proveedor (APIs propietarias, formatos de datos) y estimación del costo de egress de sacar un volumen de datos definido por el equipo, usando la calculadora del <b>Lab 03</b> como referencia de tarifas reales.</li>
+    <li><b>Estrategia de migración:</b> clasificación de cada carga de trabajo según las <b>7 R's</b> (Rehost, Replatform, Repurchase, Refactor, Retire, Retain, Relocate), coherente con lo trabajado en el <b>Lab 03</b> — justificar especialmente por qué la base de datos Oracle del data warehouse se queda en <code>Retain</code> o <code>Relocate</code> y no en <code>Refactor</code>.</li>
+  </ul>
+
+  <h3>Anexos</h3>
+  <p>Glosario, referencias (documentación oficial de AWS, Azure, Google Cloud y Oracle Cloud, material S01–S04 del curso) y, opcionalmente, evidencias de los laboratorios.</p>
+</section>
+
+<!-- ============ 6. ENTREGABLES ============ -->
+<section id="s6">
+  <h2><span class="paso">6</span> Entregables</h2>
+  <ol>
+    <li><b>Documento técnico</b> en PDF con los cuatro capítulos y anexos (máximo 20 páginas sin contar anexos).</li>
+    <li><b>Diagramas de arquitectura e interconexión</b> en formato editable (draw.io o similar), adjuntando los archivos fuente.</li>
+    <li><b>Matriz de decisión de cargas de trabajo</b> y <b>matriz de migración 7 R's</b> (pueden entregarse como anexos en hoja de cálculo o Markdown).</li>
+    <li><b>Sustentación oral</b> de 15 minutos por equipo, con 5 minutos de preguntas.</li>
+  </ol>
+</section>
+
+<!-- ============ 7. RÚBRICA ============ -->
+<section id="s7">
+  <h2><span class="paso">7</span> Rúbrica de evaluación</h2>
+  <p class="lead">Cada criterio se califica de 0.0 a 5.0. La nota del proyecto es la suma ponderada: <code>Nota = Σ (peso × calificación del criterio)</code>.</p>
+  <div class="tbl-wrap"><table class="rubrica">
+    <tr><th>#</th><th>Criterio</th><th>Semana</th><th>Peso</th><th>Nivel sobresaliente (5.0)</th></tr>
+    <tr><td class="crit">1</td><td>Estrategia y justificación multicloud</td><td>S1</td><td>20%</td><td>Distribución de cargas completa (incluyendo OCI), justificada con fortalezas reales de cada proveedor, modelos de servicio y análisis de riesgo de lock-in</td></tr>
+    <tr><td class="crit">2</td><td>Patrones de integración</td><td>S2</td><td>25%</td><td>Flujos de integración identificados sin omisiones; patrones vistos en clase correctamente seleccionados, justificados y diagramados</td></tr>
+    <tr><td class="crit">3</td><td>Redes e interconectividad</td><td>S3</td><td>25%</td><td>Diseño de red completo y coherente (VPN S2S, FastConnect/Interconnect, BGP, CIDR sin solapamientos), conectado con lo aprendido en el Lab 02</td></tr>
+    <tr><td class="crit">4</td><td>Gobierno multicloud y migración 7 R's</td><td>S4</td><td>20%</td><td>Identidad federada bien planteada, análisis de lock-in/egress con cifras del Lab 03, y matriz 7 R's consistente con el caso</td></tr>
+    <tr><td class="crit">5</td><td>Calidad documental y sustentación</td><td>Transversal</td><td>10%</td><td>Documento claro, diagramas legibles, sustentación dominada por todo el equipo</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 8. CONDICIONES ============ -->
+<section id="s8">
+  <h2><span class="paso">8</span> Condiciones de entrega</h2>
+  <ul>
+    <li>Los equipos (máximo 2 integrantes, se permite individual) deben quedar registrados con el docente a más tardar en la <b>semana 3</b>.</li>
+    <li>El documento se entrega en PDF con la nomenclatura <code>ProyectoC1_Equipo#_Apellidos.pdf</code>.</li>
+    <li>Entrega tardía: penalización del 10% de la nota por cada día de retraso, hasta un máximo de 2 días calendario.</li>
+    <li><b>Originalidad:</b> el trabajo está sujeto a revisión por similitud. Se permite el uso de herramientas de IA generativa como apoyo, siempre que se declare en una sección del documento qué herramientas se usaron y para qué secciones; el equipo es responsable de la exactitud técnica de todo el contenido entregado.</li>
+    <li>Todos los integrantes deben estar en capacidad de sustentar cualquier parte del documento.</li>
+  </ul>
+</section>
+
+<!-- ============ 9. RECOMENDACIONES ============ -->
+<section id="s9">
+  <h2><span class="paso">9</span> Recomendaciones</h2>
+  <ul>
+    <li>Apóyense en el material de las semanas 1 a 4 del aula y en los laboratorios 01 a 03; el proyecto fue diseñado para que cada semana alimente un capítulo.</li>
+    <li>Usen la documentación oficial de AWS, Microsoft Azure, Google Cloud y Oracle Cloud para fundamentar las decisiones (no se aceptan afirmaciones sin fuente técnica).</li>
+    <li>Reutilicen el esquema de red del <b>Lab 02 (OPNsense)</b> como punto de partida del capítulo de conectividad, y la dinámica del <b>Lab 03</b> para construir la matriz de las 7 R's y el análisis de egress.</li>
+    <li>Mantengan trazabilidad: cada decisión de diseño debe responder a al menos uno de los desafíos planteados en el caso.</li>
+    <li>Diagramen primero y redacten después: un buen diagrama de arquitectura simplifica la mitad del documento.</li>
+  </ul>
+
+  <div class="tip">
+    <b>Anexo — cambios aplicados frente a la versión original del documento</b> (auditoría hecha contra el contenido real de S01-S04, grep exhaustivo del HTML, no solo lectura superficial): se agregó Oracle Cloud Infrastructure como cuarto proveedor (S01-S03 lo usan como eje central, el caso original lo omitía); "AWS Direct Connect/Azure ExpressRoute/Google Cloud Interconnect" se cambió a FastConnect (OCI)/Interconnect, los términos que sí enseña el curso; se quitaron PCI-DSS, Ley 1581, RBAC, showback/chargeback y etiquetado obligatorio (0 respaldo real en S01-S04); FinOps se generalizó a "vendor lock-in y costo de egress" (lo que sí se enseñó a fondo, con calculadora en el Lab 03); landing zones se quitó como entregable explícito (solo una mención de una línea en S01); capa anticorrupción y CDC se reemplazaron por los patrones realmente enseñados (API síncrona, colas, eventos pub/sub); el Capítulo 4 ahora pide explícitamente identidad federada SAML/OIDC, el contenido real y más desarrollado de S04.
+  </div>
+</section>
+
+</div>
+</div>
+
+<footer>
+  Integración de Soluciones para Plataformas Cloud · Universidad de la Costa (CUC) · Periodo 2026-2 · Proyecto de Aula — Primer Corte
+</footer>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidenav a'));
+  var sections = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = 0;
+    sections.forEach(function(s, i){ if (s && s.offsetTop <= pos) current = i; });
+    links.forEach(function(a, i){ a.classList.toggle('active', i === current); });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
