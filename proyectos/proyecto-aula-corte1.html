@@ -291,8 +291,6 @@
   <ol>
     <li><b>Documento técnico</b> en PDF con los cinco capítulos (0 a 4) y anexos (máximo 20 páginas sin contar anexos).</li>
     <li><b>Diagramas de arquitectura e interconexión</b> en formato editable (draw.io o similar), adjuntando los archivos fuente.</li>
-    <li><b>Matriz de decisión de cargas de trabajo</b> y <b>matriz de migración 7 R's</b> (pueden entregarse como anexos en hoja de cálculo o Markdown).</li>
-    <li><b>Sustentación oral</b> de 15 minutos por equipo, con 5 minutos de preguntas.</li>
   </ol>
 </section>
 
@@ -306,7 +304,7 @@
     <tr><td class="crit">2</td><td><b>Exploración de rutas alternativas (Cap. 0)</b></td><td>Que el equipo no aceptó la fragmentación en 4 nubes sin cuestionarla</td><td>Compara de verdad la Vía A (un solo proveedor multi-cuenta) contra la Vía B (multicloud con gobierno centralizado), y justifica por qué B resuelve el mandato de la junta sin caer en 4 islas desconectadas</td><td>Presenta las 2 vías pero la comparación es superficial</td><td>Solo menciona que "podría ser un solo proveedor" sin desarrollar la comparación</td><td>No hay Capítulo 0 o es un párrafo genérico</td></tr>
     <tr><td class="crit">3</td><td><b>Patrones de integración y redes (Cap. 2-3)</b></td><td>Calidad técnica del diseño de integración y conectividad</td><td>Flujos de integración completos con patrones correctamente justificados; diseño de red coherente (VPN S2S, FastConnect/Interconnect, BGP, CIDR sin solapamientos), conectado con el Lab 02</td><td>Uno de los dos capítulos (2 o 3) está incompleto o con errores menores</td><td>Ambos capítulos superficiales, o CIDR con solapamientos</td><td>No hay diseño técnico o está copiado sin adaptar</td></tr>
     <tr><td class="crit">4</td><td><b>Gobierno multicloud y migración 7 R's (Cap. 4)</b></td><td>Que el diseño resuelva de verdad el mandato de gobierno centralizado, no solo lo mencione</td><td>Identidad federada bien planteada, análisis de lock-in/egress con cifras reales del Lab 03, matriz 7 R's consistente con el caso (justifica por qué Oracle no se refactoriza)</td><td>Cubre identidad y 7 R's pero el análisis de egress usa cifras inventadas o no usa el Lab 03</td><td>Cubre solo 1-2 de los 3 elementos (identidad, egress, 7 R's)</td><td>No hay diseño de gobierno ni de migración</td></tr>
-    <tr><td class="crit">5</td><td><b>Coherencia, trazabilidad y sustentación</b></td><td>Que todo el documento cuente una sola historia y el equipo la domine</td><td>La decisión del Capítulo 0 es la que efectivamente se implementa en los capítulos 1-4; cada decisión traza a un desafío del caso; todo el equipo sustenta cualquier parte</td><td>1 inconsistencia menor entre capítulos, o un integrante no domina alguna parte</td><td>Varias inconsistencias, o la sustentación depende de 1 sola persona</td><td>El documento se contradice entre capítulos</td></tr>
+    <tr><td class="crit">5</td><td><b>Coherencia y trazabilidad</b></td><td>Que todo el documento cuente una sola historia</td><td>La decisión del Capítulo 0 es la que efectivamente se implementa en los capítulos 1-4; cada decisión de diseño traza a un desafío concreto del caso</td><td>1 inconsistencia menor entre capítulos</td><td>Varias inconsistencias entre capítulos, o decisiones sin trazar a ningún desafío del caso</td><td>El documento se contradice entre capítulos</td></tr>
   </table></div>
 </section>
 
@@ -318,7 +316,6 @@
     <li>El documento se entrega en PDF con la nomenclatura <code>ProyectoC1_Equipo#_Apellidos.pdf</code>.</li>
     <li>Entrega tardía: penalización del 10% de la nota por cada día de retraso, hasta un máximo de 2 días calendario.</li>
     <li><b>Originalidad:</b> el trabajo está sujeto a revisión por similitud. Se permite el uso de herramientas de IA generativa como apoyo, siempre que se declare en una sección del documento qué herramientas se usaron y para qué secciones; el equipo es responsable de la exactitud técnica de todo el contenido entregado.</li>
-    <li>Todos los integrantes deben estar en capacidad de sustentar cualquier parte del documento.</li>
   </ul>
 </section>
 
@@ -334,9 +331,6 @@
     <li>Diagramen primero y redacten después: un buen diagrama de arquitectura simplifica la mitad del documento.</li>
   </ul>
 
-  <div class="tip">
-    <b>Anexo — cambios aplicados frente a la versión original del documento</b> (auditoría hecha contra el contenido real de S01-S04, grep exhaustivo del HTML, no solo lectura superficial): se agregó Oracle Cloud Infrastructure como cuarto proveedor (S01-S03 lo usan como eje central, el caso original lo omitía); "AWS Direct Connect/Azure ExpressRoute/Google Cloud Interconnect" se cambió a FastConnect (OCI)/Interconnect, los términos que sí enseña el curso; se quitaron PCI-DSS, Ley 1581, RBAC, showback/chargeback y etiquetado obligatorio (0 respaldo real en S01-S04); FinOps se generalizó a "vendor lock-in y costo de egress" (lo que sí se enseñó a fondo, con calculadora en el Lab 03); landing zones se quitó como entregable explícito (solo una mención de una línea en S01); capa anticorrupción y CDC se reemplazaron por los patrones realmente enseñados (API síncrona, colas, eventos pub/sub); el Capítulo 4 ahora pide explícitamente identidad federada SAML/OIDC, el contenido real y más desarrollado de S04.
-  </div>
 </section>
 
 </div>
