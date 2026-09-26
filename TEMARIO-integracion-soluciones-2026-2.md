@@ -84,7 +84,7 @@ Propuesta concreta del segundo destino: un "sandbox de microservicios" en `.11` 
 | 5 | 31 ago–6 sep | U1 | Repaso Unidad 1 | **Rúbrica U1** — 20% proyecto (por definir) |
 | 6 | 7–13 sep | U2 | Arquitecturas de microservicios: descomposición de monolitos, comunicación síncrona/asíncrona, API Gateway | |
 | 7 | 14–20 sep | U2 | Contenedores y registro de imágenes: Docker, Amazon ECR — **arranque del lab AWS** | **5% · Actividad 1 (U2):** checkpoint del lab AWS Vocareum #2029442 (imagen en ECR corriendo) |
-| 8 | 21–27 sep | U2 | Amazon ECR + ECS Fargate + Application Load Balancer + AWS CodeDeploy: registro de imágenes, clúster serverless, enrutamiento por path y despliegue Blue/Green — **continuación del lab AWS** | |
+| 8 | 21–27 sep | U2 | Contenedores y registro de imágenes: Docker, build de imágenes, capas y Dockerfile, registros (concepto genérico — Docker Hub/Amazon ECR/Azure ACR/Google Artifact Registry) — **laboratorio build → push → run** | **10% · Actividad 1 (U2):** [Laboratorio 4 — Contenedores con Docker Hub](laboratorios/lab-04-contenedores-docker-hub.html), en Play with Docker (reemplaza el checkpoint del lab AWS Vocareum #2029442, que no resultó viable para el curso) |
 | 9 | 28 sep–4 oct | U2 | Cierre del lab AWS: AWS CodePipeline conectando CodeCommit→CodeDeploy (dispara solo al actualizar la imagen en ECR) + **FinOps: gestión de costos multicloud** — revisión de la estimación de costos (AWS Pricing Calculator) contra el costo real observado de la infraestructura ya desplegada | **5% · Actividad 2 (U2):** entrega completa del lab AWS Vocareum #2029442, con pipeline funcionando de punta a punta |
 | **Receso** | 5–11 oct | — | Sin clase | |
 | 10 | 12–18 oct | U2 | Repaso Unidad 2 | **Rúbrica U2** — 20% proyecto (por definir) |
@@ -95,7 +95,7 @@ Propuesta concreta del segundo destino: un "sandbox de microservicios" en `.11` 
 | 15–16 | 16–29 nov | U3 | Repaso + entrega/sustentación del proyecto final | **Rúbrica U3** — proyecto documentado como parte del tercer corte. **Fin de clases: 30 nov** |
 | — | 30 nov–13 dic | — | Sin clase | Cierre académico administrativo: corrección notas (1-4 dic) · cierre 9-10 dic · grados 11 dic |
 
-**Nota de numeración de actividades U2:** por construcción, la Unidad 2 tiene solo 4 semanas de contenido antes del repaso (6, 7, 8, 9) y ambas actividades del 10% caen sobre el mismo lab AWS (checkpoint en semana 7, entrega en semana 9) — no hay una actividad conceptual "de calentamiento" separada como en U1/U3, porque toda la unidad ya es 100% el lab oficial de principio a fin.
+**Nota de numeración de actividades U2 (actualizada 2026-09-26):** la Actividad 1 de U2 (semana 8, 10%) ya no depende de AWS Vocareum — se movió a un laboratorio propio en Play with Docker + Docker Hub (build → push → run), sin costo ni cupos de AWS Academy de por medio. **Pendiente de decisión de Rodolfo:** si el lab AWS de las semanas 7 y 9 (checkpoint + entrega, filas de arriba) sigue como estaba planeado o si también se reemplaza — el checkpoint de semana 7 ya pasó en el calendario (14–20 sep), así que hay que confirmar qué se dictó realmente esa semana antes de tocar esa fila.
 
 ## Proyectos de aula (20% de cada unidad) — por definir
 
