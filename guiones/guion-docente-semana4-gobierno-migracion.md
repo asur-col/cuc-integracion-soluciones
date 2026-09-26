@@ -3,7 +3,7 @@
 
 **Curso:** Integración de Soluciones para Plataformas Cloud — CUC, 2026-2
 **Sesión:** 3 horas (≈60 min de teoría + laboratorio/taller)
-**Materiales del repo:** `2026-2-S04-...-gobierno-multicloud.html` · `laboratorios/lab-03-taller-7rs-gobierno-multicloud`
+**Materiales del repo:** `2026-2-S04-...-gobierno-multicloud.html` · *(el taller interactivo `lab-03-taller-7rs-gobierno-multicloud` que se usó en esta sesión fue retirado del repo el 2026-09-26 por instrucción de Rodolfo; queda en el historial de git si se necesita consultar o restaurar)*
 **Convención:** *cursiva = acotaciones docentes (no se leen).* Las cifras citadas llevan referencia [n] a la lista de fuentes del final.
 
 ---
@@ -117,7 +117,7 @@ Y el cierre del argumento vuelve al gobierno del inicio de la clase: la razón p
 
 Cuatro semanas, cuatro capas, un solo relato: el multicloud *sucede* — semana 1 —; se conversa con patrones — semana 2 —; se conecta por redes — semana 3 —; y se gobierna con identidad, costos, portabilidad y decisiones de migración — semana 4.
 
-En el taller de hoy — `lab-03-taller-7rs-gobierno-multicloud` — cada grupo recibe un portafolio ficticio pero realista de sistemas y aplica el marco completo: clasificar cada carga con su R, justificar la identidad y el gobierno que exige, y estimar el costo de la decisión. Es un ensayo en miniatura de lo que les van a pedir en el proyecto de aula: razonar y defender, no memorizar.
+En el taller de hoy *(el archivo interactivo usado en esta sesión, `lab-03-taller-7rs-gobierno-multicloud`, ya no está publicado en el repo — retirado 2026-09-26; si se repite esta semana con otro grupo, hay que definir con Rodolfo qué actividad lo reemplaza)* cada grupo recibe un portafolio ficticio pero realista de sistemas y aplica el marco completo: clasificar cada carga con su R, justificar la identidad y el gobierno que exige, y estimar el costo de la decisión. Es un ensayo en miniatura de lo que les van a pedir en el proyecto de aula: razonar y defender, no memorizar.
 
 Los tres mensajes del corte, si solo se llevan tres: **primero**, la identidad federada convierte un problema de N×M en un problema de N — un IdP que hable SAML para el legado y OIDC para lo moderno [20][21]. **Segundo**, el lock-in no se elimina: se administra conscientemente, capa por capa. **Tercero**, migrar y repatriar no son temas religiosos: son matemáticas de volumen, estabilidad y capacidad operativa — 3,2 millones de factura anual contra 600 mil dólares de hardware [19], 75 millones ahorrados en dos años [27], 400 millones en dos años y medio [28]. Números, no consignas.
 

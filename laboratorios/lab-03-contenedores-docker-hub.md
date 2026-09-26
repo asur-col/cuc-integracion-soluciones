@@ -1,10 +1,10 @@
-# Laboratorio 4 — Contenedores: build → push → run con Docker Hub (semana 8)
+# Laboratorio 3 — Contenedores: build → push → run con Docker Hub (semana 8)
 
 **Curso:** Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas
 **Docente:** Ing. Rodolfo Cañas Cervantes — Universidad de la Costa (CUC) · 2026-2
-**Unidad 2 · Actividad 1 · Ponderación: 10% de la nota final** (reemplaza el checkpoint del lab AWS Vocareum #2029442, que no resultó viable para el curso)
+**Unidad 2 · Actividad 1 · Ponderación: 10% de la nota final**
 **Duración estimada:** 90 min · **Modalidad:** Play with Docker (navegador, sin instalación) + Docker Hub
-**Guía visual:** esta es la versión técnica en Markdown; la guía ilustrada para Moodle es `lab-04-contenedores-docker-hub.html`
+**Guía visual:** esta es la versión técnica en Markdown; la guía ilustrada para Moodle es `lab-03-contenedores-docker-hub.html`
 
 > Ejecución técnica, diseño del laboratorio y capturas reales: modelo de IA (GLM, vía `oco`), corregido y verificado por Claude (Anthropic) contra evidencia real de comandos ejecutados.
 > Dirección académica: **Ing. Rodolfo Cañas Cervantes**.
@@ -297,7 +297,7 @@ docker compose ps
 
 ***
 
-## Rúbrica (10% de la nota final)
+## Criterios de evaluación (10% de la nota final)
 
 | Criterio | Puntos |
 |---|---|
