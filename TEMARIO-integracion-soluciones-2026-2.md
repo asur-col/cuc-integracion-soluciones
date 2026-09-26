@@ -85,31 +85,35 @@ Propuesta concreta del segundo destino: un "sandbox de microservicios" en `.11` 
 | 6 | 7–13 sep | U2 | Arquitecturas de microservicios: descomposición de monolitos, comunicación síncrona/asíncrona, API Gateway | |
 | 7 | 14–20 sep | U2 | Contenedores y registro de imágenes: Docker, Amazon ECR — **arranque del lab AWS** | **5% · Actividad 1 (U2):** checkpoint del lab AWS Vocareum #2029442 (imagen en ECR corriendo) |
 | 8 | 21–27 sep | U2 | Contenedores y registro de imágenes: Docker, build de imágenes, capas y Dockerfile, registros (concepto genérico — Docker Hub/Amazon ECR/Azure ACR/Google Artifact Registry) — **laboratorio build → push → run** | **10% · Actividad 1 (U2):** [Laboratorio 3 — Contenedores con Docker Hub](laboratorios/lab-03-contenedores-docker-hub.html) |
-| 9 | 28 sep–4 oct | U2 | Cierre del lab AWS: AWS CodePipeline conectando CodeCommit→CodeDeploy (dispara solo al actualizar la imagen en ECR) + **FinOps: gestión de costos multicloud** — revisión de la estimación de costos (AWS Pricing Calculator) contra el costo real observado de la infraestructura ya desplegada | **5% · Actividad 2 (U2):** entrega completa del lab AWS Vocareum #2029442, con pipeline funcionando de punta a punta |
+| 9 | 28 sep–4 oct | U2 | Cierre de Unidad 2: orquestación con Kubernetes (pods, deployments, services — conceptos, sin atarse a un proveedor) + pipeline CI/CD genérico con GitHub Actions (build → test → push → deploy), cerrando el ciclo `build → push → run` de la semana 8 con despliegue automatizado de CaribeMart contenedorizada | — (evaluación de U2 ya cubierta en semana 8, 10%) |
 | **Receso** | 5–11 oct | — | Sin clase | |
-| 10 | 12–18 oct | U2 | Repaso Unidad 2 | **Rúbrica U2** — 20% proyecto (por definir) |
-| 11 | 19–25 oct | U3 | IA aplicada a DevOps y pipelines: **Amazon Q Developer** como agente (análisis de repositorio, generación de planes, escaneo OWASP Top 10, modernización de código heredado), qué automatiza y qué exige supervisión humana | **5% · Actividad 1 (U3):** práctica en AWS — usar Amazon Q Developer para revisar/optimizar el pipeline construido en Unidad 2 y documentar 2 mejoras reales aplicadas |
-| 12 | 26 oct–1 nov | U3 | Integrando el pipeline con infraestructura ASUR (segundo destino real) — **service mesh multicloud como el "cómo" técnico**: Istio multi-primary / Linkerd multicluster, mirroring de servicios y mTLS cruzado entre clústeres de proveedores distintos. Aplicación práctica del patrón de interconexión de la semana 3 | **5% · Actividad 2 (U3):** milestone de integración AWS↔ASUR — políticas IAM + variables de conexión al segundo destino — **1 nov: último día retiro de asignatura** |
-| 13 | 2–8 nov | U3 | Observabilidad multicloud con IA (AIOps): **Amazon CloudWatch anomaly detection, AWS DevOps Guru, X-Ray Insights** — detección de anomalías y alertas predictivas frente al monitoreo tradicional de umbrales fijos | |
-| 14 | 9–15 nov | U3 | Seguridad multicloud asistida por IA: **CrowdStrike Falcon XDR, Microsoft Sentinel + Copilot for Security, SentinelOne Singularity** — detección de amenazas y respuesta automatizada. Discusión honesta de límites: fatiga de alertas, sesgos, ataques adversariales, y por qué la industria los describe como *human-augmented*, no autónomos | |
-| 15–16 | 16–29 nov | U3 | Repaso + entrega/sustentación del proyecto final | **Rúbrica U3** — proyecto documentado como parte del tercer corte. **Fin de clases: 30 nov** |
+| 10 | 12–18 oct | U2 | Repaso Unidad 2 | **Rúbrica U2 — 20% proyecto:** CaribeMart contenedorizada con pipeline CI/CD funcionando de punta a punta (build → push a registro → despliegue automatizado) |
+| 11 | 19–25 oct | U3 | Infraestructura como código multicloud: Terraform/OpenTofu — un mismo código de infraestructura desplegado contra distintos proveedores (demo contra floci, emulador AWS en `.3`), estado remoto y por qué IaC es la base de cualquier pipeline multicloud serio | |
+| 12 | 26 oct–1 nov | U3 | Service mesh e interconexión entre clústeres multicloud: mTLS cruzado y mirroring de servicios (Istio/Linkerd genérico; Google Anthos Service Mesh como caso real documentado), aplicación práctica del patrón de interconexión de la semana 3 | **5% · Actividad 1 (U3):** práctica en sandbox — mTLS entre 2 servicios en clústeres distintos — **1 nov: último día retiro de asignatura** |
+| 13 | 2–8 nov | U3 | Observabilidad multicloud: logs, métricas y trazas (OpenTelemetry, Prometheus/Grafana) + tendencia AIOps — detección de anomalías y alertas predictivas frente al monitoreo tradicional de umbrales fijos | **5% · Actividad 2 (U3):** instrumentar CaribeMart con métricas/trazas básicas y documentar 1 anomalía detectada |
+| 14 | 9–15 nov | U3 | Seguridad multicloud y FinOps: cadena de suministro de software (escaneo de imágenes, SBOM), IA aplicada a seguridad con discusión honesta de límites (fatiga de alertas, sesgos, ataques adversariales — *human-augmented*, no autónomos) y gestión de costos multicloud (FinOps) | |
+| 15–16 | 16–29 nov | U3 | Repaso + entrega/sustentación del proyecto final | **Rúbrica U3 — 20% proyecto:** CaribeMart desplegada multicloud con pipeline, observabilidad y seguridad aplicada, documentado como cierre del tercer corte. **Fin de clases: 30 nov** |
 | — | 30 nov–13 dic | — | Sin clase | Cierre académico administrativo: corrección notas (1-4 dic) · cierre 9-10 dic · grados 11 dic |
 
-**Nota de numeración de actividades U2 (actualizada 2026-09-26):** la Actividad 1 de U2 (semana 8, 10%) ya no depende de AWS Vocareum — se movió a un laboratorio propio en Play with Docker + Docker Hub (build → push → run), sin costo ni cupos de AWS Academy de por medio. **Pendiente de decisión de Rodolfo:** si el lab AWS de las semanas 7 y 9 (checkpoint + entrega, filas de arriba) sigue como estaba planeado o si también se reemplaza — el checkpoint de semana 7 ya pasó en el calendario (14–20 sep), así que hay que confirmar qué se dictó realmente esa semana antes de tocar esa fila.
+**Nota de numeración de actividades U2 (actualizada 2026-09-26):** la Actividad 1 de U2 (semana 8, 10%) ya no depende de AWS Vocareum — se movió a un laboratorio propio en Play with Docker + Docker Hub (build → push → run), sin costo ni cupos de AWS Academy de por medio. La semana 9 cierra la unidad con Kubernetes + CI/CD, sin actividad calificada adicional (el 10% de U2 ya se cubrió en semana 8). **Pendiente de decisión de Rodolfo:** si el lab AWS de la semana 7 (checkpoint, fila de arriba) se alcanzó a calificar de verdad o quedó sin ejecutar — hay evidencia en memoria de que el lab AWS solo se usó como calentamiento informal en semana 2, nunca confirmado como checkpoint formal.
+
+**Temario de U2 (semana 9) y U3 completo (semanas 11-16) rediseñado y aprobado por Rodolfo el 2026-09-26**, generico y sin AWS Academy — reemplaza el diseño anclado a AWS Lab Project de la sección "Validación externa" más abajo (que queda como registro histórico de la decisión de agosto, ya superada). Fuentes de validación del nuevo temario: `memorias/INVESTIGACION-fuentes-B2-temario-generico.md` (Oracle OCI, Google Skills path 13, Coursera "Foundation to Multi-Cloud").
 
 ## Proyectos de aula (20% de cada unidad) — por definir
 
 La idea general de cada proyecto ya está anclada al contenido de su unidad, pero el enunciado/rúbrica exacta **todavía no está definida** — Rodolfo los diseña más cerca de cada corte, mismo criterio que Arquitectura en la Nube (la rúbrica se libera solo la semana del corte, no antes):
 
 - **U1 (Rúbrica U1):** anclado al concepto de multicloud — evaluación de una arquitectura multi-proveedor propuesta por el estudiante (gobierno, interconexión, selección de proveedores).
-- **U2 (Rúbrica U2):** anclado a la entrega completa del lab AWS (pipeline CI/CD de microservicios).
-- **U3 (Rúbrica U3, cierre del curso):** idea de referencia — pipeline CI/CD que despliega tanto en AWS como en infraestructura ASUR, con al menos un componente de IA aplicado (revisión de pipeline, observabilidad o seguridad) — pero el enunciado final **queda por definir**.
+- **U2 (Rúbrica U2, actualizado 2026-09-26):** CaribeMart contenedorizada (Docker) con pipeline CI/CD genérico (build → push a registro → despliegue), continuando el hilo conductor de la aplicación de ejemplo iniciado en U1.
+- **U3 (Rúbrica U3, cierre del curso, actualizado 2026-09-26):** CaribeMart desplegada multicloud (varios proveedores/ASUR vía IaC de la semana 11) con al menos un componente aplicado de las semanas de U3 — observabilidad, seguridad o service mesh — enunciado exacto por definir más cerca del corte.
 
 ## Quiz de conocimiento AWS — formativo, sin nota
 
-`Evaluación de conocimientos: Creación de microservicios y una canalización de CI/CD con AWS` (50 pts en Canvas) queda como **práctica formativa, sin nota**, igual que los quizzes por módulo de Arquitectura en la Nube y Seguridad en Redes — la nota real de U2 viene del proyecto (lab AWS completo) y las actividades de clase, no de un examen de opción múltiple.
+`Evaluación de conocimientos: Creación de microservicios y una canalización de CI/CD con AWS` (50 pts en Canvas) queda como **práctica formativa, sin nota**, igual que los quizzes por módulo de Arquitectura en la Nube y Seguridad en Redes. **Actualizado 2026-09-26:** con el rediseño genérico de U2 (ya no ancla a AWS Lab Project), la nota real de U2 viene del laboratorio de contenedores (semana 8, 10%) y de la Rúbrica U2 (20%, CaribeMart con pipeline) — este quiz de AWS sigue disponible como práctica formativa opcional para quien quiera profundizar en la implementación AWS específica, no como requisito.
 
-## Validación externa del temario (Perplexity Deep Research, 2026-08-15)
+## Validación externa del temario (Perplexity Deep Research, 2026-08-15) — ⚠️ SUPERADA 2026-09-26
+
+> Esta sección documenta la decisión de agosto de anclar U2/U3 a AWS Academy/Lab Project. Esa decisión **se revirtió el 2026-09-26** (AWS Academy no resultó viable para el curso) — el temario vigente de U2 (semana 9) y U3 (semanas 11-16) es genérico, sin AWS, validado con Oracle/Google Skills/Coursera en `memorias/INVESTIGACION-fuentes-B2-temario-generico.md`. Queda como registro histórico de por qué se había diseñado así, no como el diseño actual.
 
 Se contrastó este temario contra currículos reales de multicloud vigentes 2024-2026 (learning path de Oracle "OCI Multicloud Architect Professional", outline oficial del AWS Academy Lab Project, certificaciones de FinOps Foundation, documentación de Istio/Linkerd, guías de AIOps y XDR). Veredicto: los dos anclajes elegidos (Oracle para concepto, AWS Lab Project para práctica) son correctos y siguen vigentes — la certificación Oracle incluso se extendió en 2026 a los tres hyperscalers (Database@AWS además de Azure y Google Cloud), lo que refuerza el caso de "un mismo servicio en varias nubes" de la semana 2.
 
@@ -126,13 +130,15 @@ Se contrastó este temario contra currículos reales de multicloud vigentes 2024
 
 ## Gaps / pendientes
 
-- Construir el "sandbox de microservicios" en `.11` que sirve de segundo destino multicloud (no bloqueante para semanas 1-11, se necesita antes de semana 12).
-- Profundizar contenido específico de IA en Unidad 3 (semanas 11, 13, 14) — la estructura y los temas ya están definidos; herramientas concretas de AIOps y casos reales de seguridad con IA pueden enriquecerse con investigación adicional si Rodolfo lo pide.
+- Construir cada semana de U2 (9) y U3 (11-16) según el estándar REQ-046 (deck 50-60 slides, ≥90% imagen real, guion+audio+4 videos, laboratorio gratuito) — ninguna todavía está construida, solo el temario está aprobado.
+- El "sandbox de microservicios en `.11`" y el resto de infraestructura AWS-específica de los gaps de agosto ya no aplican al rediseño genérico — revisar si algo de esa infraestructura sigue siendo útil para las nuevas semanas (p. ej. floci para IaC en semana 11).
 - Diseñar el enunciado exacto de los 3 proyectos de aula (20% c/u) — se libera semana del corte correspondiente.
 
 ## Referencias
 
-- AWS Academy Lab Project - Microservices and CI/CD Pipeline Builder [182349].
-- Oracle "Become an OCI Multicloud Architect Professional" (learn.oracle.com / Coursera) — referencia conceptual de multicloud, Unidad 1 completa.
+- AWS Academy Lab Project - Microservices and CI/CD Pipeline Builder [182349] — usado como ancla de U2/U3 hasta 2026-09-25, ya no vigente.
+- Oracle "OCI Multicloud Architect Professional 2025" (mylearn.oracle.com #144474) — referencia conceptual de multicloud, Unidad 1 completa.
+- Google Skills path 13 "Hybrid and Multi-Cloud Architect" (skills.google/paths/13) — Kubernetes/Anthos, referencia de semanas 9 y 12.
+- Coursera "Foundation to Multi-Cloud" (coursera.org/learn/foundation-to-multi-cloud) — secuencia contenedores→Kubernetes→Terraform, referencia de semanas 8-9-11.
 - Calendario académico oficial: Acuerdo CD-645 CUC 2026.
 - Contexto completo: `/opt/asur/MEMORY/project_integracion_soluciones_syllabus.md` (solo accesible desde `.3`).
