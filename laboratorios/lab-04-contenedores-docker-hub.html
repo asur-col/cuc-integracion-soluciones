@@ -5,54 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laboratorio S08 — Mi primer contenedor: de cero a registro</title>
 <style>
-  :root{--vino:#A6192E;--dorado:#D4AF37;--texto:#2A2A2A;}
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);background:#fff;line-height:1.55;}
-  .wrap{max-width:1020px;margin:0 auto;padding:32px 28px 60px;}
-  header.lab{border-bottom:4px solid var(--dorado);padding-bottom:18px;margin-bottom:26px;}
-  header.lab .kicker{font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--dorado);margin-bottom:4px;}
-  header.lab h1{font-size:32px;color:var(--vino);font-weight:700;line-height:1.15;}
-  header.lab .meta{font-size:14.5px;color:#555;margin-top:10px;line-height:1.5;}
-  header.lab .meta b{color:var(--vino);}
-  h2{font-size:21px;color:var(--vino);margin:34px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--dorado);display:flex;align-items:center;gap:12px;}
-  h2 .n{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;font-weight:800;flex:0 0 auto;}
-  h3{font-size:17px;color:var(--vino);margin:20px 0 8px;}
-  p{margin:8px 0;font-size:15.5px;}
-  ul,ol{margin:8px 0 8px 26px;font-size:15.5px;}
+  body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:15.5px;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px;}
+  header.lab{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line);}
+  header.lab img.logo{height:52px;margin-bottom:14px;}
+  header.lab .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin-bottom:6px;font-weight:500;}
+  header.lab h1{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.6vw,36px);color:var(--ink);line-height:1.2;}
+  header.lab .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px;}
+  header.lab .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;text-align:center;}
+  header.lab .meta b{color:var(--ink);}
+  header.lab .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:14px;font-family:var(--mono);}
+  h2{font-family:var(--serif);font-size:22px;color:var(--ink);margin:34px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--dorado);display:flex;align-items:center;gap:12px;font-weight:600;}
+  h2 .n{font-family:var(--mono);display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:8px;background:var(--vino);color:#fff;font-size:14px;font-weight:500;flex:0 0 auto;padding:0 4px;}
+  h3{font-family:var(--serif);font-size:16.5px;color:var(--vino-strong);margin:22px 0 8px;font-weight:600;}
+  p{margin:8px 0;color:var(--ink);}
+  ul,ol{margin:8px 0 8px 26px;}
   li{margin:4px 0;}
-  code{font-family:"Consolas","DejaVu Sans Mono",monospace;background:#f4f0f1;color:var(--vino);padding:1px 6px;border-radius:4px;font-size:14px;}
-  pre.cmd{background:#1b1b1f;color:#e6e6ea;border-radius:10px;padding:16px 20px;font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:14.5px;line-height:1.5;overflow-x:auto;margin:12px 0;white-space:pre;}
-  pre.cmd code{background:none;color:inherit;padding:0;font-size:inherit;}
-  .objetivo{background:#f9eef0;border-left:6px solid var(--vino);border-radius:8px;padding:10px 16px;font-size:15px;}
-  .dato{background:#fbf6e7;border-left:6px solid var(--dorado);border-radius:8px;padding:10px 16px;font-size:14.5px;}
-  .warn{background:#fff4f4;border:1.5px solid var(--vino);border-radius:8px;padding:10px 16px;font-size:14.5px;}
+  code{font-family:var(--mono);font-size:14px;background:var(--surface-2);border:1px solid var(--line);color:var(--vino-strong);padding:1px 6px;border-radius:5px;}
+  pre.cmd{background:#211D18;color:#EFE7D9;border:1px solid #3D362B;border-radius:10px;padding:16px 20px;font-family:var(--mono);font-size:14px;line-height:1.55;overflow-x:auto;margin:12px 0;white-space:pre;}
+  pre.cmd code{background:none;border:none;color:inherit;padding:0;font-size:inherit;}
+  .objetivo{background:var(--vino-tint);border-left:4px solid var(--vino);border-radius:8px;padding:12px 16px;font-size:14.5px;}
+  .dato{background:var(--dorado-tint);border-left:4px solid var(--dorado);border-radius:8px;padding:12px 16px;font-size:14.5px;}
+  .dato::before{content:"💡 DATO CLAVE — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
+  .warn{background:var(--dorado-tint);border-left:4px solid var(--dorado);border-radius:8px;padding:12px 16px;font-size:14.5px;}
+  .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
   .paso{margin-bottom:36px;}
   figure.captura{margin:14px 0 6px;}
-  figure.captura img{width:100%;max-width:100%;height:auto;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.18);display:block;}
-  figure.captura figcaption{font-size:13px;color:#666;margin-top:6px;font-style:italic;}
-  .nota-captura{font-size:12.5px;color:#888;margin:2px 0 10px;}
-  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
-  th,td{border:1.5px solid #ddd;padding:9px 12px;text-align:left;}
-  th{background:var(--vino);color:#fff;}
-  tr:nth-child(even){background:#faf7f8;}
-  .lab-box{background:linear-gradient(90deg,var(--vino),#7d1223);color:#fff;border-radius:12px;padding:16px 22px;font-size:15px;line-height:1.55;margin:16px 0;}
-  .lab-box b{color:var(--dorado);}
+  figure.captura img{width:100%;max-width:100%;height:auto;border-radius:10px;box-shadow:var(--shadow);display:block;border:1px solid var(--line);}
+  figure.captura figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:8px;letter-spacing:.02em;}
+  .nota-captura{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:2px 0 10px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;}
+  th{background:var(--surface-2);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);}
+  tr:nth-child(even){background:var(--surface-2);}
+  .lab-box{background:var(--vino-tint);border-left:4px solid var(--vino);color:var(--ink);border-radius:8px;padding:14px 18px;font-size:15px;line-height:1.6;margin:16px 0;}
+  .lab-box b{color:var(--vino-strong);}
   .tiempo td:first-child{font-weight:600;}
-  .pie{margin-top:44px;padding-top:14px;border-top:2px solid var(--dorado);font-size:12.5px;color:#777;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .pie,footer{margin-top:44px;padding-top:14px;padding-bottom:26px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;text-align:left;}
+  footer{flex-direction:column;text-align:center;gap:8px;}
+  footer .ia-badge{display:inline-block;background:var(--dorado-tint);color:var(--dorado);border:1px solid var(--dorado);border-radius:20px;padding:3px 12px;font-size:11px;margin-top:6px;}
+  @media(max-width:700px){
+    table{display:block;overflow-x:auto;}
+    li{overflow-wrap:anywhere;}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-
 <header class="lab">
-  <div class="kicker">Semana 8 · Unidad 2 · Actividad 1 · 10% de la nota final</div>
-  <h1>Laboratorio — Mi primer contenedor: de cero a registro</h1>
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa">
+  <div class="kicker">Laboratorio 4 · Unidad 2 — Actividad 1 · 10%</div>
+  <h1>Contenedores: build → push → run con Docker Hub</h1>
+  <div class="accent-bar"></div>
   <div class="meta">
     <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
-    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes — Universidad de la Costa (CUC)<br>
-    <b>Duración estimada:</b> 90 minutos · <b>Entorno:</b> Play with Docker + Docker Hub (reemplaza el checkpoint Vocareum #2029442)
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Duración estimada:</b> 90 minutos &nbsp;·&nbsp; <b>Modalidad:</b> Play with Docker + Docker Hub (navegador, sin instalación) &nbsp;·&nbsp; <b>Semana:</b> 8<br><b>Tipo:</b> actividad práctica calificable — 10% de la nota final (reemplaza el checkpoint AWS Vocareum #2029442)
   </div>
+  <span class="ia-badge">Ejecución técnica y capturas: modelo de IA (GLM) · corregido y verificado por Claude (Anthropic) · dirección académica: Ing. Rodolfo Cañas</span>
 </header>
+
+<div class="wrap">
 
 <h2>Introducción</h2>
 <p>En la clase vimos qué es un contenedor, cómo se construye una imagen con un <code>Dockerfile</code> y por qué el registro de imágenes es la pieza que convierte una app en un artefacto portable. Ahora lo vas a hacer tú: <b>construir tu propia imagen, publicarla en un registro y correrla en una máquina distinta a la que la construyó</b> — el flujo <code>build → push → run</code> que usan los pipelines de despliegue en cualquier nube.</p>
@@ -304,11 +339,17 @@ docker compose ps</code></pre><p><code>docker compose ps</code> muestra los dos 
 <li>Play with Docker es una máquina pública efímera: no la uses para guardar archivos personales.</li>
 </ul>
 
-<div class="pie">
-  <span>Integración de Soluciones para Plataformas Cloud · Semana 8 · Unidad 2 · 2026-2</span>
-  <span>Universidad de la Costa (CUC) · Barranquilla, Colombia</span>
-</div>
+<details style="border:1px solid var(--line);border-radius:10px;margin:24px 0;background:var(--surface-2);padding:2px 16px;">
+  <summary style="cursor:pointer;padding:10px 0;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--vino-strong);">Versión Markdown cruda (descargable)</summary>
+  <p style="font-size:14px;padding-bottom:14px;">La guía técnica completa en texto plano: <a href="lab-04-contenedores-docker-hub.md" download>descargar lab-04-contenedores-docker-hub.md</a></p>
+</details>
 
 </div>
+<footer>
+  <p><b>Integración de Soluciones para Plataformas Cloud</b> · Ingeniería de Sistemas · Universidad de la Costa CUC · 2026-2 · Barranquilla, Colombia</p>
+  <p>Ing. Rodolfo Cañas Cervantes — dirección académica<br>
+  Ejecución técnica y capturas: modelo de IA (GLM, vía <b>oco</b>) · corregido y verificado por Claude (Anthropic) contra evidencia real de comandos ejecutados</p>
+  <span class="ia-badge">🤖 × 🧑‍🏫 colaboración humano-IA verificada</span>
+</footer>
 </body>
 </html>
