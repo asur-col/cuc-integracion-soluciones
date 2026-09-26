@@ -79,7 +79,7 @@
 <header class="lab">
   <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa">
   <div class="kicker">Laboratorio 3 · Unidad 2 — Actividad 1 · 10%</div>
-  <h1>Contenedores: build → push → run con Docker Hub</h1>
+  <h1>Contenedores, segundo nivel: versionado, registro público y portabilidad real</h1>
   <div class="accent-bar"></div>
   <div class="meta">
     <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
@@ -93,7 +93,15 @@
 
 <section>
 <h2>Introducción</h2>
-<p>En la clase vimos qué es un contenedor, cómo se construye una imagen con un <code>Dockerfile</code> y por qué el registro de imágenes es la pieza que convierte una app en un artefacto portable. Ahora lo vas a hacer tú: <b>construir tu propia imagen, publicarla en un registro y correrla en una máquina distinta a la que la construyó</b> — el flujo <code>build → push → run</code> que usan los pipelines de despliegue en cualquier nube.</p>
+<p><b>Este laboratorio es la continuación directa del Laboratorio 1</b> (Sandbox de contenedores, semana 3): ahí ya construiste una imagen, la publicaste en un registro privado y la corriste con verificación de salud. Aquí vas un nivel más allá — no se repite lo mismo, se completa lo que quedó fuera.</p>
+<table>
+<tr><th></th><th>Laboratorio 1 (ya hecho)</th><th>Laboratorio 3 (este)</th></tr>
+<tr><td>Registro</td><td>Privado, del curso, ya configurado para ti</td><td><b>Público (Docker Hub) — lo configuras tú desde cero</b></td></tr>
+<tr><td>Versionado</td><td>Una sola versión de la imagen</td><td><b>Dos versiones (tags 1.0/2.0) coexistiendo sin sobrescribirse</b></td></tr>
+<tr><td>Portabilidad</td><td>Corre en tu instancia asignada</td><td><b>Prueba real: la imagen corre en una máquina nueva que nunca la construyó</b></td></tr>
+<tr><td>Multi-servicio</td><td>No aplica</td><td><b>Reto: dos contenedores comunicándose por red/DNS propio</b></td></tr>
+</table>
+<p>Si ya hiciste el Laboratorio 1, los pasos 1-6 de aquí te van a resultar familiares — van rápido. Lo nuevo de verdad empieza en el <b>paso 7 (registro público)</b> en adelante. Vas a construir tu propia imagen, publicarla en un registro público y correrla en una máquina distinta a la que la construyó — el flujo <code>build → push → run</code> que usan los pipelines de despliegue en cualquier nube, ahora con las dos piezas que el Laboratorio 1 no cubría: versionado inmutable y portabilidad probada entre máquinas.</p>
 <div class="lab-box"><b>La idea central del lab en una frase:</b> la imagen es inmutable y vive en el registro; cualquier máquina que la descargue obtiene exactamente la misma aplicación. Play with Docker te da un host Docker real en el navegador; Docker Hub hace el rol de registro (el mismo concepto que Amazon ECR, Azure Container Registry o Google Artifact Registry).</div>
 
 <h3>Presupuesto de tiempo (90 min)</h3>

@@ -1,4 +1,4 @@
-# Laboratorio 3 — Contenedores: build → push → run con Docker Hub (semana 8)
+# Laboratorio 3 — Contenedores, segundo nivel: versionado, registro público y portabilidad real (semana 8)
 
 **Curso:** Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas
 **Docente:** Ing. Rodolfo Cañas Cervantes — Universidad de la Costa (CUC) · 2026-2
@@ -12,7 +12,16 @@
 
 ## Introducción
 
-En la clase de esta semana vimos qué es un contenedor, cómo se construye una imagen con un `Dockerfile` y por qué el registro de imágenes es la pieza que convierte una app en un artefacto portable. Ahora lo vas a hacer tú: **vas a construir tu propia imagen de contenedor, publicarla en un registro y correrla en una máquina distinta a la que la construyó**, que es exactamente el flujo `build → push → run` que usan los pipelines de despliegue en cualquier nube.
+**Este laboratorio es la continuación directa del Laboratorio 1** (Sandbox de contenedores, semana 3): ahí ya construiste una imagen, la publicaste en un registro privado y la corriste con verificación de salud. Aquí vas un nivel más allá — no se repite lo mismo, se completa lo que quedó fuera:
+
+| | Laboratorio 1 (ya hecho) | Laboratorio 3 (este) |
+|---|---|---|
+| Registro | Privado, del curso, ya configurado para ti | **Público (Docker Hub) — lo configuras tú desde cero** |
+| Versionado | Una sola versión de la imagen | **Dos versiones (tags `1.0`/`2.0`) coexistiendo sin sobrescribirse** |
+| Portabilidad | Corre en tu instancia asignada | **Prueba real: la imagen corre en una máquina nueva que nunca la construyó** |
+| Multi-servicio | No aplica | **Reto: dos contenedores comunicándose por red/DNS propio** |
+
+Si ya hiciste el Laboratorio 1, los pasos 1-6 de aquí te van a resultar familiares — van rápido. Lo nuevo de verdad empieza en el **paso 7 (registro público)** en adelante. Vas a construir tu propia imagen de contenedor, publicarla en un registro público y correrla en una máquina distinta a la que la construyó, que es exactamente el flujo `build → push → run` que usan los pipelines de despliegue en cualquier nube — ahora con las dos piezas que el Laboratorio 1 no cubría: versionado inmutable y portabilidad probada entre máquinas.
 
 Vas a trabajar en **Play with Docker** (`labs.play-with-docker.com`): una instancia real de Docker en tu navegador, gratis, sin instalar nada en tu equipo. Tu imagen se publica en **Docker Hub**, el registro público de Docker — el mismo concepto que Amazon ECR, Azure Container Registry o Google Artifact Registry.
 
