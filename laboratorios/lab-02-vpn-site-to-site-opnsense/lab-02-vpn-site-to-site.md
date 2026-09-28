@@ -6,7 +6,6 @@
 **Tipo:** laboratorio práctico complementario — **sin nota**; se valida con el auto-check de la sección 10
 **Guía visual:** esta es la versión técnica cruda; la guía ilustrada con diagramas y botones de copiado es `lab-02-vpn-site-to-site-opnsense.html`
 
-> Ejecución técnica, diagnóstico y documentación: **ox-alpha**, modelo IA de lenguaje.
 > Dirección académica y arquitectura: **Ing. Rodolfo Cañas Cervantes**.
 > Todo lo aquí documentado fue ejecutado y validado en infraestructura real antes de publicarse.
 >
@@ -646,7 +645,6 @@ La NAT Network de VirtualBox no es alcanzable desde el host por defecto. Para ex
 
 ## Créditos
 
-- Ejecución técnica, diagnóstico y documentación: **ox-alpha**, modelo IA de lenguaje
 - Dirección académica y arquitectura: **Ing. Rodolfo Cañas Cervantes** (CUC)
 - Validado end-to-end en infraestructura real antes de publicarse — agosto 2026
 - v2: servers OSBoxes + administración desde los servers + bloques copiar-pegar — agosto 2026
