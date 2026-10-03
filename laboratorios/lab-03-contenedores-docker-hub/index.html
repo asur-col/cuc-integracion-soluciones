@@ -1,8 +1,832 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Laboratorio 3 · No disponible por ahora · CUC</title>
-<style>:root{--bg:#FBF8F3;--ink:#2A2A2A;--soft:#6B6259;--vino:#A6192E}@media(prefers-color-scheme:dark){:root{--bg:#181411;--ink:#EFE7D9;--soft:#B3A896;--vino:#E2536B}}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif;text-align:center;padding:24px}
-h1{color:var(--vino);font-size:28px;margin:0 0 10px}p{color:var(--soft);max-width:46ch;margin:0 auto 8px}</style></head>
-<body><main><h1>Laboratorio 3 no disponible por ahora</h1><p>Esta actividad se está actualizando. Tu docente te avisará cuando esté publicada.</p><p><a style="color:var(--vino)" href="../../index.html">Volver al curso</a></p></main></body></html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio 3 &mdash; Contenedores y Docker Hub &middot; CUC</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #FBF8F3;
+      --surface: #FFFFFF;
+      --surface-2: #F4EEE3;
+      --ink: #2A2A2A;
+      --ink-soft: #6B6259;
+      --vino: #A6192E;
+      --vino-strong: #7E1223;
+      --vino-tint: #FBEBEC;
+      --dorado: #A9791C;
+      --dorado-tint: #FBF3DE;
+      --line: #E5DCCB;
+      --code-bg: #F1EADA;
+      --code-ink: #4A4030;
+      --shadow: 0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #181411;
+        --surface: #221D18;
+        --surface-2: #2B2520;
+        --ink: #EFE7D9;
+        --ink-soft: #B3A896;
+        --vino: #E2536B;
+        --vino-strong: #F0748A;
+        --vino-tint: #3A1E22;
+        --dorado: #E4BC5C;
+        --dorado-tint: #3B321C;
+        --line: #3D352A;
+        --code-bg: #1F1914;
+        --code-ink: #E4D9C3;
+        --shadow: 0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+    a { color: var(--vino); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3.5px; width: 0%;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+      z-index: 1000; transition: width .1s ease-out;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      nav.toc { display: none; }
+    }
+
+    header.top.portada {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .portada-logo {
+      height: 72px;
+      width: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .portada-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: var(--vino);
+      background: var(--vino-tint);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    header.top h1 {
+      color: var(--vino);
+      font-size: clamp(26px, 3.8vw, 36px);
+      margin: 0 0 10px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    header.top .sub {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+      max-width: 62ch;
+      margin-inline: auto;
+    }
+
+    .accent-bar {
+      width: 200px;
+      height: 4px;
+      margin: 0 auto 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .author-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      padding-top: 4px;
+    }
+
+    .author-block span { display: inline-flex; align-items: center; gap: 6px; }
+    .author-block strong { color: var(--ink); }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 18px 40px;
+      border-right: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    nav.toc .toc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+      margin: 0 0 14px 8px;
+      font-weight: 700;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    nav.toc a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+    nav.toc a.active { background: var(--vino-tint); color: var(--vino); font-weight: 600; }
+
+    nav.toc a .badge {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-2); color: var(--ink-soft);
+      display: grid; place-items: center;
+      font-size: 11.5px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    nav.toc a.active .badge { background: var(--vino); color: #fff; }
+
+    main { padding: 40px 48px 90px; min-width: 0; }
+
+    @media (max-width: 650px) {
+      main { padding: 24px 18px 70px; }
+      header.top.portada { padding: 32px 18px 24px; }
+    }
+
+    .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 72ch; margin: 16px 0 24px; }
+    .lede b, .lede strong { color: var(--ink); }
+
+    section.part {
+      padding-top: 44px;
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+
+    section.part:first-of-type { border-top: none; padding-top: 10px; }
+
+    .part-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+    .part-badge {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--vino); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700; font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(166,25,46,.25);
+    }
+
+    .part-head h2 { margin: 0; font-size: 24px; font-weight: 600; }
+
+    h3.sub {
+      font-size: 16.5px;
+      margin: 32px 0 12px;
+      color: var(--vino);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin: 0 0 14px; max-width: 74ch; }
+
+    .docref {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      margin: -4px 0 18px;
+    }
+    .docref a { color: var(--vino); text-decoration: underline; }
+
+    ol.steps { list-style: none; margin: 8px 0 20px; padding: 0; counter-reset: step; }
+
+    ol.steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 2px 0 18px 38px;
+      max-width: 72ch;
+    }
+
+    ol.steps > li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px; font-weight: 700;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--vino);
+      box-shadow: var(--shadow);
+    }
+
+    ol.steps > li:not(:last-child)::after {
+      content: "";
+      position: absolute; left: 12.5px; top: 30px; bottom: 0;
+      width: 1.5px; background: var(--line);
+    }
+
+    ul.plain { padding-left: 20px; margin: 6px 0 14px; }
+    ul.plain li { margin-bottom: 6px; max-width: 68ch; }
+
+    pre {
+      position: relative;
+      background: #211D18; color: #EFE7D9;
+      border-radius: 10px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-size: 13.5px; line-height: 1.55;
+      margin: 8px 0 16px;
+      border: 1px solid var(--line);
+    }
+
+    code.inline {
+      background: var(--surface-2); color: var(--code-ink);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 13px; border: 1px solid var(--line);
+    }
+
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+      background: var(--surface); color: var(--ink-soft);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    pre:hover .copy-btn { opacity: 1; }
+    pre .copy-btn { color: #B3A896; border-color: #4A4030; background: #2B2520; }
+    .copy-btn:hover { color: #E4BC5C; border-color: #E4BC5C; }
+    .copy-btn.copied { color: var(--dorado); border-color: var(--dorado); opacity: 1; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 12px 0 20px;
+      font-size: 14px;
+      max-width: 72ch;
+      line-height: 1.6;
+    }
+
+    .callout.warn { background: var(--vino-tint); border-left: 4px solid var(--vino); color: var(--ink); }
+    .callout.warn b, .callout.warn strong { color: var(--vino); }
+    .callout.note { background: var(--dorado-tint); border-left: 4px solid var(--dorado); color: var(--ink); }
+    .callout.note b, .callout.note strong { color: var(--dorado); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin: 10px 0 22px;
+      box-shadow: var(--shadow);
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0; font-size: 13.5px; text-align: left; }
+    th { background: var(--vino); color: #fff; padding: 11px 14px; font-weight: 600; letter-spacing: .02em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--surface-2); }
+
+    .rubric-weight { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--vino); }
+
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin: 14px 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    .diagram-caption {
+      font-size: 12.5px; color: var(--ink-soft);
+      text-align: center; margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    figure.ref {
+      margin: 14px 0 24px;
+      max-width: 640px;
+    }
+
+    figure.ref img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #fff;
+    }
+
+    figure.ref img.logo-img {
+      max-width: 180px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    figure.ref figcaption {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.5;
+    }
+
+    figure.ref figcaption a { color: var(--ink-soft); text-decoration: underline; }
+
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer; user-select: none;
+      transition: background .15s ease;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li:hover { background: var(--surface-2); }
+
+    .checklist .box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      margin-top: 2px; flex-shrink: 0;
+      background: var(--surface);
+      transition: all .15s ease;
+    }
+
+    .checklist li.done { opacity: .6; }
+    .checklist li.done .box { background: var(--vino); border-color: var(--vino); position: relative; }
+    .checklist li.done .box::after {
+      content: "";
+      position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px;
+      border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+    }
+    .checklist li.done span.text { text-decoration: line-through; }
+
+    #back-to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--vino); color: #fff; border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 998; font-size: 16px;
+    }
+    #back-to-top.show { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover { transform: translateY(-2px); }
+
+    #toc-toggle {
+      display: none;
+      position: fixed; bottom: 24px; left: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      border: 1px solid var(--line);
+      z-index: 998; box-shadow: var(--shadow);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      #toc-toggle { display: flex; }
+      nav.toc.mobile-open {
+        display: block; position: fixed; inset: 0;
+        height: 100vh; width: 85vw; max-width: 320px;
+        background: var(--surface); z-index: 997;
+        box-shadow: var(--shadow);
+        border-right: 1px solid var(--line);
+      }
+    }
+
+    footer.page {
+      max-width: 74ch;
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    @media print {
+      nav.toc, #progress-bar, #back-to-top, #toc-toggle, .copy-btn { display: none !important; }
+      .shell { grid-template-columns: 1fr !important; }
+      section.part { break-inside: avoid; }
+    }
+  
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <div class="shell">
+    <nav class="toc" id="toc">
+      <p class="toc-label">Contenido</p>
+      <a href="#intro"><span class="badge">&middot;</span> Introducci&oacute;n</a>
+      <a href="#parte0"><span class="badge">0</span> Tu cuenta</a>
+      <a href="#parteA"><span class="badge">A</span> Primer contenedor</a>
+      <a href="#parteB"><span class="badge">B</span> Servidor web</a>
+      <a href="#parteC"><span class="badge">C</span> Dockerfile propio</a>
+      <a href="#parteD"><span class="badge">D</span> Tags y capas</a>
+      <a href="#parteE"><span class="badge">E</span> Push a Docker Hub</a>
+      <a href="#parteF"><span class="badge">F</span> Versi&oacute;n 2</a>
+      <a href="#parteG"><span class="badge">G</span> Portabilidad</a>
+      <a href="#parteH"><span class="badge">H</span> Reto multi-contenedor</a>
+      <a href="#parteI"><span class="badge">I</span> Entregable</a>
+      <a href="#troubleshooting"><span class="badge">?</span> Problemas</a>
+      <a href="#rubrica"><span class="badge">%</span> Criterios</a>
+      <a href="#referencias"><span class="badge">r</span> Referencias</a>
+      <a href="#checklist"><span class="badge">v</span> Checklist</a>
+    </nav>
+
+    <div>
+      <header class="top portada">
+        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
+        <h1>Laboratorio 3: Contenedores y Docker Hub</h1>
+        <p class="sub">Del primer contenedor a una imagen publicada en Docker Hub con etiquetas
+        inmutables, una prueba de portabilidad real y un reto multi-contenedor &mdash; todo en una
+        estaci&oacute;n propia que se crea y se destruye contigo</p>
+        <div class="accent-bar"></div>
+        <div class="author-block">
+          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span><strong>Universidad de la Costa (CUC)</strong></span>
+          <span><strong>2026-2 &middot; Ponderaci&oacute;n: por definir</strong></span>
+        </div>
+      </header>
+
+      <main>
+        <section id="intro">
+          <p class="lede">Este laboratorio contin&uacute;a el Lab 1. All&aacute; construiste una imagen y
+          la publicaste en un registro privado de tu sesi&oacute;n. Aqu&iacute; vas a hacer lo mismo pero
+          <b>en Docker Hub</b>: el registro p&uacute;blico que usan todas las empresas para distribuir
+          sus im&aacute;genes, y que es el paso previo a desplegar en la nube.</p>
+
+          <p>Van a ser <b>diez pasos</b>, y cada uno deja evidencia que <code class="inline">revisar</code>
+          comprueba solo:</p>
+          <ol class="steps">
+          <li>Preparas tu cuenta de Docker Hub y tu estaci&oacute;n.</li>
+          <li>Corres tu primer contenedor y publicas su puerto.</li>
+          <li>Escribes tu propio Dockerfile y construyes una imagen.</li>
+          <li>Comprendes las capas y los tags de build.</li>
+          <li>Publicas en Docker Hub.</li>
+          <li>Publicas una versi&oacute;n 2 con etiquetas inmutables.</li>
+          <li>Pruebas que la imagen es portable en un entorno limpio.</li>
+          <li>Levantas un reto multi-contenedor.</li>
+          <li>Ejecutas <code class="inline">revisar</code> y la evidencia queda registrada.</li>
+        </ol>
+
+          <div class="callout">
+            <p><b>Lo que NO se hace aqu&iacute;:</b> no usas ninguna plataforma online tipo
+            <i>Play with Docker</i>. Tu Docker es real, vive en tu estaci&oacute;n y se borra
+            contigo. La diferencia con esa plataforma es que lo que publicas en Docker Hub
+            <b>s&iacute; se queda</b>: es tu cuenta y tu repositorio.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parte0">
+          <div class="part-head"><span class="part-badge">0</span><h2>Paso 0 &mdash; Tu cuenta y tu estaci&oacute;n</h2></div>
+
+                  <h3 class="sub">0.1 · Entra a tu estación</h3>
+          <ol class="steps">
+          <li>Entra en <code class="inline">https://labs.proyectoasur.org</code> con tus credenciales.</li>
+          <li>Busca el <b>Lab 3 &mdash; Contenedores y Docker Hub</b> y pulsa <b>Iniciar lab</b>.</li>
+          <li>Cuando diga <b>Entrar</b>, &aacute;brelo: ver&aacute;s tu terminal y, al correr algo en el puerto 8080, la pesta&ntilde;a <b>Mi aplicaci&oacute;n</b>.</li>
+        </ol>
+
+                  <h3 class="sub">0.2 · Dile a la estación quién eres</h3>
+          <p>La plataforma <b>nunca</b> guarda ni registra tu token de Docker Hub: lo escribes t&uacute;
+          en tu terminal y se borra con la estaci&oacute;n. Lo &uacute;nico que necesita saber el validador
+          es tu usuario, para poder comprobar en Docker Hub que tus etiquetas existen.</p>
+                  <pre><code>mi-espacio
+echo 'tu-usuario-de-dockerhub' &gt; /workspace/.dockerhub-user
+export USUARIO=$(cat /workspace/.dockerhub-user)
+echo "USUARIO=$USUARIO"</code></pre>
+
+                  <h3 class="sub">0.3 · Autentícate contra Docker Hub</h3>
+                  <pre><code>docker login
+# Username: tu-usuario-de-dockerhub
+# Password: tu access token de Docker Hub (Settings → Security → New Access Token)</code></pre>
+        </section>
+
+        <section class="part" id="parteA">
+          <div class="part-head"><span class="part-badge">A</span><h2>Paso 1 &mdash; Tu primer contenedor</h2></div>
+                  <pre><code>docker run --rm hello-world</code></pre>
+          <p>La opci&oacute;n <code class="inline">--rm</code> borra el contenedor al salir: no queda nada
+          ocupando disco. Comprueba que no qued&oacute; ninguno:</p>
+                  <pre><code>docker ps -a</code></pre>2
+        </section>
+
+        <section class="part" id="parteB">
+          <div class="part-head"><span class="part-badge">B</span><h2>Paso 2 &mdash; Un servidor web con puertos</h2></div>
+          <p>Un contenedor sin publicar su puerto es un mundo cerrado. Con <code class="inline">-p</code>
+          lo abres hacia el exterior.</p>
+                  <pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine</code></pre>
+          <p>Comprueba desde dentro de tu estaci&oacute;n:</p>
+                  <pre><code>docker ps --filter name=web
+curl -s http://127.0.0.1:8080 | head -5</code></pre>2
+          <p>Y en el navegador: tu sesi&oacute;n tiene una pesta&ntilde;a <b>Mi aplicaci&oacute;n</b> que
+          muestra exactamente lo que hay en el puerto 8080 de tu estaci&oacute;n.</p>
+
+                  <h3 class="sub">B.1 · Entra al contenedor</h3>
+                  <pre><code>docker exec -it web sh
+cat /usr/share/nginx/html/index.html
+exit</code></pre>3
+          <p>Dentro, mira qu&eacute; hay en el &iacute;ndice de nginx y s&aacute;lese con
+          <code class="inline">exit</code>.</p>
+        </section>
+
+        <section class="part" id="parteC">
+          <div class="part-head"><span class="part-badge">C</span><h2>Paso 3 &mdash; Tu propio Dockerfile</h2></div>
+          <p>En <code class="inline">/workspace/app</code> tienes el c&oacute;digo de partida de una
+          aplicaci&oacute;n Node con su <code class="inline">Dockerfile</code>. L&eacute;elos:</p>
+                  <pre><code>cd /workspace/app
+cat server.js
+cat Dockerfile</code></pre>
+          <p>Construye tu imagen:</p>
+                  <pre><code>cd /workspace/app
+# libera el puerto 8080, que ocupaba el contenedor web del paso 2
+docker rm -f web
+docker build -t mi-app:1.0.0 .</code></pre>2
+        </section>
+
+        <section class="part" id="parteD">
+          <div class="part-head"><span class="part-badge">D</span><h2>Paso 4 &mdash; Builds con capas y con tags</h2></div>
+          <p>Cada instrucci&oacute;n del Dockerfile es una <b>capa</b>. Si cambias solo el
+          <code class="inline">server.js</code>, el <code class="inline">npm install</code> se sirve del
+          cache:</p>
+                  <pre><code># toca server.js (cambia un mensaje) y vuelve a construir
+docker build -t mi-app:1.0.0 .
+# mira las líneas CACHED</code></pre>
+          <p>F&iacute;jate en <code class="inline">CACHED</code> en la salida. Ahora etiqueta lo mismo
+          con varias referencias:</p>
+                  <pre><code>docker tag mi-app:1.0.0 mi-app:latest
+docker images</code></pre>2
+          <p>Las etiquetas son <b>punteros</b>: mover <code class="inline">latest</code> no borra nada,
+          solo cambia a d&oacute;nde apunta. Por eso en producci&oacute;n se usan etiquetas
+          <b>inmutables</b> (un n&uacute;mero de versi&oacute;n que nunca se reutiliza) y
+          <code class="inline">latest</code> solo para desarrollo.</p>
+        </section>
+
+        <section class="part" id="parteE">
+          <div class="part-head"><span class="part-badge">E</span><h2>Paso 5 &mdash; Publica en Docker Hub</h2></div>
+                  <pre><code>docker tag mi-app:1.0.0 $USUARIO/mi-app:v1
+docker push $USUARIO/mi-app:v1</code></pre>
+          <p>En Docker Hub ver&aacute;s el repositorio <code class="inline">mi-app</code> con la etiqueta
+          <code class="inline">v1</code>. Anota el <b>digest</b> que imprime el push: lo vas a comparar
+          despu&eacute;s.</p>
+
+          <div class="callout">
+            <p><b>Tu token no sale de tu terminal.</b> La plataforma no lo ve, no lo guarda y no lo
+            registra. Si te equivocas, rev&oacute;calo en Docker Hub y genera otro.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteF">
+          <div class="part-head"><span class="part-badge">F</span><h2>Paso 6 &mdash; Versi&oacute;n 2 con etiquetas inmutables</h2></div>
+          <p>Cambia algo de la app (un mensaje, un campo en <code class="inline">/salud</code>) y
+          construye la versi&oacute;n 2:</p>
+                  <pre><code># cambia algo en server.js
+docker build -t mi-app:2.0.0 .
+docker tag  mi-app:2.0.0 $USUARIO/mi-app:v2
+docker push $USUARIO/mi-app:v2</code></pre>
+          <p>Compara los digests de <code class="inline">v1</code> y <code class="inline">v2</code>:</p>
+                  <pre><code>docker inspect -f '{{.Id}}' mi-app:1.0.0
+docker inspect -f '{{.Id}}' mi-app:2.0.0</code></pre>2
+          <p><b>Deben ser distintos.</b> Si fueran iguales, habr&iacute;as publicado dos etiquetas
+          apuntando a la misma imagen: eso es justamente lo que no hay que hacer.</p>
+        </section>
+
+        <section class="part" id="parteG">
+          <div class="part-head"><span class="part-badge">G</span><h2>Paso 7 &mdash; Prueba de portabilidad</h2></div>
+          <p>La prueba real de que tu imagen sirve para algo es <b>que otra persona pueda
+          descargarla y correrla sin tu c&oacute;digo</b>. Simula ese entorno limpio:</p>
+                  <pre><code>docker rmi -f $USUARIO/mi-app:v2 mi-app:2.0.0
+docker pull $USUARIO/mi-app:v2
+docker run -d --rm --name portabilidad -p 18080:3000 $USUARIO/mi-app:v2
+curl -s http://127.0.0.1:18080/salud
+docker rm -f portabilidad</code></pre>
+          <p>Has borrado tu copia local, la has vuelto a descargar desde el registro y ha
+          arrancado en un contenedor nuevo. Eso es exactamente lo que pasa cuando despliegas
+          en la nube.</p>
+        </section>
+
+        <section class="part" id="parteH">
+          <div class="part-head"><span class="part-badge">H</span><h2>Paso 8 &mdash; Reto multi-contenedor</h2></div>
+          <p>Las aplicaciones reales no van solas: hay un servicio de datos, otro de cach&eacute;, otro
+          de colas. Aqu&iacute; tienes un <code class="inline">docker-compose.yml</code> que levanta
+          tu app junto a un servicio de datos.</p>
+                  <pre><code>cd /workspace/app
+cat docker-compose.yml
+docker compose up -d --build</code></pre>
+          <p>Comprueba que la app habla con el servicio de datos:</p>
+                  <pre><code>curl -s http://127.0.0.1:8080/datos</code></pre>2
+          <p>Sube <code class="inline">/datos</code> varias veces: el contador lo lleva el
+          <b>otro</b> contenedor. Mira los logs de ambos:</p>
+                  <pre><code>curl -s http://127.0.0.1:8080/datos
+docker compose logs --tail 20</code></pre>3
+        </section>
+
+        <section class="part" id="parteI">
+          <div class="part-head"><span class="part-badge">I</span><h2>Paso 9 &mdash; Entregable</h2></div>
+          <p>El entregable es la <b>evidencia registrada por la plataforma</b>. Ejecuta el validador:</p>
+                  <pre><code>revisar</code></pre>
+          <p>Comprueba cinco cosas:</p>
+          <table>
+            <thead><tr><th>Criterio</th><th>Qu&eacute; valida</th></tr></thead>
+            <tbody>
+              <tr><td><b>Etiqueta v1 publicada</b></td><td>Que <code class="inline">v1</code> existe en tu cuenta de Docker Hub</td></tr>
+              <tr><td><b>Etiqueta v2 con digest distinto</b></td><td>Que <code class="inline">v2</code> existe y su digest no es el de v1 (etiquetas inmutables)</td></tr>
+              <tr><td><b>El contenedor responde</b></td><td>Que la app responde HTTP 200 y se ve en la vista web de la sesi&oacute;n</td></tr>
+              <tr><td><b>Portabilidad</b></td><td>Que la imagen publicada se descarga y corre en un entorno limpio</td></tr>
+              <tr><td><b>Reto multi-contenedor</b></td><td>Que el compose est&aacute; en marcha y <code class="inline">/datos</code> responde desde el servicio de datos</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="troubleshooting">
+          <div class="part-head"><span class="part-badge">?</span><h2>Soluci&oacute;n de problemas</h2></div>
+          <table>
+            <thead><tr><th>S&iacute;ntoma</th><th>Causa probable</th><th>Qu&eacute; hacer</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code class="inline">docker push</code> falla con <i>denied</i></td>
+                <td>No hiciste login, o el repositorio es de otra cuenta</td>
+                <td><code class="inline">docker login</code> y comprueba que la imagen se llama <code class="inline">TU-USUARIO/mi-app</code></td>
+              </tr>
+              <tr>
+                <td>El push es muy lento o falla con <i>toomanyrequests</i></td>
+                <td>Cuota an&oacute;nima de Docker Hub por IP compartida</td>
+                <td>Espera unos minutos. Las descargas pasan por el cach&eacute; del servidor, pero el push usa tu cuenta y no tiene esa cuota</td>
+              </tr>
+              <tr>
+                <td><code class="inline">revisar</code> no ve mis etiquetas</td>
+                <td>No guardaste tu usuario, o publicaste con otro nombre</td>
+                <td><code class="inline">cat /workspace/.dockerhub-user</code> y comprueba en Docker Hub que el repositorio se llama <code class="inline">TU-USUARIO/mi-app</code></td>
+              </tr>
+              <tr>
+                <td>v1 y v2 tienen el mismo digest</td>
+                <td>Publicaste dos etiquetas sin cambiar nada</td>
+                <td>Cambia el c&oacute;digo, reconstruye y vuelve a publicar v2</td>
+              </tr>
+              <tr>
+                <td>El compose no levanta</td>
+                <td>Falta el servicio <code class="inline">datos</code> o el nombre no coincide</td>
+                <td><code class="inline">docker compose ps</code> y <code class="inline">docker compose logs</code></td>
+              </tr>
+              <tr>
+                <td>La vista web del navegador est&aacute; en blanco</td>
+                <td>Tu app no escucha en el puerto 8080</td>
+                <td>Arranca con <code class="inline">-p 8080:3000</code> y comprueba <code class="inline">curl 127.0.0.1:8080/salud</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="rubrica">
+          <div class="part-head"><span class="part-badge">%</span><h2>Criterios de evaluaci&oacute;n</h2></div>
+          <table>
+            <thead><tr><th>Aspecto</th><th>Peso</th><th>Lo que se valora</th></tr></thead>
+            <tbody>
+              <tr><td>Etiqueta v1 publicada</td><td class="rubric-weight">20%</td><td>La imagen est&aacute; en Docker Hub con etiqueta <code class="inline">v1</code></td></tr>
+              <tr><td>Etiqueta v2 con digest distinto</td><td class="rubric-weight">20%</td><td>Publicaci&oacute;n con etiquetas inmutables y verificadas por digest</td></tr>
+              <tr><td>Contenedor responde HTTP</td><td class="rubric-weight">20%</td><td>La app corre, responde 200 y es visible desde la vista web</td></tr>
+              <tr><td>Prueba de portabilidad</td><td class="rubric-weight">20%</td><td>La imagen publicada se descarga y corre en un entorno limpio</td></tr>
+              <tr><td>Reto multi-contenedor</td><td class="rubric-weight">20%</td><td>Compose en marcha con app + servicio de datos comunicados</td></tr>
+            </tbody>
+          </table>
+          <p><b>Ponderaci&oacute;n en la nota de la asignatura: por definir.</b></p>
+        </section>
+
+        <section class="part" id="referencias">
+          <div class="part-head"><span class="part-badge">r</span><h2>Referencias</h2></div>
+          <ul>
+            <li>Docker Hub &mdash; publicar una imagen: <a href="https://docs.docker.com/docker-hub/push/" target="_blank" rel="noopener">docs.docker.com/docker-hub/push</a></li>
+            <li>Docker &mdash; tags y digests: <a href="https://docs.docker.com/get-started/docker-concepts/building-images/tagging-images/" target="_blank" rel="noopener">Tagging images</a></li>
+            <li>Docker &mdash; capas y cach&eacute; de builds: <a href="https://docs.docker.com/build/cache/" target="_blank" rel="noopener">Build cache</a></li>
+            <li>Docker Compose &mdash; referencia: <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">docs.docker.com/compose</a></li>
+            <li>Docker &mdash; CLI de run/exec: <a href="https://docs.docker.com/reference/cli/docker/" target="_blank" rel="noopener">CLI reference</a></li>
+            <li>node &mdash; imagen oficial: <a href="https://hub.docker.com/_/node" target="_blank" rel="noopener">hub.docker.com/_/node</a></li>
+          </ul>
+        </section>
+
+        <section class="part" id="checklist">
+          <div class="part-head"><span class="part-badge">v</span><h2>Checklist antes de entregar</h2></div>
+          <ol class="steps">
+          <li>Hiciste <code class="inline">docker login</code> y guardaste tu usuario con <code class="inline">mi-espacio</code>.</li>
+          <li>Tu <code class="inline">$USUARIO/mi-app:v1</code> y <code class="inline">:v2</code> est&aacute;n en Docker Hub.</li>
+          <li>Los digests de v1 y v2 son distintos.</li>
+          <li>La imagen publicada corri&oacute; en un entorno limpio.</li>
+          <li>El reto multi-contenedor est&aacute; en marcha y <code class="inline">/datos</code> responde.</li>
+          <li>Ejecutaste <code class="inline">revisar</code> y los cinco criterios est&aacute;n en verde.</li>
+        </ol>
+        </section>
+      </main>
+
+      <footer class="foot">
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes</p>
+      </footer>
+    </div>
+  </div>
+  <script>
+
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      function onScroll() {
+        var h = document.documentElement;
+        bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+        var active = targets[0];
+        for (var i = 0; i < targets.length; i++) if (targets[i].getBoundingClientRect().top <= 120) active = targets[i];
+        links.forEach(function (a) { a.classList.toggle('active', active && a.getAttribute('href') === '#' + active.id); });
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var b = document.createElement('button');
+        b.className = 'copy-btn'; b.type = 'button'; b.textContent = 'copiar';
+        b.onclick = function () {
+          var c = pre.querySelector('code');
+          navigator.clipboard.writeText(c ? c.innerText : pre.innerText);
+          b.textContent = 'copiado'; b.classList.add('copied');
+          setTimeout(function () { b.textContent = 'copiar'; b.classList.remove('copied'); }, 1400);
+        };
+        pre.appendChild(b);
+      });
+    })();
+
+  </script>
+</body>
+</html>
