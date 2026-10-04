@@ -7,7 +7,7 @@ Ordenado por **urgencia del calendario**. Hoy es el 4-oct-2026; la próxima clas
 - Al menos el **90 % de las diapositivas de contenido con gráfico real**: diagrama, topología o flujo, no tarjetas con íconos. Prioridad a los diagramas de red.
 - Plantilla única: la de S07, corregida. Lienzo de 1280×720, vino `#A6192E` y dorado `#D4AF37`, logo CUC **embebido**, pie con fuente `.src` y un solo contador de página. El contenido ocupa el alto útil y las cajas usan letra de al menos 15 px.
 - **Narración por diapositiva** dentro del mismo HTML (`<script type="application/json" id="narracion">`, con un objeto por diapositiva: texto y `parte`). Son unas 140–150 palabras por diapositiva a 135 ppm, lo que da unos 60 s por diapositiva y ~15 min por parte. Cada parte cierra con su cifra de duración estimada.
-- Cada parte incluye 1 caso colombiano en la semana, 1 mini-reto, 1 pregunta a la clase, fuentes `[cite:N]` y cierre con el laboratorio.
+- Cada parte incluye 1 caso colombiano en la semana, 1 mini-reto, 1 pregunta a la clase, fuentes `[cite:N]` y cierre de síntesis con puente a la semana siguiente. **Los laboratorios quedan fuera del alcance** (instrucción del 4-oct): solo material académico.
 - Concepto genérico de industria primero; la marca del proveedor solo aparece como ejemplo. No se comparan nombres de servicios.
 
 ## Oleada 0 — Infraestructura (modelo principal, ~1 sesión)
@@ -42,12 +42,11 @@ Auditoría final de las 17 semanas, `CLAUDE.md` actualizado (estándar, convenci
 - [ ] `auditar.mjs` sin desbordes ni SVG recortados; hoja de contactos revisada a ojo.
 - [ ] Duración estimada por parte de 14 a 16 min.
 - [ ] Precisión técnica: cada cifra con `[cite:N]` y fuente verificable; sin afirmaciones inventadas.
-- [ ] Caso colombiano con fuente; lab enlazado; portada solo con el logo CUC.
+- [ ] Caso colombiano con fuente; portada solo con el logo CUC.
 - [ ] Un commit por oleada en `claude/blissful-lovelace-uxk3q8`.
 
 ## Decisiones que necesito antes de arrancar
-1. **Plataforma de labs:** ¿Codespaces + kind (recomendado), infraestructura ASUR, Killercoda o local?
-2. **Semanas de repaso (S06, S11, S16–17):** ¿deck corto de integración + guía de rúbrica, o sin deck?
-3. **Prioridad de U1 (S01–S06):** ¿la reconstruimos ahora (oleada 4) o la dejamos para 2027-1?
-4. **Voz:** ¿`edge-tts` es-CO (como los videos actuales) o Azure AI Speech con tu clave?
-5. **.pptx viejas:** si las tienes, súbelas a `insumos/pptx/` antes de la oleada 1 para mapearlas.
+1. **Semanas de repaso (S06, S11, S16–17):** ¿deck corto de integración + guía de rúbrica, o sin deck?
+2. **Prioridad de U1 (S01–S06):** ¿la reconstruimos ahora (oleada 4) o la dejamos para 2027-1?
+3. **Voz:** ¿`edge-tts` es-CO (como los videos actuales) o Azure AI Speech con tu clave?
+4. **.pptx viejas:** si las tienes, súbelas a `insumos/pptx/` antes de la oleada 1 para mapearlas.

@@ -2,7 +2,7 @@
 
 **Fase 1 — Análisis.** Documento para aprobación del Ing. Rodolfo Cañas Cervantes antes de producir.
 **Fecha del corte de análisis:** domingo 4 de octubre de 2026.
-**Insumos revisados:** `index.html` (calendario oficial), las 6 presentaciones HTML publicadas, sus PDF y videos, `guiones/` (S01–S04), `laboratorios/`, `proyectos/`, `STANDARDS.md`, `TEMARIO-…md` y `CLAUDE.md`.
+**Insumos revisados:** `index.html` (calendario oficial), las 6 presentaciones HTML publicadas, sus PDF y videos, `guiones/` (S01–S04), `proyectos/`, `STANDARDS.md`, `TEMARIO-…md` y `CLAUDE.md`.
 **Método:** cada diapositiva se renderizó a 1280×720 con Chromium (Playwright). Se contaron diapositivas y visuales con un script, se detectaron SVG recortados (`getBBox` > `viewBox`) y textos encima del pie, y se midió la duración de los videos con `ffprobe`. Las capturas no se versionan; se regeneran con `herramientas/` en la Fase 2.
 
 > Los títulos de las semanas del calendario de `index.html` son oficiales y **no cambian**. Las mejoras propuestas van **dentro** de cada semana.
@@ -15,7 +15,7 @@
 |---|---|---|
 | Dom 4-oct-2026 | **Termina la semana 9** (28 sep–4 oct, *Orquestación de contenedores con Kubernetes*). La clase fue ayer (sábado 3-oct). | **Receso** 5–11 oct → **Semana 10** (clase sáb 17-oct) → **Semana 11** Repaso U2 / Rúbrica U2 (sáb 24-oct) → Semana 12 (sáb 31-oct). |
 
-**Hallazgo crítico de calendario:** la semana 9 ya se dictó y **no tiene presentación publicada**, ni el laboratorio del 10 % (Actividad 2 U2), que sigue "pendiente de definir". Las semanas 5 y 6 tampoco tienen material publicado.
+**Hallazgo crítico de calendario:** la semana 9 ya se dictó y **no tiene presentación publicada**. Las semanas 5 y 6 tampoco tienen material publicado.
 
 ### Divergencia entre `index.html` y `TEMARIO-…md`
 El `index.html` (oficial) tiene **17 semanas**: S05 = *Resiliencia y continuidad de negocio multicloud*, S06 = *Repaso U1*, S07 = *Microservicios*. El `TEMARIO` todavía tiene la versión vieja (S05 = repaso, S06 = microservicios, S07 = contenedores con ECR). **Se sigue `index.html`** y el TEMARIO se marca como desactualizado en la Fase 2 (sin reescribirlo sin tu visto bueno).
@@ -90,7 +90,6 @@ Referentes usados (ver detalle y URL en `fuentes-recursos.md §1`):
 | Oracle Database@X | S01 (casos), S02 (3 diapositivas), S03 (red ODB) | Un solo caso ancla desarrollado en S02 y referenciado en S01 y S03 con una diapositiva cada uno |
 | Interconexión privada entre nubes | S01 (TIM Brasil) y S03 | Se queda en S03; en S01 el caso TIM se usa como motivación |
 | Puente contenedores → Kubernetes | S08 (diapositivas 49–52) y S09 | Correcto como puente si S08 no adelanta contenido de S09 |
-| Laboratorio de contenedores | Lab 1 (semana 3, U1) y Lab 3 / S08 | Ya resuelto por ti (Lab 3 = continuación); solo hay que reflejarlo en las narraciones |
 
 ### 4.3 Brechas y mejoras por semana (dentro del título oficial)
 Cada semana se organiza en 4 partes de ~15 min. Entre paréntesis, lo que **ya existe** y se reusa.
@@ -105,7 +104,7 @@ Cada semana se organiza en 4 partes de ~15 min. Entre paréntesis, lo que **ya e
 | **6 Repaso U1** | *Propuesta:* deck corto de integración (CaribeMart de punta a punta) + guía de la rúbrica U1 | — | — | — | CaribeMart (proyecto de aula) | Arquitectura integrada de CaribeMart |
 | **7 Microservicios** | (existente) | (existente) | (existente) + serverless/FaaS como alternativa de despliegue (una diapositiva) | (existente) + OWASP API Security Top 10 en el borde | (existente) | Corregir los 10 SVG recortados |
 | **8 Contenedores** | (existente) Por qué existen | (existente) Imagen y Dockerfile | (existente) Registros + NIST 800-190 | (existente) Redes y volúmenes, compose, puente | Rehacer capturas sin Play with Docker | Reemplazar tarjetas de íconos por diagramas reales (capas, flujo push/pull) |
-| **9 Kubernetes** | Del contenedor al clúster: plano de control y nodos | Pod, ReplicaSet, Deployment; rolling update y rollback | Service, Ingress, DNS interno, ConfigMap y Secret | Probes, HPA, namespaces; gestionado vs. propio; lab | Despliegue de CaribeMart en un clúster | **Topología de clúster, red de pods y services** |
+| **9 Kubernetes** | Del contenedor al clúster: plano de control y nodos | Pod, ReplicaSet, Deployment; rolling update y rollback | Service, Ingress, DNS interno, ConfigMap y Secret | Probes, HPA, namespaces; gestionado vs. propio | Despliegue de CaribeMart en un clúster | **Topología de clúster, red de pods y services** |
 | **10 CI/CD** | DevOps y métricas DORA | Etapas del pipeline: build → test → scan → push | GitHub Actions: workflows, runners, secretos, ambientes | Despliegue a Kubernetes: push vs. GitOps (principios OpenGitOps); estrategias blue/green y canary | CaribeMart con el pipeline completo | Flujo del pipeline; blue/green |
 | **11 Repaso U2** | *Propuesta:* deck corto + guía de la rúbrica U2 | — | — | — | CaribeMart contenedorizada | — |
 | **12 IaC** | Declarativo vs. imperativo; deriva | Terraform/OpenTofu: proveedores, plan/apply, estado remoto | Módulos y un mismo código contra varios proveedores | Políticas como código (OPA), IaC en el pipeline | Infraestructura reproducible para CaribeMart | Grafo de dependencias; flujo plan/apply |
@@ -116,13 +115,8 @@ Cada semana se organiza en 4 partes de ~15 min. Entre paréntesis, lo que **ya e
 
 **Temas que faltan en todo el curso y se proponen DENTRO de semanas existentes:** serverless/FaaS (S07, P3), seguridad de APIs OWASP (S07, P4), resolución DNS híbrida (S03, P4), modelo ISO/IEC 19941 (S04, P3) y SLA compuesto (S05, P2). Ningún título cambia.
 
-## 5. Plataforma de laboratorios (decisión pendiente)
-El encargo deja "[plataforma de labs]" sin definir, y hay restricciones reales:
-- **Play with Docker fue descontinuado** (commit 99e5017); el Lab 3 está retirado de la vista.
-- El **AWS Academy Lab Project [182349]** sigue activo hasta el 30-nov, pero tú lo descartaste como ancla de U2/U3 el 26-sep.
-- El Lab 1 corre sobre **infraestructura propia** (sandbox por estudiante), y funciona.
-
-Opciones para Kubernetes, CI/CD, IaC, mesh y observabilidad: (a) infraestructura propia ASUR, con un clúster k3s por equipo; (b) **GitHub Codespaces + kind/k3d**: Docker real en el navegador, cuota gratuita mensual para cuentas personales (la cifra se verifica antes de publicarla); (c) Killercoda, con escenarios Kubernetes gratuitos en el navegador; (d) instalación local (Docker Desktop/Podman + kind). **Recomendación:** (b) como principal, por ser gratuito, de industria e integrado con GitHub Actions (S10) y con OpenTofu (S12), y (a) como respaldo para S13 multiclúster.
+## 5. Alcance: solo material académico
+Por instrucción del docente (4-oct-2026), los **laboratorios quedan fuera del alcance** de este análisis y de la Fase 2. Se trabaja solo el material académico: presentaciones HTML, narración, PDF y videos. Las presentaciones no dependen de ninguna plataforma de labs. Cuando una semana necesite un ejemplo práctico, se muestra como demostración conceptual dentro del deck (diagramas, capturas propias y comandos ilustrativos), sin enlazar ni diseñar laboratorios.
 
 ## 6. Presentaciones viejas (.pptx)
 No se compartió ningún `.pptx` en esta sesión. Cuando las compartas (por ejemplo en `insumos/pptx/`, carpeta no publicada), se extraen con `python-pptx`: texto, notas y la estructura de los diagramas. Cada idea se mapea a una semana en una tabla `docs/mapa-pptx.md` y cada diagrama se **redibuja como SVG propio**. Nunca se pegan imágenes con derechos.
@@ -131,5 +125,4 @@ No se compartió ningún `.pptx` en esta sesión. Cuando las compartas (por ejem
 1. `STANDARDS.md v1.1` exige **17–20 diapositivas**, y el estándar nuevo es de ~56–60 en 4 partes. Se propone un **STANDARDS v2.0** que adopte el formato de S07.
 2. `STANDARDS.md §8`: "autónomo/sin conexión" frente al logo y los íconos por hotlink.
 3. `CLAUDE.md` dice "solo la semana 4 fue actualizada con video narrado", lo cual quedó desactualizado (S07 tiene 4 videos).
-4. El guion S04 menciona el lab de las 7 Rs retirado (ya marcado en `CLAUDE.md` regla 6).
-5. `index.html` dice "5 de 16 publicadas", pero hay 6 tarjetas y el calendario tiene 17 semanas.
+4. `index.html` dice "5 de 16 publicadas", pero hay 6 tarjetas y el calendario tiene 17 semanas.
