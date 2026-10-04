@@ -1,0 +1,100 @@
+<!-- EJEMPLO DE REFERENCIA — patrones de diapositiva de la plantilla v2.
+     Cada <section> = 1 diapositiva de contenido. El constructor agrega cabecera, logo, pie y numeración.
+     Área útil (.s-body): 1180 x 500 px. Diagrama a pantalla completa: <svg viewBox="0 0 1180 500">. -->
+
+<!-- PATRÓN A: topología de red a pantalla completa (el preferido del curso) -->
+<section data-kicker="Topología" data-titulo="Una empresa, dos nubes y una sede: el mapa de red" data-sub="Cada enlace tiene un propósito: tráfico público por internet, tráfico privado por túnel o enlace dedicado." data-fuente="Basado en: NIST SP 800-145 [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <!-- Zonas -->
+  <rect x="20" y="40" width="300" height="420" rx="14" fill="#F4F4F4" stroke="#9a9a9a" stroke-dasharray="6 5"/>
+  <text x="170" y="70" text-anchor="middle" font-size="18" font-weight="700" fill="#2A2A2A">Sede Barranquilla</text>
+  <rect x="440" y="40" width="300" height="190" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="590" y="70" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Nube A · región 1</text>
+  <rect x="440" y="270" width="300" height="190" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="590" y="300" text-anchor="middle" font-size="18" font-weight="700" fill="#9C7B16">Nube B · región 2</text>
+  <!-- Nodos -->
+  <use href="#i-usuario" x="60" y="110" width="56" height="56" color="#2A2A2A"/>
+  <text x="88" y="186" text-anchor="middle" font-size="15">Usuarios</text>
+  <use href="#i-switch" x="150" y="110" width="64" height="64" color="#2A2A2A"/>
+  <use href="#i-firewall" x="140" y="230" width="60" height="60" color="#A6192E"/>
+  <text x="170" y="310" text-anchor="middle" font-size="15">Firewall perimetral</text>
+  <use href="#i-router" x="140" y="350" width="64" height="64" color="#2A2A2A"/>
+  <text x="172" y="436" text-anchor="middle" font-size="15">Router de borde</text>
+  <use href="#i-servidor" x="490" y="100" width="56" height="56" color="#A6192E"/>
+  <text x="518" y="176" text-anchor="middle" font-size="15">App web</text>
+  <use href="#i-bd" x="630" y="100" width="56" height="56" color="#A6192E"/>
+  <text x="658" y="176" text-anchor="middle" font-size="15">Base de datos</text>
+  <use href="#i-cluster" x="490" y="330" width="60" height="60" color="#9C7B16"/>
+  <text x="520" y="410" text-anchor="middle" font-size="15">Analítica</text>
+  <use href="#i-bd" x="630" y="330" width="56" height="56" color="#9C7B16"/>
+  <text x="658" y="410" text-anchor="middle" font-size="15">Réplica</text>
+  <use href="#i-internet" x="850" y="200" width="80" height="80" color="#5E5E5E"/>
+  <text x="890" y="300" text-anchor="middle" font-size="15">Internet</text>
+  <!-- Enlaces -->
+  <line x1="204" y1="382" x2="440" y2="150" stroke="#A6192E" stroke-width="3.5" marker-end="url(#fl-vino)"/>
+  <text x="300" y="240" font-size="15" fill="#A6192E" font-weight="700" transform="rotate(-44 300 240)">túnel IPsec</text>
+  <line x1="204" y1="392" x2="440" y2="370" stroke="#9C7B16" stroke-width="5"/>
+  <text x="322" y="398" font-size="15" fill="#9C7B16" font-weight="700">enlace dedicado</text>
+  <line x1="590" y1="230" x2="590" y2="270" stroke="#2A2A2A" stroke-width="3" stroke-dasharray="5 4"/>
+  <text x="600" y="255" font-size="14" fill="#2A2A2A">interconexión privada</text>
+  <line x1="740" y1="135" x2="850" y2="225" stroke="#5E5E5E" stroke-width="2.5"/>
+  <!-- Leyenda -->
+  <rect x="960" y="60" width="200" height="140" rx="10" fill="#fff" stroke="#E3D9C6"/>
+  <text x="975" y="88" font-size="15" font-weight="700">Leyenda</text>
+  <line x1="975" y1="112" x2="1015" y2="112" stroke="#A6192E" stroke-width="3.5"/><text x="1024" y="117" font-size="14">cifrado sobre internet</text>
+  <line x1="975" y1="142" x2="1015" y2="142" stroke="#9C7B16" stroke-width="5"/><text x="1024" y="147" font-size="14">enlace privado</text>
+  <line x1="975" y1="172" x2="1015" y2="172" stroke="#5E5E5E" stroke-width="2.5"/><text x="1024" y="177" font-size="14">tráfico público</text>
+</svg>
+<aside class="narracion">Este es el mapa que vamos a usar toda la semana. A la izquierda, la sede en Barranquilla: usuarios, un switch, el firewall perimetral y el router de borde. A la derecha, dos nubes de proveedores distintos. Fíjense en que no hay un solo tipo de enlace: hacia la nube A sale un túnel cifrado que viaja por internet; hacia la nube B, un enlace dedicado que nunca toca internet; y entre las dos nubes, una interconexión privada. La pregunta de arquitectura no es cuál enlace es mejor, sino qué tráfico va por cada uno y cuánto cuesta. La definición de nube que sostiene este mapa es la del NIST.</aside>
+</section>
+
+<!-- PATRÓN B: diagrama (63 %) + columna de notas (37 %) -->
+<section data-kicker="Comparación" data-titulo="Dos formas de conectar: túnel o enlace dedicado" data-fuente="Basado en: RFC 4301 (IPsec) [cite:2] · Diagrama: elaboración propia">
+<div class="fila">
+  <div class="c-60 lienzo"><svg viewBox="0 0 720 500">
+    <rect x="10" y="30" width="700" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E"/>
+    <text x="30" y="62" font-size="18" font-weight="700" fill="#A6192E">Túnel cifrado sobre internet</text>
+    <use href="#i-edificio" x="40" y="90" width="70" height="70" color="#2A2A2A"/>
+    <use href="#i-internet" x="330" y="90" width="80" height="80" color="#5E5E5E"/>
+    <use href="#i-nube" x="600" y="90" width="80" height="80" color="#A6192E"/>
+    <path d="M115 125 H330 M410 130 H600" stroke="#A6192E" stroke-width="4" stroke-dasharray="10 6"/>
+    <use href="#i-candado" x="200" y="100" width="36" height="36" color="#A6192E"/>
+    <text x="360" y="205" text-anchor="middle" font-size="16">latencia variable · costo bajo · listo en horas</text>
+    <rect x="10" y="270" width="700" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37"/>
+    <text x="30" y="302" font-size="18" font-weight="700" fill="#9C7B16">Enlace dedicado</text>
+    <use href="#i-edificio" x="40" y="330" width="70" height="70" color="#2A2A2A"/>
+    <use href="#i-datacenter" x="330" y="330" width="80" height="80" color="#9C7B16"/>
+    <use href="#i-nube" x="600" y="330" width="80" height="80" color="#9C7B16"/>
+    <path d="M115 370 H330 M410 370 H600" stroke="#9C7B16" stroke-width="7"/>
+    <text x="360" y="445" text-anchor="middle" font-size="16">latencia estable · costo fijo · semanas de aprovisionamiento</text>
+  </svg></div>
+  <div class="c-40 col">
+    <div class="nota"><b>Túnel:</b> usa internet como transporte y cifra todo con IPsec.</div>
+    <div class="nota dorada"><b>Dedicado:</b> un circuito físico hasta un punto de presencia del proveedor.</div>
+    <div class="nota">En la práctica se usan <b>los dos</b>: el túnel como respaldo del dedicado.</div>
+  </div>
+</div>
+<aside class="narracion">Aquí comparamos las dos formas clásicas de conectar una sede con una nube. Arriba, el túnel cifrado: la sede sale a internet y el protocolo IPsec cifra cada paquete hasta la nube. Es barato y se configura en horas, pero la latencia depende de internet. Abajo, el enlace dedicado: un circuito físico que llega a un punto de presencia del proveedor; la latencia es estable y predecible, pero tarda semanas en aprovisionarse y tiene costo fijo mensual. En las empresas reales casi nunca se elige uno solo: el dedicado lleva el tráfico normal y el túnel queda como respaldo.</aside>
+</section>
+
+<!-- PATRÓN C: cifras grandes con fuente -->
+<section data-kicker="Datos" data-titulo="Lo que hay que recordar con números" data-fuente="Cifras ilustrativas del patrón — en una semana real cada cifra lleva [cite:N]">
+<div class="fila" style="align-items:center">
+  <div class="c-50 col" style="text-align:center"><div class="cifra">3</div><div class="cifra-cap">modelos de servicio (IaaS, PaaS, SaaS) [cite:1]</div></div>
+  <div class="c-50 col" style="text-align:center"><div class="cifra">4</div><div class="cifra-cap">modelos de despliegue: pública, privada, comunitaria, híbrida [cite:1]</div></div>
+  <div class="c-50 col" style="text-align:center"><div class="cifra">5</div><div class="cifra-cap">características esenciales de la nube [cite:1]</div></div>
+</div>
+<aside class="narracion">Tres, cuatro y cinco. Tres modelos de servicio, cuatro modelos de despliegue y cinco características esenciales: es la definición del NIST, y es el vocabulario mínimo para hablar de nube con precisión.</aside>
+</section>
+
+<!-- PATRÓN D: mini-reto pausable -->
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿túnel o dedicado?" data-fuente="Ejercicio de elaboración propia">
+<div class="fila">
+  <div class="c-60 col">
+    <div class="reto"><div class="r-tit">Pausa y responde</div>Una cadena de farmacias de la costa replica su inventario cada noche (40 GB) y atiende ventas en línea de día. ¿Qué enlace pondrías para cada tráfico y por qué?</div>
+    <div class="nota dorada">Pista: separa el tráfico <b>predecible y voluminoso</b> del <b>interactivo</b>.</div>
+  </div>
+  <div class="c-40 lienzo"><svg viewBox="0 0 420 500"><use href="#i-pregunta" x="90" y="110" width="240" height="240" color="#D4AF37"/></svg></div>
+</div>
+<aside class="narracion">Mini-reto. Pausa el video. Una cadena de farmacias de la costa replica cada noche cuarenta gigabytes de inventario hacia la nube y, de día, atiende ventas en línea. ¿Qué enlace pondrías para cada tráfico y por qué? Piensa en separar lo predecible y voluminoso de lo interactivo. Cuando tengas tu respuesta, continúa.</aside>
+</section>
