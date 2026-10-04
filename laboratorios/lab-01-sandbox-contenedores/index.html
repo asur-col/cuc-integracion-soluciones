@@ -487,6 +487,17 @@
       section.part { break-inside: avoid; }
     }
   
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
   </style>
 </head>
 <body>

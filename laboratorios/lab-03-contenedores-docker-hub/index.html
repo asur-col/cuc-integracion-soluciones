@@ -487,6 +487,17 @@
       section.part { break-inside: avoid; }
     }
   
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
   </style>
 </head>
 <body>
@@ -494,312 +505,597 @@
   <div class="shell">
     <nav class="toc" id="toc">
       <p class="toc-label">Contenido</p>
-      <a href="#intro"><span class="badge">&middot;</span> Introducci&oacute;n</a>
-      <a href="#parte0"><span class="badge">0</span> Tu cuenta</a>
-      <a href="#parteA"><span class="badge">A</span> Primer contenedor</a>
-      <a href="#parteB"><span class="badge">B</span> Servidor web</a>
-      <a href="#parteC"><span class="badge">C</span> Dockerfile propio</a>
-      <a href="#parteD"><span class="badge">D</span> Tags y capas</a>
-      <a href="#parteE"><span class="badge">E</span> Push a Docker Hub</a>
-      <a href="#parteF"><span class="badge">F</span> Versi&oacute;n 2</a>
-      <a href="#parteG"><span class="badge">G</span> Portabilidad</a>
-      <a href="#parteH"><span class="badge">H</span> Reto multi-contenedor</a>
-      <a href="#parteI"><span class="badge">I</span> Entregable</a>
-      <a href="#troubleshooting"><span class="badge">?</span> Problemas</a>
+      <a href="#intro"><span class="badge">&middot;</span> Introducción</a>
+      <a href="#parte0"><span class="badge">0</span> Tu registro</a>
+      <a href="#parte1"><span class="badge">1</span> Primer contenedor</a>
+      <a href="#parte2"><span class="badge">2</span> Servidor web</a>
+      <a href="#parte3"><span class="badge">3</span> Tu app</a>
+      <a href="#parte4"><span class="badge">4</span> Construir</a>
+      <a href="#parte5"><span class="badge">5</span> Correr</a>
+      <a href="#parte6"><span class="badge">6</span> Push</a>
+      <a href="#parte7"><span class="badge">7</span> Versión 2</a>
+      <a href="#parte8"><span class="badge">8</span> Portabilidad</a>
+      <a href="#parte9"><span class="badge">9</span> Multi-contenedor</a>
+      <a href="#parte10"><span class="badge">10</span> Entregable</a>
+      <a href="#industria"><span class="badge">n</span> ECR / ACR / Hub</a>
       <a href="#rubrica"><span class="badge">%</span> Criterios</a>
+      <a href="#planb"><span class="badge">B</span> Plan B</a>
+      <a href="#troubleshooting"><span class="badge">?</span> Problemas</a>
       <a href="#referencias"><span class="badge">r</span> Referencias</a>
       <a href="#checklist"><span class="badge">v</span> Checklist</a>
     </nav>
 
     <div>
       <header class="top portada">
-        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
-        <h1>Laboratorio 3: Contenedores y Docker Hub</h1>
-        <p class="sub">Del primer contenedor a una imagen publicada en Docker Hub con etiquetas
-        inmutables, una prueba de portabilidad real y un reto multi-contenedor &mdash; todo en una
-        estaci&oacute;n propia que se crea y se destruye contigo</p>
+        <div class="portada-badge">Ingeniería de Sistemas &middot; Integración de Soluciones</div>
+        <h1>Laboratorio 3: Contenedores, segundo nivel: versionado, registro y portabilidad real</h1>
+        <p class="sub">Del primer contenedor a una imagen publicada en <b>tu registro con login</b>:
+        etiquetas inmutables, portabilidad probada y un reto multi-contenedor &mdash; todo en tu
+        sesión de labs.proyectoasur.org, sin instalar nada</p>
         <div class="accent-bar"></div>
         <div class="author-block">
-          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span>Docente: <strong>Ing. Rodolfo Cañas Cervantes</strong></span>
           <span><strong>Universidad de la Costa (CUC)</strong></span>
-          <span><strong>2026-2 &middot; Ponderaci&oacute;n: por definir</strong></span>
+          <span><strong>2026-2 &middot; Actividad 1 de U2 &middot; 10 %</strong></span>
         </div>
       </header>
 
       <main>
         <section id="intro">
-          <p class="lede">Este laboratorio contin&uacute;a el Lab 1. All&aacute; construiste una imagen y
-          la publicaste en un registro privado de tu sesi&oacute;n. Aqu&iacute; vas a hacer lo mismo pero
-          <b>en Docker Hub</b>: el registro p&uacute;blico que usan todas las empresas para distribuir
-          sus im&aacute;genes, y que es el paso previo a desplegar en la nube.</p>
+          <p class="lede">Este laboratorio continúa el Lab 1. Allá construiste una imagen y la
+          publicaste en un registro privado de tu sesión. Aquí vas un nivel más allá: <b>versionas,
+          publicas con login y pruebas la portabilidad</b> en un registro que tiene <b>cuenta, clave y
+          namespace propios tuyos</b>.</p>
 
-          <p>Van a ser <b>diez pasos</b>, y cada uno deja evidencia que <code class="inline">revisar</code>
-          comprueba solo:</p>
-          <ol class="steps">
-          <li>Preparas tu cuenta de Docker Hub y tu estaci&oacute;n.</li>
-          <li>Corres tu primer contenedor y publicas su puerto.</li>
-          <li>Escribes tu propio Dockerfile y construyes una imagen.</li>
-          <li>Comprendes las capas y los tags de build.</li>
-          <li>Publicas en Docker Hub.</li>
-          <li>Publicas una versi&oacute;n 2 con etiquetas inmutables.</li>
-          <li>Pruebas que la imagen es portable en un entorno limpio.</li>
-          <li>Levantas un reto multi-contenedor.</li>
-          <li>Ejecutas <code class="inline">revisar</code> y la evidencia queda registrada.</li>
-        </ol>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th></th><th>Laboratorio 1 (ya hecho)</th><th>Laboratorio 3 (este)</th></tr></thead>
+              <tbody>
+                <tr><td><b>Registro</b></td><td>Privado, del curso, ya configurado para ti</td><td><b>Con cuenta y clave: haces <code class="inline">docker login</code> tú</b></td></tr>
+                <tr><td><b>Versionado</b></td><td>Una sola versión de la imagen</td><td><b>Dos versiones (<code class="inline">v1</code> y <code class="inline">v2</code>) coexistiendo con digests distintos</b></td></tr>
+                <tr><td><b>Portabilidad</b></td><td>Corre en tu estación</td><td><b>Prueba real: la imagen baja del registro a un entorno limpio</b></td></tr>
+                <tr><td><b>Multi-servicio</b></td><td>No aplica</td><td><b>Reto: la app y un servicio de datos hablando por la red de Docker</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Vas a trabajar en tu <b>sesión de <code class="inline">labs.proyectoasur.org</code></b>:
+          una estación real de Docker en el navegador, sin instalar nada en tu equipo. Publicas en
+          <b>el registro de tu propia sesión</b> (<code class="inline">hub:5000</code>), que tiene
+          <b>cuenta, clave y namespace propios tuyos</b>:
+          <code class="inline">hub:5000/&lt;tu-usuario&gt;/mi-app</code>.</p>
+
+          <div class="callout note">
+            <p><b>En la industria esto es Docker Hub / ECR / ACR / Artifact Registry: los comandos
+            son los mismos.</b> Cambia el nombre del servidor y quién lo administra;
+            <code class="inline">docker login</code>, <code class="inline">docker push</code>,
+            <code class="inline">docker pull</code> y los digests son idénticos. Aquí no dependes de
+            una cuenta pública ni de la cuota anónima de internet: el registro vive en tu sesión y se
+            borra contigo.</p>
+          </div>
 
           <div class="callout">
-            <p><b>Lo que NO se hace aqu&iacute;:</b> no usas ninguna plataforma online tipo
-            <i>Play with Docker</i>. Tu Docker es real, vive en tu estaci&oacute;n y se borra
-            contigo. La diferencia con esa plataforma es que lo que publicas en Docker Hub
-            <b>s&iacute; se queda</b>: es tu cuenta y tu repositorio.</p>
+            <p><b>La idea central del lab en una frase:</b> la imagen es inmutable y vive en el
+            registro; cualquier máquina que la descargue obtiene exactamente la misma aplicación.</p>
           </div>
+
+          <p>El recorrido completo, en este orden, es exactamente lo que
+          <code class="inline">revisar</code> comprueba al final:</p>
+          <ol class="steps">
+            <li>Entras a tu sesión y te autenticas en tu registro (<code class="inline">docker login</code> con tu cuenta de la sesión).</li>
+            <li>Correspond tu primer contenedor y un servidor web publicando el puerto 8080.</li>
+            <li>Lees el código de partida, construyes <code class="inline">mi-app</code> desde su <code class="inline">Dockerfile</code> y la corres.</li>
+            <li>Publicas <code class="inline">v1</code> y luego <code class="inline">v2</code> con etiquetas inmutables en <code class="inline">hub:5000/&lt;tu-usuario&gt;/mi-app</code>.</li>
+            <li>Compruebas la portabilidad: borras la copia local y la vuelves a bajar del registro.</li>
+            <li>Levantas el reto multi-contenedor con <code class="inline">docker compose</code>.</li>
+            <li>Ejecutas <code class="inline">revisar</code> y terminas con <b>5 de 5 criterios en verde</b>.</li>
+          </ol>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 300" width="100%" height="auto" role="img" aria-label="Topologia de la sesion: estacion y registro con login">
+              <rect x="16" y="16" width="888" height="268" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="44" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">TU SESIÓN &mdash; DOS CONTENEDORES QUE SE HABLAN</text>
+
+              <rect x="48" y="70" width="440" height="180" rx="12" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="70" y="98" font-family="IBM Plex Sans" font-size="13.5" font-weight="700" fill="#2A2A2A">Tu estación (Docker real, sysbox)</text>
+              <text x="70" y="122" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">terminal web · /workspace/app · código de partida</text>
+              <text x="70" y="142" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">docker build → mi-app:1.0.0 y :2.0.0</text>
+              <rect x="70" y="158" width="240" height="74" rx="8" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.2"></rect>
+              <text x="84" y="180" font-family="IBM Plex Sans" font-size="12" font-weight="700" fill="#7E5A12">app (:8080)</text>
+              <text x="84" y="198" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">/salud · /datos</text>
+              <text x="84" y="216" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">pestaña «Mi aplicación»</text>
+              <rect x="326" y="158" width="146" height="74" rx="8" fill="#FBEBEC" stroke="#A6192E" stroke-width="1.2"></rect>
+              <text x="340" y="180" font-family="IBM Plex Sans" font-size="12" font-weight="700" fill="#A6192E">datos (:3001)</text>
+              <text x="340" y="198" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">contador de visitas</text>
+              <text x="340" y="216" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">docker compose</text>
+
+              <rect x="596" y="70" width="276" height="180" rx="12" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="618" y="98" font-family="IBM Plex Sans" font-size="13.5" font-weight="700" fill="#A6192E">Registro de tu sesión · hub:5000</text>
+              <text x="618" y="122" font-family="IBM Plex Mono" font-size="11" fill="#2A2A2A">auth htpasswd (tu usuario y clave)</text>
+              <text x="618" y="142" font-family="IBM Plex Mono" font-size="11" fill="#2A2A2A">namespace: &lt;tu-usuario&gt;/mi-app</text>
+              <text x="618" y="166" font-family="IBM Plex Mono" font-size="11" fill="#7E1223">v1 → digest A</text>
+              <text x="618" y="186" font-family="IBM Plex Mono" font-size="11" fill="#7E1223">v2 → digest B (distinto)</text>
+              <text x="618" y="216" font-family="IBM Plex Sans" font-size="11" font-style="italic" fill="#7E1223">se borra con tu sesión</text>
+
+              <line x1="492" y1="120" x2="592" y2="120" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="600,120 586,113 586,127" fill="#A6192E"></polygon>
+              <text x="546" y="110" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" font-weight="700" fill="#A6192E">push</text>
+              <line x1="592" y1="200" x2="492" y2="200" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="484,200 498,193 498,207" fill="#6B6259"></polygon>
+              <text x="546" y="222" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" font-weight="700" fill="#6B6259">pull (portabilidad)</text>
+            </svg>
+            <p class="diagram-caption">Tú publicas con <b>login</b> y el registro guarda los digests;
+            el <b>pull</b> del paso 8 baja la misma imagen a un entorno limpio. Diagrama: elaboración propia.</p>
+          </div>
+
+          <p><b>Presupuesto de tiempo (90 minutos, no te desvíes):</b></p>
+          <table>
+            <thead><tr><th>Parte</th><th>Tiempo</th></tr></thead>
+            <tbody>
+              <tr><td>0 — Entra y conoce tu registro</td><td>10 min</td></tr>
+              <tr><td>Pasos 1–2 — Primer contenedor, puertos y aislamiento</td><td>15 min</td></tr>
+              <tr><td>Pasos 3–5 — Tu app: Dockerfile, build y run</td><td>25 min</td></tr>
+              <tr><td>Pasos 6–7 — Registro: push y versionado</td><td>20 min</td></tr>
+              <tr><td>Paso 8 — Prueba de portabilidad</td><td>10 min</td></tr>
+              <tr><td>Paso 9 — Reto multi-contenedor</td><td>5 min</td></tr>
+              <tr><td>Paso 10 — Entregable (<code class="inline">revisar</code>)</td><td>5 min</td></tr>
+            </tbody>
+          </table>
         </section>
 
         <section class="part" id="parte0">
-          <div class="part-head"><span class="part-badge">0</span><h2>Paso 0 &mdash; Tu cuenta y tu estaci&oacute;n</h2></div>
+          <div class="part-head"><span class="part-badge">0</span><h2>Paso 0 — Entra y conoce tu registro (~10 min)</h2></div>
 
-                  <h3 class="sub">0.1 · Entra a tu estación</h3>
+          <p><b>Objetivo:</b> abrir tu sesión y descubrir <b>tu</b> cuenta en el registro de la clase.</p>
+
+          <h3 class="sub">0.1 · Abre tu sesión</h3>
           <ol class="steps">
-          <li>Entra en <code class="inline">https://labs.proyectoasur.org</code> con tus credenciales.</li>
-          <li>Busca el <b>Lab 3 &mdash; Contenedores y Docker Hub</b> y pulsa <b>Iniciar lab</b>.</li>
-          <li>Cuando diga <b>Entrar</b>, &aacute;brelo: ver&aacute;s tu terminal y, al correr algo en el puerto 8080, la pesta&ntilde;a <b>Mi aplicaci&oacute;n</b>.</li>
-        </ol>
+            <li>Entra en <code class="inline">https://labs.proyectoasur.org</code> con tus credenciales.</li>
+            <li>Busca el <b>Lab 3 — Contenedores y Docker Hub</b> y pulsa <b>Iniciar lab</b>.</li>
+            <li>Cuando diga <b>Entrar</b>, ábrelo: verás tu terminal y una pestaña <b>Mi aplicación</b> (todavía vacía: la llenas en el paso 5).</li>
+          </ol>
 
-                  <h3 class="sub">0.2 · Dile a la estación quién eres</h3>
-          <p>La plataforma <b>nunca</b> guarda ni registra tu token de Docker Hub: lo escribes t&uacute;
-          en tu terminal y se borra con la estaci&oacute;n. Lo &uacute;nico que necesita saber el validador
-          es tu usuario, para poder comprobar en Docker Hub que tus etiquetas existen.</p>
-                  <pre><code>mi-espacio
-echo 'tu-usuario-de-dockerhub' &gt; /workspace/.dockerhub-user
-export USUARIO=$(cat /workspace/.dockerhub-user)
-echo "USUARIO=$USUARIO"</code></pre>
+          <h3 class="sub">0.2 · Tu espacio de trabajo</h3>
+          <p>Tu estación trae Docker de verdad y el código de partida; el comando
+          <code class="inline">mi-espacio</code> te lo copia y te deja la lista de archivos a la vista.</p>
+          <pre><code>docker version
+mi-espacio</code></pre>
+          <p><b>Qué debes ver:</b> la versión del servidor de Docker (no es un simulador) y, en
+          <code class="inline">/workspace/app</code>, cinco archivos: <code class="inline">Dockerfile</code>,
+          <code class="inline">package.json</code>, <code class="inline">server.js</code>,
+          <code class="inline">datos.js</code> y <code class="inline">docker-compose.yml</code>.</p>
 
-                  <h3 class="sub">0.3 · Autentícate contra Docker Hub</h3>
-                  <pre><code>docker login
-# Username: tu-usuario-de-dockerhub
-# Password: tu access token de Docker Hub (Settings → Security → New Access Token)</code></pre>
-        </section>
+          <h3 class="sub">0.3 · Tu cuenta en el registro de tu sesión</h3>
+          <p>La plataforma generó <b>para tu sesión</b> un registro con autenticación y unas
+          credenciales que viven solo en tu estación, en el fichero
+          <code class="inline">/etc/labs-hub-credenciales</code>. Cárgalas en tu terminal y acéstate
+          con <code class="inline">docker login</code>:</p>
+          <pre><code>. /etc/labs-hub-credenciales
+echo "registro: $REGISTRO   usuario: $USUARIO   repositorio: $REGISTRO/$USUARIO/mi-app"
+printf '%s' "$CLAVE" | docker login "$REGISTRO" -u "$USUARIO" --password-stdin</code></pre>
+          <p><b>Qué debes ver:</b> la ruta de tu repositorio y, al final,
+          <code class="inline">Login Succeeded</code>.</p>
 
-        <section class="part" id="parteA">
-          <div class="part-head"><span class="part-badge">A</span><h2>Paso 1 &mdash; Tu primer contenedor</h2></div>
-                  <pre><code>docker run --rm hello-world</code></pre>
-          <p>La opci&oacute;n <code class="inline">--rm</code> borra el contenedor al salir: no queda nada
-          ocupando disco. Comprueba que no qued&oacute; ninguno:</p>
-                  <pre><code>docker ps -a</code></pre>2
-        </section>
+          <div class="callout note">
+            <p><b>Tu clave no se imprime ni se pega.</b> Solo se carga en las variables de tu terminal
+            y entra al registro por <code class="inline">stdin</code>
+            (<code class="inline">--password-stdin</code>), así que no aparece en capturas, en la
+            evidencia ni en el historial. Si la escribes a mano y te equivocas, el registro la
+            <b>rechaza</b>: no hay cuenta que "se salve" con una clave mala.
+            <code class="inline">mi-espacio</code> te recuerda dónde vive.</p>
+          </div>
 
-        <section class="part" id="parteB">
-          <div class="part-head"><span class="part-badge">B</span><h2>Paso 2 &mdash; Un servidor web con puertos</h2></div>
-          <p>Un contenedor sin publicar su puerto es un mundo cerrado. Con <code class="inline">-p</code>
-          lo abres hacia el exterior.</p>
-                  <pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine</code></pre>
-          <p>Comprueba desde dentro de tu estaci&oacute;n:</p>
-                  <pre><code>docker ps --filter name=web
-curl -s http://127.0.0.1:8080 | head -5</code></pre>2
-          <p>Y en el navegador: tu sesi&oacute;n tiene una pesta&ntilde;a <b>Mi aplicaci&oacute;n</b> que
-          muestra exactamente lo que hay en el puerto 8080 de tu estaci&oacute;n.</p>
-
-                  <h3 class="sub">B.1 · Entra al contenedor</h3>
-                  <pre><code>docker exec -it web sh
-cat /usr/share/nginx/html/index.html
-exit</code></pre>3
-          <p>Dentro, mira qu&eacute; hay en el &iacute;ndice de nginx y s&aacute;lese con
-          <code class="inline">exit</code>.</p>
-        </section>
-
-        <section class="part" id="parteC">
-          <div class="part-head"><span class="part-badge">C</span><h2>Paso 3 &mdash; Tu propio Dockerfile</h2></div>
-          <p>En <code class="inline">/workspace/app</code> tienes el c&oacute;digo de partida de una
-          aplicaci&oacute;n Node con su <code class="inline">Dockerfile</code>. L&eacute;elos:</p>
-                  <pre><code>cd /workspace/app
-cat server.js
-cat Dockerfile</code></pre>
-          <p>Construye tu imagen:</p>
-                  <pre><code>cd /workspace/app
-# libera el puerto 8080, que ocupaba el contenedor web del paso 2
-docker rm -f web
-docker build -t mi-app:1.0.0 .</code></pre>2
-        </section>
-
-        <section class="part" id="parteD">
-          <div class="part-head"><span class="part-badge">D</span><h2>Paso 4 &mdash; Builds con capas y con tags</h2></div>
-          <p>Cada instrucci&oacute;n del Dockerfile es una <b>capa</b>. Si cambias solo el
-          <code class="inline">server.js</code>, el <code class="inline">npm install</code> se sirve del
-          cache:</p>
-                  <pre><code># toca server.js (cambia un mensaje) y vuelve a construir
-docker build -t mi-app:1.0.0 .
-# mira las líneas CACHED</code></pre>
-          <p>F&iacute;jate en <code class="inline">CACHED</code> en la salida. Ahora etiqueta lo mismo
-          con varias referencias:</p>
-                  <pre><code>docker tag mi-app:1.0.0 mi-app:latest
-docker images</code></pre>2
-          <p>Las etiquetas son <b>punteros</b>: mover <code class="inline">latest</code> no borra nada,
-          solo cambia a d&oacute;nde apunta. Por eso en producci&oacute;n se usan etiquetas
-          <b>inmutables</b> (un n&uacute;mero de versi&oacute;n que nunca se reutiliza) y
-          <code class="inline">latest</code> solo para desarrollo.</p>
-        </section>
-
-        <section class="part" id="parteE">
-          <div class="part-head"><span class="part-badge">E</span><h2>Paso 5 &mdash; Publica en Docker Hub</h2></div>
-                  <pre><code>docker tag mi-app:1.0.0 $USUARIO/mi-app:v1
-docker push $USUARIO/mi-app:v1</code></pre>
-          <p>En Docker Hub ver&aacute;s el repositorio <code class="inline">mi-app</code> con la etiqueta
-          <code class="inline">v1</code>. Anota el <b>digest</b> que imprime el push: lo vas a comparar
-          despu&eacute;s.</p>
-
-          <div class="callout">
-            <p><b>Tu token no sale de tu terminal.</b> La plataforma no lo ve, no lo guarda y no lo
-            registra. Si te equivocas, rev&oacute;calo en Docker Hub y genera otro.</p>
+          <div class="callout warn">
+            <p><b>Un solo laboratorio a la vez.</b> Tu sesión se cierra sola a los 180 min
+            (2 × tu tiempo estimado de 90) y al terminar se borra todo: tus imágenes, tus
+            contenedores y tu registro. Lo único que queda es la evidencia que registra
+            <code class="inline">revisar</code>.</p>
           </div>
         </section>
 
-        <section class="part" id="parteF">
-          <div class="part-head"><span class="part-badge">F</span><h2>Paso 6 &mdash; Versi&oacute;n 2 con etiquetas inmutables</h2></div>
-          <p>Cambia algo de la app (un mensaje, un campo en <code class="inline">/salud</code>) y
-          construye la versi&oacute;n 2:</p>
-                  <pre><code># cambia algo en server.js
-docker build -t mi-app:2.0.0 .
-docker tag  mi-app:2.0.0 $USUARIO/mi-app:v2
-docker push $USUARIO/mi-app:v2</code></pre>
-          <p>Compara los digests de <code class="inline">v1</code> y <code class="inline">v2</code>:</p>
-                  <pre><code>docker inspect -f '{{.Id}}' mi-app:1.0.0
-docker inspect -f '{{.Id}}' mi-app:2.0.0</code></pre>2
-          <p><b>Deben ser distintos.</b> Si fueran iguales, habr&iacute;as publicado dos etiquetas
-          apuntando a la misma imagen: eso es justamente lo que no hay que hacer.</p>
+        <section class="part" id="parte1">
+          <div class="part-head"><span class="part-badge">1</span><h2>Paso 1 — Tu primer contenedor (imagen vs. contenedor)</h2></div>
+
+          <p><b>Objetivo:</b> ver la diferencia entre una <b>imagen</b> (el paquete inmutable) y un
+          <b>contenedor</b> (la instancia en ejecución).</p>
+          <pre><code>docker run --rm hello-world
+docker ps -a</code></pre>
+
+          <p><b>Qué debes ver:</b></p>
+          <ul class="plain">
+            <li><code class="inline">docker run hello-world</code> descarga la imagen (si no la tienes) y ejecuta un contenedor que imprime <code class="inline">Hello from Docker!</code> y los cuatro pasos: cliente → daemon → creación → salida.</li>
+            <li><code class="inline">docker run --rm</code> borra el contenedor al salir, así que <code class="inline">docker ps -a</code> queda vacío: no hay nada ocupando disco.</li>
+          </ul>
+
+          <div class="callout">
+            <p><b>Dato clave:</b> <code class="inline">docker ps</code> solo muestra los contenedores
+            <b>activos</b>; <code class="inline">docker ps -a</code> los muestra todos (también los
+            detenidos).</p>
+          </div>
         </section>
 
-        <section class="part" id="parteG">
-          <div class="part-head"><span class="part-badge">G</span><h2>Paso 7 &mdash; Prueba de portabilidad</h2></div>
-          <p>La prueba real de que tu imagen sirve para algo es <b>que otra persona pueda
-          descargarla y correrla sin tu c&oacute;digo</b>. Simula ese entorno limpio:</p>
-                  <pre><code>docker rmi -f $USUARIO/mi-app:v2 mi-app:2.0.0
-docker pull $USUARIO/mi-app:v2
-docker run -d --rm --name portabilidad -p 18080:3000 $USUARIO/mi-app:v2
+        <section class="part" id="parte2">
+          <div class="part-head"><span class="part-badge">2</span><h2>Paso 2 — Un servidor web en un contenedor (puertos y modo detached)</h2></div>
+
+          <p><b>Objetivo:</b> correr un proceso que <b>no termina</b> (un servidor web) y publicar su
+          puerto hacia afuera.</p>
+          <pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+docker ps --filter name=web
+curl -s http://127.0.0.1:8080 | head -5</code></pre>
+
+          <ul class="plain">
+            <li><code class="inline">-d</code>: en segundo plano (detached) — la terminal queda libre.</li>
+            <li><code class="inline">-p 8080:80</code>: publica el <b>puerto 80</b> del contenedor en el <b>puerto 8080</b> de tu estación.</li>
+            <li><code class="inline">--name web</code>: le pone nombre para referenciarlo después.</li>
+          </ul>
+
+          <p><b>Qué debes ver:</b> el contenedor <code class="inline">web</code> con STATUS
+          <code class="inline">Up</code> y el mapeo <code class="inline">0.0.0.0:8080-&gt;80/tcp</code>, y
+          en el <code class="inline">curl</code> la cabecera <code class="inline">&lt;!DOCTYPE html&gt;</code>
+          de la página de bienvenida de nginx. En el navegador, la pestaña <b>Mi aplicación</b> de tu
+          sesión muestra exactamente eso: lo que haya en el 8080 de tu estación.</p>
+
+          <h3 class="sub">2.1 · Ejecutar algo dentro del contenedor (aislamiento)</h3>
+          <p><b>Objetivo:</b> comprobar que el contenedor tiene <b>su propio sistema de archivos</b>,
+          distinto al de tu estación.</p>
+          <pre><code>docker exec web cat /etc/os-release
+docker exec web nginx -v</code></pre>
+          <p><b>Qué debes ver:</b> el <code class="inline">ID=alpine</code> (o la base de nginx) y
+          <code class="inline">nginx version: nginx/1.27.x</code>. Con
+          <code class="inline">docker exec -it web sh</code> entrarías a un shell <b>dentro</b> del
+          contenedor y saldrías con <code class="inline">exit</code>; aquí lo usamos en modo no
+          interactivo para que puedas pegar el bloque completo.</p>
+
+          <div class="callout">
+            <p><b>Dato clave:</b> el contenedor corre su propia distribución aunque la estación sea
+            otra — aislamiento a nivel de proceso y de sistema de archivos.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parte3">
+          <div class="part-head"><span class="part-badge">3</span><h2>Paso 3 — Tu propia app: el código de partida</h2></div>
+
+          <p><b>Objetivo:</b> leer los archivos que vas a construir.</p>
+          <pre><code>cd /workspace/app
+ls -la
+cat Dockerfile</code></pre>
+
+          <p><b>Qué debes ver:</b> el <code class="inline">Dockerfile</code> con dos secciones:
+          <code class="inline">FROM node:22-alpine</code> (la imagen base) y las instrucciones
+          <code class="inline">COPY</code>, <code class="inline">RUN npm install</code>,
+          <code class="inline">ARG VERSION</code> y <code class="inline">CMD</code>. Fíjate en dos cosas:</p>
+          <ul class="plain">
+            <li><code class="inline">ARG VERSION=2.0.0</code> + <code class="inline">ENV VERSION=${VERSION}</code>: la versión <b>entra por build-arg</b>, así que puedes construir la v1 y la v2 sin editar el Dockerfile.</li>
+            <li><code class="inline">HEALTHCHECK ... /salud</code>: el mismo sondeo que en el Lab 1.</li>
+          </ul>
+          <p>Los otros cuatro archivos son la app (<code class="inline">server.js</code>), el servicio
+          de datos del reto (<code class="inline">datos.js</code>), sus dependencias
+          (<code class="inline">package.json</code>) y el <code class="inline">docker-compose.yml</code>
+          del paso 9.</p>
+        </section>
+
+        <section class="part" id="parte4">
+          <div class="part-head"><span class="part-badge">4</span><h2>Paso 4 — Construir la imagen (capas y tags)</h2></div>
+
+          <p><b>Objetivo:</b> convertir el código en una imagen identificable por tag.</p>
+          <pre><code>cd /workspace/app
+docker build --build-arg VERSION=1.0.0 -t mi-app:1.0.0 .
+docker images --filter reference=mi-app</code></pre>
+
+          <div class="callout note">
+            <p><b>El punto final</b> (<code class="inline"> . </code>) del build es obligatorio:
+            indica que el contexto de construcción es la carpeta actual.</p>
+          </div>
+
+          <p><b>Qué debes ver:</b></p>
+          <ul class="plain">
+            <li>El build termina con <code class="inline">naming to docker.io/library/mi-app:1.0.0 done</code>.</li>
+            <li><code class="inline">docker images</code> lista <code class="inline">mi-app</code> con tag <code class="inline">1.0.0</code>.</li>
+          </ul>
+
+          <div class="callout">
+            <p><b>Dato clave:</b> una imagen es una <b>pila de capas inmutables</b>. Si más adelante
+            cambias solo <code class="inline">server.js</code>, el
+            <code class="inline">npm install</code> se sirve del caché y el build es inmediato: por eso
+            construir sobre una imagen base conocida es barato.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parte5">
+          <div class="part-head"><span class="part-badge">5</span><h2>Paso 5 — Ejecutar tu imagen (ciclo build → run)</h2></div>
+
+          <p><b>Objetivo:</b> reemplazar el nginx genérico por <b>tu</b> app en el puerto 8080.</p>
+          <pre><code>cd /workspace/app
+docker rm -f web
+docker run -d --name mi-app -p 8080:3000 mi-app:1.0.0
+sleep 5
+curl -s http://127.0.0.1:8080/salud</code></pre>
+
+          <p><b>Qué debes ver:</b> el <code class="inline">curl</code> responde
+          <code class="inline">{"estado":"ok","version":"1.0.0",...}</code> y la pestaña
+          <b>Mi aplicación</b> muestra ahora <b>tu</b> app («Mi aplicación contenedorizada» con
+          <b>Versión 1.0.0</b>), no la página genérica de nginx.</p>
+        </section>
+
+        <section class="part" id="parte6">
+          <div class="part-head"><span class="part-badge">6</span><h2>Paso 6 — El registro: publica tu imagen (push)</h2></div>
+
+          <p><b>Objetivo:</b> subir tu imagen a <b>tu</b> namespace del registro de la sesión, con la
+          etiqueta inmutable <code class="inline">v1</code>.</p>
+          <pre><code>cd /workspace/app
+. /etc/labs-hub-credenciales
+docker tag mi-app:1.0.0 $REGISTRO/$USUARIO/mi-app:v1
+docker push $REGISTRO/$USUARIO/mi-app:v1
+curl -s -u "$USUARIO:$CLAVE" http://$REGISTRO/v2/$USUARIO/mi-app/tags/list</code></pre>
+
+          <ul class="plain">
+            <li><code class="inline">docker tag</code> crea un <b>alias</b> con la ruta completa: <code class="inline">hub:5000/&lt;tu-usuario&gt;/mi-app:v1</code>. Sin ese alias, <code class="inline">push</code> no sabe a qué namespace subir.</li>
+            <li><code class="inline">docker push</code> sube las capas que falten y termina con <code class="inline">v1: digest: sha256:...</code>: la <b>prueba criptográfica</b> de que tu imagen quedó almacenada.</li>
+            <li>El <code class="inline">curl</code> consulta la API del registro (con tu usuario y clave por la misma sesión) y debe responder <code class="inline">{"name":"&lt;tu-usuario&gt;/mi-app","tags":["v1"]}</code>.</li>
+          </ul>
+
+          <div class="callout note">
+            <p><b>Comprueba tu namespace:</b> solo tú publicas en
+            <code class="inline">hub:5000/&lt;tu-usuario&gt;/mi-app</code>; el registro es de tu
+            sesión, así que lo de los demás no está ahí.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parte7">
+          <div class="part-head"><span class="part-badge">7</span><h2>Paso 7 — La versión 2: etiquetas inmutables</h2></div>
+
+          <p><b>Objetivo:</b> publicar una segunda versión <b>sin tocar la primera</b>. El cambio de
+          versión entra por build-arg: mismo Dockerfile, otro contenido de imagen.</p>
+          <pre><code>cd /workspace/app
+. /etc/labs-hub-credenciales
+docker build --build-arg VERSION=2.0.0 -t mi-app:2.0.0 .
+docker tag mi-app:2.0.0 $REGISTRO/$USUARIO/mi-app:v2
+docker push $REGISTRO/$USUARIO/mi-app:v2
+docker inspect -f '{{.Id}}' mi-app:1.0.0 mi-app:2.0.0
+curl -s -u "$USUARIO:$CLAVE" http://$REGISTRO/v2/$USUARIO/mi-app/tags/list</code></pre>
+
+          <p><b>Qué debes ver:</b></p>
+          <ul class="plain">
+            <li><code class="inline">docker inspect</code> imprime <b>dos IDs distintos</b>: cada versión es un artefacto con su propio digest.</li>
+            <li>El <code class="inline">curl</code> ya lista <b>dos tags</b>: <code class="inline">v1</code> y <code class="inline">v2</code>. Ambas coexisten — una etiqueta nunca se sobrescribe.</li>
+          </ul>
+
+          <div class="callout warn">
+            <p><b>Dato clave:</b> por eso en producción nadie despliega <code class="inline">latest</code>:
+            <code class="inline">latest</code> se mueve, las etiquetas de versión
+            (<code class="inline">v1</code>, <code class="inline">v2</code>) no. Cambiar el código y
+            volver a publicar con la <b>misma</b> etiqueta es exactamente lo que no hay que hacer.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parte8">
+          <div class="part-head"><span class="part-badge">8</span><h2>Paso 8 — Prueba de portabilidad: "funciona en cualquier lado"</h2></div>
+
+          <p><b>Objetivo:</b> demostrar que tu app corre en un entorno que <b>no tiene nada tuyo</b>.</p>
+          <pre><code>cd /workspace/app
+. /etc/labs-hub-credenciales
+docker rmi mi-app:2.0.0 $REGISTRO/$USUARIO/mi-app:v2
+docker pull $REGISTRO/$USUARIO/mi-app:v2
+docker run -d --rm --name portabilidad -p 18080:3000 $REGISTRO/$USUARIO/mi-app:v2
+sleep 5
 curl -s http://127.0.0.1:18080/salud
 docker rm -f portabilidad</code></pre>
-          <p>Has borrado tu copia local, la has vuelto a descargar desde el registro y ha
-          arrancado en un contenedor nuevo. Eso es exactamente lo que pasa cuando despliegas
-          en la nube.</p>
+
+          <p>Borraste <b>ambas etiquetas locales</b> (la imagen desapareció de tu estación), la
+          volviste a descargar desde el registro y arrancó en un contenedor nuevo que nunca la
+          construyó. Esa es la conclusión del lab: la imagen es un artefacto portable — el mismo
+          digest corre en cualquier host con Docker, sin recompilar nada. Es la misma propiedad que
+          hace que un pipeline despliegue la misma aplicación en distintas nubes.</p>
         </section>
 
-        <section class="part" id="parteH">
-          <div class="part-head"><span class="part-badge">H</span><h2>Paso 8 &mdash; Reto multi-contenedor</h2></div>
-          <p>Las aplicaciones reales no van solas: hay un servicio de datos, otro de cach&eacute;, otro
-          de colas. Aqu&iacute; tienes un <code class="inline">docker-compose.yml</code> que levanta
-          tu app junto a un servicio de datos.</p>
-                  <pre><code>cd /workspace/app
-cat docker-compose.yml
-docker compose up -d --build</code></pre>
-          <p>Comprueba que la app habla con el servicio de datos:</p>
-                  <pre><code>curl -s http://127.0.0.1:8080/datos</code></pre>2
-          <p>Sube <code class="inline">/datos</code> varias veces: el contador lo lleva el
-          <b>otro</b> contenedor. Mira los logs de ambos:</p>
-                  <pre><code>curl -s http://127.0.0.1:8080/datos
-docker compose logs --tail 20</code></pre>3
+        <section class="part" id="parte9">
+          <div class="part-head"><span class="part-badge">9</span><h2>Paso 9 — Reto (bonus +0.5): multi-contenedor</h2></div>
+
+          <p><b>Objetivo:</b> dos contenedores que se comunican por nombre en una red propia: la app y
+          su servicio de datos.</p>
+          <pre><code>cd /workspace/app
+docker rm -f mi-app
+docker compose up -d --build
+sleep 10
+docker compose ps
+curl -s http://127.0.0.1:8080/datos</code></pre>
+
+          <p><b>Qué debes ver:</b> <code class="inline">docker compose ps</code> muestra los dos
+          servicios (<code class="inline">app</code> y <code class="inline">datos</code>) corriendo, y
+          el <code class="inline">curl</code> responde
+          <code class="inline">{"origen":"servicio-de-datos","visitas":N,...}</code>: el contador
+          <b>no</b> lo lleva la app, lo lleva el <b>otro</b> contenedor
+          (<code class="inline">datos.js</code>), al que la app llama por el nombre
+          <code class="inline">datos</code> dentro de la red de compose.</p>
+
+          <p>Vuelve a llamar a <code class="inline">/datos</code> varias veces y mira los logs de ambos:</p>
+          <pre><code>curl -s http://127.0.0.1:8080/datos
+docker compose logs --tail 20</code></pre>
+
+          <div class="callout note">
+            <p>Este levantamiento deja tu app en el puerto 8080, que es lo que ve la pestaña
+            <b>Mi aplicación</b>.</p>
+          </div>
         </section>
 
-        <section class="part" id="parteI">
-          <div class="part-head"><span class="part-badge">I</span><h2>Paso 9 &mdash; Entregable</h2></div>
+        <section class="part" id="parte10">
+          <div class="part-head"><span class="part-badge">10</span><h2>Paso 10 — Entregable (un solo comando)</h2></div>
+
           <p>El entregable es la <b>evidencia registrada por la plataforma</b>. Ejecuta el validador:</p>
-                  <pre><code>revisar</code></pre>
-          <p>Comprueba cinco cosas:</p>
+          <pre><code>revisar</code></pre>
+
+          <p><code class="inline">revisar</code> <b>no decide si aprobaste</b>: solo le pide al servidor
+          que evalúe tu trabajo. La comprobación se hace <b>desde fuera de tu estación</b> — mirando tu
+          namespace en el registro, el HTTP de tu app y el compose en marcha —, así que lo que imprima
+          tu terminal no cuenta. Deberías terminar con <b>5 de 5 criterios en verde</b>:</p>
+
           <table>
-            <thead><tr><th>Criterio</th><th>Qu&eacute; valida</th></tr></thead>
+            <thead><tr><th>Criterio</th><th>Qué comprueba el servidor</th></tr></thead>
             <tbody>
-              <tr><td><b>Etiqueta v1 publicada</b></td><td>Que <code class="inline">v1</code> existe en tu cuenta de Docker Hub</td></tr>
-              <tr><td><b>Etiqueta v2 con digest distinto</b></td><td>Que <code class="inline">v2</code> existe y su digest no es el de v1 (etiquetas inmutables)</td></tr>
-              <tr><td><b>El contenedor responde</b></td><td>Que la app responde HTTP 200 y se ve en la vista web de la sesi&oacute;n</td></tr>
-              <tr><td><b>Portabilidad</b></td><td>Que la imagen publicada se descarga y corre en un entorno limpio</td></tr>
-              <tr><td><b>Reto multi-contenedor</b></td><td>Que el compose est&aacute; en marcha y <code class="inline">/datos</code> responde desde el servicio de datos</td></tr>
+              <tr><td><b>Etiqueta v1 publicada</b></td><td>Existe <code class="inline">v1</code> (o <code class="inline">1.0.0</code>) en <code class="inline">hub:5000/&lt;tu-usuario&gt;/mi-app</code></td></tr>
+              <tr><td><b>Etiqueta v2 con digest distinto</b></td><td>Existe <code class="inline">v2</code> y su digest no es el de <code class="inline">v1</code> (etiquetas inmutables)</td></tr>
+              <tr><td><b>El contenedor responde HTTP</b></td><td>La app responde 200 con su contenido en el puerto 8080 de tu estación</td></tr>
+              <tr><td><b>Prueba de portabilidad</b></td><td>La imagen publicada se descarga del registro y corre en un contenedor limpio</td></tr>
+              <tr><td><b>Reto multi-contenedor</b></td><td>El compose está en marcha y <code class="inline">/datos</code> responde desde el servicio de datos</td></tr>
             </tbody>
           </table>
         </section>
 
-        <section class="part" id="troubleshooting">
-          <div class="part-head"><span class="part-badge">?</span><h2>Soluci&oacute;n de problemas</h2></div>
-          <table>
-            <thead><tr><th>S&iacute;ntoma</th><th>Causa probable</th><th>Qu&eacute; hacer</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><code class="inline">docker push</code> falla con <i>denied</i></td>
-                <td>No hiciste login, o el repositorio es de otra cuenta</td>
-                <td><code class="inline">docker login</code> y comprueba que la imagen se llama <code class="inline">TU-USUARIO/mi-app</code></td>
-              </tr>
-              <tr>
-                <td>El push es muy lento o falla con <i>toomanyrequests</i></td>
-                <td>Cuota an&oacute;nima de Docker Hub por IP compartida</td>
-                <td>Espera unos minutos. Las descargas pasan por el cach&eacute; del servidor, pero el push usa tu cuenta y no tiene esa cuota</td>
-              </tr>
-              <tr>
-                <td><code class="inline">revisar</code> no ve mis etiquetas</td>
-                <td>No guardaste tu usuario, o publicaste con otro nombre</td>
-                <td><code class="inline">cat /workspace/.dockerhub-user</code> y comprueba en Docker Hub que el repositorio se llama <code class="inline">TU-USUARIO/mi-app</code></td>
-              </tr>
-              <tr>
-                <td>v1 y v2 tienen el mismo digest</td>
-                <td>Publicaste dos etiquetas sin cambiar nada</td>
-                <td>Cambia el c&oacute;digo, reconstruye y vuelve a publicar v2</td>
-              </tr>
-              <tr>
-                <td>El compose no levanta</td>
-                <td>Falta el servicio <code class="inline">datos</code> o el nombre no coincide</td>
-                <td><code class="inline">docker compose ps</code> y <code class="inline">docker compose logs</code></td>
-              </tr>
-              <tr>
-                <td>La vista web del navegador est&aacute; en blanco</td>
-                <td>Tu app no escucha en el puerto 8080</td>
-                <td>Arranca con <code class="inline">-p 8080:3000</code> y comprueba <code class="inline">curl 127.0.0.1:8080/salud</code></td>
-              </tr>
-            </tbody>
-          </table>
+        <section class="part" id="industria">
+          <div class="part-head"><span class="part-badge">n</span><h2>Nota de industria — Docker Hub, ECR, ACR y Artifact Registry</h2></div>
+
+          <p><b>El registro de tu sesión es un Docker Hub propio de la clase</b>: el mismo software de
+          registro, con autenticación y namespace por estudiante. En la industria usas el servicio
+          gestionado de tu proveedor — <b>Docker Hub</b>, <b>ECR</b> (AWS), <b>ACR</b> (Azure) o
+          <b>Artifact Registry</b> (Google) — y los comandos son <b>exactamente los mismos</b>:</p>
+
+          <pre><code class="no-ejecutar">docker login &lt;servicio-del-registro&gt;
+docker tag mi-app:1.0.0 &lt;servicio-del-registro&gt;/&lt;cuenta&gt;/mi-app:v1
+docker push &lt;servicio-del-registro&gt;/&lt;cuenta&gt;/mi-app:v1
+docker pull &lt;servicio-del-registro&gt;/&lt;cuenta&gt;/mi-app:v1</code></pre>
+
+          <div class="callout note">
+            <p>Lo único que cambia es <b>quién administra el registro</b> y cómo se paga (cuota anónima,
+            cuenta corporativa o factura por uso). Aquí no dependes de internet ni de la cuota pública:
+            el registro vive en tu sesión y el <code class="inline">revisar</code> lo evalúa desde el
+            servidor, contra ese mismo registro.</p>
+          </div>
         </section>
 
         <section class="part" id="rubrica">
-          <div class="part-head"><span class="part-badge">%</span><h2>Criterios de evaluaci&oacute;n</h2></div>
+          <div class="part-head"><span class="part-badge">%</span><h2>Cómo se evalúa</h2></div>
+
+          <p>La plataforma tiene <b>cinco criterios con el mismo peso</b> y cada uno se comprueba
+          <b>desde el servidor</b>, contra el estado real de tu sesión: la API de tu registro, el HTTP
+          de tu estación y el compose en marcha.</p>
+
           <table>
-            <thead><tr><th>Aspecto</th><th>Peso</th><th>Lo que se valora</th></tr></thead>
+            <thead><tr><th>Criterio</th><th>Peso</th><th>Lo que se comprueba</th></tr></thead>
             <tbody>
-              <tr><td>Etiqueta v1 publicada</td><td class="rubric-weight">20%</td><td>La imagen est&aacute; en Docker Hub con etiqueta <code class="inline">v1</code></td></tr>
-              <tr><td>Etiqueta v2 con digest distinto</td><td class="rubric-weight">20%</td><td>Publicaci&oacute;n con etiquetas inmutables y verificadas por digest</td></tr>
-              <tr><td>Contenedor responde HTTP</td><td class="rubric-weight">20%</td><td>La app corre, responde 200 y es visible desde la vista web</td></tr>
-              <tr><td>Prueba de portabilidad</td><td class="rubric-weight">20%</td><td>La imagen publicada se descarga y corre en un entorno limpio</td></tr>
-              <tr><td>Reto multi-contenedor</td><td class="rubric-weight">20%</td><td>Compose en marcha con app + servicio de datos comunicados</td></tr>
+              <tr><td><b>Etiqueta v1 publicada</b></td><td class="rubric-weight">20%</td><td>La imagen está en tu namespace del registro con etiqueta <code class="inline">v1</code></td></tr>
+              <tr><td><b>Etiqueta v2 con digest distinto</b></td><td class="rubric-weight">20%</td><td>Publicación con etiquetas inmutables, verificada por digest</td></tr>
+              <tr><td><b>Contenedor responde HTTP</b></td><td class="rubric-weight">20%</td><td>La app corre, responde 200 y es visible en la vista web de la sesión</td></tr>
+              <tr><td><b>Prueba de portabilidad</b></td><td class="rubric-weight">20%</td><td>La imagen publicada se descarga del registro y corre en un entorno limpio</td></tr>
+              <tr><td><b>Reto multi-contenedor</b></td><td class="rubric-weight">20%</td><td>Compose en marcha con app + servicio de datos comunicados</td></tr>
             </tbody>
           </table>
-          <p><b>Ponderaci&oacute;n en la nota de la asignatura: por definir.</b></p>
+
+          <p>Cada paso enciende su criterio: sin trabajar, <b>0 de 5</b>; con la app corriendo, 1; con
+          <code class="inline">v1</code> publicada, 2; con <code class="inline">v2</code> publicada,
+          <b>4</b> — se encienden las etiquetas inmutables y, de una vez, la portabilidad, porque es
+          una propiedad del artefacto publicado —; y con el compose en marcha, <b>5 de 5</b>. Si alguno
+          se queda en rojo, <code class="inline">revisar</code> te dice con qué comando arreglarlo.</p>
+
+          <p><b>Ponderación en la nota de la asignatura: Actividad 1 de U2, 10%.</b></p>
+        </section>
+
+        <section class="part" id="planb">
+          <div class="part-head"><span class="part-badge">B</span><h2>Plan B — si tu sesión no arranca</h2></div>
+
+          <p>Si <b>Iniciar lab</b> no despliega nada en ~2 minutos o la terminal no aparece, pasa a la
+          cola (la plataforma te dice tu posición) o recarga la página (<code class="inline">F5</code>)
+          y vuelve a entrar. Tu sesión es <b>tuya y efímera</b>: si se cierra sola por inactividad,
+          inicia otra y continúa desde el paso en que ibas — tu imagen publicada vive mientras viva
+          <b>esa</b> sesión, y el registro se crea con ella.</p>
+        </section>
+
+        <section class="part" id="troubleshooting">
+          <div class="part-head"><span class="part-badge">?</span><h2>Solución de problemas</h2></div>
+          <table>
+            <thead><tr><th>Síntoma</th><th>Causa probable</th><th>Qué hacer</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code class="inline">docker push</code> falla con <i>unauthorized</i> o <i>denied</i></td>
+                <td>No hiciste login, o te equivocaste al escribir la clave</td>
+                <td><code class="inline">. /etc/labs-hub-credenciales</code> y repite el <code class="inline">docker login</code> del paso 0.3. Una clave incorrecta siempre se rechaza</td>
+              </tr>
+              <tr>
+                <td><code class="inline">curl</code> a la API del registro responde <code class="inline">401</code></td>
+                <td>La petición va sin credenciales</td>
+                <td>Usa <code class="inline">-u "$USUARIO:$CLAVE"</code> con las variables ya cargadas</td>
+              </tr>
+              <tr>
+                <td><code class="inline">push</code> falla con <i>connection refused</i> hacia <code class="inline">hub:5000</code></td>
+                <td>El registro de la sesión aún no está listo</td>
+                <td>Espera 10 s, comprueba <code class="inline">getent hosts hub</code> y reintenta</td>
+              </tr>
+              <tr>
+                <td><code class="inline">push</code> falla con <i>http: server gave HTTP response to HTTPS client</i></td>
+                <td>El registro no está en <code class="inline">insecure-registries</code></td>
+                <td>No debería pasar: el <code class="inline">daemon.json</code> de la estación ya trae <code class="inline">hub:5000</code>; avisa al docente</td>
+              </tr>
+              <tr>
+                <td><code class="inline">port is already allocated</code> al hacer <code class="inline">run</code></td>
+                <td>Ya tienes algo en el 8080</td>
+                <td><code class="inline">docker rm -f web mi-app</code> y vuelve a intentar</td>
+              </tr>
+              <tr>
+                <td><code class="inline">v1</code> y <code class="inline">v2</code> tienen el mismo digest</td>
+                <td>Publicaste dos etiquetas sin cambiar nada</td>
+                <td>Construye con otro <code class="inline">--build-arg VERSION=...</code> y vuelve a publicar</td>
+              </tr>
+              <tr>
+                <td><code class="inline">docker: invalid reference format</code> en el build</td>
+                <td>Falta el punto final o el tag tiene espacios</td>
+                <td><code class="inline">docker build --build-arg VERSION=1.0.0 -t mi-app:1.0.0 .</code></td>
+              </tr>
+              <tr>
+                <td><code class="inline">/datos</code> responde <code class="inline">memoria-local</code></td>
+                <td>El servicio <code class="inline">datos</code> no está corriendo</td>
+                <td><code class="inline">docker compose ps</code> y <code class="inline">docker compose logs</code></td>
+              </tr>
+              <tr>
+                <td>El compose no levanta: puerto ocupado</td>
+                <td>Tu app del paso 5 sigue en el 8080</td>
+                <td>El paso 9 ya la quita con <code class="inline">docker rm -f mi-app</code>; repítelo</td>
+              </tr>
+              <tr>
+                <td>La pestaña <b>Mi aplicación</b> está en blanco</td>
+                <td>No hay nada escuchando en el 8080</td>
+                <td>Repite el paso 5 o el paso 9</td>
+              </tr>
+              <tr>
+                <td><code class="inline">revisar</code> no ve mis etiquetas</td>
+                <td>Publicaste en otro namespace o sin login</td>
+                <td><code class="inline">echo $REGISTRO/$USUARIO/mi-app</code> y compara con el paso 6</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
 
         <section class="part" id="referencias">
           <div class="part-head"><span class="part-badge">r</span><h2>Referencias</h2></div>
           <ul>
-            <li>Docker Hub &mdash; publicar una imagen: <a href="https://docs.docker.com/docker-hub/push/" target="_blank" rel="noopener">docs.docker.com/docker-hub/push</a></li>
-            <li>Docker &mdash; tags y digests: <a href="https://docs.docker.com/get-started/docker-concepts/building-images/tagging-images/" target="_blank" rel="noopener">Tagging images</a></li>
-            <li>Docker &mdash; capas y cach&eacute; de builds: <a href="https://docs.docker.com/build/cache/" target="_blank" rel="noopener">Build cache</a></li>
-            <li>Docker Compose &mdash; referencia: <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">docs.docker.com/compose</a></li>
-            <li>Docker &mdash; CLI de run/exec: <a href="https://docs.docker.com/reference/cli/docker/" target="_blank" rel="noopener">CLI reference</a></li>
-            <li>node &mdash; imagen oficial: <a href="https://hub.docker.com/_/node" target="_blank" rel="noopener">hub.docker.com/_/node</a></li>
+            <li>Docker Registry — API v2 (la misma que consulta <code class="inline">revisar</code> desde el servidor): <a href="https://docs.docker.com/registry/spec/api/" target="_blank" rel="noopener">docs.docker.com/registry/spec/api</a></li>
+            <li>Docker — <code class="inline">docker login</code> y credenciales por <code class="inline">stdin</code>: <a href="https://docs.docker.com/reference/cli/docker/login/" target="_blank" rel="noopener">docs.docker.com/reference/cli/docker/login</a></li>
+            <li>Docker — etiquetas y digests de imagen: <a href="https://docs.docker.com/get-started/docker-concepts/building-images/tagging-images/" target="_blank" rel="noopener">tagging images</a></li>
+            <li>Docker — capas y caché de builds: <a href="https://docs.docker.com/build/cache/" target="_blank" rel="noopener">docs.docker.com/build/cache</a></li>
+            <li>Docker — registros sin TLS en red local: <a href="https://docs.docker.com/registry/insecure/" target="_blank" rel="noopener">docs.docker.com/registry/insecure</a></li>
+            <li>Docker Compose — referencia: <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">docs.docker.com/compose</a></li>
           </ul>
         </section>
 
         <section class="part" id="checklist">
           <div class="part-head"><span class="part-badge">v</span><h2>Checklist antes de entregar</h2></div>
           <ol class="steps">
-          <li>Hiciste <code class="inline">docker login</code> y guardaste tu usuario con <code class="inline">mi-espacio</code>.</li>
-          <li>Tu <code class="inline">$USUARIO/mi-app:v1</code> y <code class="inline">:v2</code> est&aacute;n en Docker Hub.</li>
-          <li>Los digests de v1 y v2 son distintos.</li>
-          <li>La imagen publicada corri&oacute; en un entorno limpio.</li>
-          <li>El reto multi-contenedor est&aacute; en marcha y <code class="inline">/datos</code> responde.</li>
-          <li>Ejecutaste <code class="inline">revisar</code> y los cinco criterios est&aacute;n en verde.</li>
-        </ol>
+            <li>Entraste con <b>Iniciar lab</b> y cargaste tus credenciales con <code class="inline">. /etc/labs-hub-credenciales</code> (la clave nunca se imprimió).</li>
+            <li>Hiciste <code class="inline">docker login</code> contra <code class="inline">hub:5000</code> y terminó en <code class="inline">Login Succeeded</code>.</li>
+            <li><code class="inline">mi-app:1.0.0</code> corre en tu estación y la pestaña web muestra <b>Versión 1.0.0</b>.</li>
+            <li><code class="inline">$REGISTRO/$USUARIO/mi-app:v1</code> y <code class="inline">:v2</code> están publicadas y sus digests son distintos.</li>
+            <li>Borraste la copia local, la bajaste de nuevo del registro y respondió <code class="inline">/salud</code> (portabilidad).</li>
+            <li>El reto multi-contenedor está en marcha y <code class="inline">/datos</code> responde <code class="inline">servicio-de-datos</code>.</li>
+            <li>Ejecutaste <code class="inline">revisar</code> y los cinco criterios están en verde.</li>
+          </ol>
         </section>
       </main>
 
       <footer class="foot">
-        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
-        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes</p>
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingeniería de Sistemas &middot; Integración de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Cañas Cervantes</p>
       </footer>
     </div>
   </div>
+
   <script>
 
     (function () {

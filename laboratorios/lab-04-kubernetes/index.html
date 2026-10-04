@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio 4 &mdash; Kubernetes: pods, deployments y services &middot; CUC</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #FBF8F3;
+      --surface: #FFFFFF;
+      --surface-2: #F4EEE3;
+      --ink: #2A2A2A;
+      --ink-soft: #6B6259;
+      --vino: #A6192E;
+      --vino-strong: #7E1223;
+      --vino-tint: #FBEBEC;
+      --dorado: #A9791C;
+      --dorado-tint: #FBF3DE;
+      --line: #E5DCCB;
+      --code-bg: #F1EADA;
+      --code-ink: #4A4030;
+      --shadow: 0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #181411;
+        --surface: #221D18;
+        --surface-2: #2B2520;
+        --ink: #EFE7D9;
+        --ink-soft: #B3A896;
+        --vino: #E2536B;
+        --vino-strong: #F0748A;
+        --vino-tint: #3A1E22;
+        --dorado: #E4BC5C;
+        --dorado-tint: #3B321C;
+        --line: #3D352A;
+        --code-bg: #1F1914;
+        --code-ink: #E4D9C3;
+        --shadow: 0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+    a { color: var(--vino); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3.5px; width: 0%;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+      z-index: 1000; transition: width .1s ease-out;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      nav.toc { display: none; }
+    }
+
+    header.top.portada {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .portada-logo {
+      height: 72px;
+      width: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .portada-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: var(--vino);
+      background: var(--vino-tint);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    header.top h1 {
+      color: var(--vino);
+      font-size: clamp(26px, 3.8vw, 36px);
+      margin: 0 0 10px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    header.top .sub {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+      max-width: 62ch;
+      margin-inline: auto;
+    }
+
+    .accent-bar {
+      width: 200px;
+      height: 4px;
+      margin: 0 auto 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .author-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      padding-top: 4px;
+    }
+
+    .author-block span { display: inline-flex; align-items: center; gap: 6px; }
+    .author-block strong { color: var(--ink); }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 18px 40px;
+      border-right: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    nav.toc .toc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+      margin: 0 0 14px 8px;
+      font-weight: 700;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    nav.toc a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+    nav.toc a.active { background: var(--vino-tint); color: var(--vino); font-weight: 600; }
+
+    nav.toc a .badge {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-2); color: var(--ink-soft);
+      display: grid; place-items: center;
+      font-size: 11.5px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    nav.toc a.active .badge { background: var(--vino); color: #fff; }
+
+    main { padding: 40px 48px 90px; min-width: 0; }
+
+    @media (max-width: 650px) {
+      main { padding: 24px 18px 70px; }
+      header.top.portada { padding: 32px 18px 24px; }
+    }
+
+    .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 72ch; margin: 16px 0 24px; }
+    .lede b, .lede strong { color: var(--ink); }
+
+    section.part {
+      padding-top: 44px;
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+
+    section.part:first-of-type { border-top: none; padding-top: 10px; }
+
+    .part-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+    .part-badge {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--vino); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700; font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(166,25,46,.25);
+    }
+
+    .part-head h2 { margin: 0; font-size: 24px; font-weight: 600; }
+
+    h3.sub {
+      font-size: 16.5px;
+      margin: 32px 0 12px;
+      color: var(--vino);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin: 0 0 14px; max-width: 74ch; }
+
+    .docref {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      margin: -4px 0 18px;
+    }
+    .docref a { color: var(--vino); text-decoration: underline; }
+
+    ol.steps { list-style: none; margin: 8px 0 20px; padding: 0; counter-reset: step; }
+
+    ol.steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 2px 0 18px 38px;
+      max-width: 72ch;
+    }
+
+    ol.steps > li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px; font-weight: 700;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--vino);
+      box-shadow: var(--shadow);
+    }
+
+    ol.steps > li:not(:last-child)::after {
+      content: "";
+      position: absolute; left: 12.5px; top: 30px; bottom: 0;
+      width: 1.5px; background: var(--line);
+    }
+
+    ul.plain { padding-left: 20px; margin: 6px 0 14px; }
+    ul.plain li { margin-bottom: 6px; max-width: 68ch; }
+
+    pre {
+      position: relative;
+      background: #211D18; color: #EFE7D9;
+      border-radius: 10px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-size: 13.5px; line-height: 1.55;
+      margin: 8px 0 16px;
+      border: 1px solid var(--line);
+    }
+
+    code.inline {
+      background: var(--surface-2); color: var(--code-ink);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 13px; border: 1px solid var(--line);
+    }
+
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+      background: var(--surface); color: var(--ink-soft);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    pre:hover .copy-btn { opacity: 1; }
+    pre .copy-btn { color: #B3A896; border-color: #4A4030; background: #2B2520; }
+    .copy-btn:hover { color: #E4BC5C; border-color: #E4BC5C; }
+    .copy-btn.copied { color: var(--dorado); border-color: var(--dorado); opacity: 1; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 12px 0 20px;
+      font-size: 14px;
+      max-width: 72ch;
+      line-height: 1.6;
+    }
+
+    .callout.warn { background: var(--vino-tint); border-left: 4px solid var(--vino); color: var(--ink); }
+    .callout.warn b, .callout.warn strong { color: var(--vino); }
+    .callout.note { background: var(--dorado-tint); border-left: 4px solid var(--dorado); color: var(--ink); }
+    .callout.note b, .callout.note strong { color: var(--dorado); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin: 10px 0 22px;
+      box-shadow: var(--shadow);
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0; font-size: 13.5px; text-align: left; }
+    th { background: var(--vino); color: #fff; padding: 11px 14px; font-weight: 600; letter-spacing: .02em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--surface-2); }
+
+    .rubric-weight { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--vino); }
+
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin: 14px 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    .diagram-caption {
+      font-size: 12.5px; color: var(--ink-soft);
+      text-align: center; margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    figure.ref {
+      margin: 14px 0 24px;
+      max-width: 640px;
+    }
+
+    figure.ref img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #fff;
+    }
+
+    figure.ref img.logo-img {
+      max-width: 180px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    figure.ref figcaption {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.5;
+    }
+
+    figure.ref figcaption a { color: var(--ink-soft); text-decoration: underline; }
+
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer; user-select: none;
+      transition: background .15s ease;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li:hover { background: var(--surface-2); }
+
+    .checklist .box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      margin-top: 2px; flex-shrink: 0;
+      background: var(--surface);
+      transition: all .15s ease;
+    }
+
+    .checklist li.done { opacity: .6; }
+    .checklist li.done .box { background: var(--vino); border-color: var(--vino); position: relative; }
+    .checklist li.done .box::after {
+      content: "";
+      position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px;
+      border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+    }
+    .checklist li.done span.text { text-decoration: line-through; }
+
+    #back-to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--vino); color: #fff; border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 998; font-size: 16px;
+    }
+    #back-to-top.show { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover { transform: translateY(-2px); }
+
+    #toc-toggle {
+      display: none;
+      position: fixed; bottom: 24px; left: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      border: 1px solid var(--line);
+      z-index: 998; box-shadow: var(--shadow);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      #toc-toggle { display: flex; }
+      nav.toc.mobile-open {
+        display: block; position: fixed; inset: 0;
+        height: 100vh; width: 85vw; max-width: 320px;
+        background: var(--surface); z-index: 997;
+        box-shadow: var(--shadow);
+        border-right: 1px solid var(--line);
+      }
+    }
+
+    footer.page {
+      max-width: 74ch;
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    @media print {
+      nav.toc, #progress-bar, #back-to-top, #toc-toggle, .copy-btn { display: none !important; }
+      .shell { grid-template-columns: 1fr !important; }
+      section.part { break-inside: avoid; }
+    }
+  
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <div class="shell">
+    <nav class="toc" id="toc">
+      <p class="toc-label">Contenido</p>
+      <a href="#intro"><span class="badge">&middot;</span> Introducci&oacute;n</a>
+      <a href="#parteA"><span class="badge">1</span> Tu cl&uacute;ster</a>
+      <a href="#parteB"><span class="badge">2</span> Build y push</a>
+      <a href="#parteC"><span class="badge">3</span> Deployment</a>
+      <a href="#parteD"><span class="badge">4</span> Service</a>
+      <a href="#parteE"><span class="badge">5</span> Autorreparaci&oacute;n</a>
+      <a href="#parteF"><span class="badge">6</span> Escalado</a>
+      <a href="#parteG"><span class="badge">7</span> Rollout y rollback</a>
+      <a href="#parteH"><span class="badge">8</span> Entregable</a>
+      <a href="#industria"><span class="badge">n</span> EKS / AKS / GKE</a>
+      <a href="#troubleshooting"><span class="badge">?</span> Problemas</a>
+      <a href="#rubrica"><span class="badge">%</span> C&oacute;mo se eval&uacute;a</a>
+      <a href="#referencias"><span class="badge">r</span> Referencias</a>
+      <a href="#checklist"><span class="badge">v</span> Checklist</a>
+    </nav>
+
+    <div>
+      <header class="top portada">
+        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
+        <h1>Laboratorio 4: Kubernetes &mdash; pods, deployments y services</h1>
+        <p class="sub">Tu propio cl&uacute;ster de un nodo: construye mi-app, s&uacute;bela a tu registro
+        privado y despli&eacute;gala con 3 r&eacute;plicas, service, autorreparaci&oacute;n y
+        rollout &mdash; todo con <code>kubectl</code>, en un entorno que se crea y se destruye contigo</p>
+        <div class="accent-bar"></div>
+        <div class="author-block">
+          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span><strong>Universidad de la Costa (CUC)</strong></span>
+          <span><strong>2026-2 &middot; Actividad 2 de U2 &middot; 10 %</strong></span>
+        </div>
+      </header>
+
+      <main>
+        <section id="intro">
+          <p class="lede">En los Labs 1 y 3 construiste una imagen y la publicaste en un registro.
+          Ahora viene la pregunta que esos labs dejaban pendiente: <b>&iquest;qui&eacute;n decide cu&aacute;ntas
+          copias corren, las reinicia si se caen y las actualiza sin cortar el servicio?</b> La
+          respuesta es un <b>orquestador</b>, y vas a usarlo: cada estudiante tiene <b>su propio
+          cl&uacute;ster Kubernetes de un nodo</b> con <code>kubectl</code> listo, sin instalar nada.</p>
+
+          <p>Los ocho pasos, en este orden, son exactamente lo que <code class="inline">revisar</code>
+          va a comprobar:</p>
+          <ol class="steps">
+            <li>Exploras tu cl&uacute;ster y entiendes qu&eacute; es un nodo y qu&eacute; es un pod.</li>
+            <li>Construyes <b>mi-app</b> (la misma de los Labs 1 y 3) y la publicas en <b>tu registro privado</b>.</li>
+            <li>La despliegas con un <b>Deployment</b> de 3 r&eacute;plicas, sondas <code class="inline">readiness</code>/<code class="inline">liveness</code> y l&iacute;mites de recursos.</li>
+            <li>Le pones un <b>Service</b> que balancea entre las r&eacute;plicas: la ves en la pesta&ntilde;a web de la sesi&oacute;n.</li>
+            <li>Borras un pod y ves c&oacute;mo el <b>ReplicaSet lo recrea</b> (autorreparaci&oacute;n).</li>
+            <li>Escalas a <b>5 r&eacute;plicas</b> y vuelves a 3.</li>
+            <li>Haces un <b>rollout v1 &rarr; v2</b> con historial y luego un <b>rollback</b>.</li>
+            <li>Ejecutas <code class="inline">revisar</code> y los cinco criterios quedan en verde.</li>
+          </ol>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 500" width="100%" height="auto" role="img" aria-label="Diagrama de conceptos de Kubernetes: Deployment, ReplicaSet, Pods, Service y sondas">
+              <rect x="16" y="16" width="888" height="468" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="44" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">TU ESTACI&Oacute;N &middot; CL&Uacute;STER KUBERNETES DE UN NODO (k3s)</text>
+
+              <!-- Deployment -->
+              <rect x="48" y="64" width="548" height="96" rx="10" fill="#FFFFFF" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="64" y="88" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#A6192E">Deployment &laquo;mi-app&raquo;</text>
+              <text x="64" y="110" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">declara: 3 r&eacute;plicas &middot; imagen &middot; sondas &middot; l&iacute;mites</text>
+              <text x="64" y="130" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">rolling update: el ReplicaSet nuevo pasa a READY</text>
+              <text x="64" y="148" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">            antes de bajar el viejo a 0</text>
+
+              <!-- flecha Deployment -> ReplicaSet -->
+              <line x1="322" y1="160" x2="322" y2="182" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="322,190 316,178 328,178" fill="#6B6259"></polygon>
+
+              <!-- ReplicaSet -->
+              <rect x="48" y="192" width="548" height="158" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="64" y="216" font-family="IBM Plex Sans" font-size="13.5" font-weight="700" fill="#2A2A2A">ReplicaSet &laquo;mi-app-7d4f9c&raquo; &mdash; la cuenta</text>
+              <text x="64" y="236" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">si borran un pod, sobra uno &rarr; aqu&iacute; se vuelve a crear</text>
+
+              <!-- Pods -->
+              <rect x="64" y="248" width="164" height="88" rx="8" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.2"></rect>
+              <text x="78" y="270" font-family="IBM Plex Sans" font-size="12" font-weight="700" fill="#7E5A12">Pod</text>
+              <text x="78" y="289" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">mi-app-7d4f9c-x1y2z</text>
+              <text x="78" y="307" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">readiness &rarr; /salud</text>
+              <text x="78" y="324" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">liveness  &rarr; /salud</text>
+
+              <rect x="240" y="248" width="164" height="88" rx="8" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.2"></rect>
+              <text x="254" y="270" font-family="IBM Plex Sans" font-size="12" font-weight="700" fill="#7E5A12">Pod</text>
+              <text x="254" y="289" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">mi-app-7d4f9c-q3w4e</text>
+              <text x="254" y="307" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">readiness &rarr; /salud</text>
+              <text x="254" y="324" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">liveness  &rarr; /salud</text>
+
+              <rect x="416" y="248" width="164" height="88" rx="8" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.2"></rect>
+              <text x="430" y="270" font-family="IBM Plex Sans" font-size="12" font-weight="700" fill="#7E5A12">Pod</text>
+              <text x="430" y="289" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">mi-app-7d4f9c-r5t6y</text>
+              <text x="430" y="307" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">readiness &rarr; /salud</text>
+              <text x="430" y="324" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">liveness  &rarr; /salud</text>
+
+              <!-- flecha ReplicaSet -> nodo -->
+              <line x1="322" y1="350" x2="322" y2="372" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="322,380 316,368 328,368" fill="#6B6259"></polygon>
+
+              <!-- Nodo -->
+              <rect x="48" y="382" width="548" height="76" rx="10" fill="#F4EEE3" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="64" y="406" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#2A2A2A">Nodo (kubelet + containerd) &mdash; <tspan font-family="IBM Plex Mono" font-size="12">kubectl get nodes &rarr; Ready</tspan></text>
+              <text x="64" y="428" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">aqu&iacute; corren los 3 pods; k3s v1.36 en un solo nodo</text>
+              <text x="64" y="447" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">t&uacute; eres el control plane de tu cl&uacute;ster de prueba</text>
+
+              <!-- Service -->
+              <rect x="636" y="192" width="244" height="116" rx="10" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="758" y="218" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#A6192E">Service &laquo;mi-app&raquo;</text>
+              <text x="758" y="242" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#2A2A2A">selector: app=mi-app</text>
+              <text x="758" y="264" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#2A2A2A">NodePort 30080 &rarr; :3000</text>
+              <text x="758" y="286" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">endpoints: 3 IPs (una por pod)</text>
+              <text x="758" y="302" text-anchor="middle" font-family="IBM Plex Sans" font-size="11" font-style="italic" fill="#7E1223">una sola direcci&oacute;n para 3 pods</text>
+
+              <line x1="636" y1="250" x2="606" y2="250" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="598,250 610,244 610,256" fill="#A6192E"></polygon>
+
+              <!-- Pestaña web -->
+              <rect x="636" y="344" width="244" height="66" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="758" y="370" text-anchor="middle" font-family="IBM Plex Sans" font-size="12.5" font-weight="700" fill="#2A2A2A">Pesta&ntilde;a &laquo;Mi aplicaci&oacute;n&raquo;</text>
+              <text x="758" y="392" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">puerto 30080 de tu estaci&oacute;n</text>
+              <line x1="758" y1="308" x2="758" y2="340" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="758,348 752,336 764,336" fill="#6B6259"></polygon>
+
+              <!-- Leyenda de sondas -->
+              <text x="636" y="436" font-family="IBM Plex Sans" font-size="11.5" font-weight="700" fill="#A9791C">Sondas</text>
+              <text x="636" y="454" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">readiness: &iquest;entro al Service?</text>
+              <text x="636" y="470" font-family="IBM Plex Mono" font-size="10.5" fill="#6B6259">liveness: &iquest;me reinician?</text>
+            </svg>
+            <p class="diagram-caption">Los seis conceptos del lab en una sola figura: <b>Deployment</b>
+            declara la intenci&oacute;n, <b>ReplicaSet</b> lleva la cuenta, cada <b>Pod</b> es una
+            caja con tu contenedor, el <b>Service</b> les pone una direcci&oacute;n &uacute;nica, las
+            <b>sondas</b> deciden qu&eacute; pod est&aacute; sano y el <b>rolling update</b> es c&oacute;mo
+            cambias la versi&oacute;n sin ca&iacute;da. Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <p><b>Presupuesto de tiempo (90 minutos, no te desv&iacute;es):</b></p>
+          <table>
+            <thead><tr><th>Parte</th><th>Tiempo</th></tr></thead>
+            <tbody>
+              <tr><td>1 &mdash; Entra y explora tu cl&uacute;ster</td><td>10 min</td></tr>
+              <tr><td>2 &mdash; Construye mi-app y s&uacute;bela a tu registro</td><td>15 min</td></tr>
+              <tr><td>3 &mdash; Deployment con 3 r&eacute;plicas, sondas y l&iacute;mites</td><td>15 min</td></tr>
+              <tr><td>4 &mdash; Service y la app en la pesta&ntilde;a web</td><td>10 min</td></tr>
+              <tr><td>5 &mdash; Autorreparaci&oacute;n (borra un pod)</td><td>10 min</td></tr>
+              <tr><td>6 &mdash; Escalado 5 y vuelta a 3</td><td>10 min</td></tr>
+              <tr><td>7 &mdash; Rollout v1 &rarr; v2 y rollback</td><td>15 min</td></tr>
+              <tr><td>8 &mdash; Entregable (<code class="inline">revisar</code>)</td><td>5 min</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="parteA">
+          <div class="part-head"><span class="part-badge">1</span><h2>Paso 1 &mdash; Entra y explora tu cl&uacute;ster (~10 min)</h2></div>
+
+                  <h3 class="sub">1.1 &middot; Abre tu sesi&oacute;n</h3>
+          <ol class="steps">
+            <li>Entra en <code class="inline">https://labs.proyectoasur.org</code> con tus credenciales.</li>
+            <li>Busca el <b>Lab 4 &mdash; Kubernetes: pods, deployments y services</b> y pulsa <b>Iniciar lab</b>.</li>
+            <li>Cuando diga <b>Entrar</b>, &aacute;brelo: ver&aacute;s tu terminal y una pesta&ntilde;a
+            <b>Mi aplicaci&oacute;n</b> (todav&iacute;a vac&iacute;a: la llenas en el paso 4).</li>
+          </ol>
+
+                  <h3 class="sub">1.2 &middot; Prepara tu espacio y mira el estado</h3>
+          <p>Tu c&oacute;digo de partida y tu cl&uacute;ster ya est&aacute;n en la estaci&oacute;n; el comando
+          <code class="inline">mi-espacio</code> te deja en el directorio de trabajo y comprueba que el
+          nodo est&aacute; en marcha:</p>
+                  <pre><code>mi-espacio
+kubectl get nodes
+kubectl get pods -A</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el c&oacute;digo copiado a
+          <code class="inline">/workspace/app</code>, el nodo con estado <code class="inline">Ready</code>
+          y, en el espacio de nombres <code class="inline">kube-system</code>, los pods
+          <code class="inline">coredns</code> y <code class="inline">local-path-provisioner</code> en
+          <code class="inline">Running</code>. En los primeros segundos del arranque el nodo puede
+          a&uacute;n estar en <code class="inline">NotReady</code>: espera 10 segundos y vuelve a
+          ejecutar el bloque.</p>
+
+          <div class="callout note">
+            <p><b>Un solo laboratorio a la vez.</b> Tu sesi&oacute;n se apaga sola si pasas demasiado
+            tiempo sin trabajar y al terminar se borra todo: los pods, los manifiestos, tu imagen en el
+            registro y el cl&uacute;ster completo. Lo &uacute;nico que queda es la evidencia que registra
+            <code class="inline">revisar</code>.</p>
+          </div>
+
+                  <h3 class="sub">1.3 &middot; Nodo y pod</h3>
+          <p>Un <b>nodo</b> es la m&aacute;quina (f&iacute;sica o virtual) donde corren tus workloads:
+          tiene un <code class="inline">kubelet</code> que habla con el API server y un
+          <code class="inline">containerd</code> que arranca los contenedores. Un <b>pod</b> es la
+          unidad m&aacute;s peque&ntilde;a que despliegas: uno o varios contenedores con la misma red y
+          el mismo disco, con vida propia (se crea, se muere y no se &ldquo;mueve&rdquo;: se recrea).</p>
+                  <pre><code>kubectl get nodes -o wide
+kubectl describe node | grep -A14 'Capacity'
+kubectl get pods -A -o wide</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> la IP del nodo, la versi&oacute;n de Kubernetes,
+          y en el <code class="inline">describe</code> los campos <code class="inline">Capacity</code> y
+          <code class="inline">Allocatable</code> (CPU y memoria disponibles para los pods). Los
+          <code class="inline">kube-system</code> son del cl&uacute;ster: t&uacute; no los tocas.</p>
+        </section>
+
+        <section class="part" id="parteB">
+          <div class="part-head"><span class="part-badge">2</span><h2>Paso 2 &mdash; Construye mi-app y s&uacute;bela a tu registro (~15 min)</h2></div>
+
+          <p>Es el mismo ciclo <code class="inline">build &rarr; push</code> de los Labs 1 y 3. La
+          &uacute;nica diferencia es que el registro es <b>el de tu sesi&oacute;n</b>
+          (<code class="inline">registry:5000</code>, privado: otro estudiante ve un cat&aacute;logo
+          vac&iacute;o) y que de ah&iacute; lo va a leer <b>Kubernetes</b>, no <code class="inline">docker run</code>.</p>
+
+                  <h3 class="sub">2.1 &middot; Lee el c&oacute;digo de partida</h3>
+                  <pre><code>cd /workspace/app
+cat server.js
+cat Dockerfile</code></pre>
+
+          <p>F&iacute;jate en dos cosas: el endpoint <code class="inline">/salud</code> (devuelve
+          <code class="inline">{"estado":"ok", ...}</code> con el nombre del pod) es el que van a usar
+          las sondas, y el <code class="inline">ARG VERSION</code> del Dockerfile es el que te va a
+          permitir construir la v2 en el paso 7.</p>
+
+                  <h3 class="sub">2.2 &middot; Construye</h3>
+                  <pre><code>cd /workspace/app
+docker build -t "$LAB_REGISTRO/mi-app:1.0.0" .
+docker images | grep mi-app</code></pre>
+
+          <p><code class="inline">$LAB_REGISTRO</code> ya est&aacute; definido en tu sesi&oacute;n y
+          apunta a <code class="inline">registry:5000</code>: <code class="inline">echo $LAB_REGISTRO</code>
+          para comprobarlo. La imagen base <code class="inline">node:22-alpine</code> ya est&aacute;
+          en cach&eacute;, as&iacute; que el build tarda unos segundos.</p>
+
+                  <h3 class="sub">2.3 &middot; Publica y verifica</h3>
+                  <pre><code>docker push "$LAB_REGISTRO/mi-app:1.0.0"
+curl -s http://$LAB_REGISTRO/v2/mi-app/tags/list</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el push termina con el <code class="inline">digest</code>
+          y el <code class="inline">curl</code> responde
+          <code class="inline">{"name":"mi-app","tags":["1.0.0"]}</code>. Si est&aacute; vac&iacute;o o
+          da error, <b>no pases al paso 3</b>: sin esa etiqueta en el registro, el cl&uacute;ster no
+          puede bajar la imagen y el criterio de <code class="inline">revisar</code> se queda en rojo.</p>
+        </section>
+
+        <section class="part" id="parteC">
+          <div class="part-head"><span class="part-badge">3</span><h2>Paso 3 &mdash; Deployment: 3 r&eacute;plicas, sondas y l&iacute;mites (~15 min)</h2></div>
+
+          <p>Un <b>Deployment</b> es lo que declaras (versi&oacute;n de la imagen, cu&aacute;ntas
+          r&eacute;plicas, qu&eacute; sondas) y detr&aacute;s lleva un <b>ReplicaSet</b> que cuenta pods.
+          Este manifiesto es tu primera declaraci&oacute;n: gu&aacute;rdalo tal cual con
+          <code class="inline">kubectl apply</code> leyendo de la entrada est&aacute;ndar.</p>
+
+                  <pre><code>kubectl apply -f - &lt;&lt;'EOF'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: mi-app }
+  template:
+    metadata:
+      labels: { app: mi-app }
+    spec:
+      containers:
+        - name: mi-app
+          image: registry:5000/mi-app:1.0.0
+          ports: [{ containerPort: 3000 }]
+          readinessProbe:
+            httpGet: { path: /salud, port: 3000 }
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /salud, port: 3000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { cpu: 250m, memory: 128Mi }
+EOF
+kubectl rollout status deploy/mi-app --timeout=120s</code></pre>
+
+          <p>La imagen es exactamente la que publicaste: <code class="inline">echo $LAB_REGISTRO</code>
+          te devuelve <code class="inline">registry:5000</code>. Las dos sondas apuntan a
+          <code class="inline">/salud</code>: la <b>readiness</b> decide si el pod entra al Service
+          (si no responde, no recibe tr&aacute;fico) y la <b>liveness</b> decide si el contenedor se
+          reinicia. Los <code class="inline">limits</code> son el techo que comparte cada pod.</p>
+
+                  <h3 class="sub">3.1 &middot; Comprueba el estado</h3>
+                  <pre><code>kubectl get deploy,rs,pods -o wide
+kubectl get pods -l app=mi-app</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> en <code class="inline">deploy</code> la columna
+          <code class="inline">READY</code> en <code class="inline">3/3</code>, un ReplicaSet con
+          sufijo tipo <code class="inline">7d4f9c</code> y tres pods con nombres distintos en
+          estado <code class="inline">Running</code>. El <code class="inline">rollout status</code>
+          del bloque anterior termina con <code class="inline">successfully rolled out</code>.</p>
+        </section>
+
+        <section class="part" id="parteD">
+          <div class="part-head"><span class="part-badge">4</span><h2>Paso 4 &mdash; Service: una direcci&oacute;n para tres pods (~10 min)</h2></div>
+
+          <p>Los pods se crean y se borran con nombres aleatorios, as&iacute; que nadie debe
+          memorizarlos. El <b>Service</b> les pone un nombre estable y un balanceo: con
+          <code class="inline">selector: { app: mi-app }</code> encuentra los pods con esa etiqueta y
+          mantiene su lista de IPs en los <b>endpoints</b>.</p>
+
+                  <pre><code>kubectl apply -f - &lt;&lt;'EOF'
+apiVersion: v1
+kind: Service
+metadata: { name: mi-app }
+spec:
+  type: NodePort
+  selector: { app: mi-app }
+  ports: [{ port: 80, targetPort: 3000, nodePort: 30080 }]
+EOF
+sleep 3
+kubectl get svc mi-app
+kubectl get endpoints mi-app</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el Service con <code class="inline">PORT(S)</code>
+          <code class="inline">80:30080/TCP</code> y los endpoints con <b>tres IPs</b> (una por pod).
+          El mensaje <i>Warning: v1 Endpoints is deprecated</i> es normal: es un aviso de
+          Kubernetes, no un error.</p>
+
+                  <h3 class="sub">4.1 &middot; La app responde y balancea</h3>
+                  <pre><code>curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:30080/salud
+for i in $(seq 1 8); do curl -s http://127.0.0.1:30080/ | grep -o 'Pod &lt;strong&gt;[^&lt;]*'; done</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> un <code class="inline">200</code> y, en las ocho
+          peticiones, <b>varios nombres de pod distintos</b>: eso es el balanceo. Ahora abre la
+          pesta&ntilde;a <b>Mi aplicaci&oacute;n</b> de tu sesi&oacute;n: ver&aacute;s la misma
+          p&aacute;gina con el nombre del pod que te respondi&oacute; &mdash; recarga y
+          cambiar&aacute;.</p>
+
+          <div class="callout warn">
+            <p><b>Service no type NodePort en producci&oacute;n.</b> Aqu&iacute; usamos
+            <code class="inline">NodePort</code> porque tu cl&uacute;ster es de un nodo y necesitas
+            ver la app desde la pesta&ntilde;a web. En la nube normalmente pondr&iacute;as
+            <code class="inline">LoadBalancer</code> o entrar&iacute;as por un ingress; el selector,
+            los endpoints y el balanceo son exactamente los mismos.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteE">
+          <div class="part-head"><span class="part-badge">5</span><h2>Paso 5 &mdash; Autorreparaci&oacute;n: borra un pod (~10 min)</h2></div>
+
+          <p>Aqu&iacute; se ve por qu&eacute; existe el ReplicaSet. T&uacute; vas a matar un pod a
+          mano; &eacute;l quer&iacute;a 3, ve 2 y crea uno nuevo. <b>No lo repares t&uacute;</b>: solo
+          borra y observa.</p>
+
+                  <pre><code>kubectl get pods -l app=mi-app
+P=$(kubectl get pods -l app=mi-app --no-headers | awk '$3=="Running"{print $1; exit}')
+echo "voy a borrar $P"
+kubectl delete pod "$P"
+sleep 8
+kubectl get pods -l app=mi-app</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el pod que borraste desaparece, aparece uno con
+          <b>otro nombre</b> y vuelves a tener 3 pods <code class="inline">Running</code>. Mira
+          qui&eacute;n lo hizo:</p>
+                  <pre><code>kubectl get events --field-selector involvedObject.kind=ReplicaSet --sort-by=.lastTimestamp | tail -5</code></pre>
+
+          <p>Entre los eventos ver&aacute;s <code class="inline">SuccessfulCreate</code> con un mensaje
+          como <i>&ldquo;Created pod: mi-app-7d4f9c-xxxxx&rdquo;</i>: ese es el ReplicaSet reponiendo
+          la cuenta. Es el mismo mecanismo con el que Kubernetes aguanta la ca&iacute;da de un nodo.</p>
+        </section>
+
+        <section class="part" id="parteF">
+          <div class="part-head"><span class="part-badge">6</span><h2>Paso 6 &mdash; Escalado: de 3 a 5 y vuelta a 3 (~10 min)</h2></div>
+
+          <p>Escalar no es arrancar contenedores a mano: es cambiar un n&uacute;mero en el Deployment
+          y dejar que el ReplicaSet lo cumpla.</p>
+
+                  <pre><code>kubectl scale deploy/mi-app --replicas=5
+sleep 10
+kubectl get pods -l app=mi-app --no-headers | wc -l
+kubectl scale deploy/mi-app --replicas=3
+sleep 10
+kubectl get deploy mi-app
+kubectl get pods -l app=mi-app</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> despu&eacute;s del primer <code class="inline">scale</code>
+          el conteo da <code class="inline">5</code>; despu&eacute;s del segundo, el Deployment vuelve
+          a <code class="inline">3/3</code> y dos pods desaparecen (el ReplicaSet los termina, no t&uacute;).
+          F&iacute;jate en que el <code class="inline">selector</code> del Service no se enter&oacute;
+          de nada: los endpoints siguen apuntando a los pods vivos.</p>
+        </section>
+
+        <section class="part" id="parteG">
+          <div class="part-head"><span class="part-badge">7</span><h2>Paso 7 &mdash; Rollout v1 &rarr; v2 y rollback (~15 min)</h2></div>
+
+          <p>La actualizaci&oacute;n continua sin ca&iacute;da. Construyes la v2 con otra etiqueta, la
+          publicas y le dices al Deployment que use esa imagen: creará un ReplicaSet nuevo, ir&aacute;
+          poniendo sus pods en <code class="inline">READY</code> uno a uno y bajar&aacute; el antiguo a 0.</p>
+
+                  <h3 class="sub">7.1 &middot; Construye y publica la v2</h3>
+                  <pre><code>cd /workspace/app
+docker build --build-arg VERSION=2.0.0 -t "$LAB_REGISTRO/mi-app:2.0.0" .
+docker push "$LAB_REGISTRO/mi-app:2.0.0"
+curl -s http://$LAB_REGISTRO/v2/mi-app/tags/list</code></pre>
+
+                  <h3 class="sub">7.2 &middot; Cambia la imagen y mira el rollout</h3>
+                  <pre><code>kubectl set image deploy/mi-app mi-app="$LAB_REGISTRO/mi-app:2.0.0"
+kubectl rollout status deploy/mi-app --timeout=120s
+kubectl rollout history deploy/mi-app
+curl -s http://127.0.0.1:30080/ | grep -o 'Versi&oacute;n &lt;strong&gt;[^&lt;]*'</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> <code class="inline">deployment "mi-app" successfully
+          rolled out</code>, un historial con m&aacute;s de una revisi&oacute;n y la app respondiendo
+          <b>Versi&oacute;n 2.0.0</b> en la pesta&ntilde;a web. Cada cambio de imagen es una
+          revisi&oacute;n nueva: <code class="inline">rollout history</code> es tu bit&aacute;cora.</p>
+
+                  <h3 class="sub">7.3 &middot; Vuelve atr&aacute;s (rollback)</h3>
+                  <pre><code>kubectl rollout undo deploy/mi-app
+kubectl rollout status deploy/mi-app --timeout=120s
+kubectl rollout history deploy/mi-app
+curl -s http://127.0.0.1:30080/ | grep -o 'Versi&oacute;n &lt;strong&gt;[^&lt;]*'</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> la respuesta vuelve a <b>Versi&oacute;n 1.0.0</b> sin
+          que t&uacute; tocaras nada m&aacute;s. El aviso
+          <i>Warning: resource deployments/mi-app was previously managed with &lsquo;kubectl apply&rsquo;</i>
+          es inofensivo: te recuerda que la anotaci&oacute;n de &ldquo;&uacute;ltimo
+          apply&rdquo; no se actualiza con el rollback.</p>
+        </section>
+
+        <section class="part" id="parteH">
+          <div class="part-head"><span class="part-badge">8</span><h2>Paso 8 &mdash; Entregable: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.8em">revisar</code> (~5 min)</h2></div>
+
+          <p>El entregable es la <b>evidencia registrada por la plataforma</b>. Desde tu terminal:</p>
+                  <pre><code>revisar</code></pre>
+
+          <p>Ese comando <b>no decide nada</b>: solo le pide al servidor que eval&uacute;e tu
+          trabajo. La comprobaci&oacute;n se hace <b>desde fuera de tu estaci&oacute;n</b> &mdash; mirando
+          tu registro, el estado real del cl&uacute;ster y las respuestas HTTP de tu Service &mdash;, as&iacute;
+          que lo que imprima tu terminal no cuenta. Deber&iacute;as terminar con
+          <b>5 de 5 criterios en verde</b>.</p>
+        </section>
+
+        <section class="part" id="industria">
+          <div class="part-head"><span class="part-badge">n</span><h2>Nota de industria &mdash; EKS, AKS y GKE</h2></div>
+
+          <p><b>EKS (AWS), AKS (Azure) y GKE (Google) son este mismo Kubernetes, gestionado.</b>
+          Los objetos que acabas de escribir &mdash; <code class="inline">Deployment</code>,
+          <code class="inline">ReplicaSet</code>, <code class="inline">Service</code>, sondas,
+          <code class="inline">rollout</code> &mdash; son id&eacute;nticos all&aacute;: usas el mismo
+          <code class="inline">kubectl</code> y los mismos manifiestos YAML, sin cambiar una l&iacute;nea.</p>
+
+          <p>Lo que cambia es <b>quién administra qu&eacute;</b>. Aqu&iacute; t&uacute; eres el control
+          plane de un nodo (k3s dentro de tu estaci&oacute;n); en un servicio gestionado, el proveedor
+          mantiene el API server, los nodos, las actualizaciones y la reparaci&oacute;n del plano de
+          control, y t&uacute; pagas por esa administraci&oacute;n y te concentras en los manifiestos.
+          Sobre eso se apoyan las diferencias reales: integraci&oacute;n con la identidad y la red de
+          la nube, nodos administrados en pools, balancesadores gestionados y cuotas por uso.</p>
+
+          <div class="callout note">
+            <p><b>El ciclo no cambia.</b> Lo que hiciste en los Labs 1 y 3 y aqu&iacute;
+            (<code class="inline">build &rarr; push &rarr; run</code> con orquestador) es el mismo
+            pipeline que ejecutan los equipos en producci&oacute;n: la imagen vive en un registro,
+            y el entorno &mdash; local, AWS, Azure o Google &mdash; solo la descarga y la corre.</p>
+          </div>
+        </section>
+
+        <section class="part" id="troubleshooting">
+          <div class="part-head"><span class="part-badge">?</span><h2>Soluci&oacute;n de problemas</h2></div>
+          <table>
+            <thead><tr><th>S&iacute;ntoma</th><th>Causa probable</th><th>Qu&eacute; hacer</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code class="inline">kubectl</code> dice <i>connection to the server 127.0.0.1:6443 was refused</i></td>
+                <td>El nodo a&uacute;n est&aacute; arrancando (los primeros segundos de la sesi&oacute;n)</td>
+                <td>Espera 10&ndash;15 s y vuelve a ejecutar <code class="inline">kubectl get nodes</code>. Si insiste, avisa al docente</td>
+              </tr>
+              <tr>
+                <td>Los pods est&aacute;n en <code class="inline">ErrImagePull</code> / <code class="inline">ImagePullBackOff</code></td>
+                <td>Kubernetes no encontr&oacute; la imagen en tu registro (no hiciste el push o pusheaste otra etiqueta)</td>
+                <td><code class="inline">kubectl describe pod &lt;pod&gt;</code> y revisa el <i>Failed to pull image</i>; repite el paso 2</td>
+              </tr>
+              <tr>
+                <td>Los pods se quedan en <code class="inline">ContainerCreating</code></td>
+                <td>Est&aacute;n montando la red o esperando la imagen; si es un error, el <code class="inline">describe</code> lo dice</td>
+                <td><code class="inline">kubectl describe pod &lt;pod&gt;</code>; espera 20 s y vuelve a mirar</td>
+              </tr>
+              <tr>
+                <td><code class="inline">docker push</code> falla con <i>connection refused</i> hacia <code class="inline">registry:5000</code></td>
+                <td>El registro de la sesi&oacute;n a&uacute;n no est&aacute; listo o no resuelve en la estaci&oacute;n</td>
+                <td>Comprueba con <code class="inline">getent hosts registry</code> y <code class="inline">curl -s http://registry:5000/v2/_catalog</code>; espera 10 s, reintenta y si sigue, avisa al docente</td>
+              </tr>
+              <tr>
+                <td>Los endpoints del Service est&aacute;n vac&iacute;os</td>
+                <td>El <code class="inline">selector</code> no coincide con los <code class="inline">labels</code> del pod, o los pods no est&aacute;n <code class="inline">Ready</code> (sondas)</td>
+                <td><code class="inline">kubectl get pods --show-labels</code> y <code class="inline">kubectl get endpoints mi-app</code></td>
+              </tr>
+              <tr>
+                <td>La pesta&ntilde;a <b>Mi aplicaci&oacute;n</b> est&aacute; en blanco</td>
+                <td>Todav&iacute;a no existe el Service en el puerto 30080, o no tiene endpoints</td>
+                <td>Termina el paso 4 y comprueba con <code class="inline">curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:30080/</code></td>
+              </tr>
+              <tr>
+                <td><i>Warning: v1 Endpoints is deprecated</i></td>
+                <td>Aviso de versi&oacute;n de Kubernetes, no es un error</td>
+                <td>Contin&uacute;a; la lista de IPs que te interesa est&aacute; ah&iacute;</td>
+              </tr>
+              <tr>
+                <td><i>Warning: resource deployments/mi-app was previously managed with &lsquo;kubectl apply&rsquo;</i> al hacer rollback</td>
+                <td>El <code class="inline">undo</code> no actualiza la anotaci&oacute;n de &ldquo;&uacute;ltimo apply&rdquo;</td>
+                <td>Inofensivo; si vuelves a aplicar el manifiesto, se re-resuelve solo</td>
+              </tr>
+              <tr>
+                <td><code class="inline">revisar</code> dice que no existe el Deployment o el Service</td>
+                <td>Te saltaste un paso o ejecutaste los bloques fuera de orden</td>
+                <td>Los bloques se ejecutan en orden: 2 (push) &rarr; 3 (deploy) &rarr; 4 (service) &rarr; 5, 6, 7</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="rubrica">
+          <div class="part-head"><span class="part-badge">%</span><h2>C&oacute;mo se eval&uacute;a</h2></div>
+
+          <p>La plataforma tiene <b>cinco criterios con el mismo peso</b> y cada uno se comprueba
+          <b>desde el servidor</b>, contra el estado real de tu sesi&oacute;n: tu registro, la API del
+          cl&uacute;ster y el HTTP de tu Service. Nada de lo que imprimas en la terminal cuenta.</p>
+
+          <table>
+            <thead><tr><th>Criterio</th><th>Peso</th><th>Lo que se comprueba</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>Imagen de mi-app en el registro de la sesi&oacute;n</b></td>
+                <td class="rubric-weight">20 %</td>
+                <td>La imagen est&aacute; publicada en <code class="inline">registry:5000</code> de tu
+                sesi&oacute;n (etiquetas visibles en <code class="inline">/v2/mi-app/tags/list</code>).</td>
+              </tr>
+              <tr>
+                <td><b>Deployment mi-app con 3 r&eacute;plicas disponibles</b></td>
+                <td class="rubric-weight">20 %</td>
+                <td>Deployment <code class="inline">mi-app</code> con &ge;3 r&eacute;plicas disponibles
+                cuya imagen viene del registro de la sesi&oacute;n (su etiqueta existe ah&iacute;) y con
+                <code class="inline">readinessProbe</code> y <code class="inline">livenessProbe</code>.</td>
+              </tr>
+              <tr>
+                <td><b>Service con endpoints que responde HTTP 200</b></td>
+                <td class="rubric-weight">20 %</td>
+                <td>Service <code class="inline">mi-app</code> con endpoints hacia pods listos y
+                respuesta HTTP 200 con el contenido de la app en su NodePort, pedida desde fuera de la estaci&oacute;n.</td>
+              </tr>
+              <tr>
+                <td><b>Autorreparaci&oacute;n por ReplicaSet</b></td>
+                <td class="rubric-weight">20 %</td>
+                <td>El ReplicaSet cre&oacute; un pod que nadie le pidi&oacute; borrar: alguien borr&oacute;
+                un pod y la cuenta de eventos del ReplicaSet (creados &minus; borrados) supera a los pods que existen.</td>
+              </tr>
+              <tr>
+                <td><b>Rollout v1 a v2 (o rollback) con historial</b></td>
+                <td class="rubric-weight">20 %</td>
+                <td>Historial de rollout con &ge;2 revisiones y, adem&aacute;s, v2 desplegada o un
+                rollback hecho (revisi&oacute;n actual &ge;3).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Cada paso de esta gu&iacute;a enciende su criterio: sin trabajar, <b>0 de 5</b>; con la
+          imagen publicada, 1; con el Deployment, 2; con el Service, 3; al borrar un pod, 4; y con el
+          rollout + rollback, <b>5 de 5</b>. Si alguno se queda en rojo, <code class="inline">revisar</code>
+          te dice con qu&eacute; comando arreglarlo.</p>
+
+          <p><b>Ponderaci&oacute;n en la nota de la asignatura: Actividad 2 de U2, 10 %.</b></p>
+        </section>
+
+        <section class="part" id="referencias">
+          <div class="part-head"><span class="part-badge">r</span><h2>Referencias</h2></div>
+          <ul>
+            <li>Kubernetes &mdash; Pods: <a href="https://kubernetes.io/docs/concepts/workloads/pods/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/workloads/pods</a></li>
+            <li>Kubernetes &mdash; Deployments (rolling update y rollback): <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/workloads/controllers/deployment</a></li>
+            <li>Kubernetes &mdash; ReplicaSet: <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/workloads/controllers/replicaset</a></li>
+            <li>Kubernetes &mdash; Services y endpoints: <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/services-networking/service</a></li>
+            <li>Kubernetes &mdash; Liveness y readiness probes: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" target="_blank" rel="noopener">configure liveness, readiness and startup probes</a></li>
+            <li>Kubernetes &mdash; <code class="inline">kubectl</code>: <a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank" rel="noopener">kubernetes.io/docs/reference/kubectl</a></li>
+            <li>k3s &mdash; cl&uacute;ster ligero de un nodo: <a href="https://docs.k3s.io/" target="_blank" rel="noopener">docs.k3s.io</a></li>
+            <li>AWS EKS: <a href="https://docs.aws.amazon.com/eks/" target="_blank" rel="noopener">docs.aws.amazon.com/eks</a></li>
+            <li>Microsoft AKS: <a href="https://learn.microsoft.com/azure/aks/" target="_blank" rel="noopener">learn.microsoft.com/azure/aks</a></li>
+            <li>Google Kubernetes Engine: <a href="https://cloud.google.com/kubernetes-engine/docs" target="_blank" rel="noopener">cloud.google.com/kubernetes-engine/docs</a></li>
+          </ul>
+        </section>
+
+        <section class="part" id="checklist">
+          <div class="part-head"><span class="part-badge">v</span><h2>Checklist antes de entregar</h2></div>
+          <ol class="steps">
+            <li><code class="inline">kubectl get nodes</code> dice <code class="inline">Ready</code> y viste los pods del sistema.</li>
+            <li>Tu <code class="inline">$LAB_REGISTRO/mi-app:1.0.0</code> est&aacute; publicada y <code class="inline">tags/list</code> la lista.</li>
+            <li>El Deployment est&aacute; en <code class="inline">3/3</code> con readiness y liveness declaradas.</li>
+            <li>El Service tiene 3 endpoints y la app responde <code class="inline">200</code> en la pesta&ntilde;a web.</li>
+            <li>Borraste un pod y el ReplicaSet lo volvi&oacute; a crear.</li>
+            <li>Escalaste a 5 y volviste a 3 sin tocar los pods a mano.</li>
+            <li>El rollout a v2 y el rollback aparecen en <code class="inline">rollout history</code>.</li>
+            <li>Ejecutaste <code class="inline">revisar</code> y los cinco criterios est&aacute;n en verde.</li>
+          </ol>
+        </section>
+      </main>
+
+      <footer class="page foot">
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      function onScroll() {
+        var h = document.documentElement;
+        bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+        var active = targets[0];
+        for (var i = 0; i < targets.length; i++) if (targets[i].getBoundingClientRect().top <= 120) active = targets[i];
+        links.forEach(function (a) { a.classList.toggle('active', active && a.getAttribute('href') === '#' + active.id); });
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var b = document.createElement('button');
+        b.className = 'copy-btn'; b.type = 'button'; b.textContent = 'copiar';
+        b.onclick = function () {
+          var c = pre.querySelector('code');
+          navigator.clipboard.writeText(c ? c.innerText : pre.innerText);
+          b.textContent = 'copiado'; b.classList.add('copied');
+          setTimeout(function () { b.textContent = 'copiar'; b.classList.remove('copied'); }, 1400);
+        };
+        pre.appendChild(b);
+      });
+    })();
+
+  </script>
+</body>
+</html>
