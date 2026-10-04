@@ -1,4 +1,6 @@
-# Plan de producción por oleadas — Fase 2 (pendiente de aprobación)
+# Plan de producción por oleadas — Fase 2
+
+> **Actualización 4-oct-2026:** el docente aprobó producir las **17 semanas empezando por la 1**, con las semanas **1–9 activas** y **10–17 creadas pero desactivadas**; entrega **solo diapositivas + narración** (los videos los genera él en local) y sin laboratorios. La Oleada 0 está hecha y la producción quedó **suspendida**; el plan operativo vigente está en `docs/plan-continuar-local.md`. Las oleadas de abajo se conservan como referencia del orden original (el orden vigente es S01→S17).
 
 Ordenado por **urgencia del calendario**. Hoy es el 4-oct-2026; la próxima clase es la S10, el sábado 17-oct.
 
