@@ -1,0 +1,99 @@
+{
+  "semana": 10,
+  "etiqueta_semana": "Semana 10",
+  "archivo": "2026-2-S10-integracion-soluciones-cicd",
+  "titulo": "Cierre de Unidad 2: pipeline CI/CD genérico con GitHub Actions",
+  "unidad": "Unidad 2",
+  "subtitulo": "Métricas DORA, etapas del pipeline, federación OIDC, GitOps y estrategias de publicación",
+  "narracion_portada": "Bienvenidos a la semana diez. Cerramos la Unidad dos con el ciclo de integración y despliegue continuo. Primero medimos el desempeño de entrega con las métricas de DORA. Después construimos el pipeline etapa por etapa. Luego lo ejemplificamos con GitHub Actions y cerramos con las estrategias de publicación. El hilo de toda la semana es CaribeMart, el caso del curso.",
+  "partes": [
+    {
+      "titulo": "Métricas de DORA: qué mide un buen pipeline",
+      "resumen": "Cinco métricas de desempeño de entrega, cómo usarlas bien y cuándo se convierten en trampa.",
+      "narracion": "Parte uno. Métricas de DORA. Antes de automatizar nada hay que saber cómo estamos. En esta parte vemos qué mide DORA, el programa de investigación de Google Cloud: cinco métricas, tres de flujo y dos de inestabilidad. Aprendemos también a no usarlas mal, porque una métrica convertida en meta se vuelve una trampa. Cerramos con un ciclo de mejora de seis pasos y con la línea base de CaribeMart."
+    },
+    {
+      "titulo": "Etapas del pipeline: construir, probar, escanear, publicar",
+      "resumen": "Las cuatro etapas, los ambientes con aprobación y la trazabilidad de cada artefacto.",
+      "narracion": "Parte dos. Etapas del pipeline. Aquí construimos. Un pipeline de integración y despliegue continuo tiene cuatro etapas: construir, probar, escanear y publicar. En cada una se decide con evidencia: si la etapa falla, el cambio regresa a quien lo hizo. Vemos también los ambientes, la idea de compilar una vez y desplegar muchas veces, y el anti patrón del pipeline decorativo."
+    },
+    {
+      "titulo": "GitHub Actions: workflows, secretos y ambientes",
+      "resumen": "Un motor de automatización como ejemplo, con su anatomía, sus ejecutores y dos casos colombianos.",
+      "narracion": "Parte tres. GitHub Actions. Hasta ahora todo fue concepto genérico. Aquí tomamos un motor de automatización real como ejemplo: GitHub Actions. Vemos su anatomía, los ejecutores donde corre, los eventos que lo disparan, los secretos que nunca se guardan en el repositorio y la federación con la nube mediante OpenID Connect. También dos casos colombianos que aplican estas prácticas."
+    },
+    {
+      "titulo": "Despliegue: push, GitOps y estrategias de publicación",
+      "resumen": "Quién mueve el cambio al clúster, los principios de OpenGitOps, azul y verde, y canario.",
+      "narracion": "Parte cuatro. Despliegue. La última decisión de la semana es quién mueve el cambio al clúster. Comparamos el modelo de empuje, donde el motor de integración tiene credenciales, con GitOps, donde un agente observa el repositorio y reconcilia. Después entramos a las estrategias de publicación: azul y verde, y canario. Cerramos con una pregunta para la clase y con el puente a la semana once."
+    }
+  ],
+  "narracion_fuentes": "Todas las fuentes citadas quedan en esta última diapositiva, con su enlace. Si quieren verificar un dato, abran la referencia y compruébenlo ustedes mismos.",
+  "fuentes": [
+    {
+      "n": 1,
+      "ref": "DORA (Google Cloud), «DORA's software delivery performance metrics», guía actualizada el 5 de enero de 2026",
+      "url": "https://dora.dev/guides/dora-metrics/"
+    },
+    {
+      "n": 2,
+      "ref": "OpenGitOps (CNCF), «GitOps Principles v1.0.0»",
+      "url": "https://opengitops.dev/"
+    },
+    {
+      "n": 3,
+      "ref": "Humble, J. y Farley, D., Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation (Addison-Wesley, 2010), capítulo 10",
+      "url": "https://www.informit.com/store/continuous-delivery-reliable-software-releases-through-9780321601919"
+    },
+    {
+      "n": 4,
+      "ref": "Fowler, M., «Continuous Integration», martinfowler.com (2006, actualizado el 18 de enero de 2024)",
+      "url": "https://martinfowler.com/articles/continuousIntegration.html"
+    },
+    {
+      "n": 5,
+      "ref": "NIST SP 800-204C, Implementation of DevSecOps for a Microservices-based Application with Service Mesh",
+      "url": "https://csrc.nist.gov/pubs/sp/800/204/c/final"
+    },
+    {
+      "n": 6,
+      "ref": "GitHub Docs, «Understanding GitHub Actions»",
+      "url": "https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions"
+    },
+    {
+      "n": 7,
+      "ref": "GitHub Docs, «Using secrets in GitHub Actions»",
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions"
+    },
+    {
+      "n": 8,
+      "ref": "GitHub Docs, «OpenID Connect» (conceptos de federación y token de corta vida)",
+      "url": "https://docs.github.com/en/actions/concepts/security/openid-connect"
+    },
+    {
+      "n": 9,
+      "ref": "GitHub Docs, «Configuring OpenID Connect in cloud providers»",
+      "url": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-cloud-providers"
+    },
+    {
+      "n": 10,
+      "ref": "GitHub Docs, «Using environments for deployment» (ambientes y reglas de protección)",
+      "url": "https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment"
+    },
+    {
+      "n": 11,
+      "ref": "GitHub Docs, «Runners» (ejecutores gestionados y propios)",
+      "url": "https://docs.github.com/en/actions/reference/runners"
+    },
+    {
+      "n": 12,
+      "ref": "Bancolombia, repositorio público devsecops-engine-tools con flujo de trabajo de GitHub Actions (workflows/build.yml)",
+      "url": "https://github.com/bancolombia/devsecops-engine-tools"
+    },
+    {
+      "n": 13,
+      "ref": "Superintendencia de Industria y Comercio, «Lineamientos de implementación DevOps», versión 1.5, 30 de noviembre de 2020",
+      "url": "https://sigi.sic.gov.co/SIGI/files/mod_documentos/anexos/304/Anexo%201%20Lineamientos%20GS03-P03.pdf"
+    }
+  ]
+}

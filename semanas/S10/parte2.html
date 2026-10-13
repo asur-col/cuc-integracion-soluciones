@@ -1,0 +1,570 @@
+<!-- S10 · Parte 2 — Etapas del pipeline (estándar v2). -->
+
+<section data-kicker="Cadena" data-titulo="Seis etapas, cinco puertas, cero decisiones a mano" data-sub="El flujo de un cambio desde el equipo hasta el ambiente, con una puerta de calidad entre etapa y etapa." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="600" y="44" text-anchor="middle" font-size="17" fill="#5E5E5E">cada etapa deja evidencia y cada puerta decide sola</text>
+  <rect x="10" y="96" width="160" height="132" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-engranaje" x="72" y="108" width="36" height="36" color="#A6192E"/>
+  <text x="90" y="176" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Compilar</text>
+  <text x="90" y="200" text-anchor="middle" font-size="14">ejecutable e</text>
+  <text x="90" y="220" text-anchor="middle" font-size="14">imagen</text>
+  <rect x="210" y="96" width="160" height="132" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-check" x="272" y="108" width="36" height="36" color="#9C7B16"/>
+  <text x="290" y="176" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">Probar</text>
+  <text x="290" y="200" text-anchor="middle" font-size="14">unidad, integración</text>
+  <text x="290" y="220" text-anchor="middle" font-size="14">y extremo</text>
+  <rect x="410" y="96" width="160" height="132" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-escudo" x="472" y="108" width="36" height="36" color="#2A2A2A"/>
+  <text x="490" y="176" text-anchor="middle" font-size="16" font-weight="700">Escanear</text>
+  <text x="490" y="200" text-anchor="middle" font-size="14">código, deps</text>
+  <text x="490" y="220" text-anchor="middle" font-size="14">y contenedor</text>
+  <rect x="610" y="96" width="160" height="132" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-registro" x="672" y="108" width="36" height="36" color="#A6192E"/>
+  <text x="690" y="176" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Publicar</text>
+  <text x="690" y="200" text-anchor="middle" font-size="14">artefacto con</text>
+  <text x="690" y="220" text-anchor="middle" font-size="14">su etiqueta</text>
+  <rect x="810" y="96" width="160" height="132" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-nube" x="872" y="108" width="36" height="36" color="#9C7B16"/>
+  <text x="890" y="176" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">Desplegar</text>
+  <text x="890" y="200" text-anchor="middle" font-size="14">en el ambiente</text>
+  <text x="890" y="220" text-anchor="middle" font-size="14">que toca</text>
+  <rect x="1010" y="96" width="160" height="132" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-ojo" x="1072" y="108" width="36" height="36" color="#2A2A2A"/>
+  <text x="1090" y="176" text-anchor="middle" font-size="16" font-weight="700">Verificar</text>
+  <text x="1090" y="200" text-anchor="middle" font-size="14">comportamiento</text>
+  <text x="1090" y="220" text-anchor="middle" font-size="14">y observabilidad</text>
+  <g stroke="#A6192E" stroke-width="3">
+    <line x1="170" y1="170" x2="178" y2="170"/><line x1="202" y1="170" x2="208" y2="170"/>
+    <line x1="370" y1="170" x2="378" y2="170"/><line x1="402" y1="170" x2="408" y2="170"/>
+    <line x1="570" y1="170" x2="578" y2="170"/><line x1="602" y1="170" x2="608" y2="170"/>
+    <line x1="770" y1="170" x2="778" y2="170"/><line x1="802" y1="170" x2="808" y2="170"/>
+    <line x1="970" y1="170" x2="978" y2="170"/><line x1="1002" y1="170" x2="1008" y2="170"/>
+  </g>
+  <g fill="#A6192E">
+    <polygon points="180,158 194,170 180,182 166,170"/>
+    <polygon points="380,158 394,170 380,182 366,170"/>
+    <polygon points="580,158 594,170 580,182 566,170"/>
+    <polygon points="780,158 794,170 780,182 766,170"/>
+    <polygon points="980,158 994,170 980,182 966,170"/>
+    <polygon points="206,163 206,177 216,170"/>
+    <polygon points="406,163 406,177 416,170"/>
+    <polygon points="606,163 606,177 616,170"/>
+    <polygon points="806,163 806,177 816,170"/>
+    <polygon points="1006,163 1006,177 1016,170"/>
+  </g>
+  <text x="190" y="76" text-anchor="middle" font-size="14" fill="#A6192E">puertas</text>
+  <path d="M1120 250 H40" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="580" y="244" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">si algo falla, el cambio vuelve al equipo con la evidencia</text>
+  <rect x="10" y="286" width="560" height="190" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="40" y="316" width="52" height="52" color="#A6192E"/>
+  <text x="112" y="336" font-size="18" font-weight="700" fill="#A6192E">Si una puerta falla</text>
+  <text x="112" y="364" font-size="15" fill="#5E5E5E">la cadena se detiene ahí</text>
+  <text x="40" y="410" font-size="16">No avanza nada: ni etiqueta, ni despliegue, ni</text>
+  <text x="40" y="438" font-size="16">cambio en el ambiente. El equipo recibe el</text>
+  <text x="40" y="462" font-size="16">detalle del fallo con la misma ejecución.</text>
+  <rect x="610" y="286" width="560" height="190" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-check" x="640" y="316" width="52" height="52" color="#9C7B16"/>
+  <text x="712" y="336" font-size="18" font-weight="700" fill="#9C7B16">Si todas pasan</text>
+  <text x="712" y="364" font-size="15" fill="#5E5E5E">el mismo artefacto sigue de camino</text>
+  <text x="640" y="410" font-size="16">Lo que se probó en la tercera puerta es lo que</text>
+  <text x="640" y="438" font-size="16">llega al ambiente final: nadie reconstruye</text>
+  <text x="640" y="462" font-size="16">entre etapa y etapa.</text>
+</svg>
+<aside class="narracion">Esta es la cadena que vamos a construir. Un cambio entra por la izquierda y recorre seis etapas: compilar, probar, escanear, publicar, desplegar y verificar. Entre etapa y etapa hay una puerta, dibujada como un rombo. La puerta no pide permiso a nadie: lee la evidencia de la etapa anterior y decide. Si algo falla, la cadena se detiene ahí y el cambio vuelve al equipo con el detalle, sin etiqueta ni despliegue. Si todo pasa, sigue el mismo artefacto. Fíjense en la tarjeta amarilla: lo que se probó en la tercera puerta es lo que llega al final, nadie reconstruye entre etapas. Ese es el secreto de un pipeline confiable: se construye una vez y se promueve, no se improvisa en cada ambiente.</aside>
+</section>
+
+<section data-kicker="Regla 1" data-titulo="Compilar una vez y publicar en todas partes" data-sub="Cada reconstrucción crea un binario distinto, y lo distinto no está probado." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="300" y="44" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Correcto: un artefacto, tres destinos</text>
+  <rect x="110" y="76" width="380" height="96" rx="12" fill="#A6192E"/>
+  <text x="300" y="114" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">artefacto único</text>
+  <text x="300" y="144" text-anchor="middle" font-size="15" fill="#F3E3E6">etiqueta + huella, probado una vez</text>
+  <line x1="170" y1="172" x2="120" y2="278" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="300" y1="172" x2="300" y2="278" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="430" y1="172" x2="480" y2="278" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="40" y="286" width="200" height="88" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="140" y="322" text-anchor="middle" font-size="16" font-weight="700">Pruebas</text>
+  <text x="140" y="352" text-anchor="middle" font-size="15" fill="#5E5E5E">mismo binario</text>
+  <rect x="240" y="286" width="120" height="88" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="300" y="322" text-anchor="middle" font-size="16" font-weight="700">Staging</text>
+  <text x="300" y="352" text-anchor="middle" font-size="15" fill="#5E5E5E">mismo binario</text>
+  <rect x="360" y="286" width="200" height="88" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="460" y="322" text-anchor="middle" font-size="16" font-weight="700">Producción</text>
+  <text x="460" y="352" text-anchor="middle" font-size="15" fill="#5E5E5E">mismo binario</text>
+  <line x1="600" y1="60" x2="600" y2="470" stroke="#5E5E5E" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="890" y="44" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Incorrecto: compilar en cada ambiente</text>
+  <rect x="660" y="76" width="150" height="80" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="735" y="112" text-anchor="middle" font-size="16" font-weight="700">Pruebas</text>
+  <text x="735" y="140" text-anchor="middle" font-size="15" fill="#5E5E5E">binario A</text>
+  <rect x="840" y="76" width="150" height="80" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="915" y="112" text-anchor="middle" font-size="16" font-weight="700">Staging</text>
+  <text x="915" y="140" text-anchor="middle" font-size="15" fill="#5E5E5E">binario B</text>
+  <rect x="1010" y="76" width="150" height="80" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="1085" y="112" text-anchor="middle" font-size="16" font-weight="700">Producción</text>
+  <text x="1085" y="140" text-anchor="middle" font-size="15" fill="#5E5E5E">binario C</text>
+  <line x1="735" y1="156" x2="735" y2="196" stroke="#5E5E5E" stroke-width="3" stroke-dasharray="6 5"/>
+  <line x1="915" y1="156" x2="915" y2="196" stroke="#5E5E5E" stroke-width="3" stroke-dasharray="6 5"/>
+  <line x1="1085" y1="156" x2="1085" y2="196" stroke="#5E5E5E" stroke-width="3" stroke-dasharray="6 5"/>
+  <text x="905" y="216" text-anchor="middle" font-size="15" fill="#5E5E5E">tres compilaciones, tres resultados posibles</text>
+  <rect x="660" y="250" width="500" height="216" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="686" y="280" width="46" height="46" color="#A6192E"/>
+  <text x="748" y="300" font-size="17" font-weight="700" fill="#A6192E">El efecto</text>
+  <text x="748" y="326" font-size="15" fill="#5E5E5E">¿qué es lo que aprobaste?</text>
+  <text x="686" y="376" font-size="16">Lo que pasó las pruebas fue el binario A,</text>
+  <text x="686" y="404" font-size="16">pero en producción corre el binario C. Si</text>
+  <text x="686" y="432" font-size="16">alguien pregunta qué se aprobó, la</text>
+  <text x="686" y="458" font-size="16">respuesta honesta es: otra cosa.</text>
+</svg>
+<aside class="narracion">Primera regla del pipeline: compilar una vez. A la izquierda, la forma correcta. Se genera un artefacto único, con etiqueta y huella, que se probó una sola vez, y ese mismo artefacto baja a pruebas, a staging y a producción. A la derecha, la forma incorrecta: cada ambiente compila por su cuenta. Tres compilaciones pueden dar tres resultados distintos, dependiendo de la versión del lenguaje, de una dependencia que se actualizó o del momento en que se ejecutó. Y entonces aparece el efecto de la tarjeta roja: lo que aprobaste fue el binario A y en producción corre el C. Si alguien pregunta qué se aprobó, la respuesta honesta es que se aprobó otra cosa. Un pipeline serio promueve artefactos, no los fabrica dos veces.</aside>
+</section>
+
+<section data-kicker="Pruebas" data-titulo="La pirámide: muchas baratas, pocas caras" data-sub="Cada nivel entra en una puerta distinta, según cuánto tarda y cuánto cuesta correrlo." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <polygon points="330,60 470,60 400,140" fill="#A6192E"/>
+  <polygon points="255,165 545,165 470,245 330,245" fill="#D4AF37"/>
+  <polygon points="180,270 620,270 545,350 255,350" fill="#9C7B16"/>
+  <polygon points="105,375 695,375 620,455 180,455" fill="#5E5E5E"/>
+  <text x="400" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Extremo a extremo</text>
+  <text x="400" y="134" text-anchor="middle" font-size="14" fill="#F3E3E6">pocas, lentas, caras</text>
+  <text x="400" y="212" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Integración</text>
+  <text x="400" y="234" text-anchor="middle" font-size="14" fill="#fff">el sistema completo</text>
+  <text x="400" y="312" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Funcionales</text>
+  <text x="400" y="334" text-anchor="middle" font-size="14" fill="#fff">flujo de usuario</text>
+  <text x="400" y="412" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Unidad</text>
+  <text x="400" y="438" text-anchor="middle" font-size="15" fill="#F3E3E6">la base: muchas y muy rápidas</text>
+  <text x="105" y="478" font-size="14" fill="#5E5E5E">rápidas y baratas</text>
+  <text x="695" y="478" text-anchor="end" font-size="14" fill="#5E5E5E">lentas y caras</text>
+  <rect x="740" y="60" width="420" height="415" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="770" y="100" font-size="17" font-weight="700">Qué corre en cada puerta</text>
+  <rect x="770" y="124" width="360" height="66" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="790" y="152" font-size="15" font-weight="700" fill="#A6192E">En cada cambio</text>
+  <text x="790" y="178" font-size="15">unidad + análisis estático</text>
+  <rect x="770" y="204" width="360" height="66" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="790" y="232" font-size="15" font-weight="700" fill="#9C7B16">Al fusionar</text>
+  <text x="790" y="258" font-size="15">integración + escaneo</text>
+  <rect x="770" y="284" width="360" height="66" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="790" y="312" font-size="15" font-weight="700">Antes de publicar</text>
+  <text x="790" y="338" font-size="15">extremo a extremo en staging</text>
+  <rect x="770" y="364" width="360" height="76" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="790" y="392" font-size="15" font-weight="700" fill="#A6192E">Después de publicar</text>
+  <text x="790" y="416" font-size="15">comprobación funcional en el</text>
+  <text x="790" y="434" font-size="15">ambiente real, con alertas</text>
+</svg>
+<aside class="narracion">La pirámide de pruebas es también un calendario. Abajo, la base: pruebas de unidad, muchas y muy rápidas, que corren en cada cambio. Suben las de integración, que montan el sistema completo con sus dependencias. Más arriba, las funcionales de flujo de usuario. Y en la punta, las de extremo a extremo: pocas, lentas y caras. La forma invertida no es estética, es económica: si la pirámide se pone pesada arriba, la primera puerta tarda veinte minutos y nadie espera. A la derecha ven en qué puerta corre cada nivel. Unidad y análisis estático en cada cambio; integración y escaneo al fusionar; extremo a extremo antes de publicar; y después de publicar, una comprobación funcional con alertas. Cuanto más arriba, menos veces se corre.</aside>
+</section>
+
+<section data-kicker="Puertas" data-titulo="Qué exige cada puerta para dejar pasar" data-sub="Cuatro criterios explícitos: si no se puede comprobar, no se puede exigir." data-fuente="Basado en: DORA, guía de métricas de entrega [cite:1] · NIST SP 800-204C, seguridad en despliegue [cite:5]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="272" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="56" cy="80" r="24" fill="#A6192E"/><text x="56" y="88" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="96" y="86" font-size="17" font-weight="700" fill="#A6192E">Compila y pasa</text>
+  <text x="44" y="132" font-size="15">Compilación sin</text>
+  <text x="44" y="158" font-size="15">errores y todas las</text>
+  <text x="44" y="184" font-size="15">pruebas de unidad</text>
+  <text x="44" y="210" font-size="15">en verde.</text>
+  <rect x="44" y="244" width="224" height="76" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="60" y="272" font-size="14" fill="#A6192E" font-weight="700">si no se cumple:</text>
+  <text x="60" y="300" font-size="14">la rama ni se fusiona</text>
+  <rect x="320" y="40" width="272" height="300" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="356" cy="80" r="24" fill="#9C7B16"/><text x="356" y="88" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="396" y="86" font-size="17" font-weight="700" fill="#9C7B16">Sin hallazgos graves</text>
+  <text x="344" y="132" font-size="15">Escaneo de código,</text>
+  <text x="344" y="158" font-size="15">dependencias e</text>
+  <text x="344" y="184" font-size="15">imagen sin</text>
+  <text x="344" y="210" font-size="15">hallazgos graves.</text>
+  <rect x="344" y="244" width="224" height="76" rx="10" fill="#fff" stroke="#9C7B16" stroke-dasharray="6 5"/>
+  <text x="360" y="272" font-size="14" fill="#9C7B16" font-weight="700">si no se cumple:</text>
+  <text x="360" y="300" font-size="14">no se publica nada</text>
+  <rect x="620" y="40" width="272" height="300" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <circle cx="656" cy="80" r="24" fill="#5E5E5E"/><text x="656" y="88" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">3</text>
+  <text x="696" y="86" font-size="17" font-weight="700">Artefacto verificable</text>
+  <text x="644" y="132" font-size="15">Etiqueta fija, huella</text>
+  <text x="644" y="158" font-size="15">registrada y origen</text>
+  <text x="644" y="184" font-size="15">conocido de cada</text>
+  <text x="644" y="210" font-size="15">dependencia.</text>
+  <rect x="644" y="244" width="224" height="76" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="6 5"/>
+  <text x="660" y="272" font-size="14" font-weight="700">si no se cumple:</text>
+  <text x="660" y="300" font-size="14">se congela el avance</text>
+  <rect x="920" y="40" width="240" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="956" cy="80" r="24" fill="#A6192E"/><text x="956" y="88" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">4</text>
+  <text x="996" y="86" font-size="17" font-weight="700" fill="#A6192E">Aprobación formal</text>
+  <text x="944" y="132" font-size="15">Para el ambiente</text>
+  <text x="944" y="158" font-size="15">final, una persona</text>
+  <text x="944" y="184" font-size="15">distinta del autor</text>
+  <text x="944" y="210" font-size="15">aprueba el paso.</text>
+  <rect x="944" y="244" width="192" height="76" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="960" y="272" font-size="14" fill="#A6192E" font-weight="700">si no se cumple:</text>
+  <text x="960" y="300" font-size="14">se espera, sin rogar</text>
+  <rect x="20" y="372" width="1140" height="104" rx="14" fill="#A6192E"/>
+  <use href="#i-candado" x="50" y="398" width="52" height="52" color="#F3E3E6"/>
+  <text x="124" y="412" font-size="18" font-weight="700" fill="#fff">El criterio</text>
+  <text x="124" y="446" font-size="16" fill="#F9EEF0">Toda puerta exige un dato que el sistema puede medir solo. Si un criterio necesita</text>
+  <text x="124" y="470" font-size="16" fill="#F9EEF0">interpretación humana en cada ejecución, no es una puerta: es una cola de espera.</text>
+</svg>
+<aside class="narracion">¿Qué exige cada puerta? Cuatro criterios, y todos son comprobables por la máquina. La primera pide compilación limpia y unidad en verde: si no, la rama ni se fusiona. La segunda pide un escaneo sin hallazgos graves en código, dependencias e imagen: si no, no se publica nada. La tercera exige un artefacto verificable, con etiqueta fija, huella registrada y origen conocido de cada dependencia: si falta, se congela el avance. La cuarta es la única con persona: en el ambiente final aprueba alguien distinto del autor, y la espera es una cola con horario, no un pedido por chat. Y está el criterio que lo resume: toda puerta exige un dato medible por la máquina. Si algo necesita interpretación humana en cada corrida, no es una puerta, es una cola de espera.</aside>
+</section>
+
+<section data-kicker="Seguridad" data-titulo="Cuatro escaneos que corren solos" data-sub="Ninguno espera un clic: se ejecutan en la puerta que les corresponde y dejan evidencia." data-fuente="Basado en: NIST SP 800-204C, seguridad en el despliegue [cite:5] · Bancolombia, DevSecOps Engine Tools [cite:12]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="60" width="272" height="264" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-codigo" x="44" y="84" width="46" height="46" color="#A6192E"/>
+  <text x="104" y="104" font-size="17" font-weight="700" fill="#A6192E">Código</text>
+  <text x="104" y="126" font-size="14" fill="#5E5E5E">análisis estático</text>
+  <text x="44" y="166" font-size="15">Patrones inseguros en</text>
+  <text x="44" y="192" font-size="15">el código fuente, antes</text>
+  <text x="44" y="218" font-size="15">de que alguien lo</text>
+  <text x="44" y="244" font-size="15">ejecute.</text>
+  <rect x="44" y="272" width="224" height="36" rx="8" fill="#fff" stroke="#A6192E"/>
+  <text x="156" y="296" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">cada cambio</text>
+  <rect x="309" y="60" width="272" height="264" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-documento" x="333" y="84" width="46" height="46" color="#9C7B16"/>
+  <text x="393" y="104" font-size="17" font-weight="700" fill="#9C7B16">Dependencias</text>
+  <text x="393" y="126" font-size="14" fill="#5E5E5E">lista de materiales</text>
+  <text x="333" y="166" font-size="15">Bibliotecas ajenas con</text>
+  <text x="333" y="192" font-size="15">vulnerabilidades o</text>
+  <text x="333" y="218" font-size="15">licencias que no</text>
+  <text x="333" y="244" font-size="15">permites usar.</text>
+  <rect x="333" y="272" width="224" height="36" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="445" y="296" text-anchor="middle" font-size="14" fill="#9C7B16" font-weight="700">al fusionar</text>
+  <rect x="598" y="60" width="272" height="264" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-llave" x="622" y="84" width="46" height="46" color="#5E5E5E"/>
+  <text x="682" y="104" font-size="17" font-weight="700">Secretos</text>
+  <text x="682" y="126" font-size="14" fill="#5E5E5E">credenciales</text>
+  <text x="622" y="166" font-size="15">Claves, tokens o</text>
+  <text x="622" y="192" font-size="15">contraseñas escritas</text>
+  <text x="622" y="218" font-size="15">dentro del repositorio</text>
+  <text x="622" y="244" font-size="15">o en la imagen.</text>
+  <rect x="622" y="272" width="224" height="36" rx="8" fill="#fff" stroke="#5E5E5E"/>
+  <text x="734" y="296" text-anchor="middle" font-size="14" font-weight="700">cada cambio</text>
+  <rect x="887" y="60" width="272" height="264" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-contenedor" x="911" y="84" width="46" height="46" color="#A6192E"/>
+  <text x="971" y="104" font-size="17" font-weight="700" fill="#A6192E">Imagen</text>
+  <text x="971" y="126" font-size="14" fill="#5E5E5E">paquetes y sistema</text>
+  <text x="911" y="166" font-size="15">Paquetes del sistema</text>
+  <text x="911" y="192" font-size="15">operativo y ajustes de</text>
+  <text x="911" y="218" font-size="15">configuración dentro</text>
+  <text x="911" y="244" font-size="15">del contenedor.</text>
+  <rect x="911" y="272" width="224" height="36" rx="8" fill="#fff" stroke="#A6192E"/>
+  <text x="1023" y="296" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">al empaquetar</text>
+  <rect x="20" y="356" width="1140" height="122" rx="14" fill="#A6192E"/>
+  <use href="#i-escudo" x="50" y="384" width="60" height="60" color="#F3E3E6"/>
+  <text x="134" y="400" font-size="18" font-weight="700" fill="#fff">Automatizado y trazable</text>
+  <text x="134" y="434" font-size="16" fill="#F9EEF0">Los cuatro corren sin pedir clic, guardan su hallazgo con la ejecución y la puerta</text>
+  <text x="134" y="462" font-size="16" fill="#F9EEF0">lee ese registro. Es el mismo enfoque que las organizaciones publican como juego.</text>
+</svg>
+<aside class="narracion">Seguridad dentro de la cadena, no al final. Cuatro escaneos. El primero mira el código fuente y encuentra patrones inseguros antes de que nadie los ejecute. El segundo revisa las bibliotecas ajenas: vulnerabilidades conocidas y licencias que la organización no permite. El tercero busca credenciales escritas en el repositorio o dentro de la imagen, el error más común y más fácil de evitar. El cuarto mira la imagen terminada: paquetes del sistema operativo y ajustes de configuración. Los cuatro corren solos, en la puerta que les toca, y guardan su hallazgo junto con la ejecución. La puerta simplemente lee ese registro. Ese enfoque es exactamente el que una organización financiera de la región publicó como herramientas abiertas de seguridad para su cadena de entrega. En la práctica, el que más ahorra dolores de cabeza es el de dependencias: buena parte de los incidentes de la industria nacen de una biblioteca olvidada y no de una línea mal escrita. Y como corre en cada cambio, la corrección llega el mismo día en que se detecta.</aside>
+</section>
+
+<section data-kicker="Artefacto" data-titulo="Etiqueta para los humanos, huella para la máquina" data-sub="La etiqueta puede moverse; la huella, no. En producción se promueve la huella." data-fuente="Basado en: Fowler, Continuous Integration [cite:4] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="70" width="250" height="150" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-engranaje" x="54" y="94" width="46" height="46" color="#A6192E"/>
+  <text x="114" y="112" font-size="17" font-weight="700" fill="#A6192E">Compilación</text>
+  <text x="54" y="164" font-size="15">una sola vez, con el</text>
+  <text x="54" y="190" font-size="15">código ya congelado</text>
+  <line x1="280" y1="145" x2="376" y2="145" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="384" y="50" width="420" height="190" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="410" y="88" font-size="17" font-weight="700">Registro de artefactos</text>
+  <rect x="410" y="108" width="368" height="54" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="430" y="142" font-size="15" fill="#5E5E5E">caribemart/carrito-servicio</text>
+  <rect x="410" y="176" width="176" height="46" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="498" y="205" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">etiqueta: v1.4.2</text>
+  <rect x="602" y="176" width="176" height="46" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="690" y="205" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">huella: sha256…</text>
+  <line x1="804" y1="145" x2="900" y2="145" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="908" y="50" width="252" height="190" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="934" y="88" font-size="17" font-weight="700" fill="#9C7B16">Ambientes</text>
+  <text x="934" y="124" font-size="15">Pruebas: la huella</text>
+  <text x="934" y="150" font-size="15">Staging: la misma huella</text>
+  <text x="934" y="176" font-size="15">Producción: la misma</text>
+  <text x="934" y="210" font-size="15" fill="#9C7B16" font-weight="700">nadie la reescribe</text>
+  <text x="160" y="300" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Lo que se aprobó</text>
+  <rect x="30" y="324" width="540" height="154" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-usuario" x="58" y="352" width="48" height="48" color="#9C7B16"/>
+  <text x="122" y="372" font-size="17" font-weight="700" fill="#9C7B16">Etiqueta</text>
+  <text x="122" y="398" font-size="15" fill="#5E5E5E">nombre legible para las personas</text>
+  <text x="58" y="440" font-size="16">Se escribe en el reporte y en el chat.</text>
+  <text x="58" y="466" font-size="16">Puede volverse a apuntar a otra huella.</text>
+  <text x="610" y="300" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Lo que se despliega</text>
+  <rect x="610" y="324" width="550" height="154" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-candado" x="638" y="352" width="48" height="48" color="#A6192E"/>
+  <text x="702" y="372" font-size="17" font-weight="700" fill="#A6192E">Huella</text>
+  <text x="702" y="398" font-size="15" fill="#5E5E5E">resumen criptográfico del contenido</text>
+  <text x="638" y="440" font-size="16">Es única y no cambia: si el contenido</text>
+  <text x="638" y="466" font-size="16">cambia, cambia la huella. Así de simple.</text>
+</svg>
+<aside class="narracion">Todo lo anterior produce algo concreto: un artefacto. En el registro hay dos formas de referirse a él. La etiqueta es un nombre legible, como la versión 1.4.2, la que se escribe en el reporte y en el chat. Pero la etiqueta puede volverse a apuntar a otra cosa. La huella es un resumen criptográfico del contenido: si el contenido cambia, cambia la huella, sin excepción. Por eso, en producción se promueve la huella, no la etiqueta. En las tres tarjetas de la derecha ven la consecuencia: pruebas, staging y producción usan exactamente la misma huella y nadie la reescribe en el camino. Así se responde la pregunta incómoda de cualquier auditoría: qué se aprobó, qué se publicó y qué está corriendo, con la misma respuesta en los tres casos.</aside>
+</section>
+
+<section data-kicker="Ambientes" data-titulo="Mismo camino, distinto contexto" data-sub="Los ambientes se parecen en el recorrido y difieren en datos, escala y aprobación." data-fuente="Basado en: GitHub, usar ambientes para el despliegue [cite:10] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="440" y="40" width="300" height="84" rx="12" fill="#A6192E"/>
+  <text x="590" y="76" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">artefacto aprobado</text>
+  <text x="590" y="106" text-anchor="middle" font-size="15" fill="#F3E3E6">una huella, tres destinos</text>
+  <line x1="520" y1="124" x2="200" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="590" y1="124" x2="590" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="660" y1="124" x2="980" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="40" y="204" width="320" height="264" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-laptop" x="66" y="228" width="46" height="46" color="#A6192E"/>
+  <text x="126" y="258" font-size="17" font-weight="700" fill="#A6192E">Pruebas</text>
+  <text x="66" y="308" font-size="15" fill="#5E5E5E">datos</text><text x="334" y="308" text-anchor="end" font-size="15" font-weight="700">ficticios</text>
+  <text x="66" y="344" font-size="15" fill="#5E5E5E">escala</text><text x="334" y="344" text-anchor="end" font-size="15" font-weight="700">1 instancia</text>
+  <text x="66" y="380" font-size="15" fill="#5E5E5E">aprobación</text><text x="334" y="380" text-anchor="end" font-size="15" font-weight="700">ninguna</text>
+  <rect x="66" y="404" width="268" height="44" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="200" y="432" text-anchor="middle" font-size="14" fill="#A6192E">se repuebla en cada corrida</text>
+  <rect x="430" y="204" width="320" height="264" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-servidor" x="456" y="228" width="46" height="46" color="#9C7B16"/>
+  <text x="516" y="258" font-size="17" font-weight="700" fill="#9C7B16">Staging</text>
+  <text x="456" y="308" font-size="15" fill="#5E5E5E">datos</text><text x="724" y="308" text-anchor="end" font-size="15" font-weight="700">de prueba</text>
+  <text x="456" y="344" font-size="15" fill="#5E5E5E">escala</text><text x="724" y="344" text-anchor="end" font-size="15" font-weight="700">casi real</text>
+  <text x="456" y="380" font-size="15" fill="#5E5E5E">aprobación</text><text x="724" y="380" text-anchor="end" font-size="15" font-weight="700">ninguna</text>
+  <rect x="456" y="404" width="268" height="44" rx="8" fill="#fff" stroke="#9C7B16" stroke-dasharray="5 4"/>
+  <text x="590" y="432" text-anchor="middle" font-size="14" fill="#9C7B16">casi igual que producción</text>
+  <rect x="820" y="204" width="320" height="264" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-datacenter" x="846" y="228" width="46" height="46" color="#2A2A2A"/>
+  <text x="906" y="258" font-size="17" font-weight="700">Producción</text>
+  <text x="846" y="308" font-size="15" fill="#5E5E5E">datos</text><text x="1114" y="308" text-anchor="end" font-size="15" font-weight="700">reales</text>
+  <text x="846" y="344" font-size="15" fill="#5E5E5E">escala</text><text x="1114" y="344" text-anchor="end" font-size="15" font-weight="700">la del negocio</text>
+  <text x="846" y="380" font-size="15" fill="#5E5E5E">aprobación</text><text x="1114" y="380" text-anchor="end" font-size="15" font-weight="700">formal</text>
+  <rect x="846" y="404" width="268" height="44" rx="8" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="980" y="432" text-anchor="middle" font-size="14">aquí ya no se improvisa</text>
+  <text x="590" y="188" text-anchor="middle" font-size="15" fill="#5E5E5E">mismo recorrido, distinto contexto</text>
+</svg>
+<aside class="narracion">Tres ambientes, un solo artefacto. En pruebas hay datos ficticios, una instancia y nadie aprueba nada: se repuebla en cada corrida. En staging los datos son de prueba, la escala casi real y sigue sin haber aprobación. En producción están los datos reales, la escala del negocio y una aprobación formal. Noten qué es igual y qué no. Es igual el recorrido del artefacto y la configuración base; son distintos los datos, la escala y quién autoriza. Si staging se construye con un procedimiento diferente al de producción, la prueba miente, porque valida una configuración que jamás va a correr. Por eso la regla práctica: el camino es el mismo y lo que cambia se declara como configuración, no como costumbre.</aside>
+</section>
+
+<section data-kicker="Retroalimentación" data-titulo="La respuesta tiene que llegar en minutos" data-sub="Si el resultado llega cuando el autor ya cambió de tarea, ya no informa: solo molesta." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Tiempos ilustrativos, elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="1140" height="66" rx="12" fill="#A6192E"/>
+  <text x="600" y="80" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">un cambio, una corrida, una respuesta</text>
+  <line x1="70" y1="196" x2="1110" y2="196" stroke="#5E5E5E" stroke-width="4"/>
+  <circle cx="70" cy="196" r="14" fill="#A6192E"/>
+  <circle cx="330" cy="196" r="14" fill="#A6192E"/>
+  <circle cx="590" cy="196" r="14" fill="#A6192E"/>
+  <circle cx="850" cy="196" r="14" fill="#9C7B16"/>
+  <circle cx="1110" cy="196" r="14" fill="#9C7B16"/>
+  <text x="70" y="238" text-anchor="middle" font-size="15" font-weight="700">commit</text>
+  <text x="70" y="262" text-anchor="middle" font-size="15" fill="#5E5E5E">minuto 0</text>
+  <text x="330" y="238" text-anchor="middle" font-size="15" font-weight="700">compila</text>
+  <text x="330" y="262" text-anchor="middle" font-size="15" fill="#5E5E5E">minuto 1</text>
+  <text x="590" y="238" text-anchor="middle" font-size="15" font-weight="700">prueba</text>
+  <text x="590" y="262" text-anchor="middle" font-size="15" fill="#5E5E5E">minuto 3</text>
+  <text x="850" y="238" text-anchor="middle" font-size="15" font-weight="700">escanea</text>
+  <text x="850" y="262" text-anchor="middle" font-size="15" fill="#5E5E5E">minuto 5</text>
+  <text x="1110" y="238" text-anchor="middle" font-size="15" font-weight="700">informa</text>
+  <text x="1110" y="262" text-anchor="middle" font-size="15" fill="#5E5E5E">minuto 6</text>
+  <text x="600" y="166" text-anchor="middle" font-size="15" fill="#5E5E5E">la respuesta llega mientras el contexto sigue abierto</text>
+  <rect x="20" y="300" width="560" height="176" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-check" x="48" y="330" width="48" height="48" color="#9C7B16"/>
+  <text x="112" y="352" font-size="17" font-weight="700" fill="#9C7B16">Lo que sí cabe en minutos</text>
+  <text x="48" y="410" font-size="16">Compilación, pruebas de unidad, análisis</text>
+  <text x="48" y="438" font-size="16">estático y escaneo de dependencias.</text>
+  <text x="48" y="464" font-size="15" fill="#5E5E5E">todo eso va en la primera puerta</text>
+  <rect x="600" y="300" width="560" height="176" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-reloj" x="628" y="330" width="48" height="48" color="#A6192E"/>
+  <text x="692" y="352" font-size="17" font-weight="700" fill="#A6192E">Lo que corre después</text>
+  <text x="628" y="410" font-size="16">Pruebas de extremo a extremo, despliegue</text>
+  <text x="628" y="438" font-size="16">y verificación en el ambiente real.</text>
+  <text x="628" y="464" font-size="15" fill="#5E5E5E">sin bloquear el siguiente cambio</text>
+</svg>
+<aside class="narracion">La cadena de arriba representa un cambio y su respuesta. Minuto cero, el commit. Minuto uno, compiló. Minuto tres, terminaron las pruebas rápidas. Minuto cinco, el escaneo. Minuto seis, el equipo ya sabe si avanza o no. La respuesta llega mientras el contexto sigue abierto: el autor todavía recuerda qué tocó. Si la respuesta llega al día siguiente, ya está en otra tarea y el error cuesta el triple. Por eso el pipeline se separa en dos velocidades. En minutos van compilación, unidad, análisis estático y dependencias: todo en la primera puerta. Después corren las pruebas lentas, el despliegue y la verificación en el ambiente real, sin bloquear el siguiente cambio. Rapidez no significa hacer todo corrido, significa ordenar por costo.</aside>
+</section>
+
+<section data-kicker="Anti-patrón" data-titulo="Un solo paso gigante no es un pipeline" data-sub="Cuando todo corre junto y al final, el fallo obliga a repetirlo todo." data-fuente="Elaboración propia · caso CaribeMart (ficticio)">
+<svg viewBox="0 0 1180 500">
+  <text x="300" y="44" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Así se ve el error clásico</text>
+  <rect x="30" y="66" width="540" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="56" y="104" font-size="17" font-weight="700" fill="#A6192E">una tarea, catorce acciones</text>
+  <text x="56" y="140" font-size="15">1 compilar   2 instalar dependencias</text>
+  <text x="56" y="170" font-size="15">3 correr pruebas   4 generar reporte</text>
+  <text x="56" y="200" font-size="15">5 escanear   6 aprobar manualmente</text>
+  <text x="56" y="230" font-size="15">7 construir imagen   8 etiquetar</text>
+  <text x="56" y="260" font-size="15">9 subir al registro   10 copiar al servidor</text>
+  <text x="56" y="290" font-size="15">11 reconfigurar   12 reiniciar servicio</text>
+  <text x="56" y="320" font-size="15">13 verificar a ojo   14 escribir el correo</text>
+  <text x="56" y="350" font-size="15" fill="#A6192E" font-weight="700">sin puertas: si falla el paso 13, empieza de cero</text>
+  <line x1="570" y1="216" x2="646" y2="216" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="608" y="200" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">sí</text>
+  <rect x="660" y="66" width="500" height="300" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="686" y="104" font-size="17" font-weight="700" fill="#9C7B16">lo mismo, en etapas cortas</text>
+  <rect x="686" y="128" width="448" height="42" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="706" y="155" font-size="15">compilar y probar · respuesta inmediata</text>
+  <rect x="686" y="184" width="448" height="42" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="706" y="211" font-size="15">escanear y empaquetar · evidencia propia</text>
+  <rect x="686" y="240" width="448" height="42" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="706" y="267" font-size="15">publicar y desplegar · reversión lista</text>
+  <rect x="686" y="296" width="448" height="42" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="706" y="323" font-size="15">verificar y avisar · informe automático</text>
+  <text x="300" y="424" text-anchor="middle" font-size="17" fill="#5E5E5E">Cada bloque se puede repetir solo, y el fallo se queda donde ocurrió</text>
+  <rect x="30" y="446" width="1130" height="44" rx="10" fill="#A6192E"/>
+  <text x="595" y="474" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">seis acciones dentro de una sola tarea no hacen falta: haz cuatro tareas</text>
+</svg>
+<aside class="narracion">El anti-patrón más frecuente: un solo paso gigante. A la izquierda, una tarea con catorce acciones dentro. Compila, prueba, escanea, sube, copia, reinicia y hasta escribe el correo. ¿El problema? No hay puertas. Si el paso trece falla, se repite todo, incluida la instalación de dependencias. Y nadie sabe qué fue lo que se cayó sin leer el registro completo. A la derecha, el mismo trabajo ordenado en cuatro bloques cortos, cada uno con su propia respuesta y su propia evidencia. Si falla el bloque dos, se repite solo el bloque dos. La regla de la tarjeta roja: seis acciones dentro de una tarea no hacen falta; conviértelas en tareas. Cortar es lo que permite volver atrás rápido.</aside>
+</section>
+
+<section data-kicker="Trazabilidad" data-titulo="Cuatro datos que responden ¿qué está corriendo?" data-sub="Si el pipeline guarda estas cuatro cosas, la auditoría se responde en segundos." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="46" width="264" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="46" y="84" font-size="17" font-weight="700" fill="#A6192E">Quién lo cambió</text>
+  <text x="46" y="118" font-size="15" fill="#5E5E5E">commit</text>
+  <rect x="46" y="134" width="212" height="50" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="62" y="166" font-size="15">a3f9c21 · rama main</text>
+  <text x="46" y="222" font-size="15" fill="#A6192E" font-weight="700">autor y mensaje</text>
+  <rect x="312" y="46" width="264" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="338" y="84" font-size="17" font-weight="700" fill="#9C7B16">Qué pasó en la cadena</text>
+  <text x="338" y="118" font-size="15" fill="#5E5E5E">corrida</text>
+  <rect x="338" y="134" width="212" height="50" rx="8" fill="#fff" stroke="#9C7B16" stroke-dasharray="5 4"/>
+  <text x="354" y="166" font-size="15">ejecución 842 · 5 etapas</text>
+  <text x="338" y="222" font-size="15" fill="#9C7B16" font-weight="700">resultado por etapa</text>
+  <rect x="604" y="46" width="264" height="200" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="630" y="84" font-size="17" font-weight="700">Qué se publicó</text>
+  <text x="630" y="118" font-size="15" fill="#5E5E5E">artefacto</text>
+  <rect x="630" y="134" width="212" height="50" rx="8" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="646" y="166" font-size="15">huella sha256…9f31</text>
+  <text x="630" y="222" font-size="15" font-weight="700">etiqueta y registro</text>
+  <rect x="896" y="46" width="264" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="922" y="84" font-size="17" font-weight="700" fill="#A6192E">Dónde terminó</text>
+  <text x="922" y="118" font-size="15" fill="#5E5E5E">despliegue</text>
+  <rect x="922" y="134" width="212" height="50" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="938" y="166" font-size="15">staging · 07:42 · ok</text>
+  <text x="922" y="222" font-size="15" fill="#A6192E" font-weight="700">ambiente, hora y estado</text>
+  <line x1="284" y1="146" x2="310" y2="146" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="576" y1="146" x2="602" y2="146" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="868" y1="146" x2="894" y2="146" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="20" y="296" width="1140" height="182" rx="14" fill="#A6192E"/>
+  <use href="#i-ojo" x="52" y="330" width="56" height="56" color="#F3E3E6"/>
+  <text x="132" y="348" font-size="19" font-weight="700" fill="#fff">La pregunta del lunes por la mañana</text>
+  <rect x="132" y="372" width="600" height="46" rx="8" fill="#fff"/>
+  <text x="152" y="402" font-size="16" font-weight="700" fill="#A6192E">¿qué versión está en producción y quién la aprobó?</text>
+  <text x="132" y="450" font-size="16" fill="#F9EEF0">respuesta: commit a3f9c21 · ejecución 842 · huella …9f31 · staging, 07:42</text>
+</svg>
+<aside class="narracion">Cuarta idea de la parte: trazabilidad. Si el pipeline guarda cuatro datos, cualquier pregunta se responde sola. Quién lo cambió, con el commit y el autor. Qué pasó en la cadena, con la corrida y el resultado de cada etapa. Qué se publicó, con la huella y la etiqueta del artefacto. Y dónde terminó, con el ambiente, la hora y el estado. Abajo está la pregunta del lunes por la mañana: qué versión está en producción y quién la aprobó. Con esos cuatro datos la respuesta sale de un solo lugar, sin entrevistar a nadie. Sin ellos, la misma pregunta obliga a reconstruir la historia a partir de correos y de la memoria de las personas, que es exactamente lo que un pipeline tiene que eliminar. Además, cuando los cuatro datos están, la respuesta también sirve para decidir: si la huella que corre en producción no coincide con la que se aprobó, el sistema lo dice solo, sin que nadie tenga que sospechar.</aside>
+</section>
+
+<section data-kicker="Caso del curso" data-titulo="CaribeMart: una publicación, siete minutos" data-sub="El mismo cambio del hilo conductor, recorriendo la cadena completa." data-fuente="Caso del curso: CaribeMart (proyecto de aula, ficticio) · Tiempos ilustrativos, elaboración propia">
+<div class="fila">
+  <div class="c-60 lienzo">
+    <div class="terminal"><span class="c"># corrida 842 · rama main · carrito-servicio</span>
+<span class="p">build</span>    compilar y probar        <span class="ok">ok</span>   48 s
+<span class="p">test</span>     214 pruebas de unidad     <span class="ok">ok</span>   1 min
+<span class="p">scan</span>     código y dependencias     <span class="ok">ok</span>   32 s
+<span class="p">image</span>    construir y etiquetar     <span class="ok">ok</span>   1 min
+<span class="p">publish</span>  registro · huella 9f31    <span class="ok">ok</span>   9 s
+<span class="p">approve</span>  autor distinto del que     <span class="ok">ok</span>   2 min
+<span class="c">         subió el cambio</span>
+<span class="p">deploy</span>   staging con la misma      <span class="ok">ok</span>   40 s
+<span class="c">         huella</span>
+<span class="p">verify</span>   funcional y alertas       <span class="ok">ok</span>   31 s
+
+<span class="ok">8 pasos · 1 aprobación formal · evidencia en un solo lugar</span></div>
+  </div>
+  <div class="c-40 col">
+    <div class="nota"><b>Lo que no pasó:</b> nadie pidió un servidor, nadie copió un archivo, nadie escribió un correo.</div>
+    <div class="nota dorada"><b>Lo que sí pasó:</b> una aprobación formal de dos minutos, con la huella a la vista.</div>
+    <div class="nota"><b>Si algo hubiera fallado:</b> la corrida se detiene en esa etapa y el equipo recibe el detalle.</div>
+  </div>
+</div>
+<aside class="narracion">Veamos el caso completo. CaribeMart sube un cambio en el servicio de carrito y la corrida 842 arranca sola. Compila y prueba en cuarenta y ocho segundos, pasa las pruebas de unidad en un minuto, escanea código y dependencias, construye la imagen, la etiqueta y la sube al registro con su huella. Luego llega la única parada con persona: una aprobación formal de dos minutos, de alguien distinto del autor, con la huella a la vista. Después despliega en staging usando exactamente esa huella y verifica con comprobación funcional y alertas. Ocho pasos, una sola parada con persona y toda la evidencia en un solo lugar. Noten lo que no ocurrió: nadie pidió un servidor, nadie copió un archivo y nadie envió un correo.</aside>
+</section>
+
+<section data-kicker="Cuellos" data-titulo="Dónde se pierde el tiempo de verdad" data-sub="Cuatro esperas típicas y el dato que las delata en el registro." data-fuente="Basado en: DORA, guía de métricas de entrega [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="196" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-usuario" x="48" y="70" width="52" height="52" color="#A6192E"/>
+  <text x="118" y="88" font-size="17" font-weight="700" fill="#A6192E">La cola de aprobación</text>
+  <text x="118" y="114" font-size="15" fill="#5E5E5E">se siente como lentitud del equipo</text>
+  <text x="48" y="158" font-size="16">La etapa técnica terminó y la corrida espera</text>
+  <text x="48" y="186" font-size="16">a una persona. El reloj sigue corriendo.</text>
+  <text x="48" y="216" font-size="15" fill="#A6192E" font-weight="700">se delata: tiempo en estado esperando</text>
+  <rect x="600" y="40" width="560" height="196" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-servidor" x="628" y="70" width="52" height="52" color="#9C7B16"/>
+  <text x="698" y="88" font-size="17" font-weight="700" fill="#9C7B16">El ambiente compartido</text>
+  <text x="698" y="114" font-size="15" fill="#5E5E5E">dos corridas, un solo destino</text>
+  <text x="628" y="158" font-size="16">Las ejecuciones se turnan por un ambiente</text>
+  <text x="628" y="186" font-size="16">que no es efímero ni se crea y se destruye.</text>
+  <text x="628" y="216" font-size="15" fill="#9C7B16" font-weight="700">se delata: espera antes de ejecutar</text>
+  <rect x="20" y="264" width="560" height="196" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-contenedor" x="48" y="294" width="52" height="52" color="#9C7B16"/>
+  <text x="118" y="312" font-size="17" font-weight="700" fill="#9C7B16">La imagen pesada</text>
+  <text x="118" y="338" font-size="15" fill="#5E5E5E">todo el sistema operativo, cada vez</text>
+  <text x="48" y="382" font-size="16">Cada corrida transmite y verifica una capa</text>
+  <text x="48" y="410" font-size="16">gigante que casi nunca cambió.</text>
+  <text x="48" y="440" font-size="15" fill="#9C7B16" font-weight="700">se delata: tiempo de transferencia</text>
+  <rect x="600" y="264" width="560" height="196" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-reloj" x="628" y="294" width="52" height="52" color="#A6192E"/>
+  <text x="698" y="312" font-size="17" font-weight="700" fill="#A6192E">La prueba que nadie acelera</text>
+  <text x="698" y="338" font-size="15" fill="#5E5E5E">lenta por costumbre, no por diseño</text>
+  <text x="628" y="382" font-size="16">La suite más larga corre en la primera</text>
+  <text x="628" y="410" font-size="16">puerta y frena cada cambio del equipo.</text>
+  <text x="628" y="440" font-size="15" fill="#A6192E" font-weight="700">se delata: duración por etapa</text>
+  <text x="600" y="486" text-anchor="middle" font-size="16" fill="#5E5E5E">ninguna de estas cuatro espera se ve en una cifra promedio</text>
+</svg>
+<aside class="narracion">¿Dónde se pierde el tiempo? Cuatro sitios típicos. Primero, la cola de aprobación: la etapa técnica terminó y la corrida espera a una persona mientras el reloj corre. Segundo, el ambiente compartido: dos corridas pelean por un destino que no es efímero. Tercero, la imagen pesada: cada corrida arrastra un sistema operativo completo que casi nunca cambió. Cuarto, la prueba que nadie acelera: la suite más larga corre en la primera puerta y frena a todo el equipo. Las cuatro se delatan en el registro, no en el sentimiento: tiempo en estado de espera, espera antes de ejecutar, tiempo de transferencia y duración por etapa. Y ninguna aparece en un promedio bonito. Por eso el registro de la corrida es la fuente de verdad.</aside>
+</section>
+
+<section data-kicker="Reglas" data-titulo="Cinco reglas para revisar tu cadena" data-sub="Si alguna no se cumple, ahí está el siguiente trabajo de automatización." data-fuente="Elaboración propia · síntesis de la parte 2">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="34" width="1140" height="82" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="76" cy="75" r="26" fill="#A6192E"/><text x="76" y="83" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">1</text>
+  <text x="124" y="70" font-size="17" font-weight="700" fill="#A6192E">Se compila una vez</text>
+  <text x="124" y="98" font-size="15" fill="#5E5E5E">el artefacto que pasó las pruebas es el que llega a producción, sin reconstruir</text>
+  <rect x="20" y="130" width="1140" height="82" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="76" cy="171" r="26" fill="#9C7B16"/><text x="76" y="179" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">2</text>
+  <text x="124" y="166" font-size="17" font-weight="700" fill="#9C7B16">Lo repetible se automatiza</text>
+  <text x="124" y="194" font-size="15" fill="#5E5E5E">lo que se hace a mano dos veces es un candidato a la cadena, no una costumbre</text>
+  <rect x="20" y="226" width="1140" height="82" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <circle cx="76" cy="267" r="26" fill="#5E5E5E"/><text x="76" y="275" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">3</text>
+  <text x="124" y="262" font-size="17" font-weight="700">Cada paso deja evidencia</text>
+  <text x="124" y="290" font-size="15" fill="#5E5E5E">resultado por etapa, huella del artefacto y quién aprobó, todo en el mismo lugar</text>
+  <rect x="20" y="322" width="1140" height="82" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="76" cy="363" r="26" fill="#A6192E"/><text x="76" y="371" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">4</text>
+  <text x="124" y="358" font-size="17" font-weight="700" fill="#A6192E">Retroceder es tan fácil como avanzar</text>
+  <text x="124" y="386" font-size="15" fill="#5E5E5E">si volver atrás requiere un procedimiento, la cadena todavía no está terminada</text>
+  <rect x="20" y="418" width="1140" height="70" rx="12" fill="#A6192E"/>
+  <circle cx="76" cy="453" r="26" fill="#fff"/><text x="76" y="461" text-anchor="middle" font-size="19" font-weight="700" fill="#A6192E">5</text>
+  <text x="124" y="448" font-size="17" font-weight="700" fill="#fff">Los secretos viven fuera del código</text>
+  <text x="124" y="474" font-size="15" fill="#F9EEF0">nada de credenciales en el repositorio ni en la imagen: eso lo revisa la puerta</text>
+</svg>
+<aside class="narracion">Cinco reglas para revisar la cadena que ya tienen. Uno: se compila una vez y el artefacto que pasó las pruebas es el que llega. Dos: lo repetible se automatiza; si alguien lo hace a mano dos veces, ya es candidato a la cadena. Tres: cada paso deja evidencia, con resultado por etapa, huella del artefacto y quién aprobó, todo en el mismo lugar. Cuatro: retroceder tiene que ser tan fácil como avanzar; si volver atrás exige un procedimiento especial, la cadena no está terminada. Cinco: los secretos viven fuera del código, y la puerta se encarga de revisar que no se hayan filtrado. Si su cadena incumple alguna, no es un defecto del equipo: es la siguiente tarea de automatización.</aside>
+</section>
+
+<section data-kicker="Resumen" data-titulo="Lo que dejó la parte dos" data-sub="Cinco ideas para llevarte antes de abrir un motor de automatización." data-fuente="Elaboración propia · síntesis de la parte 2">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="272" height="188" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="46" y="70" font-size="17" font-weight="700" fill="#A6192E">1 · Etapas y puertas</text>
+  <text x="46" y="104" font-size="15">Compilar, probar, escanear,</text>
+  <text x="46" y="130" font-size="15">publicar, desplegar y</text>
+  <text x="46" y="156" font-size="15">verificar, con una puerta</text>
+  <text x="46" y="182" font-size="15">automática entre cada una.</text>
+  <rect x="310" y="30" width="272" height="188" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="336" y="70" font-size="17" font-weight="700" fill="#9C7B16">2 · Un solo artefacto</text>
+  <text x="336" y="104" font-size="15">Se compila una vez y la</text>
+  <text x="336" y="130" font-size="15">huella viaja a todos los</text>
+  <text x="336" y="156" font-size="15">ambientes. Lo que se</text>
+  <text x="336" y="182" font-size="15">aprueba es lo que corre.</text>
+  <rect x="600" y="30" width="272" height="188" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="626" y="70" font-size="17" font-weight="700">3 · Seguridad adentro</text>
+  <text x="626" y="104" font-size="15">Código, dependencias,</text>
+  <text x="626" y="130" font-size="15">secretos e imagen se</text>
+  <text x="626" y="156" font-size="15">escanean solos, en la</text>
+  <text x="626" y="182" font-size="15">puerta que les toca.</text>
+  <rect x="890" y="30" width="272" height="188" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="916" y="70" font-size="17" font-weight="700" fill="#A6192E">4 · Minutos, no días</text>
+  <text x="916" y="104" font-size="15">La respuesta rápida va</text>
+  <text x="916" y="130" font-size="15">primero; las pruebas</text>
+  <text x="916" y="156" font-size="15">lentas corren sin frenar</text>
+  <text x="916" y="182" font-size="15">el siguiente cambio.</text>
+  <rect x="20" y="252" width="1142" height="226" rx="14" fill="#A6192E"/>
+  <use href="#i-codigo" x="56" y="292" width="72" height="72" color="#F3E3E6"/>
+  <text x="152" y="300" font-size="20" font-weight="700" fill="#fff">5 · La cadena se escribe en un archivo</text>
+  <text x="152" y="344" font-size="17" fill="#F9EEF0">Todo lo anterior vive en un texto versionado con el código: la definición de las</text>
+  <text x="152" y="372" font-size="17" fill="#F9EEF0">etapas, sus puertas y quién tiene permiso para tocar cada paso.</text>
+  <rect x="152" y="404" width="520" height="48" rx="10" fill="#fff"/>
+  <text x="172" y="435" font-size="16" font-weight="700" fill="#A6192E">Siguiente: un motor de automatización</text>
+  <rect x="704" y="404" width="424" height="48" rx="10" fill="#FBF6E7"/>
+  <text x="724" y="435" font-size="16" font-weight="700" fill="#9C7B16">parte 3 · flujos, secretos y ambientes</text>
+</svg>
+<aside class="narracion">Cierre de la parte. Cuatro ideas cortas. Las etapas se separan con puertas automáticas. El artefacto es uno solo y su huella viaja a todos los ambientes. La seguridad corre dentro de la cadena, no al final. Y la respuesta rápida va primero para no frenar al equipo. La quinta es la que conecta con la parte tres: todo esto se escribe en un archivo versionado junto al código, con la definición de las etapas, sus puertas y los permisos de cada paso. Es decir, el pipeline también se revisa, se aprueba y se guarda en el repositorio. En la parte tres vemos un motor de automatización para ejecutar ese archivo: flujos, ejecutores, secretos y ambientes.</aside>
+</section>
+
+

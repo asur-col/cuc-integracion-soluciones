@@ -1,0 +1,589 @@
+<!-- S10 · Parte 1 — Métricas de DORA (estándar v2). -->
+
+<section data-kicker="Mapa de la sesión" data-titulo="Cuatro bloques para cerrar la Unidad 2" data-sub="Primero medimos, después construimos el pipeline, luego lo ejemplificamos y cerramos con el despliegue." data-fuente="Elaboración propia · Hilo conductor: CaribeMart (caso del curso)">
+<svg viewBox="0 0 1180 500">
+  <text x="590" y="52" text-anchor="middle" font-size="16" fill="#5E5E5E">Semana 10 · cierre de la Unidad 2 · un video por parte</text>
+  <rect x="20" y="80" width="265" height="270" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <rect x="20" y="80" width="265" height="46" rx="14" fill="#A6192E"/><rect x="20" y="110" width="265" height="16" fill="#A6192E"/>
+  <text x="152" y="110" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Parte 1 · Métricas</text>
+  <use href="#i-grafica" x="120" y="145" width="64" height="64" color="#A6192E"/>
+  <text x="152" y="245" text-anchor="middle" font-size="15">Las cinco métricas</text>
+  <text x="152" y="272" text-anchor="middle" font-size="15">de DORA y cómo</text>
+  <text x="152" y="299" text-anchor="middle" font-size="15">usarlas sin trampas</text>
+  <text x="152" y="330" text-anchor="middle" font-size="15" fill="#5E5E5E">flujo y estabilidad</text>
+  <rect x="315" y="80" width="265" height="270" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <rect x="315" y="80" width="265" height="46" rx="14" fill="#9C7B16"/><rect x="315" y="110" width="265" height="16" fill="#9C7B16"/>
+  <text x="447" y="110" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Parte 2 · Etapas</text>
+  <use href="#i-pipeline" x="415" y="145" width="64" height="64" color="#9C7B16"/>
+  <text x="447" y="245" text-anchor="middle" font-size="15">Construir, probar,</text>
+  <text x="447" y="272" text-anchor="middle" font-size="15">escanear y publicar,</text>
+  <text x="447" y="299" text-anchor="middle" font-size="15">ambiente por ambiente</text>
+  <text x="447" y="330" text-anchor="middle" font-size="15" fill="#5E5E5E">con evidencia</text>
+  <rect x="610" y="80" width="265" height="270" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <rect x="610" y="80" width="265" height="46" rx="14" fill="#5E5E5E"/><rect x="610" y="110" width="265" height="16" fill="#5E5E5E"/>
+  <text x="742" y="110" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Parte 3 · Ejemplo</text>
+  <use href="#i-codigo" x="710" y="145" width="64" height="64" color="#2A2A2A"/>
+  <text x="742" y="245" text-anchor="middle" font-size="15">Flujos, ejecutores,</text>
+  <text x="742" y="272" text-anchor="middle" font-size="15">secretos, federación</text>
+  <text x="742" y="299" text-anchor="middle" font-size="15">y ambientes</text>
+  <text x="742" y="330" text-anchor="middle" font-size="15" fill="#5E5E5E">marca solo como ejemplo</text>
+  <rect x="905" y="80" width="265" height="270" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <rect x="905" y="80" width="265" height="46" rx="14" fill="#A6192E"/><rect x="905" y="110" width="265" height="16" fill="#A6192E"/>
+  <text x="1037" y="110" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Parte 4 · Despliegue</text>
+  <use href="#i-git" x="1005" y="145" width="64" height="64" color="#A6192E"/>
+  <text x="1037" y="245" text-anchor="middle" font-size="15">Empuje o GitOps,</text>
+  <text x="1037" y="272" text-anchor="middle" font-size="15">azul y verde, y</text>
+  <text x="1037" y="299" text-anchor="middle" font-size="15">publicación canaria</text>
+  <text x="1037" y="330" text-anchor="middle" font-size="15" fill="#5E5E5E">reversión segura</text>
+  <line x1="285" y1="215" x2="312" y2="215" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="580" y1="215" x2="607" y2="215" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <line x1="875" y1="215" x2="902" y2="215" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="152" y1="350" x2="152" y2="406" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="447" y1="350" x2="447" y2="406" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="742" y1="350" x2="742" y2="406" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="1037" y1="350" x2="1037" y2="406" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <rect x="20" y="410" width="1150" height="66" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-contenedor" x="44" y="424" width="38" height="38" color="#9C7B16"/>
+  <text x="98" y="440" font-size="17" font-weight="700" fill="#9C7B16">CaribeMart</text>
+  <text x="98" y="464" font-size="15">aplicación ya contenedorizada en las semanas 8 y 9 · esta semana se automatiza su entrega</text>
+  <text x="1146" y="450" text-anchor="end" font-size="15" fill="#5E5E5E">hilo conductor</text>
+</svg>
+<aside class="narracion">Arrancamos con el mapa de la semana. Cerramos la Unidad dos con el ciclo de integración y despliegue continuo, y lo hacemos en cuatro bloques. En la parte uno medimos: las métricas de DORA dicen si el equipo entrega bien. En la parte dos construimos el pipeline, etapa por etapa. En la parte tres usamos GitHub Actions como ejemplo de motor de automatización, con sus flujos, sus ejecutores y sus secretos. En la parte cuatro cerramos con el despliegue, del empuje a GitOps y las estrategias de publicación. El hilo de toda la semana es CaribeMart, que en las semanas anteriores contenedorizó su aplicación. Ya vieron contenedores y orquestación; ahora les toca mover ese código al clúster sin tocar nada a mano. Sigan el mapa mientras escuchan: ahí está la ruta de la clase de hoy.</aside>
+</section>
+
+<section data-kicker="Caso del curso" data-titulo="CaribeMart publica a mano y el negocio no espera" data-sub="Cada paso manual es una espera: revisión, construcción, pruebas y despliegue fuera del control del equipo." data-fuente="Caso del curso: CaribeMart (proyecto de aula, ficticio) · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="30" y="40" font-size="18" font-weight="700" fill="#A6192E">Publicación manual de hoy</text>
+  <rect x="30" y="60" width="160" height="86" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-git" x="46" y="74" width="34" height="34" color="#A6192E"/>
+  <text x="92" y="90" font-size="15" font-weight="700">Commit</text>
+  <text x="110" y="130" text-anchor="middle" font-size="15">código en rama</text>
+  <rect x="230" y="60" width="160" height="86" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-usuario" x="246" y="74" width="34" height="34" color="#5E5E5E"/>
+  <text x="292" y="90" font-size="15" font-weight="700">Revisión</text>
+  <text x="310" y="130" text-anchor="middle" font-size="15">espera humana</text>
+  <rect x="430" y="60" width="160" height="86" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-engranaje" x="446" y="74" width="34" height="34" color="#5E5E5E"/>
+  <text x="492" y="90" font-size="15" font-weight="700">Build</text>
+  <text x="510" y="130" text-anchor="middle" font-size="15">en el equipo local</text>
+  <rect x="630" y="60" width="160" height="86" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-check" x="646" y="74" width="34" height="34" color="#5E5E5E"/>
+  <text x="692" y="90" font-size="15" font-weight="700">Pruebas</text>
+  <text x="710" y="130" text-anchor="middle" font-size="15">lista manual</text>
+  <rect x="830" y="60" width="160" height="86" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-documento" x="846" y="74" width="34" height="34" color="#5E5E5E"/>
+  <text x="892" y="90" font-size="15" font-weight="700">Aprobación</text>
+  <text x="910" y="130" text-anchor="middle" font-size="15">correo y firma</text>
+  <rect x="1030" y="60" width="120" height="86" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-servidor" x="1046" y="74" width="34" height="34" color="#5E5E5E"/>
+  <text x="1090" y="124" text-anchor="middle" font-size="15">Despliegue</text>
+  <line x1="190" y1="103" x2="227" y2="103" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="390" y1="103" x2="427" y2="103" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="590" y1="103" x2="627" y2="103" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="790" y1="103" x2="827" y2="103" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="990" y1="103" x2="1027" y2="103" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="590" y="184" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">seis traspasos, cinco esperas, ninguna evidencia automática</text>
+  <rect x="30" y="215" width="1120" height="120" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="56" y="250" font-size="18" font-weight="700" fill="#9C7B16">El costo oculto</text>
+  <text x="56" y="284" font-size="16">Cada espera acumula riesgo: el cambio envejece, la rama crece y el error se descubre tarde.</text>
+  <text x="56" y="314" font-size="16">Y nadie responde con evidencia qué versión está corriendo ni quién la aprobó.</text>
+  <rect x="30" y="360" width="1120" height="110" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="56" y="394" font-size="18" font-weight="700" fill="#A6192E">La meta de esta semana</text>
+  <use href="#i-pipeline" x="56" y="412" width="44" height="44" color="#A6192E"/>
+  <text x="118" y="432" font-size="16">Un solo disparo: el commit activa una cadena automática que construye, prueba,</text>
+  <text x="118" y="458" font-size="16">escanea y publica, y deja registro de todo lo que pasó en cada paso.</text>
+</svg>
+<aside class="narracion">Empiezo con el caso del curso. CaribeMart tiene su aplicación contenedorizada y su sitio en línea con picos de consumo. Hoy cada publicación sigue la cadena de arriba. Un desarrollador sube el cambio y espera a que alguien lo revise. Después otra persona construye la imagen a mano, en su propio equipo. Siguen las pruebas, muchas veces con una lista manual, y una aprobación que se pide por correo. Al final, el equipo de operaciones despliega en el servidor. Cada flecha es una espera que el negocio no ve. En medio hay dos problemas serios. Nadie tiene evidencia de qué versión está corriendo. Y el error se descubre tarde, cuando ya está en producción. La meta de la semana es reemplazar esa cadena por un pipeline que se ejecute solo y que guarde la prueba de cada paso.</aside>
+</section>
+
+<section data-kicker="Conceptos" data-titulo="Integración continua, entrega y despliegue continuo" data-sub="Tres palabras que se usan como sinónimos y no lo son: cambian quién decide y cuándo." data-fuente="Basado en: Fowler, Continuous Integration [cite:4] · Humble y Farley, Continuous Delivery [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="1140" height="140" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-git" x="46" y="72" width="64" height="64" color="#A6192E"/>
+  <text x="132" y="76" font-size="19" font-weight="700" fill="#A6192E">Integración continua</text>
+  <text x="132" y="112" font-size="16">Cada cambio se fusiona con la rama principal</text>
+  <text x="132" y="142" font-size="16">y algo lo verifica solo, muchas veces al día.</text>
+  <rect x="880" y="56" width="256" height="90" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="1008" y="92" text-anchor="middle" font-size="15" font-weight="700">lo dispara</text>
+  <text x="1008" y="118" text-anchor="middle" font-size="15">cada commit o</text>
+  <text x="1008" y="140" text-anchor="middle" font-size="15">cada solicitud</text>
+  <line x1="590" y1="170" x2="590" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="20" y="200" width="1140" height="140" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-check" x="46" y="242" width="64" height="64" color="#9C7B16"/>
+  <text x="132" y="246" font-size="19" font-weight="700" fill="#9C7B16">Entrega continua</text>
+  <text x="132" y="282" font-size="16">El producto queda siempre en estado de publicarse;</text>
+  <text x="132" y="312" font-size="16">publicar es una decisión de negocio, no técnica.</text>
+  <rect x="880" y="226" width="256" height="90" rx="10" fill="#fff" stroke="#9C7B16" stroke-dasharray="6 5"/>
+  <text x="1008" y="262" text-anchor="middle" font-size="15" font-weight="700">lo decide</text>
+  <text x="1008" y="288" text-anchor="middle" font-size="15">una persona,</text>
+  <text x="1008" y="310" text-anchor="middle" font-size="15">con todo listo</text>
+  <line x1="590" y1="340" x2="590" y2="366" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="20" y="370" width="1140" height="110" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-nube" x="46" y="398" width="64" height="64" color="#2A2A2A"/>
+  <text x="132" y="410" font-size="19" font-weight="700" fill="#2A2A2A">Despliegue continuo</text>
+  <text x="132" y="446" font-size="16">Si todas las verificaciones pasan, el cambio llega a</text>
+  <text x="132" y="472" font-size="16">producción sin intervención humana.</text>
+  <rect x="880" y="392" width="256" height="66" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="6 5"/>
+  <text x="1008" y="420" text-anchor="middle" font-size="15" font-weight="700">no espera a nadie:</text>
+  <text x="1008" y="446" text-anchor="middle" font-size="15">decide el pipeline</text>
+</svg>
+<aside class="narracion">Tres palabras que suenan igual y no lo son. Arriba, integración continua: cada cambio se fusiona con la rama principal y algo lo verifica solo. La idea central es integrar seguido, porque integrar tarde siempre termina caro. En medio, entrega continua: el producto queda siempre en estado de poder publicarse y publicar ya es una decisión de negocio. Nadie arma el paquete a la hora de publicar, porque ya está armado. Abajo, despliegue continuo: si todas las verificaciones pasan, el cambio llega a producción sin intervención humana. Es el extremo de la automatización y solo funciona si la reversión es inmediata. Pregúntense en qué punto está hoy CaribeMart. Posiblemente ni siquiera en el primero, y ese es exactamente el punto de partida de esta clase.</aside>
+</section>
+
+<section data-kicker="Modelo" data-titulo="El pipeline: visible, con retroalimentación y a demanda" data-sub="Tres propósitos del pipeline de despliegue según Continuous Delivery." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="1140" height="60" rx="10" fill="#A6192E"/>
+  <text x="60" y="68" font-size="18" font-weight="700" fill="#fff">Un cambio entra</text>
+  <text x="1140" y="68" text-anchor="end" font-size="16" fill="#F3E3E6">y sale un producto publicable</text>
+  <line x1="80" y1="150" x2="1100" y2="150" stroke="#5E5E5E" stroke-width="4"/>
+  <circle cx="80" cy="150" r="14" fill="#A6192E"/><circle cx="270" cy="150" r="14" fill="#A6192E"/>
+  <circle cx="460" cy="150" r="14" fill="#A6192E"/><circle cx="650" cy="150" r="14" fill="#A6192E"/>
+  <circle cx="840" cy="150" r="14" fill="#A6192E"/><circle cx="1100" cy="150" r="14" fill="#A6192E"/>
+  <text x="80" y="192" text-anchor="middle" font-size="15">commit</text>
+  <text x="270" y="192" text-anchor="middle" font-size="15">compilar</text>
+  <text x="460" y="192" text-anchor="middle" font-size="15">probar</text>
+  <text x="650" y="192" text-anchor="middle" font-size="15">escanear</text>
+  <text x="840" y="192" text-anchor="middle" font-size="15">empaquetar</text>
+  <text x="1100" y="192" text-anchor="middle" font-size="15">publicar</text>
+  <path d="M862 118 H1094" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="978" y="106" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">cada etapa deja evidencia</text>
+  <rect x="20" y="235" width="360" height="235" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-ojo" x="46" y="258" width="56" height="56" color="#A6192E"/>
+  <text x="118" y="296" font-size="18" font-weight="700" fill="#A6192E">Visibilidad</text>
+  <text x="46" y="345" font-size="16">Todo el proceso se ve en</text>
+  <text x="46" y="373" font-size="16">un solo lugar: quién hizo</text>
+  <text x="46" y="401" font-size="16">qué, con qué resultado</text>
+  <text x="46" y="429" font-size="16">y cuánto tardó.</text>
+  <text x="46" y="458" font-size="15" fill="#5E5E5E">nadie pregunta al aire</text>
+  <rect x="410" y="235" width="360" height="235" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-reloj" x="436" y="258" width="56" height="56" color="#9C7B16"/>
+  <text x="508" y="296" font-size="18" font-weight="700" fill="#9C7B16">Retroalimentación</text>
+  <text x="436" y="345" font-size="16">El fallo aparece minutos</text>
+  <text x="436" y="373" font-size="16">después del cambio, con</text>
+  <text x="436" y="401" font-size="16">el recuerdo del autor</text>
+  <text x="436" y="429" font-size="16">todavía fresco.</text>
+  <text x="436" y="458" font-size="15" fill="#5E5E5E">error barato, no error caro</text>
+  <rect x="800" y="235" width="360" height="235" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-pipeline" x="826" y="258" width="56" height="56" color="#2A2A2A"/>
+  <text x="898" y="296" font-size="18" font-weight="700" fill="#2A2A2A">A demanda</text>
+  <text x="826" y="345" font-size="16">Cualquier versión probada</text>
+  <text x="826" y="373" font-size="16">se lleva a cualquier</text>
+  <text x="826" y="401" font-size="16">ambiente con un botón,</text>
+  <text x="826" y="429" font-size="16">sin armar nada a mano.</text>
+  <text x="826" y="458" font-size="15" fill="#5E5E5E">la reversión usa el mismo camino</text>
+</svg>
+<aside class="narracion">El pipeline no es una herramienta, es un contrato. Arriba ven la línea completa: un cambio entra por la izquierda y sale por la derecha como producto publicable. Entre medias hay etapas y cada etapa deja evidencia. Abajo están los tres propósitos del pipeline según el libro Continuous Delivery. El primero es visibilidad: todo el proceso se ve en un solo lugar, quién hizo qué, con qué resultado y cuánto tardó. El segundo es la retroalimentación: el fallo aparece minutos después del cambio, con el recuerdo del autor fresco. El tercero es el despliegue a demanda: cualquier versión probada se lleva a cualquier ambiente con un botón. Y ojo con la última línea: la reversión usa exactamente el mismo camino. Si para volver atrás hay que pedir un procedimiento, el pipeline no está terminado.</aside>
+</section>
+
+<section data-kicker="Cultura" data-titulo="DevOps no es un puesto: es responsabilidad compartida" data-sub="Antes: desarrollo empuja y operación recibe. Después: un solo equipo con las mismas métricas." data-fuente="Basado en: DORA, métricas de desempeño de entrega [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="300" y="46" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Antes · dos equipos y un muro</text>
+  <rect x="30" y="70" width="540" height="190" rx="14" fill="#F4F4F4" stroke="#9a9a9a" stroke-dasharray="7 6"/>
+  <use href="#i-codigo" x="60" y="96" width="56" height="56" color="#5E5E5E"/>
+  <text x="132" y="122" font-size="17" font-weight="700">Desarrollo</text>
+  <text x="132" y="152" font-size="15">escribe y entrega</text>
+  <use href="#i-servidor" x="330" y="96" width="56" height="56" color="#5E5E5E"/>
+  <text x="402" y="122" font-size="17" font-weight="700">Operación</text>
+  <text x="402" y="152" font-size="15">sostiene el servicio</text>
+  <rect x="272" y="92" width="26" height="130" fill="#B3261E" opacity="0.75"/>
+  <line x1="150" y1="206" x2="266" y2="206" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="205" y="196" text-anchor="middle" font-size="15" fill="#A6192E">empuja</text>
+  <line x1="470" y1="238" x2="308" y2="238" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <text x="392" y="230" text-anchor="middle" font-size="15" fill="#5E5E5E">devuelve</text>
+  <text x="300" y="292" text-anchor="middle" font-size="16" fill="#B3261E" font-weight="700">la culpa viaja de ida y vuelta</text>
+  <text x="880" y="46" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Después · un equipo con un ciclo</text>
+  <rect x="610" y="70" width="540" height="190" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <rect x="635" y="96" width="145" height="56" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="707" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">Diseñar</text>
+  <rect x="810" y="96" width="145" height="56" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="882" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">Construir</text>
+  <rect x="985" y="96" width="145" height="56" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="1057" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">Operar</text>
+  <line x1="780" y1="124" x2="806" y2="124" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="955" y1="124" x2="981" y2="124" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <path d="M1057 152 V196 H707 V172" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="882" y="238" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">la responsabilidad del servicio es una sola</text>
+  <text x="600" y="332" text-anchor="middle" font-size="17" fill="#5E5E5E">Lo que une a los dos escenarios es el dato: las mismas métricas para los dos lados</text>
+  <rect x="30" y="356" width="540" height="126" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="56" y="392" font-size="17" font-weight="700" fill="#9C7B16">Métricas de flujo</text>
+  <text x="56" y="424" font-size="16">Frecuencia de despliegue y tiempo de</text>
+  <text x="56" y="452" font-size="16">cambio: las comparten los dos lados.</text>
+  <rect x="610" y="356" width="540" height="126" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="636" y="392" font-size="17" font-weight="700" fill="#A6192E">Métricas de estabilidad</text>
+  <text x="636" y="424" font-size="16">Si la tasa de fallo sube, el problema</text>
+  <text x="636" y="452" font-size="16">es del sistema, no de una persona.</text>
+</svg>
+<aside class="narracion">DevOps no es un cargo que se pone en la tarjeta. A la izquierda, el escenario que conocen: desarrollo escribe la función y la empuja; operación la sostiene y a veces la devuelve. En medio hay un muro y, sobre él, la famosa discusión de quién tiene la culpa. A la derecha aparece el escenario opuesto: un solo ciclo que diseña, construye y opera el mismo servicio, sin traspasos ni responsables intermitentes. Ahora bien, ¿qué sostiene ese ciclo? Lo que está abajo. Las métricas de flujo y las de estabilidad se leen igual para quien escribe el código y para quien lo opera. Si la tasa de fallo sube, el problema es del sistema, no de una persona con nombre y apellido. Ese es el corazón cultural antes de tocar cualquier herramienta.</aside>
+</section>
+
+<section data-kicker="Métricas" data-titulo="Cinco métricas de DORA: flujo e inestabilidad" data-sub="Tres de flujo y dos de inestabilidad: así las agrupa la fuente oficial." data-fuente="Fuente: DORA, guía oficial de métricas de entrega [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="300" y="40" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">FLUJO · cuánto pasa y qué tan rápido</text>
+  <rect x="20" y="58" width="560" height="176" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <rect x="46" y="84" width="140" height="14" fill="#A6192E" rx="7"/>
+  <text x="46" y="136" font-size="17" font-weight="700" fill="#A6192E">Frecuencia de</text>
+  <text x="46" y="162" font-size="17" font-weight="700" fill="#A6192E">despliegue</text>
+  <text x="46" y="192" font-size="15">¿cuántas veces llega a</text>
+  <text x="46" y="216" font-size="15">producción por día?</text>
+  <rect x="220" y="84" width="140" height="14" fill="#A6192E" rx="7"/>
+  <text x="220" y="136" font-size="17" font-weight="700" fill="#A6192E">Tiempo de</text>
+  <text x="220" y="162" font-size="17" font-weight="700" fill="#A6192E">cambio</text>
+  <text x="220" y="192" font-size="15">del commit al cliente,</text>
+  <text x="220" y="216" font-size="15">sin esperas dormidas</text>
+  <rect x="394" y="84" width="140" height="14" fill="#A6192E" rx="7"/>
+  <text x="394" y="136" font-size="17" font-weight="700" fill="#A6192E">Tiempo de</text>
+  <text x="394" y="162" font-size="17" font-weight="700" fill="#A6192E">recuperación</text>
+  <text x="394" y="192" font-size="15">cuánto tarda el equipo</text>
+  <text x="394" y="216" font-size="15">en sanar un despliegue</text>
+  <text x="20" y="246" font-size="15" fill="#5E5E5E">la recuperación también es flujo: mide la rapidez de reacción, no la solidez</text>
+  <rect x="20" y="264" width="560" height="164" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <rect x="46" y="290" width="140" height="14" fill="#5E5E5E" rx="7"/>
+  <text x="46" y="342" font-size="17" font-weight="700">Tasa de fallo</text>
+  <text x="46" y="368" font-size="17" font-weight="700">al desplegar</text>
+  <text x="46" y="398" font-size="15">¿qué porcentaje exige</text>
+  <text x="46" y="420" font-size="15">arreglo o reversión?</text>
+  <rect x="300" y="290" width="140" height="14" fill="#5E5E5E" rx="7"/>
+  <text x="300" y="342" font-size="17" font-weight="700">Tasa de reaparición</text>
+  <text x="300" y="368" font-size="17" font-weight="700">de trabajo</text>
+  <text x="300" y="398" font-size="15">¿cuántos cambios se rehacen</text>
+  <text x="300" y="420" font-size="15">poco después de publicarse?</text>
+  <text x="880" y="40" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">INESTABILIDAD · qué tan sólido es</text>
+  <rect x="620" y="58" width="540" height="370" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-grafica" x="654" y="96" width="72" height="72" color="#9C7B16"/>
+  <text x="746" y="136" font-size="18" font-weight="700" fill="#9C7B16">Cómo se leen</text>
+  <text x="746" y="164" font-size="18" font-weight="700" fill="#9C7B16">juntas</text>
+  <line x1="654" y1="196" x2="1126" y2="196" stroke="#9C7B16" stroke-width="2" stroke-dasharray="5 5"/>
+  <text x="654" y="236" font-size="16">La investigación de DORA lo repite:</text>
+  <text x="654" y="264" font-size="16">velocidad y estabilidad no son un</text>
+  <text x="654" y="292" font-size="16">intercambio; los mejores van bien</text>
+  <text x="654" y="320" font-size="16">en las cinco a la vez.</text>
+  <text x="654" y="364" font-size="16">Si entregas mucho pero rehaces</text>
+  <text x="654" y="392" font-size="16">mucho, no estás entregando bien.</text>
+  <text x="654" y="420" font-size="15" fill="#5E5E5E">flujo sin solidez es riesgo corrido</text>
+  <path d="M580 146 H614" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <path d="M580 340 H614" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="20" y="450" width="1140" height="40" rx="10" fill="#A6192E"/>
+  <text x="600" y="476" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">mide el sistema, no a las personas</text>
+</svg>
+<aside class="narracion">Aquí está la lista completa, tal como la publica DORA. De un lado, flujo: frecuencia de despliegue, tiempo de cambio y tiempo de recuperación. Responden cuánto pasa por la cadena y qué tan rápido reacciona el equipo cuando una publicación falla. Del otro lado, inestabilidad: tasa de fallo al desplegar y tasa de reaparición de trabajo. Responden qué tan sólido es lo que se entrega. La quinta métrica, la reaparición, es la menos conocida y la más incómoda: cuenta los cambios que hay que rehacer poco después de publicarse. Fíjense en la caja amarilla: la investigación de DORA dice que velocidad y estabilidad no son un intercambio; los mejores van bien en las cinco. Y abajo, la regla que no se olvida: se mide el sistema, nunca a las personas.</aside>
+</section>
+
+<section data-kicker="Flujo" data-titulo="Frecuencia de despliegue y tiempo de cambio" data-sub="Dos métricas que dependen del pipeline, no del ánimo del equipo." data-fuente="Fuente: DORA, guía oficial de métricas de entrega [cite:1] · Caso: CaribeMart (ficticio) · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="34" width="560" height="446" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-reloj" x="52" y="62" width="56" height="56" color="#A6192E"/>
+  <text x="124" y="90" font-size="19" font-weight="700" fill="#A6192E">Frecuencia de despliegue</text>
+  <text x="124" y="116" font-size="15" fill="#5E5E5E">cuántas veces llega a producción por día</text>
+  <line x1="60" y1="200" x2="540" y2="200" stroke="#5E5E5E" stroke-width="3"/>
+  <line x1="60" y1="194" x2="60" y2="206" stroke="#5E5E5E" stroke-width="3"/>
+  <line x1="270" y1="194" x2="270" y2="206" stroke="#5E5E5E" stroke-width="3"/>
+  <line x1="540" y1="194" x2="540" y2="206" stroke="#5E5E5E" stroke-width="3"/>
+  <rect x="120" y="160" width="80" height="40" fill="#A6192E" opacity="0.85"/>
+  <rect x="360" y="176" width="60" height="24" fill="#D4AF37"/>
+  <text x="60" y="232" font-size="15" fill="#5E5E5E">cada pocas semanas</text>
+  <text x="270" y="232" text-anchor="middle" font-size="15" fill="#5E5E5E">entre medias</text>
+  <text x="540" y="232" text-anchor="end" font-size="15" fill="#5E5E5E">muchas veces al día</text>
+  <text x="160" y="152" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">CaribeMart</text>
+  <text x="390" y="168" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">meta</text>
+  <text x="60" y="290" font-size="16">Sube solo si construir y publicar</text>
+  <text x="60" y="318" font-size="16">es barato y repetible. Subirla a la</text>
+  <text x="60" y="346" font-size="16">fuerza, sin pipeline, solo produce</text>
+  <text x="60" y="374" font-size="16">cambios más grandes.</text>
+  <rect x="60" y="404" width="480" height="56" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <use href="#i-alerta" x="76" y="416" width="32" height="32" color="#A6192E"/>
+  <text x="122" y="428" font-size="15" font-weight="700" fill="#A6192E">ojo:</text>
+  <text x="162" y="428" font-size="15">subir la meta sin pipeline solo</text>
+  <text x="122" y="450" font-size="15">acelera los cambios grandes, no el flujo</text>
+  <rect x="620" y="34" width="540" height="446" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-pipeline" x="652" y="62" width="56" height="56" color="#9C7B16"/>
+  <text x="724" y="90" font-size="19" font-weight="700" fill="#9C7B16">Tiempo de cambio</text>
+  <text x="724" y="116" font-size="15" fill="#5E5E5E">del commit al cliente, sin espera dormida</text>
+  <rect x="652" y="150" width="150" height="70" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="727" y="180" text-anchor="middle" font-size="15" font-weight="700">Commit</text>
+  <text x="727" y="204" text-anchor="middle" font-size="15">listo para</text>
+  <rect x="1002" y="150" width="130" height="70" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="1067" y="180" text-anchor="middle" font-size="15" font-weight="700">Cliente</text>
+  <text x="1067" y="204" text-anchor="middle" font-size="15">en uso</text>
+  <line x1="806" y1="185" x2="998" y2="185" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="902" y="166" text-anchor="middle" font-size="15" fill="#9C7B16" font-weight="700">ese lapso mide la métrica</text>
+  <rect x="652" y="246" width="480" height="66" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="668" y="262" width="34" height="34" color="#A6192E"/>
+  <text x="716" y="274" font-size="15" font-weight="700" fill="#A6192E">lo que no se ve</text>
+  <text x="716" y="298" font-size="15">las horas en cola de aprobación</text>
+  <text x="1000" y="274" text-anchor="middle" font-size="15" fill="#5E5E5E">también cuentan</text>
+  <text x="652" y="356" font-size="16">Se mide sobre el reloj real del cambio,</text>
+  <text x="652" y="384" font-size="16">no sobre el tiempo de ejecución del</text>
+  <text x="652" y="412" font-size="16">equipo. Ahí aparece la cola de aprobación</text>
+  <text x="652" y="440" font-size="16">y la espera por el ambiente de pruebas.</text>
+</svg>
+<aside class="narracion">Primero, frecuencia de despliegue: cuántas veces por día llega algo a producción. En la barra, CaribeMart está a la izquierda, muy lejos del extremo de muchas veces al día. ¿Cómo sube? Solo si construir y publicar es barato y repetible. Y atención: subir la meta a la fuerza, sin pipeline, solo produce cambios más grandes, que justamente empeoran las métricas de estabilidad. Segundo, tiempo de cambio: el lapso desde el commit hasta que el cliente lo usa. Medimos el reloj real del cambio, no las horas de trabajo del equipo. Ahí aparecen los ladrones invisibles: la cola de aprobación, la espera por un ambiente de pruebas ocupado, la ventanilla de publicación de los viernes. Todos esos minutos se cuentan.</aside>
+</section>
+
+<section data-kicker="Solidez" data-titulo="Recuperación, fallo al desplegar y trabajo repetido" data-sub="La recuperación mide la rapidez de reacción; el fallo y la reaparición, la solidez de lo publicado." data-fuente="Fuente: DORA, guía oficial de métricas de entrega [cite:1] · Caso: CaribeMart (ficticio) · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="34" width="366" height="300" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-reloj" x="46" y="60" width="50" height="50" color="#2A2A2A"/>
+  <text x="110" y="84" font-size="17" font-weight="700">Tiempo de</text>
+  <text x="110" y="108" font-size="17" font-weight="700">recuperación</text>
+  <text x="46" y="136" font-size="15" fill="#A6192E" font-weight="700">fallo</text>
+  <text x="354" y="136" text-anchor="end" font-size="15" fill="#A6192E" font-weight="700">sano</text>
+  <line x1="46" y1="170" x2="354" y2="170" stroke="#5E5E5E" stroke-width="3"/>
+  <path d="M46 170 V148" stroke="#A6192E" stroke-width="3"/>
+  <path d="M354 170 V148" stroke="#A6192E" stroke-width="3"/>
+  <line x1="150" y1="170" x2="250" y2="170" stroke="#A6192E" stroke-width="8" marker-start="url(#fl-vino)" marker-end="url(#fl-vino)"/>
+  <text x="200" y="216" text-anchor="middle" font-size="15" fill="#5E5E5E">arreglar o revertir · DORA la cuenta en el flujo</text>
+  <text x="46" y="264" font-size="16">No cuenta el error en sí: cuenta</text>
+  <text x="46" y="292" font-size="16">cuánto se tarda el equipo en</text>
+  <text x="46" y="316" font-size="16">volver a estar operativo.</text>
+  <rect x="407" y="34" width="366" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="433" y="60" width="50" height="50" color="#A6192E"/>
+  <text x="497" y="84" font-size="17" font-weight="700" fill="#A6192E">Tasa de fallo</text>
+  <text x="497" y="108" font-size="17" font-weight="700" fill="#A6192E">al desplegar</text>
+  <rect x="433" y="150" width="300" height="36" rx="8" fill="#fff" stroke="#5E5E5E" stroke-width="2"/>
+  <rect x="433" y="150" width="84" height="36" rx="8" fill="#A6192E"/>
+  <text x="475" y="212" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">arreglados</text>
+  <text x="625" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">salen sin arreglo</text>
+  <text x="433" y="264" font-size="16">Un cambio entra aquí si exige</text>
+  <text x="433" y="292" font-size="16">un arreglo o una reversión</text>
+  <text x="433" y="316" font-size="16">después de publicarse.</text>
+  <rect x="794" y="34" width="366" height="300" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-grafica" x="820" y="60" width="50" height="50" color="#9C7B16"/>
+  <text x="884" y="84" font-size="17" font-weight="700" fill="#9C7B16">Tasa de</text>
+  <text x="884" y="108" font-size="17" font-weight="700" fill="#9C7B16">reaparición</text>
+  <rect x="820" y="150" width="130" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="885" y="178" text-anchor="middle" font-size="15" font-weight="700">cambio</text>
+  <text x="885" y="202" text-anchor="middle" font-size="15">publicado</text>
+  <rect x="990" y="150" width="130" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="1055" y="178" text-anchor="middle" font-size="15" font-weight="700">rehacer</text>
+  <text x="1055" y="202" text-anchor="middle" font-size="15">o corregir</text>
+  <path d="M950 190 H986" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="820" y="264" font-size="16">Cuenta los cambios que se</text>
+  <text x="820" y="292" font-size="16">rehacen poco después de</text>
+  <text x="820" y="316" font-size="16">publicarse.</text>
+  <rect x="20" y="362" width="1140" height="116" rx="14" fill="#A6192E"/>
+  <use href="#i-escudo" x="48" y="392" width="56" height="56" color="#F3E3E6"/>
+  <text x="126" y="406" font-size="17" font-weight="700" fill="#fff">Leídas juntas</text>
+  <text x="126" y="440" font-size="16" fill="#F9EEF0">Si despliegas seguido pero cae todo, la velocidad es de mentira. Si nada cae</text>
+  <text x="126" y="466" font-size="16" fill="#F9EEF0">porque no se publica nada, la calma también. Las cinco van de la mano.</text>
+</svg>
+<aside class="narracion">Las tres métricas restantes. Primero, tiempo de recuperación: mide cuánto tarda el equipo en volver a estar operativo después de un despliegue fallido. No cuenta el error en sí, cuenta la duración del daño; por eso DORA la agrupa en el flujo, porque mide la rapidez de la reacción. Segundo, tasa de fallo al desplegar: qué porcentaje de despliegues exige un arreglo o una reversión después de publicarse. Tercero, tasa de reaparición de trabajo: los cambios que hay que rehacer poco después de salir, porque llegaron incompletos o con un defecto que la prueba no vio. Estas dos sí son inestabilidad. Abajo, la lectura cruzada: si despliegas seguido pero cae todo, la velocidad es de mentira. Y si nada cae porque no se publica nada, la calma también. Las cinco se leen juntas, siempre.</aside>
+</section>
+
+<section data-kicker="Lectura cruzada" data-titulo="Velocidad y estabilidad se mejoran a la vez" data-sub="Los cuatro escenarios posibles y por qué la meta es el cuadrante superior derecho." data-fuente="Basado en: DORA, guía oficial de métricas de entrega [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <text x="60" y="58" font-size="15" fill="#5E5E5E">estabilidad</text>
+  <path d="M60 66 V86" stroke="#5E5E5E" stroke-width="2.5" marker-end="url(#fl-gris)"/>
+  <rect x="60" y="96" width="250" height="150" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="84" y="134" font-size="17" font-weight="700">Calma lenta</text>
+  <text x="84" y="168" font-size="15">poco llega a producción,</text>
+  <text x="84" y="194" font-size="15">pero tampoco se cae</text>
+  <text x="84" y="226" font-size="15" fill="#5E5E5E">el negocio pide cambios</text>
+  <rect x="310" y="96" width="250" height="150" rx="10" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+  <text x="334" y="134" font-size="17" font-weight="700" fill="#9C7B16">Frecuente y estable</text>
+  <text x="334" y="168" font-size="15">entrega continua real:</text>
+  <text x="334" y="194" font-size="15">automatizado y reversible</text>
+  <text x="334" y="226" font-size="15" fill="#5E5E5E">este es el objetivo</text>
+  <rect x="60" y="246" width="250" height="150" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="84" y="284" font-size="17" font-weight="700">Caos</text>
+  <text x="84" y="318" font-size="15">casi nada sale y cuando</text>
+  <text x="84" y="344" font-size="15">sale, se rompe</text>
+  <text x="84" y="376" font-size="15" fill="#5E5E5E">deploy manual, con miedo</text>
+  <rect x="310" y="246" width="250" height="150" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="334" y="284" font-size="17" font-weight="700" fill="#A6192E">Frecuente y frágil</text>
+  <text x="334" y="318" font-size="15">se publica mucho y se</text>
+  <text x="334" y="344" font-size="15">rehace casi lo mismo</text>
+  <text x="334" y="376" font-size="15" fill="#5E5E5E">velocidad de mentira</text>
+  <text x="560" y="432" text-anchor="end" font-size="15" fill="#5E5E5E">más frecuencia</text>
+  <rect x="620" y="40" width="540" height="200" rx="14" fill="#A6192E"/>
+  <text x="652" y="80" font-size="18" font-weight="700" fill="#fff">Qué dice la fuente oficial</text>
+  <text x="652" y="122" font-size="16" fill="#F9EEF0">Mejorar la velocidad y la estabilidad a la vez</text>
+  <text x="652" y="150" font-size="16" fill="#F9EEF0">está asociado a un mejor desempeño de entrega</text>
+  <text x="652" y="178" font-size="16" fill="#F9EEF0">y a un mejor desempeño organizacional.</text>
+  <text x="652" y="216" font-size="15" fill="#F3E3E6">DORA · métricas de desempeño de entrega</text>
+  <rect x="620" y="272" width="540" height="206" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="652" y="312" font-size="18" font-weight="700">Cómo usarlas sin hacer daño</text>
+  <use href="#i-check" x="652" y="336" width="30" height="30" color="#9C7B16"/>
+  <text x="696" y="357" font-size="16">Compárense con ellos mismos, en el tiempo</text>
+  <use href="#i-check" x="652" y="382" width="30" height="30" color="#9C7B16"/>
+  <text x="696" y="403" font-size="16">Discutan el sistema, no a la persona</text>
+  <use href="#i-check" x="652" y="428" width="30" height="30" color="#9C7B16"/>
+  <text x="696" y="449" font-size="16">Revisen las cinco juntas, nunca una sola</text>
+</svg>
+<aside class="narracion">Ahora la lectura cruzada. Están los cuatro cuadrantes. Abajo a la izquierda, caos: casi nada sale y cuando sale se rompe. Arriba a la izquierda, calma lenta: pocos cambios y ninguna falla, pero el negocio pide evolucionar. Abajo a la derecha, frecuente y frágil: se publica mucho y se rehace casi lo mismo, la velocidad de mentira. Y arriba a la derecha, frecuente y estable, que es el objetivo: automatizado y reversible. La fuente oficial dice que mejorar las dos dimensiones a la vez se asocia a un mejor desempeño de entrega y organizacional. Y el consejo más práctico: compárense con ustedes mismos en el tiempo, discutan el sistema, no a la persona, y revisen las cinco juntas.</aside>
+</section>
+
+<section data-kicker="Cuidado" data-titulo="Cuatro trampas al usar las métricas" data-sub="Los errores típicos al convertir los números en objetivos del equipo." data-fuente="Basado en: DORA, guía oficial de métricas de entrega [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="180" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-grafica" x="48" y="70" width="56" height="56" color="#A6192E"/>
+  <text x="124" y="86" font-size="17" font-weight="700" fill="#A6192E">1 · El promedio esconde la cola</text>
+  <text x="124" y="116" font-size="15" fill="#5E5E5E">una media mensual tapa los picos</text>
+  <text x="48" y="156" font-size="16">Si el promedio es bonito pero cinco cambios</text>
+  <text x="48" y="184" font-size="16">tardaron semanas, la cola sigue ahí.</text>
+  <text x="48" y="208" font-size="15" fill="#A6192E">miren la mediana y el peor caso</text>
+  <rect x="600" y="40" width="560" height="180" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-usuario" x="628" y="70" width="56" height="56" color="#5E5E5E"/>
+  <text x="704" y="86" font-size="17" font-weight="700">2 · La meta individual la corrompe</text>
+  <text x="704" y="116" font-size="15" fill="#5E5E5E">medir personas rompe el sistema</text>
+  <text x="628" y="156" font-size="16">Si el bono depende de la métrica, aparecen</text>
+  <text x="628" y="184" font-size="16">los atajos y las cifras se vuelven inútiles.</text>
+  <text x="628" y="208" font-size="15" fill="#A6192E">se mide el proceso, no a la gente</text>
+  <rect x="20" y="250" width="560" height="180" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-equipo" x="48" y="280" width="56" height="56" color="#9C7B16"/>
+  <text x="124" y="296" font-size="17" font-weight="700" fill="#9C7B16">3 · Comparar lo incomparable</text>
+  <text x="124" y="326" font-size="15" fill="#5E5E5E">contextos distintos, cifras distintas</text>
+  <text x="48" y="366" font-size="16">Un equipo de mantenimiento y uno de producto</text>
+  <text x="48" y="394" font-size="16">no se leen igual en la misma tabla.</text>
+  <text x="48" y="418" font-size="15" fill="#9C7B16">compare cada equipo consigo mismo</text>
+  <rect x="600" y="250" width="560" height="180" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-ojo" x="628" y="280" width="56" height="56" color="#A6192E"/>
+  <text x="704" y="296" font-size="17" font-weight="700" fill="#A6192E">4 · Medir solo lo fácil</text>
+  <text x="704" y="326" font-size="15" fill="#5E5E5E">lo que se mide es lo que se cuida</text>
+  <text x="628" y="366" font-size="16">Si solo contamos ejecuciones, nadie mira</text>
+  <text x="628" y="394" font-size="16">la espera entre el commit y la ejecución.</text>
+  <text x="628" y="418" font-size="15" fill="#A6192E">incluyan el tiempo en cola</text>
+  <rect x="20" y="452" width="1140" height="40" rx="10" fill="#A6192E"/>
+  <text x="600" y="478" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">regla: la métrica abre la conversación, nunca la cierra</text>
+</svg>
+<aside class="narracion">Las métricas sirven hasta que se convierten en bandera. Cuatro trampas. La primera: el promedio esconde la cola. Si la media es bonita pero cinco cambios tardaron semanas, el problema está ahí. La segunda: cuando la meta se vuelve individual, aparecen los atajos y la cifra deja de servir. La tercera: comparar equipos que no se parecen. El de mantenimiento y el de producto no viven en el mismo contexto. La cuarta: medir solo lo fácil de medir. Si contamos ejecuciones y nadie mira el tiempo en cola, estamos mirando el semáforo y no la fila. Cierro con la regla: la métrica abre la conversación, nunca la cierra. Si un número no genera una pregunta sobre el sistema, no está haciendo su trabajo.</aside>
+</section>
+
+<section data-kicker="Proceso" data-titulo="Seis tramos que el pipeline debe cubrir" data-sub="El recorrido de un cambio desde el equipo hasta el usuario y de regreso." data-fuente="Basado en: Humble y Farley, Continuous Delivery, capítulo 10 [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="60" width="320" height="120" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="86" cy="94" r="22" fill="#A6192E"/><text x="86" y="101" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="124" y="100" font-size="17" font-weight="700" fill="#A6192E">Desarrollar</text>
+  <text x="70" y="140" font-size="15">código, pruebas y</text>
+  <text x="70" y="164" font-size="15">configuración juntos</text>
+  <rect x="430" y="60" width="320" height="120" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="476" cy="94" r="22" fill="#9C7B16"/><text x="476" y="101" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="514" y="100" font-size="17" font-weight="700" fill="#9C7B16">Verificar</text>
+  <text x="460" y="140" font-size="15">automatizar y escanear</text>
+  <text x="460" y="164" font-size="15">en cada cambio</text>
+  <rect x="820" y="60" width="320" height="120" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <circle cx="866" cy="94" r="22" fill="#5E5E5E"/><text x="866" y="101" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">3</text>
+  <text x="904" y="100" font-size="17" font-weight="700">Empaquetar</text>
+  <text x="850" y="140" font-size="15">artefacto inmutable,</text>
+  <text x="850" y="164" font-size="15">con su etiqueta</text>
+  <rect x="820" y="300" width="320" height="120" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <circle cx="866" cy="334" r="22" fill="#A6192E"/><text x="866" y="341" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">4</text>
+  <text x="904" y="340" font-size="17" font-weight="700" fill="#A6192E">Preparar</text>
+  <text x="850" y="380" font-size="15">ambiente idéntico</text>
+  <text x="850" y="404" font-size="15">a producción</text>
+  <rect x="430" y="300" width="320" height="120" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="476" cy="334" r="22" fill="#9C7B16"/><text x="476" y="341" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">5</text>
+  <text x="514" y="340" font-size="17" font-weight="700" fill="#9C7B16">Desplegar</text>
+  <text x="460" y="380" font-size="15">con estrategia y</text>
+  <text x="460" y="404" font-size="15">reversión disponible</text>
+  <rect x="40" y="300" width="320" height="120" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <circle cx="86" cy="334" r="22" fill="#5E5E5E"/><text x="86" y="341" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">6</text>
+  <text x="124" y="340" font-size="17" font-weight="700">Operar</text>
+  <text x="70" y="380" font-size="15">observar y volver</text>
+  <text x="70" y="404" font-size="15">al equipo</text>
+  <line x1="364" y1="120" x2="426" y2="120" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="754" y1="120" x2="816" y2="120" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="980" y1="184" x2="980" y2="296" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="816" y1="360" x2="754" y2="360" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="426" y1="360" x2="364" y2="360" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="200" y1="300" x2="200" y2="184" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="600" y="240" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">Cada tramo deja evidencia y nadie trabaja a puerta cerrada</text>
+  <rect x="8" y="214" width="182" height="60" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="6 5"/>
+  <text x="22" y="240" font-size="14" fill="#5E5E5E">lo que entra al</text>
+  <text x="22" y="262" font-size="14" fill="#5E5E5E">tramo 1 vuelve</text>
+  <rect x="998" y="214" width="174" height="60" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="6 5"/>
+  <text x="1012" y="240" font-size="14" fill="#5E5E5E">si el tramo 5</text>
+  <text x="1012" y="262" font-size="14" fill="#5E5E5E">falla, se revierte</text>
+</svg>
+<aside class="narracion">El recorrido completo en seis tramos. Uno, desarrollar: código, pruebas y configuración viajan juntos. Dos, verificar: automatizar y escanear en cada cambio, no al final. Tres, empaquetar: el artefacto es inmutable y lleva su etiqueta; la imagen que se probó es la misma que se publica. Cuatro, preparar: el ambiente de pruebas se arma igual que el de producción, si no, las pruebas mienten. Cinco, desplegar: con estrategia y reversión disponibles desde el primer día. Seis, operar: observar y devolver la información al equipo. Noten el sentido de las flechas: es un ciclo, no una línea recta. Lo que entra al tramo uno vuelve como información, y si el tramo cinco falla, se revierte sin llamar a nadie. Esta semana armamos justamente esto, automático y visible.</aside>
+</section>
+
+<section data-kicker="Cómo empezar" data-titulo="Tu línea base: tres datos, sin herramienta todavía" data-sub="Antes de automatizar hay que saber dónde se está parado." data-fuente="Elaboración propia · método de línea base alineado con DORA [cite:1]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="620" height="440" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="50" y="84" font-size="19" font-weight="700" fill="#A6192E">Tres pasos esta semana</text>
+  <circle cx="76" cy="140" r="24" fill="#A6192E"/><text x="76" y="148" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">1</text>
+  <text x="118" y="134" font-size="17" font-weight="700">Anota el último despliegue exitoso</text>
+  <text x="118" y="162" font-size="15" fill="#5E5E5E">fecha, hora y quién lo hizo</text>
+  <circle cx="76" cy="242" r="24" fill="#A6192E"/><text x="76" y="250" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">2</text>
+  <text x="118" y="236" font-size="17" font-weight="700">Cuenta los despliegues de la semana</text>
+  <text x="118" y="264" font-size="15" fill="#5E5E5E">incluidos los manuales y los de emergencia</text>
+  <circle cx="76" cy="344" r="24" fill="#A6192E"/><text x="76" y="352" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">3</text>
+  <text x="118" y="338" font-size="17" font-weight="700">Marca cuántos exigieron arreglo</text>
+  <text x="118" y="366" font-size="15" fill="#5E5E5E">o reversión después de publicarse</text>
+  <rect x="50" y="396" width="560" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <use href="#i-ojo" x="66" y="412" width="34" height="34" color="#A6192E"/>
+  <text x="114" y="424" font-size="15" font-weight="700" fill="#A6192E">sin hoja de cálculo ni tablero:</text>
+  <text x="114" y="450" font-size="15">basta un registro escrito por semana</text>
+  <rect x="680" y="40" width="480" height="440" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="710" y="84" font-size="19" font-weight="700">Registro mínimo de la semana</text>
+  <rect x="710" y="112" width="420" height="44" rx="8" fill="#A6192E"/>
+  <text x="730" y="140" font-size="15" font-weight="700" fill="#fff">fecha</text>
+  <text x="1114" y="140" text-anchor="end" font-size="15" font-weight="700" fill="#fff">despliegues · arreglos · espera</text>
+  <rect x="710" y="164" width="420" height="44" rx="8" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="730" y="192" font-size="15" fill="#5E5E5E">semana pasada</text>
+  <rect x="710" y="216" width="420" height="44" rx="8" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="730" y="244" font-size="15" fill="#5E5E5E">esta semana</text>
+  <rect x="710" y="268" width="420" height="44" rx="8" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="730" y="296" font-size="15" fill="#5E5E5E">próxima semana</text>
+  <text x="710" y="348" font-size="16">Con tres columnas aparece la tendencia:</text>
+  <text x="710" y="376" font-size="16">si suben los despliegues y bajan los</text>
+  <text x="710" y="404" font-size="16">arreglos, el sistema está mejorando.</text>
+  <use href="#i-grafica" x="710" y="424" width="44" height="44" color="#9C7B16"/>
+  <text x="768" y="452" font-size="15" fill="#5E5E5E">la tendencia vale más que el dato aislado</text>
+</svg>
+<aside class="narracion">Si ahora mismo no tienen ninguna métrica, empiecen por lo mínimo, tres datos y un papel. Primero, anoten el último despliegue exitoso: fecha, hora y quién lo hizo. Segundo, cuenten cuántos despliegues hubo en la semana, incluidos los manuales y los de emergencia. Tercero, marquen cuántos exigieron un arreglo o una reversión después de publicar. Con eso ya tienen frecuencia y tasa de fallo. A la derecha está el registro mínimo: tres filas, una por semana. Conviene evitar la hoja de cálculo perfecta que nadie llena. Lo que importa es la tendencia: si suben los despliegues y bajan los arreglos, el sistema está mejorando. Y si no cambia nada, ya saben qué hay que automatizar primero.</aside>
+</section>
+
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿dónde se rompe tu cadena?" data-fuente="Ejercicio de elaboración propia · caso CaribeMart (ficticio)">
+<div class="fila">
+  <div class="c-60 col">
+    <div class="reto"><div class="r-tit">Pausa y responde</div>CaribeMart pasó de 1 despliegue por semana a 8, pero las reversiones pasaron de 1 a 6. Con las cinco métricas de DORA, ¿qué le estás diciendo al equipo con ese patrón?</div>
+    <div class="nota dorada">Pista: separa el <b>flujo</b> de la <b>inestabilidad</b> y mira qué gráfico subió junto con qué otro.</div>
+    <div class="nota">Escribe una frase: si el sistema no mejora, ninguna métrica individual salvará la publicación.</div>
+  </div>
+  <div class="c-40 lienzo"><svg viewBox="0 0 420 500"><rect x="30" y="40" width="360" height="180" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><use href="#i-grafica" x="60" y="80" width="100" height="100" color="#A6192E"/><text x="180" y="112" font-size="16" font-weight="700" fill="#A6192E">8 despliegues</text><text x="180" y="144" font-size="16" fill="#5E5E5E">por semana</text><text x="180" y="176" font-size="16" fill="#5E5E5E">antes: 1</text><rect x="300" y="150" width="16" height="30" fill="#A6192E"/><rect x="322" y="130" width="16" height="50" fill="#A6192E"/><rect x="344" y="110" width="16" height="70" fill="#A6192E"/><line x1="296" y1="184" x2="366" y2="184" stroke="#5E5E5E" stroke-width="2"/><rect x="30" y="244" width="360" height="180" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/><use href="#i-alerta" x="60" y="284" width="100" height="100" color="#9C7B16"/><text x="180" y="316" font-size="16" font-weight="700" fill="#9C7B16">6 reversiones</text><text x="180" y="348" font-size="16" fill="#5E5E5E">en la semana</text><text x="180" y="380" font-size="16" fill="#5E5E5E">antes: 1</text></svg></div>
+</div>
+<aside class="narracion">Mini-reto. Pausa el video. CaribeMart pasó de un despliegue por semana a ocho, muy bien por el lado del flujo. Pero las reversiones subieron de una a seis, o sea que de cada ocho publicaciones, seis pidieron arreglo. Con las cinco métricas de DORA, ¿qué le estás diciendo al equipo con ese patrón? Piensa en separar el flujo de la inestabilidad y mira qué subió junto con qué. Escribe una sola frase con tu lectura. Cuando la tengas, continúa.</aside>
+</section>
+
+<section data-kicker="Resumen" data-titulo="Cinco ideas para llevarte de esta parte" data-sub="Lo que sostiene todo lo que sigue: primero medir, después construir." data-fuente="Elaboración propia · síntesis de la parte 1">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="272" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="46" y="70" font-size="17" font-weight="700" fill="#A6192E">1 · Medir primero</text>
+  <text x="46" y="104" font-size="15">Sin línea base no hay</text>
+  <text x="46" y="130" font-size="15">mejora demostrable:</text>
+  <text x="46" y="156" font-size="15">solo impresiones.</text>
+  <text x="46" y="198" font-size="15" fill="#5E5E5E">tres datos alcanzan</text>
+  <rect x="310" y="30" width="272" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="336" y="70" font-size="17" font-weight="700" fill="#9C7B16">2 · Cinco métricas</text>
+  <text x="336" y="104" font-size="15">Frecuencia, tiempo de cambio</text>
+  <text x="336" y="130" font-size="15">y recuperación son flujo;</text>
+  <text x="336" y="156" font-size="15">fallo y reaparición,</text>
+  <text x="336" y="182" font-size="15">inestabilidad.</text>
+  <rect x="600" y="30" width="272" height="200" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="626" y="70" font-size="17" font-weight="700">3 · Las dos a la vez</text>
+  <text x="626" y="104" font-size="15">Velocidad sin solidez</text>
+  <text x="626" y="130" font-size="15">es ruido; solidez sin</text>
+  <text x="626" y="156" font-size="15">velocidad es estancamiento.</text>
+  <text x="626" y="198" font-size="15" fill="#5E5E5E">se miran juntas</text>
+  <rect x="890" y="30" width="272" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="916" y="70" font-size="17" font-weight="700" fill="#A6192E">4 · Medir el sistema</text>
+  <text x="916" y="104" font-size="15">La métrica abre la</text>
+  <text x="916" y="130" font-size="15">conversación y nunca</text>
+  <text x="916" y="156" font-size="15">se vuelve meta</text>
+  <text x="916" y="182" font-size="15">individual.</text>
+  <text x="916" y="198" font-size="15" fill="#5E5E5E" opacity="0">.</text>
+  <rect x="20" y="266" width="1142" height="212" rx="14" fill="#A6192E"/>
+  <use href="#i-pipeline" x="56" y="306" width="80" height="80" color="#F3E3E6"/>
+  <text x="164" y="316" font-size="20" font-weight="700" fill="#fff">5 · El pipeline es el que da el dato</text>
+  <text x="164" y="356" font-size="17" fill="#F9EEF0">Cada paso de la cadena deja evidencia automática. Por eso, antes de discutir</text>
+  <text x="164" y="384" font-size="17" fill="#F9EEF0">umbrales, hay que construir la cadena: eso es exactamente lo que sigue.</text>
+  <rect x="164" y="410" width="480" height="48" rx="10" fill="#fff"/>
+  <text x="184" y="441" font-size="16" font-weight="700" fill="#A6192E">Siguiente: etapas del pipeline</text>
+  <rect x="676" y="410" width="452" height="48" rx="10" fill="#FBF6E7"/>
+  <text x="696" y="441" font-size="16" font-weight="700" fill="#9C7B16">parte 2 · construir, probar, escanear, publicar</text>
+</svg>
+<aside class="narracion">Cierre de la parte. Cinco ideas para llevarte. Una: medir primero, porque sin línea base no hay mejora demostrable, solo impresiones, y tres datos alcanzan para arrancar. Dos: son cinco métricas, tres de flujo y dos de inestabilidad. Tres: las dos dimensiones se leen juntas, velocidad sin solidez es ruido y solidez sin velocidad es estancamiento. Cuatro: se mide el sistema, nunca a la persona. Y cinco, la más práctica: el dato lo entrega el pipeline, cada paso deja evidencia automática. Por eso la discusión de umbrales viene después, no antes. En la parte dos entramos justo ahí: qué etapas debe tener la cadena y en qué orden, para que CaribeMart empiece a tener esos datos sin escribirlos a mano.</aside>
+</section>
+
+

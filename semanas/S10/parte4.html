@@ -1,0 +1,512 @@
+<!-- S10 · Parte 4 — Despliegue: push, GitOps y estrategias (estándar v2). -->
+
+<section data-kicker="Dos modelos" data-titulo="Quién mueve el cambio: tú, o el destino" data-sub="Empujar y pedir resuelven la misma tarea con filosofías distintas de confianza." data-fuente="Basado en: OpenGitOps, principios de GitOps [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="330" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="50" y="84" font-size="19" font-weight="700" fill="#A6192E">Empujar</text>
+  <text x="50" y="112" font-size="15" fill="#5E5E5E">la cadena lleva el cambio hasta el destino</text>
+  <rect x="50" y="140" width="200" height="90" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="150" y="176" text-anchor="middle" font-size="16" font-weight="700">Cadena de entrega</text>
+  <text x="150" y="206" text-anchor="middle" font-size="15" fill="#5E5E5E">tiene la credencial</text>
+  <rect x="350" y="140" width="200" height="90" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="450" y="176" text-anchor="middle" font-size="16" font-weight="700">Ambiente</text>
+  <text x="450" y="206" text-anchor="middle" font-size="15" fill="#5E5E5E">recibe y aplica</text>
+  <line x1="256" y1="185" x2="344" y2="185" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
+  <text x="300" y="166" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">envía</text>
+  <text x="50" y="274" font-size="16">Rápido y simple: quien construye también</text>
+  <text x="50" y="302" font-size="16">publica. La llave vive del lado del automatismo.</text>
+  <rect x="50" y="322" width="500" height="34" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="66" y="345" font-size="14" fill="#A6192E" font-weight="700">el destino no decide: aplica lo que llega</text>
+  <rect x="600" y="40" width="560" height="330" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="630" y="84" font-size="19" font-weight="700" fill="#9C7B16">Pedir</text>
+  <text x="630" y="112" font-size="15" fill="#5E5E5E">el destino busca y aplica el cambio</text>
+  <rect x="630" y="140" width="200" height="90" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="730" y="176" text-anchor="middle" font-size="16" font-weight="700">Repositorio</text>
+  <text x="730" y="206" text-anchor="middle" font-size="15" fill="#5E5E5E">estado deseado</text>
+  <rect x="930" y="140" width="200" height="90" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="1030" y="176" text-anchor="middle" font-size="16" font-weight="700">Ambiente</text>
+  <text x="1030" y="206" text-anchor="middle" font-size="15" fill="#5E5E5E">observa y ajusta</text>
+  <line x1="836" y1="185" x2="924" y2="185" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
+  <text x="880" y="166" text-anchor="middle" font-size="14" fill="#9C7B16" font-weight="700">compara</text>
+  <text x="630" y="274" font-size="16">Más lento de armar y más robusto: cada</text>
+  <text x="630" y="302" font-size="16">destino mira lo que debe estar corriendo.</text>
+  <rect x="630" y="322" width="500" height="34" rx="8" fill="#fff" stroke="#9C7B16" stroke-dasharray="5 4"/>
+  <text x="646" y="345" font-size="14" fill="#9C7B16" font-weight="700">el destino tiene credenciales solo para leer</text>
+  <rect x="20" y="400" width="1140" height="86" rx="14" fill="#A6192E"/>
+  <use href="#i-git" x="52" y="422" width="44" height="44" color="#F3E3E6"/>
+  <text x="118" y="436" font-size="17" font-weight="700" fill="#fff">La pregunta de la semana</text>
+  <text x="118" y="466" font-size="16" fill="#F9EEF0">No cuál es mejor, sino quién queda con la llave de cada ambiente y qué pasa si se pierde.</text>
+</svg>
+<aside class="narracion">Arrancamos la parte cuatro con la pregunta de despliegue: quién mueve el cambio. A la izquierda, empujar: la cadena de entrega lleva el artefacto hasta el ambiente y lo aplica. Es rápido y simple, quien construye también publica, pero la llave de escritura vive del lado del automatismo. A la derecha, pedir: el destino mira el repositorio, compara con lo que debe estar corriendo y ajusta. Es más lento de armar y más robusto, y el destino solo necesita credenciales de lectura. Ninguno de los dos es la respuesta correcta por defecto. La pregunta que importa es la de abajo: quién queda con la llave de cada ambiente y qué sucede si alguien la pierde. Con eso en mente, veamos el conjunto de principios que ordena la opción de pedir.</aside>
+</section>
+
+<section data-kicker="Principios" data-titulo="Cuatro principios que definen GitOps" data-sub="Son la definición abierta del modelo de operación declarativa." data-fuente="Fuente: OpenGitOps, principios de GitOps [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="50" y="78" font-size="17" font-weight="700" fill="#A6192E">1 · Declarativo</text>
+  <text x="50" y="116" font-size="16">Se describe el resultado que se quiere, no la</text>
+  <text x="50" y="144" font-size="16">lista de instrucciones para lograrlo.</text>
+  <text x="50" y="184" font-size="15" fill="#5E5E5E">estado deseado escrito, no comandos sueltos</text>
+  <use href="#i-documento" x="500" y="66" width="52" height="52" color="#A6192E"/>
+  <rect x="600" y="40" width="560" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="630" y="78" font-size="17" font-weight="700" fill="#9C7B16">2 · Versionado e inmutable</text>
+  <text x="630" y="116" font-size="16">Ese estado vive en un repositorio, con historial,</text>
+  <text x="630" y="144" font-size="16">revisiones y reversión por confirmación.</text>
+  <text x="630" y="184" font-size="15" fill="#5E5E5E">quién cambió qué y cuándo, en un solo lugar</text>
+  <use href="#i-git" x="1080" y="66" width="52" height="52" color="#9C7B16"/>
+  <rect x="20" y="264" width="560" height="200" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="50" y="302" font-size="17" font-weight="700">3 · Obtenido automáticamente</text>
+  <text x="50" y="340" font-size="16">El sistema toma ese estado por su cuenta,</text>
+  <text x="50" y="368" font-size="16">sin que nadie copie archivos a mano.</text>
+  <text x="50" y="408" font-size="15" fill="#5E5E5E">el mismo camino para todos los ambientes</text>
+  <use href="#i-nube" x="500" y="290" width="52" height="52" color="#5E5E5E"/>
+  <rect x="600" y="264" width="560" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="630" y="302" font-size="17" font-weight="700" fill="#A6192E">4 · Reconciliado continuamente</text>
+  <text x="630" y="340" font-size="16">Lo que corre se compara sin descanso con lo que</text>
+  <text x="630" y="368" font-size="16">debería correr; si se separa, se corrige.</text>
+  <text x="630" y="408" font-size="15" fill="#5E5E5E">la deriva no espera a que alguien la note</text>
+  <use href="#i-engranaje" x="1080" y="290" width="52" height="52" color="#A6192E"/>
+  <text x="600" y="486" text-anchor="middle" font-size="15" fill="#5E5E5E">los cuatro juntos: sin uno de ellos, el resto deja de ser sostenible</text>
+</svg>
+<aside class="narracion">La opción de pedir tiene cuatro principios definidos de forma abierta. Primero, declarativo: se escribe el resultado que se quiere, no la lista de comandos para lograrlo. Segundo, versionado e inmutable: ese estado vive en un repositorio, con historial, revisiones y reversión por confirmación, así que se responde quién cambió qué y cuándo. Tercero, obtenido automáticamente: el sistema toma el estado por su cuenta, sin que nadie copie archivos a mano, y usa el mismo camino para todos los ambientes. Cuarto, reconciliado continuamente: lo que corre se compara sin descanso con lo que debería correr, y si se separa, se corrige. Los cuatro se necesitan entre sí; si falta uno, el resto deja de ser sostenible en el tiempo.</aside>
+</section>
+
+<section data-kicker="Bucle" data-titulo="Reconciliar: observar, comparar y corregir" data-sub="El corazón del modelo: nadie espera a que alguien se dé cuenta de la deriva." data-fuente="Fuente: OpenGitOps, principios de GitOps [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="120" width="250" height="120" rx="14" fill="#A6192E"/>
+  <text x="165" y="164" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Estado deseado</text>
+  <text x="165" y="196" text-anchor="middle" font-size="15" fill="#F9EEF0">en el repositorio</text>
+  <text x="165" y="222" text-anchor="middle" font-size="14" fill="#F3E3E6">versionado y revisado</text>
+  <path d="M290 140 H436" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="444" y="80" width="290" height="90" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="589" y="118" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">Observar</text>
+  <text x="589" y="148" text-anchor="middle" font-size="15" fill="#5E5E5E">qué está corriendo ahora mismo</text>
+  <path d="M589 170 V236" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="444" y="244" width="290" height="90" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="589" y="282" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">Comparar</text>
+  <text x="589" y="312" text-anchor="middle" font-size="15" fill="#5E5E5E">¿coincide con lo deseado?</text>
+  <path d="M444 306 H296" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="40" y="264" width="250" height="90" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="165" y="302" text-anchor="middle" font-size="17" font-weight="700">Corregir</text>
+  <text x="165" y="332" text-anchor="middle" font-size="15" fill="#5E5E5E">aplicar la diferencia</text>
+  <path d="M165 354 V420 H820 V344" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="700" y="380" width="460" height="96" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-ojo" x="724" y="404" width="46" height="46" color="#A6192E"/>
+  <text x="786" y="420" font-size="16" font-weight="700" fill="#A6192E">El resultado</text>
+  <text x="786" y="450" font-size="15">La deriva se corrige en minutos,</text>
+  <text x="786" y="472" font-size="15">con registro de qué cambió y por qué</text>
+  <rect x="780" y="80" width="380" height="240" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="810" y="118" font-size="17" font-weight="700">Qué se detecta así</text>
+  <use href="#i-alerta" x="810" y="142" width="30" height="30" color="#A6192E"/>
+  <text x="852" y="164" font-size="15">alguien cambió un ajuste a mano</text>
+  <use href="#i-alerta" x="810" y="192" width="30" height="30" color="#A6192E"/>
+  <text x="852" y="214" font-size="15">un proceso reinició con otra versión</text>
+  <use href="#i-alerta" x="810" y="242" width="30" height="30" color="#A6192E"/>
+  <text x="852" y="264" font-size="15">un recurso desapareció y nadie notó</text>
+  <text x="810" y="304" font-size="15" fill="#A6192E" font-weight="700">se corrige solo, con evidencia</text>
+</svg>
+<aside class="narracion">El cuarto principio merece su propia diapositiva porque es el que cambia la operación. El bucle tiene cuatro tiempos. Está el estado deseado, versionado y revisado en el repositorio. Luego se observa qué está corriendo ahora mismo en el ambiente. Después se compara: ¿coincide con lo deseado? Y si no coincide, se aplica la diferencia. Este bucle no corre una vez al día; corre de forma continua. Por eso se detectan cosas que antes esperaban a que alguien se diera cuenta: un ajuste cambiado a mano, un proceso que reinició con otra versión, un recurso que desapareció. La deriva se corrige en minutos y queda registro de qué cambió y por qué. Nadie descubre el problema un lunes a las ocho de la mañana.</aside>
+</section>
+
+<section data-kicker="Criterios" data-titulo="Cuándo empujar y cuándo pedir" data-sub="No es una religión: la elección depende de urgencia, número de ambientes y gobierno." data-fuente="Basado en: OpenGitOps, principios de GitOps [cite:2] · Humble y Farley, Continuous Delivery [cite:3]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="330" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="50" y="82" font-size="18" font-weight="700" fill="#A6192E">Conviene empujar cuando…</text>
+  <use href="#i-check" x="50" y="108" width="30" height="30" color="#A6192E"/>
+  <text x="94" y="130" font-size="16">el cambio es urgente y reversible</text>
+  <use href="#i-check" x="50" y="156" width="30" height="30" color="#A6192E"/>
+  <text x="94" y="178" font-size="16">hay pocos ambientes y todos se parecen</text>
+  <use href="#i-check" x="50" y="204" width="30" height="30" color="#A6192E"/>
+  <text x="94" y="226" font-size="16">quien despliega es quien construyó</text>
+  <use href="#i-check" x="50" y="252" width="30" height="30" color="#A6192E"/>
+  <text x="94" y="274" font-size="16">la operación es de un solo equipo</text>
+  <rect x="50" y="306" width="500" height="44" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="70" y="334" font-size="15" fill="#A6192E" font-weight="700">menos piezas en movimiento, más cerca del código</text>
+  <rect x="600" y="40" width="560" height="330" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="630" y="82" font-size="18" font-weight="700" fill="#9C7B16">Conviene pedir cuando…</text>
+  <use href="#i-check" x="630" y="108" width="30" height="30" color="#9C7B16"/>
+  <text x="674" y="130" font-size="16">hay muchos ambientes que mantener iguales</text>
+  <use href="#i-check" x="630" y="156" width="30" height="30" color="#9C7B16"/>
+  <text x="674" y="178" font-size="16">operación y desarrollo son equipos distintos</text>
+  <use href="#i-check" x="630" y="204" width="30" height="30" color="#9C7B16"/>
+  <text x="674" y="226" font-size="16">importa quién cambió qué, con historial</text>
+  <use href="#i-check" x="630" y="252" width="30" height="30" color="#9C7B16"/>
+  <text x="674" y="274" font-size="16">el destino debe resistir cambios manuales</text>
+  <rect x="630" y="306" width="500" height="44" rx="8" fill="#fff" stroke="#9C7B16" stroke-dasharray="5 4"/>
+  <text x="650" y="334" font-size="15" fill="#9C7B16" font-weight="700">más gobierno, menos credenciales repartidas</text>
+  <rect x="20" y="396" width="1140" height="90" rx="14" fill="#A6192E"/>
+  <use href="#i-balanceador" x="52" y="416" width="46" height="46" color="#F3E3E6"/>
+  <text x="120" y="430" font-size="17" font-weight="700" fill="#fff">La regla práctica</text>
+  <text x="120" y="462" font-size="16" fill="#F9EEF0">Muchos equipos usan los dos: empujan a pruebas y pedir en producción, donde el gobierno pesa.</text>
+</svg>
+<aside class="narracion">¿Cuándo conviene cada uno? Conviene empujar cuando el cambio es urgente y reversible, cuando hay pocos ambientes que se parecen, cuando quien despliega es quien construyó y cuando la operación es de un solo equipo. Conviene pedir cuando hay muchos ambientes que mantener iguales, cuando operación y desarrollo son equipos distintos, cuando importa quién cambió qué con historial, y cuando el destino debe resistir cambios manuales. Y está la regla práctica de abajo: la mayoría de equipos usa los dos a la vez. Empujan a pruebas, donde la velocidad manda, y dejan que producción pida, donde el gobierno y el registro pesan más. La elección no es de herramienta, es de contexto.</aside>
+</section>
+
+<section data-kicker="Confianza" data-titulo="El riesgo del empuje: quién queda con la llave" data-sub="Una credencial de larga duración en la cadena convierte una fuga en un incidente mayor." data-fuente="Basado en: GitHub, identidad federada y secretos [cite:8] · GitHub, secretos en los flujos [cite:7]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="50" y="82" font-size="18" font-weight="700" fill="#A6192E">El escenario frágil</text>
+  <rect x="50" y="106" width="500" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-llave" x="68" y="124" width="30" height="30" color="#A6192E"/>
+  <text x="112" y="134" font-size="15" font-weight="700">Llave de escritura en la cadena</text>
+  <text x="112" y="158" font-size="14" fill="#5E5E5E">guardada como secreto, vigente por años</text>
+  <line x1="300" y1="172" x2="300" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="50" y="204" width="500" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-servidor" x="68" y="222" width="30" height="30" color="#A6192E"/>
+  <text x="112" y="232" font-size="15" font-weight="700">La cadena toca el destino directamente</text>
+  <text x="112" y="256" font-size="14" fill="#5E5E5E">si se filtra, se publica lo que sea</text>
+  <text x="50" y="308" font-size="16">El alcance del daño lo decide la llave,</text>
+  <text x="50" y="332" font-size="16">no la intención de quien la usa.</text>
+  <rect x="600" y="40" width="560" height="300" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="630" y="82" font-size="18" font-weight="700" fill="#9C7B16">El escenario sólido</text>
+  <rect x="630" y="106" width="500" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <use href="#i-escudo" x="648" y="124" width="30" height="30" color="#9C7B16"/>
+  <text x="692" y="134" font-size="15" font-weight="700">Identidad de la corrida</text>
+  <text x="692" y="158" font-size="14" fill="#5E5E5E">sin secreto almacenado, permiso por minutos</text>
+  <line x1="880" y1="172" x2="880" y2="196" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="630" y="204" width="500" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <use href="#i-candado" x="648" y="222" width="30" height="30" color="#9C7B16"/>
+  <text x="692" y="232" font-size="15" font-weight="700">Alcance declarado por destino</text>
+  <text x="692" y="256" font-size="14" fill="#5E5E5E">lo que la regla permite, ni un poco más</text>
+  <text x="630" y="308" font-size="16">Si algo se filtra, se filtra una identidad</text>
+  <text x="630" y="332" font-size="16">corta, acotada y revocable.</text>
+  <rect x="20" y="368" width="1140" height="110" rx="14" fill="#A6192E"/>
+  <use href="#i-alerta" x="52" y="400" width="52" height="52" color="#F3E3E6"/>
+  <text x="124" y="414" font-size="17" font-weight="700" fill="#fff">Lo que se lleva la clase</text>
+  <text x="124" y="446" font-size="16" fill="#F9EEF0">La pregunta no es si la llave se puede filtrar, es qué tan grande queda el daño cuando</text>
+  <text x="124" y="472" font-size="16" fill="#F9EEF0">eso pasa. La identidad temporal y el alcance declarado reducen esa superficie.</text>
+</svg>
+<aside class="narracion">Todo modelo de empuje tiene que responder esto: quién queda con la llave. Arriba, el escenario frágil: una credencial de escritura guardada como secreto en la cadena, vigente durante años, que toca el destino directamente. Si se filtra, se publica lo que sea, y el alcance del daño lo decide la llave, no la intención de quien la usa. Abajo, el escenario sólido: identidad de la corrida, sin secreto almacenado, permiso por minutos y alcance declarado por destino. La clase se lleva una idea: la pregunta no es si la llave se puede filtrar, es qué tan grande queda el daño cuando eso pasa. Identidad temporal y alcance declarado reducen esa superficie.</aside>
+</section>
+
+<section data-kicker="Estrategias" data-titulo="Por qué no se publica todo de golpe" data-sub="El tamaño del daño posible, no el código, decide cómo se publica." data-fuente="Basado en: Humble y Farley, Continuous Delivery [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="330" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="50" y="84" font-size="19" font-weight="700" fill="#A6192E">De golpe</text>
+  <text x="50" y="112" font-size="15" fill="#5E5E5E">una sola decisión, todo el tráfico a la vez</text>
+  <rect x="60" y="150" width="170" height="80" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="145" y="184" text-anchor="middle" font-size="16" font-weight="700">Versión nueva</text>
+  <text x="145" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">aplicada</text>
+  <line x1="236" y1="190" x2="306" y2="190" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
+  <circle cx="430" cy="190" r="120" fill="none" stroke="#A6192E" stroke-width="3" stroke-dasharray="8 6"/>
+  <circle cx="430" cy="190" r="78" fill="none" stroke="#A6192E" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="430" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Radio de impacto</text>
+  <text x="430" y="212" text-anchor="middle" font-size="15" fill="#A6192E">100 por ciento</text>
+  <text x="50" y="312" font-size="16">Si algo anda mal, no hay público que quede</text>
+  <text x="50" y="340" font-size="16">afuera: todos reciben el problema a la vez.</text>
+  <rect x="600" y="40" width="560" height="330" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="630" y="84" font-size="19" font-weight="700" fill="#9C7B16">Por etapas</text>
+  <text x="630" y="112" font-size="15" fill="#5E5E5E">cada paso se gana con evidencia</text>
+  <rect x="640" y="230" width="90" height="70" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="685" y="258" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">1 por ciento</text>
+  <text x="685" y="284" text-anchor="middle" font-size="14">mira</text>
+  <rect x="748" y="200" width="90" height="100" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="793" y="228" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">10 por ciento</text>
+  <text x="793" y="254" text-anchor="middle" font-size="14">mide</text>
+  <rect x="856" y="160" width="90" height="140" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="901" y="188" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">50 por ciento</text>
+  <text x="901" y="214" text-anchor="middle" font-size="14">confirma</text>
+  <rect x="964" y="120" width="90" height="180" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="1009" y="148" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">100 por ciento</text>
+  <text x="1009" y="174" text-anchor="middle" font-size="14">completo</text>
+  <line x1="640" y1="330" x2="1054" y2="330" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="847" y="358" text-anchor="middle" font-size="15" fill="#9C7B16" font-weight="700">se avanza si las mediciones acompañan</text>
+  <rect x="630" y="386" width="530" height="90" rx="14" fill="#A6192E"/>
+  <text x="660" y="422" font-size="17" font-weight="700" fill="#fff">La idea de la semana</text>
+  <text x="660" y="454" font-size="16" fill="#F9EEF0">Publicar es una serie de decisiones pequeñas, no un interruptor.</text>
+</svg>
+<aside class="narracion">Pasamos a las estrategias de publicación, y la primera idea es por qué no se publica todo de golpe. A la izquierda, la apuesta única: una versión se aplica y el radio de impacto es de cien por ciento. Si algo anda mal, no queda público afuera, todos reciben el problema a la vez. A la derecha, la escalera: uno por ciento para mirar, diez por ciento para medir, cincuenta por ciento para confirmar y solo entonces el total. Cada peldaño se gana con evidencia, y si las mediciones no acompañan, no se sube. Publicar no es un interruptor; es una serie de decisiones pequeñas y reversibles. Además, cada peldaño deja evidencia: si la versión se detiene en diez por ciento, solo ese público la vivió y el resto sigue tranquilo. Con ese marco, veamos las dos estrategias clásicas.</aside>
+</section>
+
+<section data-kicker="Estrategia" data-titulo="Azul y verde: dos ambientes y un conmutador" data-sub="La versión nueva espera llena de tráfico ficticio antes de recibir a nadie real." data-fuente="Basado en: Humble y Farley, Continuous Delivery [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="470" y="30" width="240" height="76" rx="12" fill="#A6192E"/>
+  <text x="590" y="62" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Punto de entrada</text>
+  <text x="590" y="90" text-anchor="middle" font-size="15" fill="#F9EEF0">un solo conmutador</text>
+  <path d="M470 76 H340 V170" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <path d="M710 76 H840 V170" fill="none" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="380" y="120" font-size="15" fill="#A6192E" font-weight="700">100 por ciento</text>
+  <text x="800" y="120" font-size="15" fill="#9C7B16" font-weight="700">0 por ciento</text>
+  <rect x="60" y="178" width="500" height="170" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="90" y="214" font-size="18" font-weight="700" fill="#A6192E">Azul · versión actual</text>
+  <rect x="90" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="155" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <rect x="240" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="305" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <rect x="390" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="455" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <text x="90" y="330" font-size="15" fill="#5E5E5E">atiende con normalidad, sin cambios</text>
+  <rect x="620" y="178" width="500" height="170" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="650" y="214" font-size="18" font-weight="700" fill="#9C7B16">Verde · versión nueva</text>
+  <rect x="650" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="715" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <rect x="800" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="865" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <rect x="950" y="234" width="130" height="60" rx="8" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="1015" y="270" text-anchor="middle" font-size="15">servidor</text>
+  <text x="650" y="330" font-size="15" fill="#5E5E5E">recibe tráfico de prueba, listo para la conmutación</text>
+  <rect x="60" y="378" width="1060" height="98" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="90" y="414" font-size="16" font-weight="700">Los cuatro pasos</text>
+  <text x="90" y="446" font-size="15">1 · publicar verde  ·  2 · verificar con pruebas y métricas  ·  3 · conmutar el tráfico  ·  4 · azul queda en espera</text>
+  <text x="90" y="470" font-size="15" fill="#A6192E" font-weight="700">Si algo falla en el paso 3, el conmutador regresa a azul en segundos</text>
+</svg>
+<aside class="narracion">La primera estrategia es azul y verde. Arriba hay un punto de entrada, un solo conmutador, que hoy entrega todo el tráfico al ambiente azul, la versión actual, que atiende sin cambios. El ambiente verde corre la versión nueva con cero por ciento del tráfico real: recibe solo pruebas. Los cuatro pasos son publicar verde, verificar con pruebas y métricas, conmutar el tráfico y dejar a azul en espera. La virtud está en el paso cuatro: si algo falla al conmutar, el conmutador regresa a azul en segundos, sin compilar nada. El costo es mantener dos ambientes vivos durante la publicación. También sirve cuando la versión nueva necesita calentamiento o una migración de datos antes de recibir visitas reales. La pregunta es cuándo vale esa duplicación.</aside>
+</section>
+
+<section data-kicker="Estrategia" data-titulo="Canario: primero una parte mínima del público" data-sub="Se expone un porcentaje pequeño y se decide con datos, no con impresiones." data-fuente="Basado en: Humble y Farley, Continuous Delivery [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="60" width="200" height="240" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-usuario" x="96" y="94" width="68" height="68" color="#5E5E5E"/>
+  <text x="130" y="200" text-anchor="middle" font-size="16" font-weight="700">Todas las</text>
+  <text x="130" y="226" text-anchor="middle" font-size="16" font-weight="700">personas</text>
+  <text x="130" y="264" text-anchor="middle" font-size="15" fill="#5E5E5E">tráfico entrante</text>
+  <path d="M230 180 H320" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="330" y="110" width="220" height="140" rx="12" fill="#A6192E"/>
+  <text x="440" y="154" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Repartidor</text>
+  <text x="440" y="184" text-anchor="middle" font-size="15" fill="#F9EEF0">reparte por porcentaje</text>
+  <text x="440" y="216" text-anchor="middle" font-size="15" fill="#F3E3E6">y lo registra todo</text>
+  <path d="M550 150 H640" fill="none" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <path d="M550 220 H640" fill="none" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
+  <text x="600" y="140" text-anchor="middle" font-size="15" fill="#5E5E5E" font-weight="700">90 por ciento</text>
+  <text x="600" y="252" text-anchor="middle" font-size="15" fill="#9C7B16" font-weight="700">10 por ciento</text>
+  <rect x="650" y="60" width="240" height="140" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="770" y="98" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Versión estable</text>
+  <text x="770" y="128" text-anchor="middle" font-size="15" fill="#5E5E5E">la de siempre</text>
+  <text x="770" y="162" text-anchor="middle" font-size="15" fill="#5E5E5E">sirve a la mayoría</text>
+  <rect x="650" y="230" width="240" height="140" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="770" y="268" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">Versión nueva</text>
+  <text x="770" y="298" text-anchor="middle" font-size="15" fill="#5E5E5E">el canario</text>
+  <text x="770" y="332" text-anchor="middle" font-size="15" fill="#5E5E5E">pocos, pero medibles</text>
+  <rect x="930" y="60" width="230" height="310" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="960" y="98" font-size="16" font-weight="700">Se observa</text>
+  <use href="#i-grafica" x="960" y="116" width="28" height="28" color="#A6192E"/>
+  <text x="998" y="138" font-size="15">tasa de error</text>
+  <use href="#i-reloj" x="960" y="160" width="28" height="28" color="#A6192E"/>
+  <text x="998" y="182" font-size="15">tiempo de respuesta</text>
+  <use href="#i-alerta" x="960" y="204" width="28" height="28" color="#A6192E"/>
+  <text x="998" y="226" font-size="15">quejas reales</text>
+  <line x1="960" y1="256" x2="1130" y2="256" stroke="#5E5E5E" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="960" y="292" font-size="15" fill="#A6192E" font-weight="700">Si algo se sale del rango</text>
+  <text x="960" y="318" font-size="15">se retira el canario</text>
+  <text x="960" y="344" font-size="15">y nadie lo notó</text>
+  <rect x="30" y="400" width="1130" height="76" rx="14" fill="#A6192E"/>
+  <text x="60" y="432" font-size="17" font-weight="700" fill="#fff">La diferencia con azul y verde</text>
+  <text x="60" y="460" font-size="16" fill="#F9EEF0">no se cambia todo el tráfico de una: se compra información antes de comprometer a todos.</text>
+</svg>
+<aside class="narracion">La segunda estrategia es el canario. En vez de mover todo el tráfico de un salto, el repartidor entrega noventa por ciento a la versión estable y diez por ciento a la versión nueva. El canario es pocos usuarios, pero son medibles: se observa la tasa de error, el tiempo de respuesta y las quejas reales. Si algún indicador se sale del rango, se retira el canario y la mayoría ni se enteró. La diferencia con azul y verde es sutil y importante: allá se cambia el tráfico completo en un instante, aquí se compra información antes de comprometer a todo el mundo. Y obliga a definir de antemano qué indicador manda: sin umbral acordado, diez por ciento no prueba nada. Funciona mejor cuando el producto ya tiene tráfico constante que se pueda dividir.</aside>
+</section>
+
+<section data-kicker="Reversión" data-titulo="El botón rojo: revertir es una tarea planificada" data-sub="Poder volver atrás no es suerte de último minuto; es algo que se diseña y se ensaya." data-fuente="Fuente: Humble y Farley, Continuous Delivery [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="40" width="640" height="240" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="70" y="82" font-size="18" font-weight="700" fill="#A6192E">La ruta cuando algo sale mal</text>
+  <rect x="70" y="110" width="130" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="135" y="140" text-anchor="middle" font-size="15" font-weight="700">Detectar</text>
+  <text x="135" y="164" text-anchor="middle" font-size="14" fill="#5E5E5E">la alerta</text>
+  <line x1="206" y1="145" x2="234" y2="145" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="240" y="110" width="130" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="305" y="140" text-anchor="middle" font-size="15" font-weight="700">Decidir</text>
+  <text x="305" y="164" text-anchor="middle" font-size="14" fill="#5E5E5E">quién aprueba</text>
+  <line x1="376" y1="145" x2="404" y2="145" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="410" y="110" width="130" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="475" y="140" text-anchor="middle" font-size="15" font-weight="700">Aplicar</text>
+  <text x="475" y="164" text-anchor="middle" font-size="14" fill="#5E5E5E">vuelve lo anterior</text>
+  <line x1="546" y1="145" x2="574" y2="145" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="580" y="110" width="70" height="70" rx="10" fill="#A6192E"/>
+  <text x="615" y="152" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Sana</text>
+  <text x="70" y="238" font-size="16">Nadie improvisa: el camino está escrito, probado y con una persona designada.</text>
+  <circle cx="360" cy="400" r="72" fill="#A6192E" stroke="#7A101F" stroke-width="8"/>
+  <text x="360" y="394" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Revertir</text>
+  <text x="360" y="422" text-anchor="middle" font-size="15" fill="#F3E3E6">en minutos</text>
+  <text x="360" y="492" text-anchor="middle" font-size="15" fill="#5E5E5E">el botón solo existe si detrás hay un proceso</text>
+  <rect x="720" y="40" width="440" height="240" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="750" y="82" font-size="18" font-weight="700" fill="#9C7B16">Para que el botón sirva</text>
+  <use href="#i-check" x="750" y="106" width="30" height="30" color="#9C7B16"/>
+  <text x="792" y="128" font-size="16">la versión anterior sigue disponible</text>
+  <use href="#i-check" x="750" y="152" width="30" height="30" color="#9C7B16"/>
+  <text x="792" y="174" font-size="16">los datos aceptan volver atrás</text>
+  <use href="#i-check" x="750" y="198" width="30" height="30" color="#9C7B16"/>
+  <text x="792" y="220" font-size="16">el regreso se ensayó antes, no el día D</text>
+  <text x="750" y="258" font-size="15" fill="#9C7B16" font-weight="700">sin los tres, revertir es solo una intención</text>
+  <rect x="720" y="308" width="440" height="168" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="750" y="348" font-size="17" font-weight="700">Después se aprende</text>
+  <text x="750" y="384" font-size="16">Qué pasó, por qué no se vio antes y</text>
+  <text x="750" y="412" font-size="16">qué puerta faltó en la cadena.</text>
+  <text x="750" y="452" font-size="15" fill="#A6192E" font-weight="700">la reversión compra tiempo, no conocimiento</text>
+</svg>
+<aside class="narracion">Toda estrategia de publicación descansa en una habilidad previa: poder volver atrás. La ruta de arriba es siempre la misma: detectar con la alerta, decidir quién aprueba, aplicar el regreso y sanar. Nadie improvisa, porque el camino está escrito, probado y con una persona designada. Detrás del botón rojo hacen falta tres cosas: que la versión anterior siga disponible, que los datos acepten volver atrás y que el regreso se haya ensayado antes, no el día del incidente. Sin esos tres, revertir es solo una intención. Y falta un paso más, el de abajo: después se aprende qué pasó, por qué no se vio antes y qué puerta faltó. Por eso los equipos que revierten con frecuencia publican más seguido: el miedo baja cuando el regreso está ensayado. La reversión compra tiempo; el análisis compra conocimiento.</aside>
+</section>
+
+<section data-kicker="Decisión" data-titulo="Qué estrategia elijo para esta publicación" data-sub="El árbol se recorre por el riesgo del cambio, no por lo que esté de moda." data-fuente="Basado en: Humble y Farley, Continuous Delivery [cite:3] · OpenGitOps [cite:2]">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="40" width="230" height="80" rx="12" fill="#A6192E"/>
+  <text x="145" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Vas a publicar</text>
+  <text x="145" y="102" text-anchor="middle" font-size="15" fill="#F9EEF0">una versión nueva</text>
+  <line x1="266" y1="80" x2="324" y2="80" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="330" y="40" width="280" height="80" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="470" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">¿Se puede revertir</text>
+  <text x="470" y="102" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">en minutos?</text>
+  <line x1="616" y1="66" x2="674" y2="66" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="645" y="52" text-anchor="middle" font-size="15" fill="#9C7B16" font-weight="700">sí</text>
+  <rect x="680" y="30" width="460" height="100" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="710" y="70" font-size="16" font-weight="700" fill="#9C7B16">Publica directo y observa</text>
+  <text x="710" y="102" font-size="15">con alertas encendidas y reversión lista</text>
+  <path d="M470 120 V178" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="486" y="156" font-size="15" fill="#A6192E" font-weight="700">no</text>
+  <rect x="330" y="184" width="280" height="80" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="470" y="218" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Entonces prepara</text>
+  <text x="470" y="246" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">dos ambientes</text>
+  <line x1="616" y1="224" x2="674" y2="224" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="680" y="174" width="460" height="100" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="3"/>
+  <text x="710" y="214" font-size="16" font-weight="700">Azul y verde</text>
+  <text x="710" y="246" font-size="15">la versión nueva espera llena de pruebas</text>
+  <path d="M330 300 H140 V340" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="30" y="346" width="240" height="90" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="150" y="382" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">¿Miles de personas</text>
+  <text x="150" y="410" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">lo usarán ya?</text>
+  <line x1="276" y1="392" x2="334" y2="392" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <text x="305" y="378" text-anchor="middle" font-size="15" fill="#9C7B16" font-weight="700">sí</text>
+  <rect x="340" y="346" width="380" height="90" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="370" y="382" font-size="16" font-weight="700" fill="#9C7B16">Canario primero</text>
+  <text x="370" y="414" font-size="15">de uno a diez por ciento, y se mide</text>
+  <line x1="726" y1="392" x2="784" y2="392" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <text x="755" y="378" text-anchor="middle" font-size="15" fill="#5E5E5E" font-weight="700">no</text>
+  <rect x="790" y="346" width="350" height="90" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="3"/>
+  <text x="820" y="382" font-size="16" font-weight="700">Con lo anterior basta</text>
+  <text x="820" y="414" font-size="15">lo urgente es poder volver atrás</text>
+  <rect x="30" y="456" width="1110" height="34" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="585" y="479" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="700">La estrategia se elige por el riesgo y el daño posible, no por la moda del equipo</text>
+</svg>
+<aside class="narracion">Ya tenemos las piezas; ahora el árbol de decisión. Vas a publicar y la primera pregunta es si puedes revertir en minutos. Si la respuesta es sí, publicas directo con las alertas encendidas y la reversión lista. Si la respuesta es no, preparas dos ambientes y dejas la versión nueva esperando llena de pruebas. La segunda pregunta, de abajo, es si miles de personas lo van a usar de inmediato. Si es así, el canario primero, de uno a diez por ciento, medido con calma. Si no, con lo anterior basta. Nótenlo: la primera pregunta no habla de tecnología, habla de recuperación. Y las respuestas pueden cambiar en la misma semana: una corrección de seguridad exige más cuidado que un ajuste de textos. La estrategia se elige por el riesgo y el daño posible, no por la moda del equipo.</aside>
+</section>
+
+<section data-kicker="Caso CaribeMart" data-titulo="Cómo publica CaribeMart una semana normal" data-sub="Los dos modelos conviven: se empuja a pruebas y se pide en producción." data-fuente="Caso de clase CaribeMart (hilo conductor del curso) · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="1140" height="76" rx="14" fill="#A6192E"/>
+  <text x="52" y="74" font-size="17" font-weight="700" fill="#fff">La ruta de CaribeMart</text>
+  <text x="52" y="104" font-size="16" fill="#F9EEF0">se confirma un cambio, la cadena hace el trabajo pesado y la decisión de publicar sigue siendo de la gente</text>
+  <rect x="30" y="150" width="170" height="96" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="115" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">1 · Confirmar</text>
+  <text x="115" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">cambio revisado</text>
+  <text x="115" y="234" text-anchor="middle" font-size="14" fill="#5E5E5E">por otra persona</text>
+  <line x1="206" y1="198" x2="234" y2="198" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="240" y="150" width="170" height="96" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="325" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">2 · Construir</text>
+  <text x="325" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">probar y escanear</text>
+  <text x="325" y="234" text-anchor="middle" font-size="14" fill="#5E5E5E">y el artefacto listo</text>
+  <line x1="416" y1="198" x2="444" y2="198" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="450" y="150" width="170" height="96" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="535" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">3 · Revisión</text>
+  <text x="535" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">ambiente de prueba</text>
+  <text x="535" y="234" text-anchor="middle" font-size="14" fill="#5E5E5E">aprueba el equipo</text>
+  <line x1="626" y1="198" x2="654" y2="198" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="660" y="150" width="170" height="96" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="745" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">4 · Canario</text>
+  <text x="745" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">diez por ciento</text>
+  <text x="745" y="234" text-anchor="middle" font-size="14" fill="#5E5E5E">del tráfico real</text>
+  <line x1="836" y1="198" x2="864" y2="198" stroke="#5E5E5E" stroke-width="3" marker-end="url(#fl-gris)"/>
+  <rect x="870" y="150" width="170" height="96" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="955" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">5 · Medir</text>
+  <text x="955" y="212" text-anchor="middle" font-size="15" fill="#5E5E5E">errores, tiempos</text>
+  <text x="955" y="234" text-anchor="middle" font-size="14" fill="#5E5E5E">y reclamos reales</text>
+  <line x1="1046" y1="198" x2="1074" y2="198" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="1046" y="150" width="114" height="96" rx="12" fill="#fff" stroke="#9C7B16" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="1103" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">6 · Subir</text>
+  <text x="1103" y="222" text-anchor="middle" font-size="14">a todo</text>
+  <rect x="30" y="286" width="550" height="190" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="60" y="326" font-size="17" font-weight="700">Lo que se empuja</text>
+  <text x="60" y="360" font-size="16">Las pruebas, el escaneo y el artefacto: todo corre</text>
+  <text x="60" y="388" font-size="16">solo, sin esperar a que alguien lo mande a hacer.</text>
+  <text x="60" y="432" font-size="15" fill="#A6192E" font-weight="700">velocidad donde no hay riesgo</text>
+  <rect x="600" y="286" width="560" height="190" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="630" y="326" font-size="17" font-weight="700" fill="#9C7B16">Lo que se pide</text>
+  <text x="630" y="360" font-size="16">La decisión de tocar producción: alguien aprueba,</text>
+  <text x="630" y="388" font-size="16">las métricas acompañan y recién entonces se sube.</text>
+  <text x="630" y="432" font-size="15" fill="#9C7B16" font-weight="700">criterio donde sí hay riesgo</text>
+</svg>
+<aside class="narracion">Veamos la ruta completa de CaribeMart en una semana normal. Se confirma un cambio revisado por otra persona; la cadena construye, prueba, escanea y deja el artefacto listo; el ambiente de revisión aprueba; luego entran diez por ciento del tráfico real en canario, con las métricas de errores, tiempos y reclamos encima; y solo después se sube a todo. Abajo está la síntesis de la parte: lo que se empuja es lo que no tiene riesgo, pruebas, escaneo y artefacto, todo corriendo solo. Lo que se pide es tocar producción, donde alguien aprueba y las métricas acompañan. Si en el canario las métricas se salen del rango, el cambio se retira y la tienda sigue vendiendo. Velocidad de un lado, criterio del otro.</aside>
+</section>
+
+<section data-kicker="Pregunta abierta" data-titulo="Si nadie estuviera mirando, ¿qué pasaría esta noche?" data-sub="No hay respuesta única: sirve para discutir qué tan frágil es el despliegue de tu entorno." data-fuente="Pregunta para discutir en clase · elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="40" width="1120" height="150" rx="16" fill="#A6192E"/>
+  <use href="#i-pregunta" x="66" y="76" width="78" height="78" color="#F3E3E6"/>
+  <text x="176" y="100" font-size="21" font-weight="700" fill="#fff">Si esta noche la cadena publicara</text>
+  <text x="176" y="132" font-size="21" font-weight="700" fill="#fff">sin que nadie estuviera mirando,</text>
+  <text x="176" y="164" font-size="21" font-weight="700" fill="#fff">¿qué tan tranquilo te quedarías?</text>
+  <rect x="30" y="216" width="356" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="60" y="256" font-size="17" font-weight="700" fill="#A6192E">¿Hay reversión?</text>
+  <text x="60" y="294" font-size="16">Si algo sale mal, ¿en cuántos</text>
+  <text x="60" y="322" font-size="16">minutos vuelve lo anterior?</text>
+  <text x="60" y="366" font-size="15" fill="#5E5E5E">y quién es la persona que decide</text>
+  <rect x="412" y="216" width="356" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="442" y="256" font-size="17" font-weight="700" fill="#9C7B16">¿Hay puertas?</text>
+  <text x="442" y="294" font-size="16">Si las pruebas fallan, ¿el cambio</text>
+  <text x="442" y="322" font-size="16">llega igual a producción?</text>
+  <text x="442" y="366" font-size="15" fill="#5E5E5E">y si alguien apaga la puerta a mano</text>
+  <rect x="794" y="216" width="356" height="200" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="824" y="256" font-size="17" font-weight="700">¿Quién tiene la llave?</text>
+  <text x="824" y="294" font-size="16">Si la credencial se filtra, ¿qué</text>
+  <text x="824" y="322" font-size="16">tan grande es el daño posible?</text>
+  <text x="824" y="366" font-size="15" fill="#5E5E5E">y cuánto tardarías en revocarla</text>
+  <rect x="30" y="444" width="1120" height="44" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="590" y="472" text-anchor="middle" font-size="16" fill="#A6192E" font-weight="700">Tres minutos en parejas, después compartimos dos respuestas con la clase</text>
+</svg>
+<aside class="narracion">Pregunta abierta para la clase. Si esta noche la cadena publicara sin que nadie estuviera mirando, ¿qué tan tranquilo te quedarías? No buscamos una respuesta correcta, sino tres hilos para discutir. Primero, ¿hay reversión? Si algo sale mal, ¿en cuántos minutos vuelve lo anterior y quién es la persona que decide? Segundo, ¿hay puertas? Si las pruebas fallan, ¿el cambio llega igual a producción, y qué pasa si alguien apaga esa puerta a mano? Tercero, ¿quién tiene la llave? Si la credencial se filtra, ¿qué tan grande es el daño y cuánto tardarías en revocarla? Ninguna de las tres necesita herramientas nuevas para responderse: basta mirar cómo está montado hoy tu despliegue. Tres minutos en parejas y compartimos después dos respuestas con el grupo.</aside>
+</section>
+
+<section data-kicker="Síntesis" data-titulo="La semana en cinco ideas" data-sub="Lo que debe quedarte aunque se te olvide el resto de la clase." data-fuente="Elaboración propia a partir de las fuentes de la semana">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="1140" height="82" rx="12" fill="#A6192E"/>
+  <text x="52" y="80" font-size="19" font-weight="700" fill="#fff">Cinco ideas para llevarte</text>
+  <rect x="20" y="126" width="1140" height="70" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="56" y="168" font-size="17" font-weight="700" fill="#A6192E">1</text>
+  <text x="96" y="168" font-size="16">Integración continua es una práctica, no una herramienta: compilar, probar y detectar en cada cambio.</text>
+  <rect x="20" y="206" width="1140" height="70" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="56" y="248" font-size="17" font-weight="700" fill="#9C7B16">2</text>
+  <text x="96" y="248" font-size="16">La cadena gana confianza con puertas: si una falla, no se sigue y el cambio vuelve a quien lo hizo.</text>
+  <rect x="20" y="286" width="1140" height="70" rx="10" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="56" y="328" font-size="17" font-weight="700">3</text>
+  <text x="96" y="328" font-size="16">GitHub Actions se mueve con cuatro piezas: flujos, ejecutores, disparadores y ambientes protegidos.</text>
+  <rect x="20" y="366" width="1140" height="70" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="56" y="408" font-size="17" font-weight="700" fill="#A6192E">4</text>
+  <text x="96" y="408" font-size="16">Empujar y pedir responden a la misma pregunta: quién queda con la llave y qué tan grande es el daño.</text>
+  <rect x="20" y="446" width="1140" height="46" rx="10" fill="#A6192E"/>
+  <text x="56" y="476" font-size="17" font-weight="700" fill="#D4AF37">5</text>
+  <text x="96" y="476" font-size="16" fill="#fff">Se publica por etapas y con reversión ensayada: primero uno a diez por ciento, y lo anterior sigue disponible.</text>
+</svg>
+<aside class="narracion">Cinco ideas para llevarte de la semana. Una: la integración continua es una práctica, no una herramienta; compilar, probar y detectar en cada cambio. Dos: la cadena gana confianza con puertas; si una falla, no se sigue y el cambio vuelve a quien lo hizo. Tres: GitHub Actions se mueve con cuatro piezas, flujos, ejecutores, disparadores y ambientes protegidos. Cuatro: empujar y pedir responden a la misma pregunta, quién queda con la llave y qué tan grande es el daño si algo se filtra. Cinco: se publica por etapas y con reversión ensayada, primero de uno a diez por ciento, y la versión anterior sigue disponible mientras se decide. Si te quedas con una sola, que sea esta: el riesgo, y no la tecnología, ordena el despliegue. Esas cinco son el examen de bolsillo de esta clase.</aside>
+</section>
+
+<section data-kicker="Puente" data-titulo="Qué practicas antes de la semana 11" data-sub="Cierra la Unidad 2 con cuatro tareas concretas y deja listo el repaso." data-fuente="Elaboración propia · Calendario del curso: semana 11, Repaso Unidad 2">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="700" height="330" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="52" y="84" font-size="18" font-weight="700">Cuatro tareas para consolidar</text>
+  <use href="#i-check" x="52" y="106" width="32" height="32" color="#A6192E"/>
+  <text x="98" y="130" font-size="16">Escribe un flujo que corra al confirmar un cambio</text>
+  <use href="#i-check" x="52" y="156" width="32" height="32" color="#A6192E"/>
+  <text x="98" y="180" font-size="16">Añade una puerta que detenga el despliegue al fallar</text>
+  <use href="#i-check" x="52" y="206" width="32" height="32" color="#A6192E"/>
+  <text x="98" y="230" font-size="16">Guarda un secreto y limita los permisos del flujo</text>
+  <use href="#i-check" x="52" y="256" width="32" height="32" color="#A6192E"/>
+  <text x="98" y="280" font-size="16">Decide, por escrito, la estrategia de tu publicación</text>
+  <rect x="52" y="310" width="636" height="44" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="72" y="338" font-size="15" fill="#A6192E" font-weight="700">y prepara la reversión: ¿qué volvería atrás y en cuántos minutos?</text>
+  <rect x="750" y="40" width="410" height="330" rx="14" fill="#A6192E"/>
+  <use href="#i-pipeline" x="786" y="72" width="56" height="56" color="#F3E3E6"/>
+  <text x="860" y="96" font-size="18" font-weight="700" fill="#fff">La próxima semana</text>
+  <text x="860" y="124" font-size="16" fill="#F9EEF0">Repaso Unidad 2</text>
+  <line x1="786" y1="152" x2="1124" y2="152" stroke="#D4AF37" stroke-width="2"/>
+  <text x="786" y="196" font-size="16" fill="#F9EEF0">Recorremos de nuevo las piezas</text>
+  <text x="786" y="226" font-size="16" fill="#F9EEF0">de la unidad: redes, patrones,</text>
+  <text x="786" y="256" font-size="16" fill="#F9EEF0">contenedores y esta cadena de</text>
+  <text x="786" y="286" font-size="16" fill="#F9EEF0">entrega, con preguntas abiertas.</text>
+  <rect x="786" y="312" width="338" height="40" rx="8" fill="#FBF6E7"/>
+  <text x="955" y="338" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">prepara tus dudas de la unidad</text>
+  <rect x="20" y="396" width="1140" height="90" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <use href="#i-colombia" x="52" y="416" width="46" height="46" color="#9C7B16"/>
+  <text x="120" y="432" font-size="17" font-weight="700" fill="#9C7B16">Cierre de la Unidad 2</text>
+  <text x="120" y="464" font-size="16">Con esta semana cierras el ciclo de CaribeMart: del cambio al despliegue, con métricas y reversión. Nos vemos en el repaso.</text>
+</svg>
+<aside class="narracion">Antes de cerrar, cuatro tareas concretas para consolidar. Escribe un flujo que corra al confirmar un cambio. Añade una puerta que detenga el despliegue cuando las pruebas fallen. Guarda un secreto y limita los permisos del flujo a lo que necesita. Y decide, por escrito, la estrategia de publicación de tu caso, preparando además la reversión: qué volvería atrás y en cuántos minutos. La próxima semana toca repaso de la Unidad 2: recorremos de nuevo redes, patrones, contenedores y esta cadena de entrega, con preguntas abiertas. Llega con tus dudas de la unidad. Anota también un caso real que hayas visto donde un despliegue salió mal, porque en el repaso lo vamos a discutir. Con esto cierras el ciclo de CaribeMart, del cambio al despliegue, con métricas y reversión. Nos vemos en el repaso.</aside>
+</section>

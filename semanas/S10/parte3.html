@@ -1,0 +1,544 @@
+<!-- S10 · Parte 3 — GitHub Actions como ejemplo (estándar v2). -->
+
+<section data-kicker="Concepto" data-titulo="Un motor de automatización tiene cinco piezas" data-sub="Primero el concepto genérico; después veremos un producto concreto como ejemplo." data-fuente="Basado en: GitHub, entender GitHub Actions [cite:6] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="70" width="290" height="180" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-documento" x="46" y="94" width="44" height="44" color="#A6192E"/>
+  <text x="104" y="114" font-size="17" font-weight="700" fill="#A6192E">Definición</text>
+  <text x="46" y="164" font-size="15">Un archivo de texto que</text>
+  <text x="46" y="190" font-size="15">vive en el repositorio,</text>
+  <text x="46" y="216" font-size="15">se revisa y se versiona</text>
+  <text x="46" y="240" font-size="15" fill="#5E5E5E">declarativo, no un script suelto</text>
+  <line x1="310" y1="160" x2="386" y2="160" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="394" y="50" width="400" height="220" rx="14" fill="#A6192E"/>
+  <text x="594" y="90" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Motor de automatización</text>
+  <rect x="420" y="112" width="348" height="44" rx="8" fill="#fff"/>
+  <text x="594" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">interpretar la definición</text>
+  <rect x="420" y="166" width="348" height="44" rx="8" fill="#fff"/>
+  <text x="594" y="194" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">ejecutar los pasos en orden</text>
+  <rect x="420" y="220" width="348" height="36" rx="8" fill="#FBF6E7"/>
+  <text x="594" y="244" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">registrar evidencia paso a paso</text>
+  <line x1="794" y1="160" x2="870" y2="160" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="878" y="70" width="282" height="180" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-servidor" x="904" y="94" width="44" height="44" color="#9C7B16"/>
+  <text x="962" y="114" font-size="17" font-weight="700" fill="#9C7B16">Ejecutores</text>
+  <text x="904" y="164" font-size="15">Máquinas efímeras que viven</text>
+  <text x="904" y="190" font-size="15">solo mientras corre el trabajo</text>
+  <text x="904" y="216" font-size="15">y se descartan después</text>
+  <text x="904" y="240" font-size="15" fill="#5E5E5E">limpios en cada corrida</text>
+  <rect x="60" y="330" width="300" height="110" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-evento" x="84" y="354" width="44" height="44" color="#5E5E5E"/>
+  <text x="144" y="374" font-size="17" font-weight="700">Eventos</text>
+  <text x="84" y="414" font-size="15" fill="#5E5E5E">push, solicitud de fusión, agenda</text>
+  <text x="84" y="434" font-size="15" fill="#5E5E5E">o ejecución manual</text>
+  <rect x="440" y="330" width="300" height="110" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-llave" x="464" y="354" width="44" height="44" color="#A6192E"/>
+  <text x="524" y="374" font-size="17" font-weight="700" fill="#A6192E">Credenciales</text>
+  <text x="464" y="414" font-size="15" fill="#5E5E5E">secretos cifrados que solo el</text>
+  <text x="464" y="434" font-size="15" fill="#5E5E5E">trabajo autorizado puede leer</text>
+  <rect x="820" y="330" width="300" height="110" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-datacenter" x="844" y="354" width="44" height="44" color="#9C7B16"/>
+  <text x="904" y="374" font-size="17" font-weight="700" fill="#9C7B16">Ambientes</text>
+  <text x="844" y="414" font-size="15" fill="#5E5E5E">destino, aprobaciones y</text>
+  <text x="844" y="434" font-size="15" fill="#5E5E5E">permisos de cada despliegue</text>
+  <path d="M210 330 V286 H594 V274" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <path d="M590 330 V274" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <path d="M970 330 V286 H594 V274" fill="none" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+</svg>
+<aside class="narracion">Abrimos la parte tres con el concepto, antes que con la marca. Un motor de automatización tiene cinco piezas. La definición: un archivo de texto que vive en el repositorio, se revisa como cualquier otro código y se versiona con él. El motor: interpreta esa definición, ejecuta los pasos en orden y registra la evidencia de cada uno. Los ejecutores: máquinas efímeras que viven solo mientras corre el trabajo y se descartan después, siempre limpias. Y las tres entradas de abajo: los disparadores, como un push o una solicitud de fusión; las credenciales cifradas que solo el trabajo autorizado puede leer; y los ambientes, con su aprobación y sus permisos. Con este vocabulario, cualquier herramienta del mercado se vuelve legible. El producto concreto que usaremos como ejemplo entra en la diapositiva siguiente. También importa entender por qué se guarda como archivo: si la definición vive en el repositorio, el cambio de la cadena se revisa con el mismo rigor que el cambio del producto. Nadie modifica un paso sin que alguien lo lea.</aside>
+</section>
+
+<section data-kicker="Anatomía" data-titulo="Flujo, trabajos y pasos: tres niveles anidados" data-sub="Los trabajos pueden correr en paralelo; los pasos de un trabajo, siempre en orden." data-fuente="Basado en: GitHub, entender GitHub Actions [cite:6] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="770" height="430" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="46" y="76" font-size="17" font-weight="700">flujo · definición en el repositorio</text>
+  <rect x="46" y="94" width="718" height="76" rx="10" fill="#fff" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="66" y="124" font-size="15" font-weight="700" fill="#A6192E">disparadores</text>
+  <text x="66" y="152" font-size="15">push a main · solicitud de fusión · agenda de lunes · manual</text>
+  <rect x="46" y="192" width="346" height="254" rx="10" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="66" y="224" font-size="15" font-weight="700" fill="#A6192E">trabajo A · verificar</text>
+  <rect x="66" y="242" width="306" height="54" rx="8" fill="#fff" stroke="#A6192E"/>
+  <text x="86" y="266" font-size="14" font-weight="700">paso 1</text><text x="150" y="266" font-size="14">instalar dependencias</text>
+  <text x="86" y="286" font-size="13" fill="#5E5E5E">si falla, se detiene el trabajo</text>
+  <rect x="66" y="306" width="306" height="54" rx="8" fill="#fff" stroke="#A6192E"/>
+  <text x="86" y="330" font-size="14" font-weight="700">paso 2</text><text x="150" y="330" font-size="14">correr las pruebas</text>
+  <text x="86" y="350" font-size="13" fill="#5E5E5E">cada paso publica su resultado</text>
+  <rect x="66" y="370" width="306" height="54" rx="8" fill="#fff" stroke="#A6192E"/>
+  <text x="86" y="394" font-size="14" font-weight="700">paso 3</text><text x="150" y="394" font-size="14">escanear el código</text>
+  <text x="86" y="414" font-size="13" fill="#5E5E5E">el resumen queda en la corrida</text>
+  <rect x="418" y="192" width="346" height="254" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="438" y="224" font-size="15" font-weight="700" fill="#9C7B16">trabajo B · empaquetar</text>
+  <rect x="438" y="242" width="306" height="54" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="458" y="266" font-size="14" font-weight="700">paso 1</text><text x="522" y="266" font-size="14">construir la imagen</text>
+  <text x="458" y="286" font-size="13" fill="#5E5E5E">etiqueta con el commit</text>
+  <rect x="438" y="306" width="306" height="54" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="458" y="330" font-size="14" font-weight="700">paso 2</text><text x="522" y="330" font-size="14">escanear el contenedor</text>
+  <text x="458" y="350" font-size="13" fill="#5E5E5E">paquetes y configuración</text>
+  <rect x="438" y="370" width="306" height="54" rx="8" fill="#fff" stroke="#9C7B16"/>
+  <text x="458" y="394" font-size="14" font-weight="700">paso 3</text><text x="522" y="394" font-size="14">subir al registro</text>
+  <text x="458" y="414" font-size="13" fill="#5E5E5E">huella guardada como evidencia</text>
+  <rect x="820" y="40" width="340" height="430" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="846" y="80" font-size="17" font-weight="700" fill="#A6192E">Cómo se leen juntos</text>
+  <use href="#i-check" x="846" y="104" width="30" height="30" color="#9C7B16"/>
+  <text x="888" y="126" font-size="15">Los trabajos A y B pueden</text>
+  <text x="888" y="148" font-size="15">correr al mismo tiempo, cada</text>
+  <text x="888" y="170" font-size="15">uno en su ejecutor.</text>
+  <use href="#i-check" x="846" y="196" width="30" height="30" color="#9C7B16"/>
+  <text x="888" y="218" font-size="15">Dentro de un trabajo, los</text>
+  <text x="888" y="240" font-size="15">pasos van en orden: si uno</text>
+  <text x="888" y="262" font-size="15">falla, el resto no corre.</text>
+  <use href="#i-check" x="846" y="288" width="30" height="30" color="#9C7B16"/>
+  <text x="888" y="310" font-size="15">El disparador decide cuándo</text>
+  <text x="888" y="332" font-size="15">arranca el flujo; el resto del</text>
+  <text x="888" y="354" font-size="15">tiempo nadie espera nada.</text>
+  <rect x="846" y="384" width="288" height="60" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="866" y="410" font-size="14" fill="#A6192E" font-weight="700">cada corrida queda guardada</text>
+  <text x="866" y="432" font-size="14">con su resultado por paso</text>
+</svg>
+<aside class="narracion">La definición se lee en tres niveles. Afuera, el flujo: contiene los disparadores y los trabajos que van a correr. En medio, los trabajos: el trabajo A verifica y el trabajo B empaqueta, y los dos pueden correr al mismo tiempo, cada uno en su propio ejecutor. Adentro, los pasos: se ejecutan en orden y, si uno falla, el resto no corre. Ese anidamiento es lo que permite paralelizar sin perder control. Fíjense en la columna derecha: mientras nadie empuja código, nada espera encendido, porque el disparador decide cuándo arranca. Y cuando arranca, cada corrida queda guardada con su resultado paso a paso. Con esta estructura ya se puede escribir la cadena de la parte dos en un solo archivo.</aside>
+</section>
+
+<section data-kicker="Ejemplo" data-titulo="La misma cadena, escrita en un archivo" data-sub="Estructura mínima de una definición: nombre, disparadores y trabajos con sus pasos." data-fuente="Basado en: GitHub, entender GitHub Actions [cite:6] · Ejemplo propio, genérico">
+<div class="fila">
+  <div class="c-60 lienzo">
+    <div class="terminal"><span class="c"># definición en el repositorio</span>
+<span class="p">nombre:</span> verificar-cambios
+
+<span class="p">disparadores:</span>
+  push:    ramas: [ main ]
+  solicitud: ramas: [ main ]
+  agenda:  - cron: <span class="ok">"0 12 * * 1"</span>
+
+<span class="p">trabajos:</span>
+  verificar:
+    ejecutor: ubuntu-latest
+    pasos:
+      - instalar dependencias
+      - correr pruebas unitarias
+      - escanear código
+  empaquetar:
+    necesita: verificar
+    pasos:
+      - construir imagen
+      - escanear contenedor
+      - subir al registro</div>
+  </div>
+  <div class="c-40 col">
+    <div class="nota"><b>El archivo vive en el repo:</b> se revisa en una solicitud de fusión como cualquier código.</div>
+    <div class="nota dorada"><b>Los pasos son declarativos:</b> qué hacer, no cómo instalar la máquina que lo hace.</div>
+    <div class="nota"><b>Dependencias entre trabajos:</b> empaquetar espera a que verificar pase sus puertas.</div>
+  </div>
+</div>
+<aside class="narracion">Aquí está la misma cadena escrita en un archivo. Arriba, el nombre del flujo y los disparadores: un empuje a la rama principal, una solicitud de fusión o una ejecución programada los lunes al mediodía. Abajo, los dos trabajos. El primero verifica: instala dependencias, corre las pruebas unitarias y escanea el código. El segundo empaquetar, que declara que necesita al primero, construye la imagen, la escanea y la sube al registro. Tres detalles que importan. El archivo vive en el repositorio y se revisa en una solicitud de fusión como cualquier código. Los pasos dicen qué hacer, no cómo se prepara la máquina. Y la dependencia entre trabajos es la puerta de la parte dos: si verificar no pasa, empaquetar no empieza.</aside>
+</section>
+
+<section data-kicker="Ejecutores" data-titulo="Dónde corre: administrado o propio" data-sub="La misma definición apunta a una u otra opción sin cambiar los pasos." data-fuente="Basado en: GitHub, ejecutores [cite:11] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-nube" x="50" y="70" width="56" height="56" color="#A6192E"/>
+  <text x="124" y="94" font-size="18" font-weight="700" fill="#A6192E">Administrado por el proveedor</text>
+  <text x="124" y="120" font-size="15" fill="#5E5E5E">máquinas listas, se alquilan por uso</text>
+  <text x="50" y="176" font-size="16">Arranca en segundos y no hay que</text>
+  <text x="50" y="204" font-size="16">parchear nada: el sistema operativo</text>
+  <text x="50" y="232" font-size="16">y las herramientas ya están.</text>
+  <rect x="50" y="262" width="500" height="58" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="70" y="286" font-size="15" fill="#A6192E" font-weight="700">ideal para pruebas rápidas</text>
+  <text x="70" y="310" font-size="15">entorno distinto al de ejecución real</text>
+  <rect x="600" y="40" width="560" height="300" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-datacenter" x="630" y="70" width="56" height="56" color="#9C7B16"/>
+  <text x="704" y="94" font-size="18" font-weight="700" fill="#9C7B16">Propio, bajo tu control</text>
+  <text x="704" y="120" font-size="15" fill="#5E5E5E">máquinas que ya tienes o alquilas</text>
+  <text x="630" y="176" font-size="16">Útil cuando el trabajo necesita una</text>
+  <text x="630" y="204" font-size="16">red privada, un equipo concreto o</text>
+  <text x="630" y="232" font-size="16">requisitos de cumplimiento.</text>
+  <rect x="630" y="262" width="500" height="58" rx="10" fill="#fff" stroke="#9C7B16" stroke-dasharray="6 5"/>
+  <text x="650" y="286" font-size="15" fill="#9C7B16" font-weight="700">ideal para despliegues internos</text>
+  <text x="650" y="310" font-size="15">toca mantenerlo y escalarlo tú</text>
+  <rect x="20" y="368" width="1140" height="110" rx="14" fill="#A6192E"/>
+  <use href="#i-engranaje" x="50" y="398" width="52" height="52" color="#F3E3E6"/>
+  <text x="124" y="412" font-size="18" font-weight="700" fill="#fff">Lo que no cambia</text>
+  <text x="124" y="446" font-size="16" fill="#F9EEF0">El archivo de definición es el mismo en los dos casos: cambia la línea que declara</text>
+  <text x="124" y="472" font-size="16" fill="#F9EEF0">dónde corre, no los pasos ni las puertas que ya construimos.</text>
+</svg>
+<aside class="narracion">Segunda pieza: el ejecutor. Hay dos caminos. El administrado por el proveedor ofrece máquinas listas que arrancan en segundos, sin parchear nada, y se pagan por uso; es ideal para pruebas rápidas, aunque el entorno no siempre es igual al de ejecución real. El propio, bajo tu control, sirve cuando el trabajo necesita una red privada, un equipo concreto o requisitos de cumplimiento, y ahí el mantenimiento y el escalado son tuyos. La parte bonita es lo que no cambia: el archivo de definición es idéntico en los dos casos. Solo cambia la línea que declara dónde corre. Las puertas, los pasos y la evidencia siguen iguales, y esa es la ventaja de haber separado la definición de la máquina.</aside>
+</section>
+
+<section data-kicker="Disparadores" data-titulo="Qué enciende el flujo" data-sub="Cinco formas de arrancar la misma cadena, sin abrir una terminal." data-fuente="Basado en: GitHub, entender GitHub Actions [cite:6] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="50" width="350" height="64" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-git" x="44" y="66" width="32" height="32" color="#A6192E"/>
+  <text x="92" y="80" font-size="16" font-weight="700" fill="#A6192E">Empuje a la rama principal</text>
+  <text x="92" y="102" font-size="14" fill="#5E5E5E">cada fusión dispara la cadena</text>
+  <rect x="20" y="130" width="350" height="64" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-documento" x="44" y="146" width="32" height="32" color="#9C7B16"/>
+  <text x="92" y="160" font-size="16" font-weight="700" fill="#9C7B16">Solicitud de fusión</text>
+  <text x="92" y="182" font-size="14" fill="#5E5E5E">verifica antes de aprobar</text>
+  <rect x="20" y="210" width="350" height="64" rx="12" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-reloj" x="44" y="226" width="32" height="32" color="#5E5E5E"/>
+  <text x="92" y="240" font-size="16" font-weight="700">Agenda</text>
+  <text x="92" y="262" font-size="14" fill="#5E5E5E">corrida de sanidad, aunque nadie toque nada</text>
+  <rect x="20" y="290" width="350" height="64" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-evento" x="44" y="306" width="32" height="32" color="#A6192E"/>
+  <text x="92" y="320" font-size="16" font-weight="700" fill="#A6192E">Publicación de versión</text>
+  <text x="92" y="342" font-size="14" fill="#5E5E5E">una etiqueta nueva activa el despliegue</text>
+  <rect x="20" y="370" width="350" height="64" rx="12" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-usuario" x="44" y="386" width="32" height="32" color="#9C7B16"/>
+  <text x="92" y="400" font-size="16" font-weight="700" fill="#9C7B16">Ejecución manual</text>
+  <text x="92" y="422" font-size="14" fill="#5E5E5E">clic con usuario, fecha y motivo</text>
+  <line x1="370" y1="82" x2="466" y2="82" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="370" y1="162" x2="466" y2="162" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="370" y1="242" x2="466" y2="242" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="370" y1="322" x2="466" y2="322" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="370" y1="402" x2="466" y2="402" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="474" y="50" width="350" height="400" rx="16" fill="#A6192E"/>
+  <text x="649" y="96" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">El motor</text>
+  <rect x="500" y="124" width="298" height="76" rx="10" fill="#fff"/>
+  <text x="649" y="154" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">lee la definición</text>
+  <text x="649" y="182" text-anchor="middle" font-size="14" fill="#5E5E5E">mismo archivo, cinco disparadores</text>
+  <rect x="500" y="220" width="298" height="76" rx="10" fill="#fff"/>
+  <text x="649" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">elige el ejecutor</text>
+  <text x="649" y="278" text-anchor="middle" font-size="14" fill="#5E5E5E">y le entrega los secretos</text>
+  <rect x="500" y="316" width="298" height="76" rx="10" fill="#FBF6E7"/>
+  <text x="649" y="346" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">guarda la evidencia</text>
+  <text x="649" y="374" text-anchor="middle" font-size="14" fill="#5E5E5E">resultado y duración por paso</text>
+  <line x1="824" y1="250" x2="856" y2="250" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="864" y="140" width="296" height="220" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="890" y="180" font-size="17" font-weight="700">El resultado</text>
+  <text x="890" y="216" font-size="15">Una corrida por evento, con</text>
+  <text x="890" y="242" font-size="15">su autor, su fecha y su</text>
+  <text x="890" y="268" font-size="15">resultado por paso.</text>
+  <text x="890" y="312" font-size="15" fill="#A6192E" font-weight="700">nadie abrió una terminal</text>
+  <text x="890" y="338" font-size="14" fill="#5E5E5E">y nadie copió un archivo</text>
+</svg>
+<aside class="narracion">¿Qué enciende el flujo? Cinco disparadores, todos sin terminal. El empuje a la rama principal, cada vez que alguien integra un cambio. La solicitud de fusión, que verifica antes de que alguien apruebe. La agenda, una corrida de sanidad aunque nadie toque nada durante días. La publicación de una versión, cuando aparece una etiqueta nueva. Y la ejecución manual, que deja usuario, fecha y motivo. Los cinco alimentan el mismo motor, que lee la misma definición, elige el ejecutor, le entrega los secretos y guarda la evidencia. A la derecha, lo que sale: una corrida por evento, con su autor, su fecha y su resultado por paso. Ninguna de estas cinco formas de arrancar implica abrir una terminal ni copiar un archivo.</aside>
+</section>
+
+<section data-kicker="Secretos" data-titulo="Los secretos viven en el servidor, no en el archivo" data-sub="Una credencial en el repositorio es un incidente, no un atajo." data-fuente="Basado en: GitHub, usar secretos en los flujos [cite:7] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="560" height="340" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="3"/>
+  <text x="50" y="82" font-size="18" font-weight="700" fill="#9C7B16">Así sí</text>
+  <rect x="50" y="106" width="500" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <use href="#i-candado" x="68" y="124" width="30" height="30" color="#9C7B16"/>
+  <text x="112" y="134" font-size="15" font-weight="700">Servidor de secretos</text>
+  <text x="112" y="158" font-size="14" fill="#5E5E5E">cifrado, con registro de quién lo cambió</text>
+  <line x1="300" y1="172" x2="300" y2="196" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="50" y="204" width="500" height="66" rx="10" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <use href="#i-engranaje" x="68" y="222" width="30" height="30" color="#9C7B16"/>
+  <text x="112" y="232" font-size="15" font-weight="700">El paso lo recibe como variable</text>
+  <text x="112" y="256" font-size="14" fill="#5E5E5E">solo durante esa corrida</text>
+  <line x1="300" y1="270" x2="300" y2="294" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="50" y="302" width="500" height="60" rx="10" fill="#fff" stroke="#9C7B16" stroke-dasharray="6 5"/>
+  <text x="70" y="328" font-size="15" font-weight="700" fill="#9C7B16">En el registro de la corrida</text>
+  <text x="70" y="352" font-size="14">aparece enmascarado, jamás en texto plano</text>
+  <rect x="600" y="40" width="560" height="340" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <text x="630" y="82" font-size="18" font-weight="700" fill="#A6192E">Así no</text>
+  <rect x="630" y="106" width="500" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="648" y="124" width="30" height="30" color="#A6192E"/>
+  <text x="692" y="134" font-size="15" font-weight="700">Credencial en el archivo</text>
+  <text x="692" y="158" font-size="14" fill="#5E5E5E">dentro de la definición o de la imagen</text>
+  <line x1="880" y1="172" x2="880" y2="196" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="630" y="204" width="500" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-git" x="648" y="222" width="30" height="30" color="#A6192E"/>
+  <text x="692" y="232" font-size="15" font-weight="700">Queda en el historial</text>
+  <text x="692" y="256" font-size="14" fill="#5E5E5E">y en cada copia del repositorio</text>
+  <line x1="880" y1="270" x2="880" y2="294" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="630" y="302" width="500" height="60" rx="10" fill="#fff" stroke="#A6192E" stroke-dasharray="6 5"/>
+  <text x="650" y="328" font-size="15" font-weight="700" fill="#A6192E">La puerta lo detecta</text>
+  <text x="650" y="352" font-size="14">el escaneo de secretos detiene la cadena</text>
+  <rect x="20" y="408" width="1140" height="78" rx="14" fill="#A6192E"/>
+  <use href="#i-llave" x="50" y="426" width="42" height="42" color="#F3E3E6"/>
+  <text x="112" y="442" font-size="17" font-weight="700" fill="#fff">La regla</text>
+  <text x="112" y="470" font-size="16" fill="#F9EEF0">Si un secreto se copió una sola vez en el repositorio, ya se considera comprometido: se rota y se retira.</text>
+</svg>
+<aside class="narracion">Los secretos. A la izquierda, la forma correcta. La credencial vive cifrada en el servidor de secretos, con registro de quién la cambió. Cuando el trabajo arranca, el paso la recibe como variable, solo durante esa corrida, y en el registro aparece enmascarada, jamás en texto plano. A la derecha, la forma incorrecta: la credencial escrita en el archivo o dentro de la imagen. Eso queda en el historial y en cada copia del repositorio, y el escaneo de secretos de la parte dos detiene la cadena en cuanto la encuentra. La regla de abajo es tajante: si un secreto se copió una sola vez, ya se considera comprometido, se rota y se retira. No hay excepciones por estar en una rama privada. Y como el secreto vive en un solo lado, cuando se rota se cambia una vez y todas las corridas nuevas ya lo reciben.</aside>
+</section>
+
+<section data-kicker="Federación" data-titulo="Acceso sin secretos: la identidad es la credencial" data-sub="El ejecutor pide credenciales temporales presentando quién es y de dónde viene." data-fuente="Basado en: GitHub, identidad federada entre flujos y la nube [cite:8] · Proveedores cloud con OIDC [cite:9]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="70" width="260" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-engranaje" x="46" y="96" width="46" height="46" color="#A6192E"/>
+  <text x="106" y="126" font-size="17" font-weight="700" fill="#A6192E">El ejecutor</text>
+  <text x="46" y="176" font-size="15">Arranca una corrida y</text>
+  <text x="46" y="202" font-size="15">necesita publicar un</text>
+  <text x="46" y="228" font-size="15">artefacto en la nube.</text>
+  <text x="46" y="256" font-size="15" fill="#5E5E5E">sin credenciales guardadas</text>
+  <line x1="280" y1="170" x2="356" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="318" y="152" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">pide</text>
+  <rect x="364" y="70" width="260" height="200" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-escudo" x="390" y="96" width="46" height="46" color="#2A2A2A"/>
+  <text x="450" y="126" font-size="17" font-weight="700">Servidor de identidad</text>
+  <text x="390" y="176" font-size="15">Emite un documento corto</text>
+  <text x="390" y="202" font-size="15">con la identidad de la</text>
+  <text x="390" y="228" font-size="15">corrida y su vencimiento.</text>
+  <text x="390" y="256" font-size="15" fill="#5E5E5E">válido por minutos</text>
+  <line x1="624" y1="170" x2="700" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="662" y="152" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">valida</text>
+  <rect x="708" y="70" width="260" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-nube" x="734" y="96" width="46" height="46" color="#9C7B16"/>
+  <text x="794" y="126" font-size="17" font-weight="700" fill="#9C7B16">La nube</text>
+  <text x="734" y="176" font-size="15">Comprueba quién pide y</text>
+  <text x="734" y="202" font-size="15">desde dónde, contra las</text>
+  <text x="734" y="228" font-size="15">reglas que tú definiste.</text>
+  <text x="734" y="256" font-size="15" fill="#9C7B16">decide en milisegundos</text>
+  <line x1="968" y1="170" x2="1044" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <text x="1006" y="152" text-anchor="middle" font-size="14" fill="#A6192E" font-weight="700">entrega</text>
+  <rect x="1052" y="70" width="110" height="200" rx="14" fill="#A6192E"/>
+  <text x="1107" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Permisos</text>
+  <text x="1107" y="170" text-anchor="middle" font-size="15" fill="#F9EEF0">temporales</text>
+  <text x="1107" y="204" text-anchor="middle" font-size="14" fill="#F3E3E6">solo para</text>
+  <text x="1107" y="226" text-anchor="middle" font-size="14" fill="#F3E3E6">esta corrida</text>
+  <rect x="20" y="318" width="1140" height="160" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-candado" x="52" y="352" width="56" height="56" color="#A6192E"/>
+  <text x="132" y="362" font-size="18" font-weight="700" fill="#A6192E">Por qué importa</text>
+  <text x="132" y="400" font-size="16">Antes había que guardar una llave de larga duración en el servidor de secretos y</text>
+  <text x="132" y="428" font-size="16">renovarla a mano. Ahora la identidad de la corrida hace de credencial y el permiso</text>
+  <text x="132" y="456" font-size="16">muere solo cuando termina el trabajo.</text>
+</svg>
+<aside class="narracion">Federación de identidad, la mejora más práctica de los últimos años. El proceso es una cadena de cuatro eslabones. El ejecutor arranca sin ninguna credencial guardada y pide acceso. El servidor de identidad emite un documento corto con la identidad de la corrida y su vencimiento. La nube valida quién pide y desde dónde contra reglas que tú escribiste. Y si coincide, entrega permisos temporales, válidos solo para esa corrida. Comparemos con lo anterior: antes había que guardar una llave de larga duración en el servidor de secretos, renovarla a mano y rotarla cuando alguien se fuera. Ahora la llave no existe. Lo que existe es una identidad que muere sola cuando termina el trabajo.</aside>
+</section>
+
+<section data-kicker="Federación" data-titulo="Reclamos: lo que la nube revisa antes de conceder" data-sub="No se confía en el nombre: se confía en el documento y en sus campos verificables." data-fuente="Basado en: GitHub, identidad federada entre flujos y la nube [cite:8] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="540" height="430" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-documento" x="50" y="70" width="48" height="48" color="#5E5E5E"/>
+  <text x="114" y="92" font-size="18" font-weight="700">El documento de la corrida</text>
+  <text x="114" y="118" font-size="15" fill="#5E5E5E">campos firmados y legibles</text>
+  <rect x="50" y="146" width="480" height="64" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="70" y="174" font-size="15" font-weight="700" fill="#A6192E">audiencia</text>
+  <text x="70" y="198" font-size="15">para quién vale este documento</text>
+  <rect x="50" y="224" width="480" height="64" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="70" y="252" font-size="15" font-weight="700" fill="#A6192E">sujeto</text>
+  <text x="70" y="276" font-size="15">repositorio, rama y ambiente exactos</text>
+  <rect x="50" y="302" width="480" height="64" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="70" y="330" font-size="15" font-weight="700" fill="#A6192E">vencimiento</text>
+  <text x="70" y="354" font-size="15">minutos, no días</text>
+  <text x="50" y="410" font-size="16">Si alguno no coincide con lo esperado, la nube</text>
+  <text x="50" y="438" font-size="16">responde negativa y el trabajo se detiene.</text>
+  <path d="M560 255 H636" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="644" y="40" width="516" height="430" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="674" y="82" font-size="18" font-weight="700" fill="#A6192E">La regla que tú escribes</text>
+  <rect x="674" y="106" width="456" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="694" y="136" font-size="15" font-weight="700">solo desde el repositorio de la aplicación</text>
+  <text x="694" y="162" font-size="15" fill="#5E5E5E">y solo desde la rama principal</text>
+  <rect x="674" y="192" width="456" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="694" y="222" font-size="15" font-weight="700">solo hacia el ambiente de producción</text>
+  <text x="694" y="248" font-size="15" fill="#5E5E5E">con la aprobación ya registrada</text>
+  <rect x="674" y="278" width="456" height="70" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="694" y="308" font-size="15" font-weight="700">solo durante los minutos que dura la corrida</text>
+  <text x="694" y="334" font-size="15" fill="#5E5E5E">después, el permiso deja de existir</text>
+  <rect x="674" y="376" width="456" height="66" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="694" y="404" font-size="15" font-weight="700" fill="#9C7B16">Resultado</text>
+  <text x="694" y="430" font-size="15">ningún archivo de credenciales que olvidar</text>
+</svg>
+<aside class="narracion">Cómo se comprueba que quien pide permiso es quien dice ser. El documento de la corrida trae tres campos firmados. La audiencia dice para quién vale: no sirve ante cualquier servicio. El sujeto identifica el repositorio, la rama y el ambiente exactos, no una cuenta genérica. Y el vencimiento se mide en minutos. Del otro lado están las reglas que tú escribes: solo desde el repositorio de la aplicación, solo desde la rama principal, solo hacia producción y solo con la aprobación registrada. Si alguno no coincide, la nube responde negativa y el trabajo se detiene ahí mismo. El resultado es simple: no queda ningún archivo de credenciales que alguien pueda olvidar rotar.</aside>
+</section>
+
+<section data-kicker="Ambientes" data-titulo="Protecciones del ambiente: la puerta con persona" data-sub="El despliegue final se abre solo si se cumplen las reglas del ambiente." data-fuente="Basado en: GitHub, usar ambientes para el despliegue [cite:10] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="330" height="430" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="46" y="80" font-size="17" font-weight="700">El flujo quiere desplegar</text>
+  <rect x="46" y="104" width="278" height="72" rx="10" fill="#fff" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="66" y="134" font-size="15" font-weight="700">artefacto verificado</text>
+  <text x="66" y="160" font-size="14" fill="#5E5E5E">huella fija, puertas en verde</text>
+  <rect x="46" y="200" width="278" height="72" rx="10" fill="#fff" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="66" y="230" font-size="15" font-weight="700">destino declarado</text>
+  <text x="66" y="256" font-size="14" fill="#5E5E5E">ambiente de producción</text>
+  <rect x="46" y="296" width="278" height="72" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="6 5"/>
+  <text x="66" y="326" font-size="15" font-weight="700">solicitud de despliegue</text>
+  <text x="66" y="352" font-size="14" fill="#5E5E5E">el motor espera respuesta</text>
+  <text x="46" y="418" font-size="15" fill="#5E5E5E">en ambientes sin protección,</text>
+  <text x="46" y="442" font-size="15" fill="#5E5E5E">este paso no existe</text>
+  <line x1="350" y1="332" x2="426" y2="332" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="434" y="40" width="360" height="430" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+  <use href="#i-escudo" x="464" y="70" width="52" height="52" color="#A6192E"/>
+  <text x="532" y="94" font-size="18" font-weight="700" fill="#A6192E">Ambiente: producción</text>
+  <text x="532" y="120" font-size="15" fill="#5E5E5E">reglas propias, no del flujo</text>
+  <rect x="464" y="150" width="300" height="64" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="484" y="178" font-size="15" font-weight="700">Revisores requeridos</text>
+  <text x="484" y="202" font-size="14" fill="#5E5E5E">quien aprueba no es quien subió</text>
+  <rect x="464" y="230" width="300" height="64" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="484" y="258" font-size="15" font-weight="700">Rama restringida</text>
+  <text x="484" y="282" font-size="14" fill="#5E5E5E">solo la rama principal puede llegar</text>
+  <rect x="464" y="310" width="300" height="64" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="484" y="338" font-size="15" font-weight="700">Espera obligatoria</text>
+  <text x="484" y="362" font-size="14" fill="#5E5E5E">un intervalo mínimo antes de seguir</text>
+  <rect x="464" y="390" width="300" height="56" rx="10" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="484" y="416" font-size="15" font-weight="700" fill="#9C7B16">Registro de quién aprobó</text>
+  <text x="484" y="438" font-size="14">usuario, hora y motivo</text>
+  <line x1="794" y1="255" x2="870" y2="255" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="878" y="140" width="282" height="230" rx="14" fill="#A6192E"/>
+  <text x="1019" y="184" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Si todo se cumple</text>
+  <text x="1019" y="226" text-anchor="middle" font-size="16" fill="#F9EEF0">el despliegue sigue</text>
+  <text x="1019" y="256" text-anchor="middle" font-size="16" fill="#F9EEF0">con la misma huella</text>
+  <text x="1019" y="300" text-anchor="middle" font-size="15" fill="#F3E3E6">quien aprobó queda</text>
+  <text x="1019" y="324" text-anchor="middle" font-size="15" fill="#F3E3E6">escrito en la corrida</text>
+  </svg>
+<aside class="narracion">La protección del ambiente es la puerta con persona, y se configura en el ambiente, no en el flujo. A la izquierda, lo que el motor presenta: el artefacto verificado con su huella, el destino declarado y la solicitud de despliegue; mientras tanto, espera. En el centro, la caja de la producción: revisores requeridos, de modo que quien aprueba no es quien subió; rama restringida, solo la principal puede llegar; y una espera obligatoria antes de continuar. Debajo, el registro de quién aprobó, con usuario, hora y motivo. Si todo se cumple, el despliegue sigue con la misma huella. Noten que estas reglas viven en el ambiente: el mismo flujo puede apuntar a un ambiente de pruebas sin ninguna de ellas. Y el registro de quién autorizó sobrevive cuando el equipo cambia: es exactamente lo que un auditor pregunta.</aside>
+</section>
+
+<section data-kicker="Permisos" data-titulo="El flujo declara solo lo que necesita" data-sub="Mínimo privilegio: todo lo no declarado queda denegado." data-fuente="Basado en: GitHub, entender GitHub Actions [cite:6] · GitHub, secretos y permisos [cite:7]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="60" width="340" height="290" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-alerta" x="48" y="88" width="50" height="50" color="#A6192E"/>
+  <text x="114" y="110" font-size="17" font-weight="700" fill="#A6192E">Sin declaración</text>
+  <text x="114" y="134" font-size="15" fill="#5E5E5E">el token llega más lejos</text>
+  <text x="48" y="184" font-size="16">Un paso que solo iba a leer</text>
+  <text x="48" y="212" font-size="16">archivos puede acabar con</text>
+  <text x="48" y="240" font-size="16">permisos de escritura en</text>
+  <text x="48" y="268" font-size="16">todo el repositorio.</text>
+  <rect x="48" y="294" width="284" height="40" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="66" y="320" font-size="14" fill="#A6192E" font-weight="700">nadie pidió eso</text>
+  <line x1="360" y1="205" x2="436" y2="205" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="444" y="40" width="360" height="330" rx="14" fill="#A6192E"/>
+  <text x="624" y="82" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Declarado en el archivo</text>
+  <rect x="470" y="104" width="308" height="60" rx="10" fill="#fff"/>
+  <text x="490" y="130" font-size="15" font-weight="700" fill="#A6192E">contenido: leer</text>
+  <text x="490" y="154" font-size="14" fill="#5E5E5E">el código, nada más</text>
+  <rect x="470" y="176" width="308" height="60" rx="10" fill="#fff"/>
+  <text x="490" y="202" font-size="15" font-weight="700" fill="#A6192E">paquetes: escribir</text>
+  <text x="490" y="226" font-size="14" fill="#5E5E5E">solo para subir el artefacto</text>
+  <rect x="470" y="248" width="308" height="60" rx="10" fill="#fff"/>
+  <text x="490" y="274" font-size="15" font-weight="700" fill="#A6192E">identidad: otorgar</text>
+  <text x="490" y="298" font-size="14" fill="#5E5E5E">para pedir permisos en la nube</text>
+  <text x="624" y="340" text-anchor="middle" font-size="15" fill="#F3E3E6">todo lo demás: denegado</text>
+  <line x1="804" y1="205" x2="880" y2="205" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="888" y="60" width="272" height="290" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-escudo" x="916" y="88" width="50" height="50" color="#9C7B16"/>
+  <text x="982" y="110" font-size="17" font-weight="700" fill="#9C7B16">Resultado</text>
+  <text x="916" y="164" font-size="16">Si un paso intenta algo</text>
+  <text x="916" y="192" font-size="16">fuera de lo declarado, falla</text>
+  <text x="916" y="220" font-size="16">y se ve en la corrida.</text>
+  <text x="916" y="264" font-size="16">El daño posible queda</text>
+  <text x="916" y="292" font-size="16">acotado a lo que el trabajo</text>
+  <text x="916" y="320" font-size="16">realmente pidió.</text>
+  <rect x="20" y="380" width="1140" height="98" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-candado" x="52" y="404" width="50" height="50" color="#5E5E5E"/>
+  <text x="124" y="420" font-size="17" font-weight="700">Mínimo privilegio</text>
+  <text x="124" y="452" font-size="16">Se declara lo necesario para el paso y nada más. La identidad temporal de la parte</text>
+  <text x="124" y="474" font-size="16">anterior hace lo mismo, pero al revés: el permiso nace corto y muere corto.</text>
+</svg>
+<aside class="narracion">Permisos. A la izquierda, lo que pasa cuando el flujo no declara nada: el token llega más lejos de lo que el paso necesita, y un trabajo que solo iba a leer acaba con escritura en todo el repositorio. Nadie pidió eso, pero está. En el centro, la declaración explícita: contenido para leer, paquetes para escribir solo al subir el artefacto, identidad para pedir permisos en la nube, y todo lo demás denegado. A la derecha, el efecto: si un paso intenta algo fuera de lo declarado, falla ahí mismo y se ve en la corrida. Ese es el principio de mínimo privilegio aplicado al pipeline, y con la identidad temporal de la diapositiva anterior se vuelve aún más fuerte, porque el permiso nace corto y muere corto.</aside>
+</section>
+
+<section data-kicker="Caso real" data-titulo="Un banco de la región ya opera así" data-sub="Repositorio público de un banco colombiano: cinco decisiones que reconocerás." data-fuente="Fuente: Bancolombia, repositorio devsecops-engine-tools [cite:12] · Lectura de su configuración de automatización">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="640" height="430" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="50" y="80" font-size="18" font-weight="700" fill="#A6192E">Lo que se observa en su cadena</text>
+  <use href="#i-servidor" x="50" y="106" width="38" height="38" color="#A6192E"/>
+  <text x="104" y="132" font-size="16">Ejecutor administrado, listo y efímero</text>
+  <use href="#i-usuario" x="50" y="166" width="38" height="38" color="#A6192E"/>
+  <text x="104" y="192" font-size="16">Ambiente de publicación declarado en el flujo</text>
+  <use href="#i-llave" x="50" y="226" width="38" height="38" color="#A6192E"/>
+  <text x="104" y="252" font-size="16">Identidad federada en lugar de llave fija</text>
+  <use href="#i-git" x="50" y="286" width="38" height="38" color="#A6192E"/>
+  <text x="104" y="312" font-size="16">Acciones de terceros fijadas por versión</text>
+  <use href="#i-escudo" x="50" y="346" width="38" height="38" color="#A6192E"/>
+  <text x="104" y="372" font-size="16">Análisis de código en cada corrida</text>
+  <rect x="50" y="404" width="580" height="44" rx="8" fill="#fff" stroke="#A6192E" stroke-dasharray="5 4"/>
+  <text x="70" y="432" font-size="15" fill="#A6192E" font-weight="700">todo publicado en repositorio abierto</text>
+  <line x1="660" y1="255" x2="736" y2="255" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="744" y="40" width="416" height="204" rx="14" fill="#A6192E"/>
+  <text x="774" y="82" font-size="18" font-weight="700" fill="#fff">Qué demuestra</text>
+  <text x="774" y="124" font-size="16" fill="#F9EEF0">Las cinco decisiones de la parte</text>
+  <text x="774" y="152" font-size="16" fill="#F9EEF0">dos y de esta parte no son teoría</text>
+  <text x="774" y="180" font-size="16" fill="#F9EEF0">de aula: se usan en producción</text>
+  <text x="774" y="208" font-size="16" fill="#F9EEF0">en la región y son auditables.</text>
+  <rect x="744" y="266" width="416" height="204" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="774" y="308" font-size="18" font-weight="700" fill="#9C7B16">Cómo se lee en clase</text>
+  <text x="774" y="350" font-size="16">Como ejemplo, no como receta:</text>
+  <text x="774" y="378" font-size="16">las piezas son del patrón, la</text>
+  <text x="774" y="406" font-size="16">herramienta elegida por ellos es</text>
+  <text x="774" y="434" font-size="16">solo una decisión de equipo.</text>
+</svg>
+<aside class="narracion">Ahora un caso real de la región. Un banco colombiano publicó en repositorio abierto su conjunto de herramientas de seguridad para la entrega de software, y su configuración deja ver cinco decisiones que ya reconocen: un ejecutor administrado, listo y efímero; un ambiente de publicación declarado en el flujo; identidad federada en lugar de una llave fija; las acciones de terceros fijadas por versión, para que nadie cambie una utilidad a sus espaldas; y análisis de código en cada corrida. ¿Qué demuestra esto? Que las piezas de la parte dos y de esta parte no son teoría de aula: se usan en producción en la región y cualquiera puede auditarlas. Léanlo como ejemplo y no como receta: las piezas son del patrón, la herramienta es decisión de cada equipo.</aside>
+</section>
+
+<section data-kicker="Gobierno" data-titulo="Cuando el regulador publica lineamientos" data-sub="La Superintendencia de Industria y Comercio describe la misma cadena en un documento formal." data-fuente="Fuente: Superintendencia de Industria y Comercio, Lineamientos de implementación DevOps, versión 1.5, 2020 [cite:13]">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="40" width="440" height="430" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <use href="#i-edificio" x="50" y="70" width="56" height="56" color="#5E5E5E"/>
+  <text x="124" y="94" font-size="18" font-weight="700">El documento</text>
+  <text x="124" y="120" font-size="15" fill="#5E5E5E">lineamientos técnicos</text>
+  <rect x="50" y="156" width="380" height="72" rx="10" fill="#fff" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="70" y="186" font-size="15" font-weight="700">Lineamientos de implementación DevOps</text>
+  <text x="70" y="212" font-size="14" fill="#5E5E5E">Superintendencia de Industria y Comercio · OTI</text>
+  <rect x="50" y="244" width="380" height="64" rx="10" fill="#fff" stroke="#5E5E5E" stroke-dasharray="5 4"/>
+  <text x="70" y="272" font-size="15" font-weight="700">Versión 1.5 · 30 de noviembre de 2020</text>
+  <text x="70" y="296" font-size="14" fill="#5E5E5E">con control de cambios publicado</text>
+  <text x="50" y="352" font-size="16">Su historial dice algo importante:</text>
+  <text x="50" y="380" font-size="16">las versiones siguientes añadieron</text>
+  <text x="50" y="408" font-size="16">el lineamiento de pipeline de</text>
+  <text x="50" y="436" font-size="16">integración continua y el de</text>
+  <text x="50" y="464" font-size="16">despliegue continuo.</text>
+  <line x1="460" y1="255" x2="536" y2="255" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <rect x="544" y="40" width="616" height="430" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="574" y="82" font-size="18" font-weight="700" fill="#A6192E">Las mismas piezas, en lenguaje de gobierno</text>
+  <rect x="574" y="106" width="556" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="594" y="136" font-size="15" font-weight="700">Puertas de calidad</text>
+  <text x="594" y="160" font-size="14" fill="#5E5E5E">una sección propia de controles antes de avanzar</text>
+  <rect x="574" y="184" width="556" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="594" y="214" font-size="15" font-weight="700">Codificación y construcción</text>
+  <text x="594" y="238" font-size="14" fill="#5E5E5E">repositorio, ramas, versiones y verificación estática</text>
+  <rect x="574" y="262" width="556" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="594" y="292" font-size="15" font-weight="700">Pipeline de integración continua</text>
+  <text x="594" y="316" font-size="14" fill="#5E5E5E">lineamiento dedicado, añadido en una versión posterior</text>
+  <rect x="574" y="340" width="556" height="66" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+  <text x="594" y="370" font-size="15" font-weight="700">Despliegue continuo</text>
+  <text x="594" y="394" font-size="14" fill="#5E5E5E">también con lineamiento propio en el documento</text>
+  <text x="574" y="440" font-size="16" fill="#5E5E5E">Si tu cadena habla este idioma, la conversación con cumplimiento es corta</text>
+</svg>
+<aside class="narracion">Cierre del caso colombiano con el ángulo de gobierno. La Superintendencia de Industria y Comercio publicó lineamientos técnicos para implementar y operar DevOps, con control de cambios visible y una versión 1.5 de noviembre de 2020. Su historial de versiones es el dato interesante: una versión añadió el lineamiento de pipeline de integración continua y la siguiente el de despliegue continuo. Es decir, el regulador llegó a las mismas piezas que vimos hoy: puertas de calidad, codificación y construcción, integración continua y despliegue continuo. ¿Por qué importa en clase? Porque cuando tu cadena habla ese idioma, la conversación con el área de cumplimiento se vuelve corta: no hay que traducir cada paso, el documento ya lo nombra.</aside>
+</section>
+
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿dónde va cada credencial?" data-fuente="Ejercicio de elaboración propia · caso CaribeMart (ficticio)">
+<div class="fila">
+  <div class="c-60 col">
+    <div class="reto"><div class="r-tit">Pausa y responde</div>CaribeMart necesita dos cosas en su flujo: subir la imagen al registro y generar el informe de dependencias. Hoy hay una llave de administrador escrita en el archivo de definición. ¿Qué harías con esa llave y cómo conseguirías los dos permisos sin guardar ninguno?</div>
+    <div class="nota dorada">Pista: separa <b>secretos</b>, <b>identidad federada</b> y <b>permisos mínimos</b>; son tres mecanismos distintos.</div>
+    <div class="nota">Escribe la solución en tres líneas: dónde vive la credencial, quién la emite y qué alcance tiene.</div>
+  </div>
+  <div class="c-40 lienzo"><svg viewBox="0 0 420 500"><rect x="40" y="40" width="340" height="140" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><use href="#i-llave" x="70" y="76" width="68" height="68" color="#A6192E"/><text x="164" y="104" font-size="16" font-weight="700" fill="#A6192E">llave de administrador</text><text x="164" y="134" font-size="15" fill="#5E5E5E">escrita en el archivo</text><text x="164" y="160" font-size="15" fill="#5E5E5E">de definición</text><rect x="40" y="204" width="340" height="140" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/><use href="#i-candado" x="70" y="240" width="68" height="68" color="#9C7B16"/><text x="164" y="268" font-size="16" font-weight="700" fill="#9C7B16">permisos que faltan</text><text x="164" y="298" font-size="15" fill="#5E5E5E">registro de imágenes</text><text x="164" y="324" font-size="15" fill="#5E5E5E">e informe de deps</text><rect x="40" y="368" width="340" height="96" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/><use href="#i-pregunta" x="66" y="388" width="56" height="56" color="#5E5E5E"/><text x="140" y="418" font-size="16" font-weight="700">tres líneas</text><text x="140" y="444" font-size="15" fill="#5E5E5E">tu propuesta</text></svg></div>
+</div>
+<aside class="narracion">Mini-reto. Pausa el video. CaribeMart necesita dos cosas en su flujo: subir la imagen al registro y generar el informe de dependencias. Hoy hay una llave de administrador escrita dentro del archivo de definición, que es exactamente lo que no debería estar ahí. ¿Qué harías con esa llave y cómo conseguirías los dos permisos sin guardar ninguno? La pista: son tres mecanismos distintos que se confunden todo el tiempo, secretos, identidad federada y permisos mínimos. Escribe tu solución en tres líneas: dónde vive la credencial, quién la emite y qué alcance tiene. Cuando la tengas, continúa.</aside>
+</section>
+
+<section data-kicker="Resumen" data-titulo="Lo que dejó la parte tres" data-sub="Cinco ideas para llevarte antes de ver el despliegue." data-fuente="Elaboración propia · síntesis de la parte 3">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="30" width="272" height="188" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="46" y="70" font-size="17" font-weight="700" fill="#A6192E">1 · Concepto primero</text>
+  <text x="46" y="104" font-size="15">Definición, motor,</text>
+  <text x="46" y="130" font-size="15">ejecutores, eventos y</text>
+  <text x="46" y="156" font-size="15">ambientes: el vocabulario</text>
+  <text x="46" y="182" font-size="15">de cualquier herramienta.</text>
+  <rect x="310" y="30" width="272" height="188" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="336" y="70" font-size="17" font-weight="700" fill="#9C7B16">2 · Tres niveles</text>
+  <text x="336" y="104" font-size="15">Flujo, trabajos y pasos:</text>
+  <text x="336" y="130" font-size="15">paralelo entre trabajos,</text>
+  <text x="336" y="156" font-size="15">en orden dentro de cada</text>
+  <text x="336" y="182" font-size="15">uno, con evidencia propia.</text>
+  <rect x="600" y="30" width="272" height="188" rx="14" fill="#F4F4F4" stroke="#5E5E5E" stroke-width="2"/>
+  <text x="626" y="70" font-size="17" font-weight="700">3 · Secretos y llaves</text>
+  <text x="626" y="104" font-size="15">El secreto vive en el</text>
+  <text x="626" y="130" font-size="15">servidor; la identidad</text>
+  <text x="626" y="156" font-size="15">federada lo reemplaza y</text>
+  <text x="626" y="182" font-size="15">el permiso nace corto.</text>
+  <rect x="890" y="30" width="272" height="188" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="916" y="70" font-size="17" font-weight="700" fill="#A6192E">4 · Puertas con reglas</text>
+  <text x="916" y="104" font-size="15">Ambiente, revisores,</text>
+  <text x="916" y="130" font-size="15">rama y permisos viven</text>
+  <text x="916" y="156" font-size="15">en el destino, no en el</text>
+  <text x="916" y="182" font-size="15">archivo del flujo.</text>
+  <rect x="20" y="252" width="1142" height="226" rx="14" fill="#A6192E"/>
+  <use href="#i-nube" x="56" y="292" width="72" height="72" color="#F3E3E6"/>
+  <text x="152" y="300" font-size="20" font-weight="700" fill="#fff">5 · El ejemplo es un ejemplo</text>
+  <text x="152" y="344" font-size="17" fill="#F9EEF0">Las piezas son del patrón y las usan organizaciones de la región; la marca concreta</text>
+  <text x="152" y="372" font-size="17" fill="#F9EEF0">solo sirve para mostrar dónde se aprieta cada botón del camino.</text>
+  <rect x="152" y="404" width="480" height="48" rx="10" fill="#fff"/>
+  <text x="172" y="435" font-size="16" font-weight="700" fill="#A6192E">Siguiente: cómo se publica de verdad</text>
+  <rect x="664" y="404" width="464" height="48" rx="10" fill="#FBF6E7"/>
+  <text x="684" y="435" font-size="16" font-weight="700" fill="#9C7B16">parte 4 · empuje, GitOps y estrategias</text>
+</svg>
+<aside class="narracion">Cierre de la parte tres. Cinco ideas. Primera: el concepto antes que la marca, con cinco piezas que cualquier herramienta repite. Segunda: tres niveles anidados, paralelos entre trabajos y en orden dentro de cada uno. Tercera: el secreto vive en el servidor y la identidad federada lo va reemplazando, con permisos que nacen cortos. Cuarta: las reglas duras, revisores, rama y permisos, viven en el destino y no en el archivo del flujo. Quinta: el ejemplo es un ejemplo, las piezas son del patrón y las usan organizaciones de la región. Lo que falta es lo más visible de todo: qué pasa cuando ese artefacto aprobado finalmente llega al usuario. Eso es la parte cuatro, empuje, GitOps y estrategias de publicación.</aside>
+</section>
+
+
