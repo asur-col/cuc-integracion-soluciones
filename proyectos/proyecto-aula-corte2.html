@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto de Aula Corte 2 — CaribeMart contenedorizada · Integración de Soluciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --line:#E5DCCB;
+    --ok:#0E7A4B; --ok-tint:#E8F5EE;
+    --warn:#B23A3A; --warn-tint:#FBE9E7;
+    --shadow:0 1px 2px rgba(42,26,20,.05),0 8px 24px rgba(42,26,20,.07);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme=light]){
+      --bg:#1B1613; --surface:#24201B; --surface-2:#2C2620;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C; --line:#3D362B;
+      --ok:#5BD69E; --ok-tint:#1D3328;
+      --warn:#F0748A; --warn-tint:#3A1E22;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
+  .layout{display:flex;align-items:flex-start;max-width:1400px;margin:0 auto;gap:0}
+  .wrap{flex:1 1 auto;min-width:0;max-width:1140px;margin:0 auto;padding:0 20px 80px}
+  .sidenav{position:sticky;top:0;flex:0 0 220px;padding:32px 12px 32px 20px;display:flex;flex-direction:column;gap:4px;align-self:flex-start;max-height:100vh;overflow-y:auto}
+  .sidenav a{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-decoration:none;padding:8px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+  .sidenav a:hover{color:var(--vino);background:var(--surface-2)}
+  .sidenav a.active{color:var(--vino-strong);border-left-color:var(--vino);background:var(--vino-tint);font-weight:600}
+  @media(max-width:960px){
+    .layout{display:block}
+    .sidenav{position:static;flex-direction:row;flex-wrap:wrap;max-height:none;overflow-y:visible;padding:14px 20px 6px;gap:8px}
+    .sidenav a{border:1px solid var(--line);border-left:1px solid var(--line);background:var(--surface-2);border-radius:20px;padding:6px 13px}
+    .sidenav a.active{border-color:var(--vino)}
+    .wrap{max-width:100%}
+  }
+  header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  header.top img.logo{height:52px;margin-bottom:14px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(24px,4vw,38px);margin:0 0 10px;line-height:1.15}
+  .sub{color:var(--ink-soft);margin:0;font-size:16px;max-width:680px;margin-left:auto;margin-right:auto}
+  .accent-bar{width:72px;height:4px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin:18px auto;border-radius:2px}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);line-height:1.8;margin:0}
+  .meta b{color:var(--ink)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-top:26px;box-shadow:var(--shadow)}
+  h2{font-family:var(--serif);font-size:23px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  h2 .paso{font-family:var(--mono);font-size:13px;background:var(--vino);color:#fff;border-radius:8px;padding:3px 11px;font-weight:500;flex:none}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--vino-strong);font-family:var(--serif)}
+  h4{font-size:15px;margin:18px 0 6px;color:var(--ink)}
+  .lead{color:var(--ink-soft);margin-top:2px}
+  table{border-collapse:collapse;width:100%;font-size:13.8px;margin:14px 0}
+  th{text-align:left;background:var(--surface-2);padding:9px 12px;border:1px solid var(--line);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+  td{padding:8px 12px;border:1px solid var(--line);vertical-align:top}
+  .tbl-wrap{overflow-x:auto}
+  code{font-family:var(--mono);font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  blockquote{margin:14px 0;padding:14px 18px;border-left:4px solid var(--dorado);background:var(--dorado-tint);border-radius:0 8px 8px 0;font-style:italic;color:var(--ink)}
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .tip{border-color:var(--ok);background:var(--ok-tint)} .tip::before{content:"💡 TIP — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok)}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint)} .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado)}
+  .danger{border-color:var(--vino);background:var(--vino-tint)} .danger::before{content:"☠ DECISIÓN DE LA JUNTA — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino)}
+  ul,ol{padding-left:22px}
+  li{margin:6px 0}
+  figure.diagram{margin:22px 0;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+  figure.diagram svg{min-width:640px;width:100%;height:auto;display:block}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.03em}
+  .rubrica td:first-child, .rubrica th:first-child{font-family:var(--mono);text-align:center;width:28px}
+  .rubrica td.crit{font-weight:600;color:var(--vino-strong)}
+  footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+  a.ext{color:var(--vino);text-decoration:none;border-bottom:1px dotted var(--vino)}
+  a.ext:hover{color:var(--vino-strong);border-bottom-style:solid}
+</style>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+  <p class="eyebrow">Proyecto de Aula · Segundo Corte · Unidad 2</p>
+  <h1>Proyecto de aula Corte 2: CaribeMart contenedorizada y desplegada</h1>
+  <p class="sub">La junta aprobó modernizar la tienda en línea: pasar de un monolito a servicios contenedorizados, desplegados en Kubernetes y entregados de forma automatizada. El equipo debe demostrar que cada paso se ejecuta y se puede reproducir</p>
+  <div class="accent-bar"></div>
+  <p class="meta">
+    <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
+    <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
+    <b>Modalidad:</b> equipo de máximo 2 estudiantes &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 2 (semanas 7 a 10)
+  </p>
+</header>
+
+<div class="layout">
+<nav class="sidenav">
+  <a href="#s1">1. Info general</a>
+  <a href="#s2">2. Caso de estudio</a>
+  <a href="#s3">3. Objetivos</a>
+  <a href="#s4">4. Alcance</a>
+  <a href="#s5">5. Contenido mínimo</a>
+  <a href="#s6">6. Entregables</a>
+  <a href="#s7">7. Rúbrica</a>
+  <a href="#s8">8. Condiciones</a>
+  <a href="#s9">9. Recomendaciones</a>
+</nav>
+<div class="wrap">
+
+<!-- ============ 1. INFO GENERAL ============ -->
+<section id="s1">
+  <h2><span class="paso">1</span> Información general</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>Campo</th><th>Detalle</th></tr>
+    <tr><td>Asignatura</td><td>Integración de Soluciones para Plataformas Cloud (Soluciones Multicloud)</td></tr>
+    <tr><td>Corte evaluado</td><td>Segundo corte</td></tr>
+    <tr><td>Unidad evaluada</td><td>Unidad 2 (semanas 7 a 10)</td></tr>
+    <tr><td>Temas de la unidad</td><td>Microservicios (S07) · Contenedores y registro (S08) · Kubernetes (S09) · CI/CD con GitHub Actions (S10)</td></tr>
+    <tr><td>Laboratorios relacionados</td><td>Lab 3 — Contenedores y Docker Hub · Lab 4 — Kubernetes (ambos en labs.proyectoasur.org)</td></tr>
+    <tr><td>Modalidad</td><td><b>Máximo 2 estudiantes</b></td></tr>
+    <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
+    <tr><td><b>Fecha límite de entrega</b></td><td><b>Sábado 24 de octubre de 2026, 23:59</b> (deja el domingo 25 para calificar antes del plazo de notas del corte 2)</td></tr>
+    <tr><td>Medio de entrega</td><td>Microsoft Teams</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 2. CASO DE ESTUDIO ============ -->
+<section id="s2">
+  <h2><span class="paso">2</span> Caso de estudio: CaribeMart contenedorizada</h2>
+
+  <h3>Contexto</h3>
+  <p>Este proyecto continúa el caso del primer corte. <b>CaribeMart</b> es una cadena colombiana de retail con 60 almacenes físicos, un canal de venta por catálogo y una tienda en línea que crece entre 35% y 40% anual. En el primer corte, la junta aprobó una estrategia multicloud; en este corte, el equipo se concentra en una sola parte de esa estrategia: la <b>tienda en línea</b>, que hoy corre como un monolito en un hosting de capacidad fija y se degrada en eventos de alto tráfico como el Día sin IVA o Black Friday.</p>
+
+  <h3>La decisión de la junta</h3>
+  <div class="danger">La junta aprobó modernizar la tienda en línea: dividirla en servicios contenedorizados, desplegarlos en Kubernetes y automatizar su entrega desde el repositorio, de modo que un cambio llegue al clúster sin pasos manuales y sin depender de un solo equipo de operación.</div>
+  <p>El equipo actúa como el <b>equipo de arquitectura y plataforma</b> contratado para entregar la primera versión de esa modernización. La lógica de negocio es secundaria: lo que se evalúa es la arquitectura, la contenerización y la automatización.</p>
+</section>
+
+<!-- ============ 3. OBJETIVOS ============ -->
+<section id="s3">
+  <h2><span class="paso">3</span> Objetivos del proyecto</h2>
+  <h3>Objetivo general</h3>
+  <p>Construir y desplegar una versión contenedorizada de la tienda en línea de CaribeMart, con sus servicios orquestados en Kubernetes y su entrega automatizada con GitHub Actions, aplicando los conceptos de la Unidad 2.</p>
+  <h3>Objetivos específicos</h3>
+  <ol>
+    <li><b>(Semana 7)</b> Descomponer la tienda en al menos tres servicios, justificando sus límites y la forma de comunicación entre ellos (síncrona o asíncrona), y el papel de un API Gateway.</li>
+    <li><b>(Semana 8)</b> Empaquetar cada servicio en una imagen de contenedor portable, con etiquetado inmutable, y publicarla en un registro.</li>
+    <li><b>(Semana 9)</b> Desplegar los servicios en Kubernetes con réplicas, sondas de salud, límites de recursos y una estrategia de actualización explícita.</li>
+    <li><b>(Semana 10)</b> Automatizar el ciclo build → test → push → deploy con GitHub Actions, manejando los secretos fuera del código.</li>
+  </ol>
+</section>
+
+<!-- ============ 4. ALCANCE ============ -->
+<section id="s4">
+  <h2><span class="paso">4</span> Alcance: temas de la Unidad 2</h2>
+  <p>El proyecto evalúa <b>únicamente la Unidad 2</b>. Se califica la <b>arquitectura, la contenerización y la automatización</b>, no la lógica de negocio: los servicios pueden ser mínimos (por ejemplo, una respuesta fija o datos de prueba en memoria).</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Semana</th><th>Tema</th><th>Laboratorio de apoyo</th><th>Aplicación esperada</th></tr>
+    <tr><td>7</td><td>Microservicios</td><td>—</td><td>Descomposición en servicios, comunicación y API Gateway</td></tr>
+    <tr><td>8</td><td>Contenedores y registro</td><td>Lab 3 — Contenedores y Docker Hub</td><td>Dockerfiles, imágenes etiquetadas y publicadas</td></tr>
+    <tr><td>9</td><td>Kubernetes</td><td>Lab 4 — Kubernetes</td><td>Manifiestos de Deployment y Service, sondas, réplicas y actualización</td></tr>
+    <tr><td>10</td><td>CI/CD con GitHub Actions</td><td>—</td><td>Workflow build → test → push → deploy con secretos</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 5. CONTENIDO MÍNIMO ============ -->
+<section id="s5">
+  <h2><span class="paso">5</span> Contenido mínimo del proyecto</h2>
+
+  <h3>a) Descomposición y comunicación (Semana 7)</h3>
+  <ul>
+    <li>Propuesta de <b>al menos tres servicios</b> (por ejemplo catálogo, pedidos y frontend; el equipo puede proponer otros), con responsabilidad única y límites documentados.</li>
+    <li>Para cada enlace entre servicios, indicar si es <b>síncrono</b> o <b>asíncrono</b> y justificar la elección.</li>
+    <li>Un <b>API Gateway</b> como punto de entrada, con su justificación (qué centraliza y qué no debe hacer).</li>
+    <li>Diagrama de arquitectura que muestre servicios, gateway y comunicación.</li>
+  </ul>
+
+  <h3>b) Contenedores e imágenes (Semana 8, Lab 3)</h3>
+  <ul>
+    <li><b>Un Dockerfile por servicio</b>, con la imagen base y el usuario de ejecución justificados.</li>
+    <li>Etiquetado <b>inmutable</b> (por ejemplo, identificador del commit o versión semántica; no basta con <code>latest</code>).</li>
+    <li>Publicación de las imágenes en un registro con autenticación.</li>
+    <li>Prueba de portabilidad: la imagen se ejecuta en un contenedor limpio, sin depender del código fuente local.</li>
+  </ul>
+
+  <h3>c) Orquestación en Kubernetes (Semana 9, Lab 4)</h3>
+  <ul>
+    <li><b>Deployment</b> y <b>Service</b> por cada servicio, con número de réplicas justificado.</li>
+    <li><b>Sondas</b> de liveness y readiness, y <b>límites de recursos</b> (requests y limits).</li>
+    <li>Estrategia de actualización explícita (por ejemplo, rolling update con sus parámetros) y, si se ejecutó, un rollback.</li>
+  </ul>
+
+  <h3>d) Pipeline CI/CD (Semana 10)</h3>
+  <ul>
+    <li>Workflow de <b>GitHub Actions</b> con las etapas <b>build → test → push → deploy</b>, en ese orden.</li>
+    <li>Credenciales (registro, clúster) guardadas en <i>GitHub Secrets</i>; ningún valor sensible en el repositorio.</li>
+    <li>Etiqueta de la imagen derivada del commit, consistente con el punto b.</li>
+  </ul>
+
+  <h3>e) Informe corto (máximo 8 páginas)</h3>
+  <p>Decisiones de diseño, riesgos identificados y <b>alternativas descartadas</b> con su motivo (por ejemplo, por qué no un solo contenedor, por qué otro mecanismo de mensajería o de despliegue).</p>
+
+  <h3>f) Evidencia de ejecución</h3>
+  <ul>
+    <li>Capturas con <b>fecha y nombre del equipo</b> de lo que sí se ejecutó (build, push, <code>kubectl</code>, ejecución del workflow). Pueden apoyarse en lo hecho en los Labs 3 y 4.</li>
+    <li>Si un paso no pudo ejecutarse, debe decirse <b>explícitamente</b> en el informe y justificarse. Declarar un paso no ejecutado no penaliza por sí mismo; ocultarlo sí.</li>
+  </ul>
+</section>
+
+<!-- ============ 6. ENTREGABLES ============ -->
+<section id="s6">
+  <h2><span class="paso">6</span> Entregables</h2>
+  <p>Una carpeta comprimida con el nombre <code>equipo-XX/</code> (XX: número de equipo) que contenga:</p>
+  <ol>
+    <li><code>README.md</code> con los <b>integrantes</b>, los <b>pasos para reproducir</b> el proyecto (build, push, despliegue y pipeline) y las <b>decisiones</b> principales.</li>
+    <li>Código fuente de los servicios, los <b>Dockerfiles</b> y los <b>manifiestos de Kubernetes</b>.</li>
+    <li>El <b>workflow de GitHub Actions</b> (<code>.github/workflows/</code>).</li>
+    <li>El <b>informe corto</b> en PDF (máximo 8 páginas).</li>
+    <li>Carpeta <code>evidencias/</code> con las capturas con fecha y nombre del equipo.</li>
+    <li>Diagrama de arquitectura en formato editable (draw.io o similar), con su archivo fuente.</li>
+  </ol>
+</section>
+
+<!-- ============ 7. RÚBRICA ============ -->
+<section id="s7">
+  <h2><span class="paso">7</span> Rúbrica de evaluación — 5 criterios, nota final de 0.0 a 5.0</h2>
+  <p class="lead">Cada criterio vale <b>hasta 1.0 punto</b>. La suma de los 5 da la nota final del proyecto (máximo 5.0). Los criterios 1 a 4 son <b>grupales</b>. El criterio 5 es <b>individual</b>: la calidad de la evidencia del equipo fija el tope de ese criterio, y la respuesta de cada integrante a la pregunta al azar ajusta su nota dentro de ese tope.</p>
+  <div class="tbl-wrap"><table class="rubrica">
+    <tr><th>#</th><th>Criterio</th><th>Qué mide</th><th>1.0 (pleno)</th><th>0.6 (parcial)</th><th>0.2 (mínimo)</th><th>0.0</th></tr>
+    <tr><td class="crit">1</td><td><b>Descomposición y comunicación entre servicios (S07)</b></td><td>Que la división en servicios y la forma de comunicación estén justificadas, y que el gateway tenga un papel claro</td><td>Tres servicios o más con responsabilidad única y límites documentados; cada enlace marcado como síncrono o asíncrono con justificación; API Gateway con su razón; al menos una llamada entre servicios se muestra funcionando en la evidencia</td><td>Tres servicios y diagrama, pero una comunicación o el rol del gateway se justifica de forma genérica, o un servicio mezcla responsabilidades</td><td>Menos de tres servicios, o la comunicación no se justifica, o el diagrama no coincide con el código</td><td>No hay descomposición, o es el monolito con otro nombre</td></tr>
+    <tr><td class="crit">2</td><td><b>Contenerización y registro de imágenes (S08, Lab 3)</b></td><td>Que cada servicio sea una imagen portable, versionada y publicada</td><td>Los 3 servicios tienen Dockerfile con etiqueta inmutable (no <code>latest</code>); las imágenes están publicadas en un registro con autenticación; la imagen corre en un contenedor limpio y responde a su prueba de salud</td><td>Los Dockerfile existen y construyen, pero una imagen usa <code>latest</code>, o falla en un contenedor limpio, o el push no se evidencia ni se declara</td><td>Solo uno o dos servicios contenerizados, o imágenes sin etiqueta versionada</td><td>No hay Dockerfile ni imágenes</td></tr>
+    <tr><td class="crit">3</td><td><b>Orquestación en Kubernetes (S09, Lab 4)</b></td><td>Que los servicios desplegados sean resilientes y actualizables</td><td>Deployment y Service por servicio; réplicas definidas; sondas de liveness y readiness; requests y limits en cada Deployment; estrategia de actualización explícita; <code>rollout status</code> evidenciado, o validación con <code>kubectl apply --dry-run=client</code> más declaración del motivo si no hubo clúster</td><td>Manifiestos completos y validados, pero falta una pieza (sondas o límites en algún servicio), o el rollout no se evidencia y no se declara</td><td>Manifiestos incompletos, por ejemplo solo Deployment sin Service ni sondas</td><td>No hay manifiestos de Kubernetes</td></tr>
+    <tr><td class="crit">4</td><td><b>Pipeline CI/CD con GitHub Actions (S10)</b></td><td>Que el ciclo build → test → push → deploy esté automatizado y sea seguro</td><td>Workflow con build, test, push y deploy en ese orden; el test puede fallar (al menos una prueba real); secretos en GitHub Secrets y ningún valor sensible en el repo; etiqueta de imagen derivada del commit; ejecución verde con enlace al run, o validación local del YAML con declaración explícita si no fue posible ejecutarlo</td><td>Etapas en orden, pero el test o el deploy no son reales (no pueden fallar), o alguna credencial queda visible en el repositorio</td><td>Workflow que solo compila, o que no versiona la imagen</td><td>No hay workflow en el repositorio</td></tr>
+    <tr><td class="crit">5</td><td><b>Evidencia, justificación y defensa individual</b></td><td>Que el informe, la evidencia y el README permitan reproducir y entender el proyecto, y que cada integrante pueda explicar su parte (criterio individual)</td><td>Capturas con fecha y nombre del equipo de cada paso ejecutado; pasos no ejecutados declarados con justificación; informe con decisiones, riesgos y al menos una alternativa descartada con su motivo; README que permite reproducir; el integrante responde con precisión la pregunta al azar y la relaciona con una decisión del equipo</td><td>Evidencia y README completos, pero el informe omite alguna decisión o riesgo; la respuesta es correcta solo en lo general</td><td>Evidencia parcial sin declarar lo no ejecutado, o la respuesta muestra que el integrante no conoce la parte que dice haber hecho</td><td>Sin evidencia, o el integrante no responde o no puede explicar su trabajo</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 8. CONDICIONES ============ -->
+<section id="s8">
+  <h2><span class="paso">8</span> Condiciones de entrega</h2>
+  <ul>
+    <li>Los equipos (máximo 2 integrantes) deben quedar registrados con el docente antes de la entrega.</li>
+    <li>La entrega se realiza por <b>Microsoft Teams</b>, en la carpeta comprimida <code>equipo-XX/</code> descrita en la sección 6, a más tardar el <b>sábado 24 de octubre de 2026, 23:59</b>.</li>
+    <li>Entrega tardía: no se califica, salvo causa justificada comunicada al docente <b>antes</b> del plazo.</li>
+    <li><b>Trabajo propio:</b> cada equipo entrega su propio trabajo. No se permite copiar código, configuraciones, informes ni evidencias entre equipos.</li>
+    <li><b>Uso de IA generativa:</b> permitido solo si se declara en el informe qué herramientas se usaron y para qué partes; el equipo es responsable de la exactitud técnica de todo lo entregado.</li>
+    <li><b>Ejecución:</b> el aula y la plataforma de laboratorios no requieren Internet, salvo el uso propio de GitHub de cada equipo. Para los pasos que el estudiante no pueda ejecutar por restricciones de red, vale la validación local del YAML y la declaración explícita en el informe.</li>
+  </ul>
+</section>
+
+<!-- ============ 9. RECOMENDACIONES ============ -->
+<section id="s9">
+  <h2><span class="paso">9</span> Recomendaciones</h2>
+  <ul>
+    <li>Empiecen por una <b>versión mínima funcionando</b>: primero un servicio que corra en contenedor, luego los demás, luego Kubernetes y al final el pipeline. Un pipeline sobre algo que no corre no sirve de evidencia.</li>
+    <li><b>Versionen todo</b>: código, Dockerfiles, manifiestos y workflow en el repositorio desde el primer día, con commits pequeños.</li>
+    <li><b>Lean primero la rúbrica</b> (sección 7): cada criterio dice qué evidencia se espera. Los niveles 1.0 describen lo que hay que demostrar.</li>
+    <li>Apóyense en los Labs 3 y 4 y en el material de las semanas 7 a 10; cada semana alimenta un criterio de la rúbrica.</li>
+    <li>Documenten lo que no funcionó y por qué. Un informe honesto sobre un paso fallido vale más que un paso presentado como exitoso sin evidencia.</li>
+  </ul>
+
+</section>
+
+</div>
+</div>
+
+<footer>
+  Integración de Soluciones para Plataformas Cloud · Universidad de la Costa (CUC) · Periodo 2026-2 · Proyecto de Aula — Segundo Corte
+</footer>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidenav a'));
+  var sections = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = 0;
+    sections.forEach(function(s, i){ if (s && s.offsetTop <= pos) current = i; });
+    links.forEach(function(a, i){ a.classList.toggle('active', i === current); });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
