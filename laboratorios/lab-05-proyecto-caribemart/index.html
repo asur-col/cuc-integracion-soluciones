@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio 5 &mdash; Proyecto pr&aacute;ctico CaribeMart &middot; CUC</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #FBF8F3;
+      --surface: #FFFFFF;
+      --surface-2: #F4EEE3;
+      --ink: #2A2A2A;
+      --ink-soft: #6B6259;
+      --vino: #A6192E;
+      --vino-strong: #7E1223;
+      --vino-tint: #FBEBEC;
+      --dorado: #A9791C;
+      --dorado-tint: #FBF3DE;
+      --line: #E5DCCB;
+      --code-bg: #F1EADA;
+      --code-ink: #4A4030;
+      --shadow: 0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #181411;
+        --surface: #221D18;
+        --surface-2: #2B2520;
+        --ink: #EFE7D9;
+        --ink-soft: #B3A896;
+        --vino: #E2536B;
+        --vino-strong: #F0748A;
+        --vino-tint: #3A1E22;
+        --dorado: #E4BC5C;
+        --dorado-tint: #3B321C;
+        --line: #3D352A;
+        --code-bg: #1F1914;
+        --code-ink: #E4D9C3;
+        --shadow: 0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+    a { color: var(--vino); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3.5px; width: 0%;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+      z-index: 1000; transition: width .1s ease-out;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      nav.toc { display: none; }
+    }
+
+    header.top.portada {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .portada-logo {
+      height: 72px;
+      width: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .portada-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: var(--vino);
+      background: var(--vino-tint);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    header.top h1 {
+      color: var(--vino);
+      font-size: clamp(26px, 3.8vw, 36px);
+      margin: 0 0 10px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    header.top .sub {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+      max-width: 62ch;
+      margin-inline: auto;
+    }
+
+    .accent-bar {
+      width: 200px;
+      height: 4px;
+      margin: 0 auto 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .author-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      padding-top: 4px;
+    }
+
+    .author-block span { display: inline-flex; align-items: center; gap: 6px; }
+    .author-block strong { color: var(--ink); }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 18px 40px;
+      border-right: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    nav.toc .toc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+      margin: 0 0 14px 8px;
+      font-weight: 700;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    nav.toc a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+    nav.toc a.active { background: var(--vino-tint); color: var(--vino); font-weight: 600; }
+
+    nav.toc a .badge {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-2); color: var(--ink-soft);
+      display: grid; place-items: center;
+      font-size: 11.5px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    nav.toc a.active .badge { background: var(--vino); color: #fff; }
+
+    main { padding: 40px 48px 90px; min-width: 0; }
+
+    @media (max-width: 650px) {
+      main { padding: 24px 18px 70px; }
+      header.top.portada { padding: 32px 18px 24px; }
+    }
+
+    .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 72ch; margin: 16px 0 24px; }
+    .lede b, .lede strong { color: var(--ink); }
+
+    section.part {
+      padding-top: 44px;
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+
+    section.part:first-of-type { border-top: none; padding-top: 10px; }
+
+    .part-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+    .part-badge {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--vino); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700; font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(166,25,46,.25);
+    }
+
+    .part-head h2 { margin: 0; font-size: 24px; font-weight: 600; }
+
+    h3.sub {
+      font-size: 16.5px;
+      margin: 32px 0 12px;
+      color: var(--vino);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin: 0 0 14px; max-width: 74ch; }
+
+    .docref {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      margin: -4px 0 18px;
+    }
+    .docref a { color: var(--vino); text-decoration: underline; }
+
+    ol.steps { list-style: none; margin: 8px 0 20px; padding: 0; counter-reset: step; }
+
+    ol.steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 2px 0 18px 38px;
+      max-width: 72ch;
+    }
+
+    ol.steps > li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px; font-weight: 700;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--vino);
+      box-shadow: var(--shadow);
+    }
+
+    ol.steps > li:not(:last-child)::after {
+      content: "";
+      position: absolute; left: 12.5px; top: 30px; bottom: 0;
+      width: 1.5px; background: var(--line);
+    }
+
+    ul.plain { padding-left: 20px; margin: 6px 0 14px; }
+    ul.plain li { margin-bottom: 6px; max-width: 68ch; }
+
+    pre {
+      position: relative;
+      background: #211D18; color: #EFE7D9;
+      border-radius: 10px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-size: 13.5px; line-height: 1.55;
+      margin: 8px 0 16px;
+      border: 1px solid var(--line);
+    }
+
+    code.inline {
+      background: var(--surface-2); color: var(--code-ink);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 13px; border: 1px solid var(--line);
+    }
+
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+      background: var(--surface); color: var(--ink-soft);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    pre:hover .copy-btn { opacity: 1; }
+    pre .copy-btn { color: #B3A896; border-color: #4A4030; background: #2B2520; }
+    .copy-btn:hover { color: #E4BC5C; border-color: #E4BC5C; }
+    .copy-btn.copied { color: var(--dorado); border-color: var(--dorado); opacity: 1; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 12px 0 20px;
+      font-size: 14px;
+      max-width: 72ch;
+      line-height: 1.6;
+    }
+
+    .callout.warn { background: var(--vino-tint); border-left: 4px solid var(--vino); color: var(--ink); }
+    .callout.warn b, .callout.warn strong { color: var(--vino); }
+    .callout.note { background: var(--dorado-tint); border-left: 4px solid var(--dorado); color: var(--ink); }
+    .callout.note b, .callout.note strong { color: var(--dorado); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin: 10px 0 22px;
+      box-shadow: var(--shadow);
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0; font-size: 13.5px; text-align: left; }
+    th { background: var(--vino); color: #fff; padding: 11px 14px; font-weight: 600; letter-spacing: .02em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--surface-2); }
+
+    .rubric-weight { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--vino); }
+
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin: 14px 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    .diagram-caption {
+      font-size: 12.5px; color: var(--ink-soft);
+      text-align: center; margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    figure.ref {
+      margin: 14px 0 24px;
+      max-width: 640px;
+    }
+
+    figure.ref img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #fff;
+    }
+
+    figure.ref img.logo-img {
+      max-width: 180px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    figure.ref figcaption {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.5;
+    }
+
+    figure.ref figcaption a { color: var(--ink-soft); text-decoration: underline; }
+
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer; user-select: none;
+      transition: background .15s ease;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li:hover { background: var(--surface-2); }
+
+    .checklist .box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      margin-top: 2px; flex-shrink: 0;
+      background: var(--surface);
+      transition: all .15s ease;
+    }
+
+    .checklist li.done { opacity: .6; }
+    .checklist li.done .box { background: var(--vino); border-color: var(--vino); position: relative; }
+    .checklist li.done .box::after {
+      content: "";
+      position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px;
+      border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+    }
+    .checklist li.done span.text { text-decoration: line-through; }
+
+    #back-to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--vino); color: #fff; border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 998; font-size: 16px;
+    }
+    #back-to-top.show { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover { transform: translateY(-2px); }
+
+    #toc-toggle {
+      display: none;
+      position: fixed; bottom: 24px; left: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      border: 1px solid var(--line);
+      z-index: 998; box-shadow: var(--shadow);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      #toc-toggle { display: flex; }
+      nav.toc.mobile-open {
+        display: block; position: fixed; inset: 0;
+        height: 100vh; width: 85vw; max-width: 320px;
+        background: var(--surface); z-index: 997;
+        box-shadow: var(--shadow);
+        border-right: 1px solid var(--line);
+      }
+    }
+
+    footer.page {
+      max-width: 74ch;
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    @media print {
+      nav.toc, #progress-bar, #back-to-top, #toc-toggle, .copy-btn { display: none !important; }
+      .shell { grid-template-columns: 1fr !important; }
+      section.part { break-inside: avoid; }
+    }
+  
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <div class="shell">
+    <nav class="toc" id="toc">
+      <p class="toc-label">Contenido</p>
+      <a href="#intro"><span class="badge">&middot;</span> Introducci&oacute;n</a>
+      <a href="#parteA"><span class="badge">1</span> Reconoce CaribeMart</a>
+      <a href="#parteB"><span class="badge">2</span> Conteneriza</a>
+      <a href="#parteC"><span class="badge">3</span> Despliega</a>
+      <a href="#parteD"><span class="badge">4</span> Punta a punta</a>
+      <a href="#parteE"><span class="badge">5</span> Autorreparaci&oacute;n y rollout</a>
+      <a href="#parteF"><span class="badge">6</span> Pipeline</a>
+      <a href="#parteG"><span class="badge">7</span> Entregable</a>
+      <a href="#industria"><span class="badge">n</span> EKS / AKS / GKE</a>
+      <a href="#troubleshooting"><span class="badge">?</span> Problemas</a>
+      <a href="#rubrica"><span class="badge">%</span> C&oacute;mo se eval&uacute;a</a>
+      <a href="#referencias"><span class="badge">r</span> Referencias</a>
+      <a href="#checklist"><span class="badge">v</span> Checklist</a>
+    </nav>
+
+    <div>
+      <header class="top portada">
+        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
+        <h1>Laboratorio 5: Proyecto pr&aacute;ctico CaribeMart</h1>
+        <p class="sub">Pasa la tienda de un monolito a <b>3 servicios contenedorizados</b>
+        (cat&aacute;logo, pedidos y frontend) desplegados en Kubernetes, con
+        autorreparaci&oacute;n, actualizaci&oacute;n sin ca&iacute;da y un pipeline que los entrega.
+        <b>Individual &middot; 20&nbsp;% del Corte 2.</b></p>
+        <div class="accent-bar"></div>
+        <div class="author-block">
+          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span><strong>Universidad de la Costa (CUC)</strong></span>
+          <span><strong>2026-2 &middot; Proyecto de Corte 2 &middot; 20 %</strong></span>
+        </div>
+      </header>
+
+      <main>
+        <section id="intro">
+          <p class="lede">En los Labs 1 y 3 construiste y publicaste una imagen; en el Lab 4 la
+          orquestaste con Kubernetes. Ahora es un <b>proyecto completo</b>: la tienda
+          <b>CaribeMart</b> deja de ser un monolito y pasa a ser <b>tres servicios que se
+          hablan entre s&iacute;</b> y un <b>pipeline</b> que los entrega. Se califica
+          <b>contenerizaci&oacute;n, orquestaci&oacute;n y automatizaci&oacute;n</b>, no programaci&oacute;n: el c&oacute;digo
+          de negocio ya te lo damos hecho.</p>
+
+          <p>El proyecto tiene <b>cinco entregables</b>, exactamente lo que <code class="inline">revisar</code>
+          comprueba:</p>
+          <ol class="steps">
+            <li><b>Im&aacute;genes publicadas</b>: los 3 servicios construidos y subidos a <b>tu registro</b>
+            con una etiqueta <b>inmutable</b> (nunca <code class="inline">latest</code>).</li>
+            <li><b>Despliegue en Kubernetes</b>: 3 <code class="inline">Deployments</code> con
+            <b>&ge;2 r&eacute;plicas</b>, sondas de salud y l&iacute;mites de recursos.</li>
+            <li><b>Servicios comunicados</b>: una petici&oacute;n al <b>frontend</b> recorre
+            <b>pedidos</b>, que a su vez consulta al <b>cat&aacute;logo</b>, y responde de punta a punta.</li>
+            <li><b>Autorreparaci&oacute;n y rollout</b>: si se borra un pod, vuelve; y en una
+            actualizaci&oacute;n rodante el servicio <b>no deja de responder</b>.</li>
+            <li><b>Pipeline</b>: un <code class="inline">ci.sh</code> local
+            (<i>build</i> &rarr; <i>test</i> &rarr; <i>push</i> &rarr; <i>deploy</i>) que se detiene si
+            una prueba falla, m&aacute;s el workflow equivalente de GitHub Actions.</li>
+          </ol>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 340" width="100%" height="auto" role="img" aria-label="Los tres servicios de CaribeMart en Kubernetes">
+              <rect x="16" y="16" width="888" height="308" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="44" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">TU ESTACI&Oacute;N &middot; CL&Uacute;STER KUBERNETES DE UN NODO (k3s)</text>
+
+              <rect x="70" y="120" width="200" height="120" rx="10" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="170" y="150" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#A6192E">frontend</text>
+              <text x="170" y="174" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">NodePort 30080</text>
+              <text x="170" y="194" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">GET / · /api/estado</text>
+              <text x="170" y="214" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">POST /api/pedidos</text>
+
+              <rect x="360" y="120" width="200" height="120" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="460" y="150" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#2A2A2A">pedidos</text>
+              <text x="460" y="174" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">GET/POST /pedidos</text>
+              <text x="460" y="194" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">calcula el total</text>
+
+              <rect x="650" y="120" width="200" height="120" rx="10" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.5"></rect>
+              <text x="750" y="150" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#7E5A12">cat&aacute;logo</text>
+              <text x="750" y="174" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">GET /productos</text>
+              <text x="750" y="194" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">precios</text>
+
+              <line x1="360" y1="165" x2="280" y2="165" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="272,165 284,159 284,171" fill="#A6192E"></polygon>
+              <text x="320" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">CATALOGO_URL</text>
+
+              <line x1="650" y1="180" x2="560" y2="180" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="552,180 564,174 564,186" fill="#6B6259"></polygon>
+              <text x="605" y="171" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">CATALOGO_URL</text>
+
+              <text x="460" y="286" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">registry:5000 &rarr; de aqu&iacute; salen las 3 im&aacute;genes (etiqueta inmutable)</text>
+            </svg>
+            <p class="diagram-caption">El <b>frontend</b> es la &uacute;nica puerta al exterior
+            (NodePort 30080); habla con <b>pedidos</b> por su nombre de Service y
+            <b>pedidos</b> consulta al <b>cat&aacute;logo</b> el precio. Las tres im&aacute;genes se
+            publican en tu registro privado. Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <p><b>Presupuesto de tiempo (120 minutos):</b></p>
+          <table>
+            <thead><tr><th>Parte</th><th>Tiempo</th></tr></thead>
+            <tbody>
+              <tr><td>1 &mdash; Reconoce CaribeMart y tu cl&uacute;ster</td><td>10 min</td></tr>
+              <tr><td>2 &mdash; Conteneriza los 3 servicios y publ&iacute;calos</td><td>20 min</td></tr>
+              <tr><td>3 &mdash; Deployments, Services, sondas y l&iacute;mites</td><td>30 min</td></tr>
+              <tr><td>4 &mdash; Comunicaci&oacute;n de punta a punta</td><td>15 min</td></tr>
+              <tr><td>5 &mdash; Autorreparaci&oacute;n y rollout sin ca&iacute;da</td><td>20 min</td></tr>
+              <tr><td>6 &mdash; Pipeline <code class="inline">ci.sh</code> y Actions</td><td>20 min</td></tr>
+              <tr><td>7 &mdash; Entregable (<code class="inline">revisar</code>)</td><td>5 min</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout note">
+            <p><b>Es individual.</b> Cada estudiante tiene su propia estaci&oacute;n, su propio cl&uacute;ster
+            y su propio registro privado: nadie ve tus im&aacute;genes ni tus pods. Al cerrar la
+            sesi&oacute;n se borra todo (pods, manifiestos, im&aacute;genes y cl&uacute;ster); lo &uacute;nico que queda
+            es la evidencia que registra <code class="inline">revisar</code>.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteA">
+          <div class="part-head"><span class="part-badge">1</span><h2>Paso 1 &mdash; Reconoce CaribeMart y tu cl&uacute;ster (~10 min)</h2></div>
+
+          <h3 class="sub">1.1 &middot; Abre tu sesi&oacute;n</h3>
+          <ol class="steps">
+            <li>Entra en <code class="inline">https://labs.proyectoasur.org</code> con tus credenciales.</li>
+            <li>Busca el <b>Lab 5 &mdash; Proyecto pr&aacute;ctico CaribeMart</b> y pulsa <b>Iniciar lab</b>.</li>
+            <li>Cuando diga <b>Entrar</b>, &aacute;brelo: tu terminal es igual que la del Lab 4 y
+            tienes una pesta&ntilde;a <b>CaribeMart</b> (vac&iacute;a hasta el paso 4).</li>
+          </ol>
+
+          <h3 class="sub">1.2 &middot; Prepara tu espacio</h3>
+          <p>El comando <code class="inline">mi-espacio</code> (el mismo de los Labs 3 y 4) te deja en
+          el directorio del proyecto y comprueba que el nodo est&aacute; en marcha:</p>
+          <pre><code>mi-espacio
+kubectl get nodes
+kubectl get pods -A</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el proyecto copiado a
+          <code class="inline">/workspace/proyecto</code>, el nodo en <code class="inline">Ready</code> y, en
+          <code class="inline">kube-system</code>, los pods <code class="inline">coredns</code> y
+          <code class="inline">local-path-provisioner</code> en <code class="inline">Running</code>. Si el nodo
+          a&uacute;n est&aacute; en <code class="inline">NotReady</code>, espera 10 s y repite.</p>
+
+          <h3 class="sub">1.3 &middot; Lo que ya te damos</h3>
+          <p>Estos son los tres servicios (l&oacute;gica de negocio trivial). <b>NO te toca
+          programar</b>: revisa qu&eacute; expone cada uno y qu&eacute; variables de entorno usa.</p>
+          <pre><code>cd /workspace/proyecto
+find . -maxdepth 2 -type f | sort
+cat catalogo/server.js
+cat pedidos/server.js
+cat frontend/server.js</code></pre>
+          <p>Fíjate en las pistas que usar&aacute;s despu&eacute;s:</p>
+          <table>
+            <thead><tr><th>Servicio</th><th>Endpoints</th><th>Necesita</th></tr></thead>
+            <tbody>
+              <tr><td><b>cat&aacute;logo</b></td><td><code class="inline">/salud</code>,
+                <code class="inline">/productos</code></td><td>nada</td></tr>
+              <tr><td><b>pedidos</b></td><td><code class="inline">/salud</code>,
+                <code class="inline">/pedidos</code> (GET/POST)</td>
+                <td><code class="inline">CATALOGO_URL</code></td></tr>
+              <tr><td><b>frontend</b></td><td><code class="inline">/salud</code>,
+                <code class="inline">/api/estado</code>, <code class="inline">/api/pedidos</code></td>
+                <td><code class="inline">CATALOGO_URL</code>, <code class="inline">PEDIDOS_URL</code></td></tr>
+            </tbody>
+          </table>
+          <div class="callout warn">
+            <p><b>No hay manifiestos en <code class="inline">k8s/</code>.</b> Los Deployments y
+            Services los escribes t&uacute; (paso 3). El <code class="inline">ci.sh</code> eval&uacute;a el
+            directorio <code class="inline">k8s/</code>: hasta que no lo crees, el pipeline se detiene
+            al final.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteB">
+          <div class="part-head"><span class="part-badge">2</span><h2>Paso 2 &mdash; Conteneriza los 3 servicios y publ&iacute;calos (~20 min)</h2></div>
+          <p>Es el mismo ciclo <code class="inline">build &rarr; push</code> de los Labs 1 y 3, ahora
+          para tres im&aacute;genes. Cada servicio ya trae su <code class="inline">Dockerfile</code> y su
+          <code class="inline">.dockerignore</code>; t&uacute; decides la etiqueta: <b>versionada e
+          inmutable</b> (por ejemplo <code class="inline">1.0.0</code>). <code class="inline">latest</code>
+          est&aacute; <b>prohibido</b> por el contrato del lab.</p>
+
+          <pre><code>cd /workspace/proyecto
+echo $LAB_REGISTRO                 # debe decir registry:5000
+
+for s in catalogo pedidos frontend; do
+  docker build -t "$LAB_REGISTRO/$s:1.0.0" "$s"
+  docker push  "$LAB_REGISTRO/$s:1.0.0"
+done
+
+curl -s http://$LAB_REGISTRO/v2/_catalog</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el cat&aacute;logo
+          <code class="inline">{"repositories":["catalogo","frontend","pedidos"]}</code> (el orden
+          puede variar) y, si consultas
+          <code class="inline">curl -s http://$LAB_REGISTRO/v2/catalogo/tags/list</code>,
+          <code class="inline">{"name":"catalogo","tags":["1.0.0"]}</code>. Publicar dos
+          etiquetas (por ejemplo una versi&oacute;n 1 y una 2) es normal y te har&aacute; falta para el
+          rollout del paso 5.</p>
+          <p>El pipeline del paso 6 hace este mismo build/push por ti; puedes hacerlo a
+          mano primero para entenderlo y dejar que <code class="inline">ci.sh</code> lo repita
+          despu&eacute;s.</p>
+        </section>
+
+        <section class="part" id="parteC">
+          <div class="part-head"><span class="part-badge">3</span><h2>Paso 3 &mdash; Despliega los 3 servicios en Kubernetes (~30 min)</h2></div>
+          <p>Esta es la parte central del proyecto: <b>t&uacute; escribes los manifiestos</b> en
+          <code class="inline">/workspace/proyecto/k8s/</code> (un archivo por servicio, por
+          ejemplo <code class="inline">catalogo.yaml</code>, <code class="inline">pedidos.yaml</code> y
+          <code class="inline">frontend.yaml</code>). Cada servicio necesita un
+          <b>Deployment</b> y un <b>Service</b>.</p>
+
+          <h3 class="sub">3.1 &middot; Lo que el servidor exige de cada Deployment</h3>
+          <ul>
+            <li><b>&ge;2 r&eacute;plicas</b> (<code class="inline">spec.replicas: 2</code> o m&aacute;s)
+            y con las r&eacute;plicas <b>disponibles</b> (no basta declararlas).</li>
+            <li>La imagen sale de <b>tu registro</b> con una etiqueta publicada:
+            <code class="inline">registry:5000/&lt;servicio&gt;:1.0.0</code>.</li>
+            <li><b>readinessProbe</b> y <b>livenessProbe</b> apuntando a
+            <code class="inline">/salud</code> en el puerto 3000.</li>
+            <li><b>resources.requests</b> y <b>resources.limits</b> (CPU y memoria).</li>
+            <li>En <b>pedidos</b> y <b>frontend</b>: variables
+            <code class="inline">CATALOGO_URL</code> y/o
+            <code class="inline">PEDIDOS_URL</code> apuntando a los <b>nombres de Service</b>
+            (<code class="inline">http://catalogo:3000</code>, <code class="inline">http://pedidos:3000</code>).</li>
+          </ul>
+
+          <h3 class="sub">3.2 &middot; Un esqueleto del que partir</h3>
+          <p>As&iacute; se ve un Deployment (le faltan cosas a prop&oacute;sito: mira la lista de
+          arriba y compl&eacute;talo t&uacute;):</p>
+          <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata: { name: catalogo }
+spec:
+  replicas: 2                 # &lt;-- exige >=2
+  selector: { matchLabels: { app: catalogo } }
+  template:
+    metadata: { labels: { app: catalogo } }
+    spec:
+      containers:
+        - name: catalogo
+          image: registry:5000/catalogo:1.0.0
+          ports: [{ containerPort: 3000 }]
+          # ... readinessProbe, livenessProbe y resources (te toca)</code></pre>
+          <div class="callout note">
+            <p><b>&iquest;No recuerdas la sintaxis de las sondas o de los l&iacute;mites?</b> No necesitas
+            Internet: la estaci&oacute;n tiene la documentaci&oacute;n de Kubernetes. Cons&uacute;ltala con
+            <code class="inline">kubectl explain</code>, por ejemplo:</p>
+            <pre><code>kubectl explain deployment.spec.template.spec.containers.readinessProbe
+kubectl explain deployment.spec.template.spec.containers.livenessProbe
+kubectl explain deployment.spec.template.spec.containers.resources
+kubectl explain deployment.spec.template.spec.containers.resources.limits</code></pre>
+            <p>Agrega <code class="inline">--recursive</code> para ver todos los campos de una vez.
+            Las sondas apuntan a <code class="inline">/salud</code> en el puerto <code class="inline">3000</code>.</p>
+          </div>
+          <p>Apl&iacute;calos como en el Lab 4 y espera el rollout:</p>
+          <pre><code>kubectl apply -f /workspace/proyecto/k8s/
+kubectl get deploy,rs,pods -o wide
+kubectl rollout status deploy/catalogo --timeout=120s</code></pre>
+
+          <h3 class="sub">3.3 &middot; El Service del frontend</h3>
+          <p>Los otros dos Services pueden ser <code class="inline">ClusterIP</code> (solo se
+          hablan dentro del cl&uacute;ster). El del <b>frontend</b> tiene que ser
+          <code class="inline">NodePort</code> en el <b>30080</b> para verlo en la pesta&ntilde;a
+          <b>CaribeMart</b>:</p>
+          <pre><code>apiVersion: v1
+kind: Service
+metadata: { name: frontend }
+spec:
+  type: NodePort
+  selector: { app: frontend }
+  ports: [{ port: 80, targetPort: 3000, nodePort: 30080 }]</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> <code class="inline">kubectl get deploy</code> con
+          <code class="inline">READY 2/2</code> (o m&aacute;s) para los tres servicios, y
+          <code class="inline">kubectl get svc</code> con los Services y sus endpoints. Si un pod
+          queda en <code class="inline">ImagePullBackOff</code>, revisa que subiste esa
+          etiqueta exacta (paso 2).</p>
+        </section>
+
+        <section class="part" id="parteD">
+          <div class="part-head"><span class="part-badge">4</span><h2>Paso 4 &mdash; Comunicaci&oacute;n de punta a punta (~15 min)</h2></div>
+          <p>El objetivo del proyecto: una petici&oacute;n al <b>frontend</b> recorre
+          <b>pedidos</b> y este consulta al <b>cat&aacute;logo</b>. Compru&eacute;balo t&uacute; mismo desde la
+          estaci&oacute;n:</p>
+          <pre><code>kubectl get endpoints frontend
+curl -s http://127.0.0.1:30080/api/estado
+curl -s -X POST http://127.0.0.1:30080/api/pedidos \
+  -H 'Content-Type: application/json' \
+  -d '{"productoId":1,"cantidad":2,"referencia":"mi-prueba"}'
+curl -s http://127.0.0.1:30080/api/estado</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el primer <code class="inline">/api/estado</code>
+          con <code class="inline">catalogo.ok=true</code> y
+          <code class="inline">pedidos.ok=true</code>; la compra devolviendo un pedido con el
+          <b>nombre del producto</b> y tu <code class="inline">referencia</code>; y en el segundo
+          <code class="inline">/api/estado</code> el contador de pedidos <b>+1</b>. Abre la
+          pesta&ntilde;a <b>CaribeMart</b> de la sesi&oacute;n: ver&aacute;s el cat&aacute;logo y el pedido.</p>
+          <div class="callout note">
+            <p><b>C&oacute;mo lo comprueba el servidor:</b> <code class="inline">revisar</code> lanza
+            &eacute;l mismo una compra nueva con una referencia aleatoria por el NodePort y
+            exige que el contador de pedidos suba y que el pedido traiga el producto.
+            Una p&aacute;gina est&aacute;tica &ldquo;de mentira&rdquo; no pasa esta prueba.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteE">
+          <div class="part-head"><span class="part-badge">5</span><h2>Paso 5 &mdash; Autorreparaci&oacute;n y rollout sin ca&iacute;da (~20 min)</h2></div>
+
+          <h3 class="sub">5.1 &middot; Autorreparaci&oacute;n</h3>
+          <p>Con &ge;2 r&eacute;plicas, borra un pod a mano y observa c&oacute;mo el ReplicaSet lo repone
+          (igual que en el Lab 4):</p>
+          <pre><code>P=$(kubectl get pods -l app=frontend --no-headers | awk '$3=="Running"{print $1; exit}')
+echo "borro $P"
+kubectl delete pod "$P"
+sleep 8
+kubectl get pods -l app=frontend</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el pod borrado desaparece y aparece otro con
+          <b>otro nombre</b>, y vuelves a tener el n&uacute;mero de r&eacute;plicas completo. El servidor
+          hace esta misma prueba &eacute;l solo.</p>
+
+          <h3 class="sub">5.2 &middot; Publica una v2</h3>
+          <p>Para la actualizaci&oacute;n rodante necesitas una segunda etiqueta del
+          <b>frontend</b>. Con el mismo <code class="inline">VERSION</code> del Dockerfile:</p>
+          <pre><code>cd /workspace/proyecto
+docker build --build-arg VERSION=2.0.0 -t "$LAB_REGISTRO/frontend:2.0.0" frontend
+docker push "$LAB_REGISTRO/frontend:2.0.0"
+curl -s http://$LAB_REGISTRO/v2/frontend/tags/list</code></pre>
+
+          <h3 class="sub">5.3 &middot; Actualiza sin cortar el servicio</h3>
+          <p>Cambia la imagen del Deployment y comprueba que, durante la actualizaci&oacute;n,
+          el NodePort <b>sigue respondiendo 200 en todo momento</b> (por eso exigen
+          &ge;2 r&eacute;plicas):</p>
+          <pre><code>kubectl set image deploy/frontend frontend="$LAB_REGISTRO/frontend:2.0.0"
+while kubectl rollout status deploy/frontend --timeout=1s 2>/dev/null; do
+  curl -s -o /dev/null -w '%{http_code} ' http://127.0.0.1:30080/salud
+done
+curl -s http://127.0.0.1:30080/ | grep -o 'versi&oacute;n [^<]*'</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> una fila de <code class="inline">200</code> y al
+          final <code class="inline">successfully rolled out</code>. El servidor hace el mismo
+          rollout &eacute;l solo (y lo revierte al terminar).</p>
+        </section>
+
+        <section class="part" id="parteF">
+          <div class="part-head"><span class="part-badge">6</span><h2>Paso 6 &mdash; Pipeline build &rarr; test &rarr; push &rarr; deploy (~20 min)</h2></div>
+          <p>El proyecto ya trae <code class="inline">ci.sh</code>, las pruebas de <code class="inline">pruebas/</code>
+          (una unitaria por servicio y una de humo) y un workflow de Actions. Tu trabajo es dejarlo
+          <b>coherente y completo</b> para tu proyecto.</p>
+
+          <h3 class="sub">6.1 &middot; El contrato de <code class="inline">ci.sh</code></h3>
+          <ul>
+            <li>Anuncia las etapas con las marcas <code class="inline">ETAPA build</code>,
+            <code class="inline">ETAPA test</code>, <code class="inline">ETAPA push</code>,
+            <code class="inline">ETAPA deploy</code>.</li>
+            <li>Ejecuta <b>todas</b> las pruebas de <code class="inline">pruebas/*.sh</code>; si una
+            devuelve distinto de cero, el pipeline <b>se detiene antes de publicar y
+            desplegar</b>.</li>
+            <li>En <i>deploy</i> aplica <code class="inline">k8s/</code> y espera el rollout.</li>
+          </ul>
+          <p>Escribe tu pipeline en <code class="inline">/workspace/proyecto/ci.sh</code>:</p>
+          <pre><code>cd /workspace/proyecto
+cat &lt;&lt;'EOF' &gt; ci.sh
+#!/bin/bash
+set -euo pipefail
+
+RAIZ="$(cd "$(dirname "$0")" &amp;&amp; pwd)"
+REG="${LAB_REGISTRO:-registry:5000}"
+export TAG="${TAG:-1.0.0}"
+SERVICIOS="catalogo pedidos frontend"
+
+echo "ETAPA build (tag $TAG)"
+for s in $SERVICIOS; do
+  echo "  - $s"
+  docker build --build-arg "VERSION=$TAG" -t "$REG/$s:$TAG" "$RAIZ/$s"
+done
+
+echo "ETAPA test"
+fallo=0
+for t in "$RAIZ"/pruebas/*.sh; do
+  [ -e "$t" ] || continue
+  echo "  - $(basename "$t")"
+  if ! sh "$t"; then
+    echo "PRUEBA FALLIDA: $(basename "$t")"
+    fallo=1
+  fi
+done
+if [ "$fallo" -ne 0 ]; then
+  echo "PIPELINE ABORTADO: hay pruebas en rojo; no se publica ni se despliega."
+  exit 1
+fi
+
+echo "ETAPA push"
+for s in $SERVICIOS; do
+  docker push "$REG/$s:$TAG"
+done
+
+echo "ETAPA deploy"
+if [ ! -d "$RAIZ/k8s" ]; then
+  echo "FALTA el directorio k8s/ con tus manifiestos (Deployments y Services)."
+  exit 1
+fi
+kubectl apply -f "$RAIZ/k8s/"
+for s in $SERVICIOS; do
+  kubectl rollout status "deploy/$s" --timeout=180s
+done
+
+echo "PIPELINE_OK"
+EOF
+chmod +x ci.sh
+./ci.sh</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> las 4 etapas y, al final,
+          <code class="inline">PIPELINE_OK</code>. A&ntilde;ade una prueba que falle (o p&iacute;dele al
+          servidor que la inyecte) y ver&aacute;s que el pipeline <b>para antes del push</b>.</p>
+
+          <h3 class="sub">6.2 &middot; El workflow de GitHub Actions</h3>
+          <p>En <code class="inline">.github/workflows/ci.yml</code> est&aacute; el mismo pipeline
+          como workflow. Rev&iacute;salo y aj&uacute;stalo a tus nombres de imagen; el servidor
+          comprueba que <b>existe y es YAML v&aacute;lido</b>.</p>
+          <div class="callout note">
+            <p><b>C&oacute;mo se comprueba:</b> el servidor corre <code class="inline">ci.sh</code>
+            (debe terminar bien), le inyecta <code class="inline">pruebas/zz-varita-fallida.sh</code>
+            (que falla) y comprueba que el pipeline se detiene <b>sin</b> llegar a
+            <code class="inline">ETAPA push</code> ni <code class="inline">ETAPA deploy</code>; despu&eacute;s
+            la retira. Por eso tu <code class="inline">ci.sh</code> debe recorrer
+            <code class="inline">pruebas/*.sh</code>.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteG">
+          <div class="part-head"><span class="part-badge">7</span><h2>Paso 7 &mdash; Entregable: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.8em">revisar</code> (~5 min)</h2></div>
+          <p>El entregable es la <b>evidencia registrada por la plataforma</b>. Desde tu
+          terminal:</p>
+          <pre><code>revisar</code></pre>
+          <p>Ese comando <b>no decide nada</b>: pide al servidor que eval&uacute;e tu proyecto
+          mirando el estado real de tu sesi&oacute;n desde fuera (tu registro, tu cl&uacute;ster y las
+          respuestas HTTP de tu frontend). El servidor ejecuta algunas pruebas &eacute;l mismo
+          (borra un pod, hace el rollout, corre y rompe el pipeline), as&iacute; que la
+          evaluaci&oacute;n <b>tarda m&aacute;s</b> que en el Lab 4: ten paciencia. Deber&iacute;as terminar con
+          <b>5 de 5 criterios autom&aacute;ticos en verde</b>; luego el docente completa la
+          defensa.</p>
+        </section>
+
+        <section class="part" id="industria">
+          <div class="part-head"><span class="part-badge">n</span><h2>Nota de industria &mdash; EKS, AKS y GKE</h2></div>
+          <p>Lo que acabas de montar es el patr&oacute;n real de una arquitectura de
+          microservicios: servicios que se descubren por nombre, un registro de im&aacute;genes,
+          sondas de salud, l&iacute;mites de recursos y un pipeline que entrega. En AWS EKS,
+          Azure AKS o Google GKE los objetos son <b>id&eacute;nticos</b> (mismo
+          <code class="inline">kubectl</code>, mismos YAML); lo que cambia es qui&eacute;n administra el
+          plano de control y c&oacute;mo se integra la red, la identidad y el almacenamiento de
+          cada nube. El registro privado de tu sesi&oacute;n es el equivalente local de ECR,
+          ACR o Artifact Registry.</p>
+        </section>
+
+        <section class="part" id="troubleshooting">
+          <div class="part-head"><span class="part-badge">?</span><h2>Soluci&oacute;n de problemas</h2></div>
+          <table>
+            <thead><tr><th>S&iacute;ntoma</th><th>Causa probable</th><th>Qu&eacute; hacer</th></tr></thead>
+            <tbody>
+              <tr><td><code class="inline">kubectl</code> dice <i>connection refused</i> a 127.0.0.1:6443</td>
+              <td>El nodo a&uacute;n arranca</td><td>Espera 10&ndash;15 s y repite <code class="inline">kubectl get nodes</code></td></tr>
+              <tr><td>Pods en <code class="inline">ErrImagePull</code> / <code class="inline">ImagePullBackOff</code></td>
+              <td>La imagen o la etiqueta exacta no est&aacute;n en tu registro</td>
+              <td><code class="inline">kubectl describe pod &lt;pod&gt;</code>; comprueba <code class="inline">tags/list</code> y repite el paso 2</td></tr>
+              <tr><td>El frontend responde pero <code class="inline">/api/estado</code> da <code class="inline">ok:false</code></td>
+              <td>Falta <code class="inline">CATALOGO_URL</code>/<code class="inline">PEDIDOS_URL</code> o el Service no resuelve</td>
+              <td>Revisa las variables del Deployment y que existan los Services <code class="inline">catalogo</code> y <code class="inline">pedidos</code></td></tr>
+              <tr><td>La compra devuelve <code class="inline">503 catalogo no disponible</code></td>
+              <td>El cat&aacute;logo no responde o el nombre del Service es distinto</td>
+              <td><code class="inline">kubectl get svc,endpoints</code>; corrige <code class="inline">CATALOGO_URL</code></td></tr>
+              <tr><td>Durante el rollout la pesta&ntilde;a da alg&uacute;n error</td>
+              <td>Hay 1 sola r&eacute;plica del frontend (no tolera la ca&iacute;da)</td>
+              <td>Sube a <b>&ge;2 r&eacute;plicas</b> y con readiness; repite el rollout</td></tr>
+              <tr><td><code class="inline">ci.sh</code> no se detiene con una prueba rota</td>
+              <td>No recorre <code class="inline">pruebas/*.sh</code></td>
+              <td>Ajusta <code class="inline">ci.sh</code> para ejecutar todas las pruebas y abortar con <code class="inline">exit != 0</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="rubrica">
+          <div class="part-head"><span class="part-badge">%</span><h2>C&oacute;mo se eval&uacute;a</h2></div>
+          <p>La r&uacute;brica tiene <b>5 criterios autom&aacute;ticos</b> (peso 0,8 cada uno) que
+          comprueba el servidor, y <b>1 criterio del docente</b> (peso 1,0) de defensa y
+          evidencia. Suma <b>5,0</b>. Cada criterio autom&aacute;tico vale 1,0 si se cumple y 0,0 si
+          no; el del docente lo califica en 1,0 / 0,6 / 0,2 / 0,0.</p>
+          <table>
+            <thead><tr><th>Criterio</th><th>Peso</th><th>Tipo</th><th>Lo que se comprueba</th></tr></thead>
+            <tbody>
+              <tr><td><b>Im&aacute;genes publicadas</b></td><td class="rubric-weight">0,8</td><td>auto</td>
+                <td>cat&aacute;logo, pedidos y frontend en <code class="inline">registry:5000</code> con etiqueta inmutable (nunca <code class="inline">latest</code>).</td></tr>
+              <tr><td><b>Despliegue en Kubernetes</b></td><td class="rubric-weight">0,8</td><td>auto</td>
+                <td>3 Deployments con &ge;2 r&eacute;plicas disponibles, readiness y liveness, y requests/limits.</td></tr>
+              <tr><td><b>Servicios comunicados</b></td><td class="rubric-weight">0,8</td><td>auto</td>
+                <td>una compra por el NodePort del frontend se registra en pedidos (que consult&oacute; el cat&aacute;logo).</td></tr>
+              <tr><td><b>Autorreparaci&oacute;n y rollout</b></td><td class="rubric-weight">0,8</td><td>auto</td>
+                <td>un pod borrado vuelve; la actualizaci&oacute;n a v2 no deja de responder.</td></tr>
+              <tr><td><b>Pipeline</b></td><td class="rubric-weight">0,8</td><td>auto</td>
+                <td><code class="inline">ci.sh</code> corre y se detiene ante una prueba rota; workflow de Actions v&aacute;lido.</td></tr>
+              <tr><td><b>Defensa y evidencia</b></td><td class="rubric-weight">1,0</td><td>docente</td>
+                <td>defiendes tus decisiones en una conversaci&oacute;n corta con el docente (ver abajo).</td></tr>
+            </tbody>
+          </table>
+          <p>Sin trabajar, <b>0 de 5</b> autom&aacute;ticos; cada paso de esta gu&iacute;a enciende su
+          criterio. Mientras el docente no complete su criterio, la nota aparece como
+          <b>pendiente de r&uacute;brica docente</b> (la parte autom&aacute;tica se muestra como parcial).</p>
+
+          <div class="callout note">
+            <p><b>La defensa (1,0), c&oacute;mo funciona.</b> Es una conversaci&oacute;n <b>individual de unos
+            5 minutos</b> con el docente, despu&eacute;s de entregar. <b>La fecha y el horario los anuncia el
+            docente</b> en clase o por Teams; no necesitas preparar nada aparte. Como evidencia sirve el resultado de
+            <code class="inline">revisar</code> que queda registrado en tu ficha de la plataforma, y tu propio
+            conocimiento del trabajo: te har&aacute; preguntas sobre <b>tres decisiones tuyas</b>, por ejemplo
+            por qu&eacute; la etiqueta inmutable, para qu&eacute; sirven la sonda de lectura y la de vida, qu&eacute; hace
+            la estrategia de actualizaci&oacute;n, o por qu&eacute; tu <code class="inline">ci.sh</code> se detiene
+            ante una prueba rota. Se califica con los niveles 1,0 / 0,6 / 0,2 / 0,0: defiende con soltura
+            cada decisi&oacute;n (1,0); explica con lagunas (0,6); describe sin justificar (0,2); no puede
+            explicarlo (0,0). Tu sesi&oacute;n del laboratorio se cierra, as&iacute; que no dependas de ella
+            para la defensa.</p>
+          </div>
+        </section>
+
+        <section class="part" id="referencias">
+          <div class="part-head"><span class="part-badge">r</span><h2>Referencias</h2></div>
+          <ul>
+            <li>Kubernetes &mdash; Deployments y rolling update: <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/workloads/controllers/deployment</a></li>
+            <li>Kubernetes &mdash; Services y descubrimiento: <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="noopener">kubernetes.io/docs/concepts/services-networking/service</a></li>
+            <li>Kubernetes &mdash; Sondas liveness/readiness: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" target="_blank" rel="noopener">configure liveness, readiness and startup probes</a></li>
+            <li>Kubernetes &mdash; Gesti&oacute;n de recursos: <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/" target="_blank" rel="noopener">manage resources for containers</a></li>
+            <li>Docker &mdash; Buenas pr&aacute;cticas de build: <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/" target="_blank" rel="noopener">docs.docker.com/develop/develop-images</a></li>
+            <li>GitHub Actions: <a href="https://docs.github.com/actions" target="_blank" rel="noopener">docs.github.com/actions</a></li>
+            <li>k3s: <a href="https://docs.k3s.io/" target="_blank" rel="noopener">docs.k3s.io</a></li>
+          </ul>
+        </section>
+
+        <section class="part" id="checklist">
+          <div class="part-head"><span class="part-badge">v</span><h2>Checklist antes de entregar</h2></div>
+          <ol class="steps">
+            <li>Las 3 im&aacute;genes est&aacute;n en <code class="inline">registry:5000</code> con etiqueta
+            versionada (no <code class="inline">latest</code>).</li>
+            <li>Los 3 Deployments est&aacute;n en <code class="inline">2/2</code> con sondas y
+            <code class="inline">resources</code>.</li>
+            <li>El Service del frontend es <code class="inline">NodePort 30080</code> y la pesta&ntilde;a
+            <b>CaribeMart</b> responde.</li>
+            <li>Una compra por <code class="inline">/api/pedidos</code> crea un pedido y el contador
+            sube.</li>
+            <li>Borraste un pod y volvi&oacute;.</li>
+            <li>Publicaste una v2 del frontend y el rollout no cort&oacute; el servicio.</li>
+            <li><code class="inline">./ci.sh</code> termina en <code class="inline">PIPELINE_OK</code> y
+            se detiene si una prueba falla.</li>
+            <li>Existe <code class="inline">.github/workflows/ci.yml</code> v&aacute;lido.</li>
+            <li>Ejecutaste <code class="inline">revisar</code> y los 5 criterios est&aacute;n en verde.</li>
+          </ol>
+        </section>
+      </main>
+
+      <footer class="page foot">
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes &middot; Proyecto de Corte 2 (20 %)</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      function onScroll() {
+        var h = document.documentElement;
+        bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+        var active = targets[0];
+        for (var i = 0; i < targets.length; i++) if (targets[i].getBoundingClientRect().top <= 120) active = targets[i];
+        links.forEach(function (a) { a.classList.toggle('active', active && a.getAttribute('href') === '#' + active.id); });
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var b = document.createElement('button');
+        b.className = 'copy-btn'; b.type = 'button'; b.textContent = 'copiar';
+        b.onclick = function () {
+          var c = pre.querySelector('code');
+          navigator.clipboard.writeText(c ? c.innerText : pre.innerText);
+          b.textContent = 'copiado'; b.classList.add('copied');
+          setTimeout(function () { b.textContent = 'copiar'; b.classList.remove('copied'); }, 1400);
+        };
+        pre.appendChild(b);
+      });
+    })();
+  </script>
+</body>
+</html>
