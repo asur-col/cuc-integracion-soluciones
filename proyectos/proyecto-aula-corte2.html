@@ -79,186 +79,156 @@
   a.ext{color:var(--vino);text-decoration:none;border-bottom:1px dotted var(--vino)}
   a.ext:hover{color:var(--vino-strong);border-bottom-style:solid}
 </style>
+</head>
 <body>
 <header class="top">
   <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-  <p class="eyebrow">Proyecto de Aula · Segundo Corte · Unidad 2</p>
+  <p class="eyebrow">Laboratorio práctico · Segundo Corte · Unidad 2</p>
   <h1>Proyecto de aula Corte 2: CaribeMart contenedorizada y desplegada</h1>
-  <p class="sub">La junta aprobó modernizar la tienda en línea: pasar de un monolito a servicios contenedorizados, desplegados en Kubernetes y entregados de forma automatizada. El equipo debe demostrar que cada paso se ejecuta y se puede reproducir</p>
+  <p class="sub">El proyecto se hace <b>dentro de la plataforma</b> <code>labs.proyectoasur.org</code>, no en tu computador. Al iniciar el laboratorio recibes un proyecto con los tres servicios de CaribeMart; tú los contenerizas, los despliegas en Kubernetes y montas el pipeline. El servidor revisa tu trabajo con cinco criterios automáticos y tu docente califica la defensa.</p>
   <div class="accent-bar"></div>
   <p class="meta">
     <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
     <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
-    <b>Modalidad:</b> equipo de máximo 2 estudiantes &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 2 (semanas 7 a 10)
+    <b>Modalidad:</b> individual &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Entrega:</b> sábado 24 de octubre de 2026, 23:59
   </p>
 </header>
 
 <div class="layout">
 <nav class="sidenav">
-  <a href="#s1">1. Info general</a>
-  <a href="#s2">2. Caso de estudio</a>
-  <a href="#s3">3. Objetivos</a>
-  <a href="#s4">4. Alcance</a>
-  <a href="#s5">5. Contenido mínimo</a>
-  <a href="#s6">6. Entregables</a>
-  <a href="#s7">7. Rúbrica</a>
-  <a href="#s8">8. Condiciones</a>
-  <a href="#s9">9. Recomendaciones</a>
+  <a href="#s1">1. Cómo funciona</a>
+  <a href="#s2">2. Fechas y reglas</a>
+  <a href="#s3">3. Qué encuentras</a>
+  <a href="#s4">4. Los 5 criterios</a>
+  <a href="#s5">5. Defensa y evidencia</a>
+  <a href="#s6">6. Cómo se calcula la nota</a>
+  <a href="#s7">7. Trampas que no cuentan</a>
+  <a href="#s8">8. Antes de entregar</a>
 </nav>
 <div class="wrap">
 
-<!-- ============ 1. INFO GENERAL ============ -->
+<!-- ============ 1. CÓMO FUNCIONA ============ -->
 <section id="s1">
-  <h2><span class="paso">1</span> Información general</h2>
+  <h2><span class="paso">1</span> Cómo funciona</h2>
+  <p>Este proyecto <b>no se entrega por Teams</b> ni se sube a GitHub: se resuelve dentro del laboratorio. La plataforma abre una estación de trabajo con el proyecto de <b>CaribeMart</b> ya cargado, su propio registro de imágenes y un clúster de Kubernetes listo.</p>
+  <ol>
+    <li>Entra a <b>labs.proyectoasur.org</b> con tu correo institucional.</li>
+    <li>La <b>clave inicial es tu cédula</b>. El primer ingreso te obliga a cambiarla; anótala.</li>
+    <li>Busca el laboratorio <b>Lab 5 — Proyecto práctico CaribeMart</b> y pulsa <b>Iniciar lab</b>.</li>
+    <li>Trabaja en la terminal de la estación (la misma de los Labs 3 y 4).</li>
+    <li>Cuando termines, ejecuta <code>revisar</code> en la terminal: el servidor evalúa tu trabajo y te muestra, criterio por criterio, qué está en verde y qué falta.</li>
+    <li>Tu docente califica la defensa desde el panel y ahí se publica la nota final.</li>
+  </ol>
+  <div class="danger">Tienes <b>un solo intento</b>. Si necesitas otro (por una caída, un error de la plataforma o una situación justificada), pídelo a tu docente: los intentos extra <b>solo los concede él</b>.</div>
+  <p>Si hay muchos compañeros conectados al mismo tiempo, la plataforma te pone <b>en cola</b> y te muestra tu posición. No cierres la pestaña: tu laboratorio arranca solo cuando se libera un cupo.</p>
+</section>
+
+<!-- ============ 2. FECHAS Y REGLAS ============ -->
+<section id="s2">
+  <h2><span class="paso">2</span> Fechas y reglas</h2>
   <div class="tbl-wrap"><table>
     <tr><th>Campo</th><th>Detalle</th></tr>
-    <tr><td>Asignatura</td><td>Integración de Soluciones para Plataformas Cloud (Soluciones Multicloud)</td></tr>
-    <tr><td>Corte evaluado</td><td>Segundo corte</td></tr>
-    <tr><td>Unidad evaluada</td><td>Unidad 2 (semanas 7 a 10)</td></tr>
-    <tr><td>Temas de la unidad</td><td>Microservicios (S07) · Contenedores y registro (S08) · Kubernetes (S09) · CI/CD con GitHub Actions (S10)</td></tr>
-    <tr><td>Laboratorios relacionados</td><td>Lab 3 — Contenedores y Docker Hub · Lab 4 — Kubernetes (ambos en labs.proyectoasur.org)</td></tr>
-    <tr><td>Modalidad</td><td><b>Máximo 2 estudiantes</b></td></tr>
-    <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
-    <tr><td><b>Fecha límite de entrega</b></td><td><b>Sábado 24 de octubre de 2026, 23:59</b> (deja el domingo 25 para calificar antes del plazo de notas del corte 2)</td></tr>
-    <tr><td>Medio de entrega</td><td>Microsoft Teams</td></tr>
+    <tr><td>Modalidad</td><td><b>Individual</b> (no en parejas: la defensa es de cada estudiante)</td></tr>
+    <tr><td>Ponderación</td><td>20% del corte 2</td></tr>
+    <tr><td>Fecha límite</td><td><b>Sábado 24 de octubre de 2026, 23:59</b></td></tr>
+    <tr><td>Dónde</td><td>Plataforma <code>labs.proyectoasur.org</code>, laboratorio <b>Lab 5</b></td></tr>
+    <tr><td>Intentos</td><td><b>1</b>; los extra los concede el docente desde el panel</td></tr>
+    <tr><td>Duración de la sesión</td><td>Tope de 240 minutos; una extensión de +60 min desde la propia sesión</td></tr>
+    <tr><td>Inactividad</td><td>La sesión se cierra sola tras 30 minutos <b>sin actividad real</b> en la terminal</td></tr>
+    <tr><td>Evaluación</td><td>5 criterios automáticos (0,8 cada uno) + 1 criterio del docente (1,0) = 5,0</td></tr>
   </table></div>
+  <p>El laboratorio estará habilitado para tu grupo hasta la fecha límite. Después de esa hora no se abren sesiones nuevas.</p>
 </section>
 
-<!-- ============ 2. CASO DE ESTUDIO ============ -->
-<section id="s2">
-  <h2><span class="paso">2</span> Caso de estudio: CaribeMart contenedorizada</h2>
-
-  <h3>Contexto</h3>
-  <p>Este proyecto continúa el caso del primer corte. <b>CaribeMart</b> es una cadena colombiana de retail con 60 almacenes físicos, un canal de venta por catálogo y una tienda en línea que crece entre 35% y 40% anual. En el primer corte, la junta aprobó una estrategia multicloud; en este corte, el equipo se concentra en una sola parte de esa estrategia: la <b>tienda en línea</b>, que hoy corre como un monolito en un hosting de capacidad fija y se degrada en eventos de alto tráfico como el Día sin IVA o Black Friday.</p>
-
-  <h3>La decisión de la junta</h3>
-  <div class="danger">La junta aprobó modernizar la tienda en línea: dividirla en servicios contenedorizados, desplegarlos en Kubernetes y automatizar su entrega desde el repositorio, de modo que un cambio llegue al clúster sin pasos manuales y sin depender de un solo equipo de operación.</div>
-  <p>El equipo actúa como el <b>equipo de arquitectura y plataforma</b> contratado para entregar la primera versión de esa modernización. La lógica de negocio es secundaria: lo que se evalúa es la arquitectura, la contenerización y la automatización.</p>
-</section>
-
-<!-- ============ 3. OBJETIVOS ============ -->
+<!-- ============ 3. QUÉ ENCUENTRAS ============ -->
 <section id="s3">
-  <h2><span class="paso">3</span> Objetivos del proyecto</h2>
-  <h3>Objetivo general</h3>
-  <p>Construir y desplegar una versión contenedorizada de la tienda en línea de CaribeMart, con sus servicios orquestados en Kubernetes y su entrega automatizada con GitHub Actions, aplicando los conceptos de la Unidad 2.</p>
-  <h3>Objetivos específicos</h3>
-  <ol>
-    <li><b>(Semana 7)</b> Descomponer la tienda en al menos tres servicios, justificando sus límites y la forma de comunicación entre ellos (síncrona o asíncrona), y el papel de un API Gateway.</li>
-    <li><b>(Semana 8)</b> Empaquetar cada servicio en una imagen de contenedor portable, con etiquetado inmutable, y publicarla en un registro.</li>
-    <li><b>(Semana 9)</b> Desplegar los servicios en Kubernetes con réplicas, sondas de salud, límites de recursos y una estrategia de actualización explícita.</li>
-    <li><b>(Semana 10)</b> Automatizar el ciclo build → test → push → deploy con GitHub Actions, manejando los secretos fuera del código.</li>
-  </ol>
+  <h2><span class="paso">3</span> Qué encuentras al entrar</h2>
+  <p>En <code>/workspace/proyecto</code> está el proyecto de partida:</p>
+  <ul>
+    <li><b>catalogo/</b>, <b>pedidos/</b> y <b>frontend/</b>: los tres servicios, cada uno con su <code>Dockerfile</code>, su <code>server.js</code> y su <code>test.js</code>.</li>
+    <li><b>pruebas/</b>: los scripts de prueba del pipeline.</li>
+    <li><b>.github/workflows/</b>: el workflow de GitHub Actions.</li>
+    <li><b>README.md</b>: el contrato de los servicios y del pipeline.</li>
+  </ul>
+  <div class="danger">El proyecto <b>no trae</b> los manifiestos de Kubernetes ni el <code>ci.sh</code>: eso es exactamente lo que tú construyes. Tampoco hay una solución publicada en este repositorio ni en la plataforma.</div>
+  <p>La estación tiene su propio registro en <code>registry:5000</code> y un clúster de Kubernetes con <code>kubectl</code> ya configurado. No necesitas internet para el clúster.</p>
 </section>
 
-<!-- ============ 4. ALCANCE ============ -->
+<!-- ============ 4. LOS 5 CRITERIOS ============ -->
 <section id="s4">
-  <h2><span class="paso">4</span> Alcance: temas de la Unidad 2</h2>
-  <p>El proyecto evalúa <b>únicamente la Unidad 2</b>. Se califica la <b>arquitectura, la contenerización y la automatización</b>, no la lógica de negocio: los servicios pueden ser mínimos (por ejemplo, una respuesta fija o datos de prueba en memoria).</p>
-  <div class="tbl-wrap"><table>
-    <tr><th>Semana</th><th>Tema</th><th>Laboratorio de apoyo</th><th>Aplicación esperada</th></tr>
-    <tr><td>7</td><td>Microservicios</td><td>—</td><td>Descomposición en servicios, comunicación y API Gateway</td></tr>
-    <tr><td>8</td><td>Contenedores y registro</td><td>Lab 3 — Contenedores y Docker Hub</td><td>Dockerfiles, imágenes etiquetadas y publicadas</td></tr>
-    <tr><td>9</td><td>Kubernetes</td><td>Lab 4 — Kubernetes</td><td>Manifiestos de Deployment y Service, sondas, réplicas y actualización</td></tr>
-    <tr><td>10</td><td>CI/CD con GitHub Actions</td><td>—</td><td>Workflow build → test → push → deploy con secretos</td></tr>
-  </table></div>
+  <h2><span class="paso">4</span> Los cinco criterios automáticos</h2>
+  <p>Cada criterio vale <b>0,8</b> y lo verifica el servidor desde fuera de tu estación: nada de lo que imprimas en pantalla cuenta por sí solo.</p>
+
+  <h3>1. Imágenes de los 3 servicios publicadas con etiqueta inmutable <code>0,8</code></h3>
+  <p>En verde cuando: catálogo, pedidos y frontend construidos y publicados en el registro de la sesión con una etiqueta versionada (nunca <code>latest</code>).</p>
+
+  <h3>2. Despliegue en Kubernetes de los 3 servicios <code>0,8</code></h3>
+  <p>En verde cuando: 3 Deployments con ≥2 réplicas disponibles, readinessProbe y livenessProbe, y requests/limits de recursos; imágenes desde el registro de la sesión.</p>
+
+  <h3>3. Comunicación de punta a punta entre los 3 servicios <code>0,8</code></h3>
+  <p>En verde cuando: una compra lanzada por el NodePort del frontend se registra en pedidos (que consultó el catálogo) y el resultado lo devuelve la petición.</p>
+
+  <h3>4. Autorreparación y actualización sin caída <code>0,8</code></h3>
+  <p>En verde cuando: el ReplicaSet recrea el pod borrado y la actualización rodante a v2 (o el restart) mantiene el servicio respondiendo 200 en todo momento.</p>
+
+  <h3>5. Pipeline local build → test → push → deploy <code>0,8</code></h3>
+  <p>En verde cuando: <code>ci.sh</code> corre de punta a punta, se detiene sin desplegar cuando una prueba falla, y existe el workflow de Actions válido.</p>
 </section>
 
-<!-- ============ 5. CONTENIDO MÍNIMO ============ -->
+<!-- ============ 5. DEFENSA ============ -->
 <section id="s5">
-  <h2><span class="paso">5</span> Contenido mínimo del proyecto</h2>
-
-  <h3>a) Descomposición y comunicación (Semana 7)</h3>
-  <ul>
-    <li>Propuesta de <b>al menos tres servicios</b> (por ejemplo catálogo, pedidos y frontend; el equipo puede proponer otros), con responsabilidad única y límites documentados.</li>
-    <li>Para cada enlace entre servicios, indicar si es <b>síncrono</b> o <b>asíncrono</b> y justificar la elección.</li>
-    <li>Un <b>API Gateway</b> como punto de entrada, con su justificación (qué centraliza y qué no debe hacer).</li>
-    <li>Diagrama de arquitectura que muestre servicios, gateway y comunicación.</li>
-  </ul>
-
-  <h3>b) Contenedores e imágenes (Semana 8, Lab 3)</h3>
-  <ul>
-    <li><b>Un Dockerfile por servicio</b>, con la imagen base y el usuario de ejecución justificados.</li>
-    <li>Etiquetado <b>inmutable</b> (por ejemplo, identificador del commit o versión semántica; no basta con <code>latest</code>).</li>
-    <li>Publicación de las imágenes en un registro con autenticación.</li>
-    <li>Prueba de portabilidad: la imagen se ejecuta en un contenedor limpio, sin depender del código fuente local.</li>
-  </ul>
-
-  <h3>c) Orquestación en Kubernetes (Semana 9, Lab 4)</h3>
-  <ul>
-    <li><b>Deployment</b> y <b>Service</b> por cada servicio, con número de réplicas justificado.</li>
-    <li><b>Sondas</b> de liveness y readiness, y <b>límites de recursos</b> (requests y limits).</li>
-    <li>Estrategia de actualización explícita (por ejemplo, rolling update con sus parámetros) y, si se ejecutó, un rollback.</li>
-  </ul>
-
-  <h3>d) Pipeline CI/CD (Semana 10)</h3>
-  <ul>
-    <li>Workflow de <b>GitHub Actions</b> con las etapas <b>build → test → push → deploy</b>, en ese orden.</li>
-    <li>Credenciales (registro, clúster) guardadas en <i>GitHub Secrets</i>; ningún valor sensible en el repositorio.</li>
-    <li>Etiqueta de la imagen derivada del commit, consistente con el punto b.</li>
-  </ul>
-
-  <h3>e) Informe corto (máximo 8 páginas)</h3>
-  <p>Decisiones de diseño, riesgos identificados y <b>alternativas descartadas</b> con su motivo (por ejemplo, por qué no un solo contenedor, por qué otro mecanismo de mensajería o de despliegue).</p>
-
-  <h3>f) Evidencia de ejecución</h3>
-  <ul>
-    <li>Capturas con <b>fecha y nombre del equipo</b> de lo que sí se ejecutó (build, push, <code>kubectl</code>, ejecución del workflow). Pueden apoyarse en lo hecho en los Labs 3 y 4.</li>
-    <li>Si un paso no pudo ejecutarse, debe decirse <b>explícitamente</b> en el informe y justificarse. Declarar un paso no ejecutado no penaliza por sí mismo; ocultarlo sí.</li>
-  </ul>
-</section>
-
-<!-- ============ 6. ENTREGABLES ============ -->
-<section id="s6">
-  <h2><span class="paso">6</span> Entregables</h2>
-  <p>Una carpeta comprimida con el nombre <code>equipo-XX/</code> (XX: número de equipo) que contenga:</p>
-  <ol>
-    <li><code>README.md</code> con los <b>integrantes</b>, los <b>pasos para reproducir</b> el proyecto (build, push, despliegue y pipeline) y las <b>decisiones</b> principales.</li>
-    <li>Código fuente de los servicios, los <b>Dockerfiles</b> y los <b>manifiestos de Kubernetes</b>.</li>
-    <li>El <b>workflow de GitHub Actions</b> (<code>.github/workflows/</code>).</li>
-    <li>El <b>informe corto</b> en PDF (máximo 8 páginas).</li>
-    <li>Carpeta <code>evidencias/</code> con las capturas con fecha y nombre del equipo.</li>
-    <li>Diagrama de arquitectura en formato editable (draw.io o similar), con su archivo fuente.</li>
-  </ol>
-</section>
-
-<!-- ============ 7. RÚBRICA ============ -->
-<section id="s7">
-  <h2><span class="paso">7</span> Rúbrica de evaluación — 5 criterios, nota final de 0.0 a 5.0</h2>
-  <p class="lead">Cada criterio vale <b>hasta 1.0 punto</b>. La suma de los 5 da la nota final del proyecto (máximo 5.0). Los criterios 1 a 4 son <b>grupales</b>. El criterio 5 es <b>individual</b>: la calidad de la evidencia del equipo fija el tope de ese criterio, y la respuesta de cada integrante a la pregunta al azar ajusta su nota dentro de ese tope.</p>
-  <div class="tbl-wrap"><table class="rubrica">
-    <tr><th>#</th><th>Criterio</th><th>Qué mide</th><th>1.0 (pleno)</th><th>0.6 (parcial)</th><th>0.2 (mínimo)</th><th>0.0</th></tr>
-    <tr><td class="crit">1</td><td><b>Descomposición y comunicación entre servicios (S07)</b></td><td>Que la división en servicios y la forma de comunicación estén justificadas, y que el gateway tenga un papel claro</td><td>Tres servicios o más con responsabilidad única y límites documentados; cada enlace marcado como síncrono o asíncrono con justificación; API Gateway con su razón; al menos una llamada entre servicios se muestra funcionando en la evidencia</td><td>Tres servicios y diagrama, pero una comunicación o el rol del gateway se justifica de forma genérica, o un servicio mezcla responsabilidades</td><td>Menos de tres servicios, o la comunicación no se justifica, o el diagrama no coincide con el código</td><td>No hay descomposición, o es el monolito con otro nombre</td></tr>
-    <tr><td class="crit">2</td><td><b>Contenerización y registro de imágenes (S08, Lab 3)</b></td><td>Que cada servicio sea una imagen portable, versionada y publicada</td><td>Los 3 servicios tienen Dockerfile con etiqueta inmutable (no <code>latest</code>); las imágenes están publicadas en un registro con autenticación; la imagen corre en un contenedor limpio y responde a su prueba de salud</td><td>Los Dockerfile existen y construyen, pero una imagen usa <code>latest</code>, o falla en un contenedor limpio, o el push no se evidencia ni se declara</td><td>Solo uno o dos servicios contenerizados, o imágenes sin etiqueta versionada</td><td>No hay Dockerfile ni imágenes</td></tr>
-    <tr><td class="crit">3</td><td><b>Orquestación en Kubernetes (S09, Lab 4)</b></td><td>Que los servicios desplegados sean resilientes y actualizables</td><td>Deployment y Service por servicio; réplicas definidas; sondas de liveness y readiness; requests y limits en cada Deployment; estrategia de actualización explícita; <code>rollout status</code> evidenciado, o validación con <code>kubectl apply --dry-run=client</code> más declaración del motivo si no hubo clúster</td><td>Manifiestos completos y validados, pero falta una pieza (sondas o límites en algún servicio), o el rollout no se evidencia y no se declara</td><td>Manifiestos incompletos, por ejemplo solo Deployment sin Service ni sondas</td><td>No hay manifiestos de Kubernetes</td></tr>
-    <tr><td class="crit">4</td><td><b>Pipeline CI/CD con GitHub Actions (S10)</b></td><td>Que el ciclo build → test → push → deploy esté automatizado y sea seguro</td><td>Workflow con build, test, push y deploy en ese orden; el test puede fallar (al menos una prueba real); secretos en GitHub Secrets y ningún valor sensible en el repo; etiqueta de imagen derivada del commit; ejecución verde con enlace al run, o validación local del YAML con declaración explícita si no fue posible ejecutarlo</td><td>Etapas en orden, pero el test o el deploy no son reales (no pueden fallar), o alguna credencial queda visible en el repositorio</td><td>Workflow que solo compila, o que no versiona la imagen</td><td>No hay workflow en el repositorio</td></tr>
-    <tr><td class="crit">5</td><td><b>Evidencia, justificación y defensa individual</b></td><td>Que el informe, la evidencia y el README permitan reproducir y entender el proyecto, y que cada integrante pueda explicar su parte (criterio individual)</td><td>Capturas con fecha y nombre del equipo de cada paso ejecutado; pasos no ejecutados declarados con justificación; informe con decisiones, riesgos y al menos una alternativa descartada con su motivo; README que permite reproducir; el integrante responde con precisión la pregunta al azar y la relaciona con una decisión del equipo</td><td>Evidencia y README completos, pero el informe omite alguna decisión o riesgo; la respuesta es correcta solo en lo general</td><td>Evidencia parcial sin declarar lo no ejecutado, o la respuesta muestra que el integrante no conoce la parte que dice haber hecho</td><td>Sin evidencia, o el integrante no responde o no puede explicar su trabajo</td></tr>
+  <h2><span class="paso">5</span> Defensa y evidencia (criterio del docente)</h2>
+  <p>Vale <b>1,0</b> y lo califica tu docente. No es un examen sorpresa: es la conversación sobre tu propio trabajo.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Nivel</th><th>Qué significa</th></tr>
+    <tr><td><b>1,0</b></td><td>Defiende con soltura cada decisión (registro inmutable, sondas y límites, comunicación entre servicios, autorreparación, pipeline) y muestra evidencia reproducible.</td></tr>
+    <tr><td><b>0,6</b></td><td>Explica el trabajo pero con lagunas en 1 o 2 criterios o sin evidencia clara.</td></tr>
+    <tr><td><b>0,2</b></td><td>Defensa incompleta: replicó comandos sin entenderlos o faltan partes del proyecto.</td></tr>
+    <tr><td><b>0,0</b></td><td>No defiende o no presenta evidencia del proyecto.</td></tr>
   </table></div>
+  <p>Ten a mano lo que hiciste: los manifiestos que escribiste, la salida de <code>kubectl get pods</code>, la de <code>kubectl rollout history</code> y la del pipeline. Si el docente te pide repetir un comando, debe salir igual.</p>
 </section>
 
-<!-- ============ 8. CONDICIONES ============ -->
+<!-- ============ 6. NOTA ============ -->
+<section id="s6">
+  <h2><span class="paso">6</span> Cómo se calcula la nota</h2>
+  <p>La nota se pondera sobre <b>5,0</b>:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Parte</th><th>Peso</th><th>Quién la pone</th></tr>
+    <tr><td>Los 5 criterios automáticos</td><td>0,8 cada uno (4,0 en total)</td><td>El servidor, al pulsar Revisar</td></tr>
+    <tr><td>Defensa y evidencia</td><td>1,0</td><td>Tu docente</td></tr>
+    <tr><td><b>Total</b></td><td><b>5,0</b></td><td>—</td></tr>
+  </table></div>
+  <p>Mientras tu docente no haya calificado la defensa, la plataforma te muestra tu <b>nota parcial automática</b> y el aviso <b>«pendiente de rúbrica docente»</b>. La nota final se publica cuando estén todos los criterios calificados.</p>
+</section>
+
+<!-- ============ 7. TRAMPAS ============ -->
+<section id="s7">
+  <h2><span class="paso">7</span> Lo que no cuenta</h2>
+  <p>El verificador está hecho para mirar el estado real del clúster y del registro, no lo que diga la pantalla. En particular:</p>
+  <ul>
+    <li><b>Etiquetas <code>latest</code></b>: no son inmutables y el criterio 1 las rechaza.</li>
+    <li><b>Pods sueltos</b> (<code>kubectl run</code>, pods que no pertenecen a tus Deployments): no cuentan como despliegue.</li>
+    <li><b>Un frontend que responde datos fijos</b> sin hablar con pedidos y catálogo: el servidor lanza una compra nueva y comprueba que el pedido quedó registrado.</li>
+    <li><b>Un <code>ci.sh</code> que no ejecuta pruebas</b>: se le inyecta una prueba que falla y debe detenerse antes de publicar.</li>
+  </ul>
+  <p>Copiar una solución de otro compañero, de un repositorio o de una IA no sirve: la defensa es individual y el servidor revisa tu sesión, no un texto.</p>
+</section>
+
+<!-- ============ 8. ANTES DE ENTREGAR ============ -->
 <section id="s8">
-  <h2><span class="paso">8</span> Condiciones de entrega</h2>
+  <h2><span class="paso">8</span> Antes de entregar</h2>
   <ul>
-    <li>Los equipos (máximo 2 integrantes) deben quedar registrados con el docente antes de la entrega.</li>
-    <li>La entrega se realiza por <b>Microsoft Teams</b>, en la carpeta comprimida <code>equipo-XX/</code> descrita en la sección 6, a más tardar el <b>sábado 24 de octubre de 2026, 23:59</b>.</li>
-    <li>Entrega tardía: no se califica, salvo causa justificada comunicada al docente <b>antes</b> del plazo.</li>
-    <li><b>Trabajo propio:</b> cada equipo entrega su propio trabajo. No se permite copiar código, configuraciones, informes ni evidencias entre equipos.</li>
-    <li><b>Uso de IA generativa:</b> permitido solo si se declara en el informe qué herramientas se usaron y para qué partes; el equipo es responsable de la exactitud técnica de todo lo entregado.</li>
-    <li><b>Ejecución:</b> el aula y la plataforma de laboratorios no requieren Internet, salvo el uso propio de GitHub de cada equipo. Para los pasos que el estudiante no pueda ejecutar por restricciones de red, vale la validación local del YAML y la declaración explícita en el informe.</li>
+    <li>Las 3 imágenes están en el registro de la sesión con etiqueta versionada.</li>
+    <li><code>kubectl get deploy</code> muestra 3 Deployments con 2/2 réplicas listas.</li>
+    <li>Los 3 Services existen y el frontend responde por su NodePort.</li>
+    <li>Borraste un pod a propósito y volvió solo.</li>
+    <li>Hiciste la actualización rodante y el frontend no dejó de responder.</li>
+    <li><code>ci.sh</code> termina con <code>PIPELINE_OK</code> y se detiene si una prueba falla.</li>
+    <li>Pulsaste <b>Revisar</b> y viste los 5 criterios en verde.</li>
+    <li>Puedes explicar cada decisión sin leer un papel.</li>
   </ul>
-</section>
-
-<!-- ============ 9. RECOMENDACIONES ============ -->
-<section id="s9">
-  <h2><span class="paso">9</span> Recomendaciones</h2>
-  <ul>
-    <li>Empiecen por una <b>versión mínima funcionando</b>: primero un servicio que corra en contenedor, luego los demás, luego Kubernetes y al final el pipeline. Un pipeline sobre algo que no corre no sirve de evidencia.</li>
-    <li><b>Versionen todo</b>: código, Dockerfiles, manifiestos y workflow en el repositorio desde el primer día, con commits pequeños.</li>
-    <li><b>Lean primero la rúbrica</b> (sección 7): cada criterio dice qué evidencia se espera. Los niveles 1.0 describen lo que hay que demostrar.</li>
-    <li>Apóyense en los Labs 3 y 4 y en el material de las semanas 7 a 10; cada semana alimenta un criterio de la rúbrica.</li>
-    <li>Documenten lo que no funcionó y por qué. Un informe honesto sobre un paso fallido vale más que un paso presentado como exitoso sin evidencia.</li>
-  </ul>
-
+  <p>Dudas de la plataforma (no del proyecto) → escríbele a tu docente antes del viernes 23 de octubre, no el sábado a las 23:50.</p>
 </section>
 
 </div>
