@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio 6 &mdash; Tu primer agente de IA: opencode en Windows &middot; CUC</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #FBF8F3;
+      --surface: #FFFFFF;
+      --surface-2: #F4EEE3;
+      --ink: #2A2A2A;
+      --ink-soft: #6B6259;
+      --vino: #A6192E;
+      --vino-strong: #7E1223;
+      --vino-tint: #FBEBEC;
+      --dorado: #A9791C;
+      --dorado-tint: #FBF3DE;
+      --line: #E5DCCB;
+      --code-bg: #F1EADA;
+      --code-ink: #4A4030;
+      --shadow: 0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #181411;
+        --surface: #221D18;
+        --surface-2: #2B2520;
+        --ink: #EFE7D9;
+        --ink-soft: #B3A896;
+        --vino: #E2536B;
+        --vino-strong: #F0748A;
+        --vino-tint: #3A1E22;
+        --dorado: #E4BC5C;
+        --dorado-tint: #3B321C;
+        --line: #3D352A;
+        --code-bg: #1F1914;
+        --code-ink: #E4D9C3;
+        --shadow: 0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+    a { color: var(--vino); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3.5px; width: 0%;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+      z-index: 1000; transition: width .1s ease-out;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      nav.toc { display: none; }
+    }
+
+    header.top.portada {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .portada-logo {
+      height: 72px;
+      width: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .portada-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: var(--vino);
+      background: var(--vino-tint);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    header.top h1 {
+      color: var(--vino);
+      font-size: clamp(26px, 3.8vw, 36px);
+      margin: 0 0 10px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    header.top .sub {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+      max-width: 62ch;
+      margin-inline: auto;
+    }
+
+    .accent-bar {
+      width: 200px;
+      height: 4px;
+      margin: 0 auto 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .author-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      padding-top: 4px;
+    }
+
+    .author-block span { display: inline-flex; align-items: center; gap: 6px; }
+    .author-block strong { color: var(--ink); }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 18px 40px;
+      border-right: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    nav.toc .toc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+      margin: 0 0 14px 8px;
+      font-weight: 700;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    nav.toc a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+    nav.toc a.active { background: var(--vino-tint); color: var(--vino); font-weight: 600; }
+
+    nav.toc a .badge {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-2); color: var(--ink-soft);
+      display: grid; place-items: center;
+      font-size: 11.5px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    nav.toc a.active .badge { background: var(--vino); color: #fff; }
+
+    main { padding: 40px 48px 90px; min-width: 0; }
+
+    @media (max-width: 650px) {
+      main { padding: 24px 18px 70px; }
+      header.top.portada { padding: 32px 18px 24px; }
+    }
+
+    .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 72ch; margin: 16px 0 24px; }
+    .lede b, .lede strong { color: var(--ink); }
+
+    section.part {
+      padding-top: 44px;
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+
+    section.part:first-of-type { border-top: none; padding-top: 10px; }
+
+    .part-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+    .part-badge {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--vino); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700; font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(166,25,46,.25);
+    }
+
+    .part-head h2 { margin: 0; font-size: 24px; font-weight: 600; }
+
+    h3.sub {
+      font-size: 16.5px;
+      margin: 32px 0 12px;
+      color: var(--vino);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin: 0 0 14px; max-width: 74ch; }
+
+    .docref {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      margin: -4px 0 18px;
+    }
+    .docref a { color: var(--vino); text-decoration: underline; }
+
+    ol.steps { list-style: none; margin: 8px 0 20px; padding: 0; counter-reset: step; }
+
+    ol.steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 2px 0 18px 38px;
+      max-width: 72ch;
+    }
+
+    ol.steps > li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px; font-weight: 700;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--vino);
+      box-shadow: var(--shadow);
+    }
+
+    ol.steps > li:not(:last-child)::after {
+      content: "";
+      position: absolute; left: 12.5px; top: 30px; bottom: 0;
+      width: 1.5px; background: var(--line);
+    }
+
+    ul.plain { padding-left: 20px; margin: 6px 0 14px; }
+    ul.plain li { margin-bottom: 6px; max-width: 68ch; }
+
+    pre {
+      position: relative;
+      background: #211D18; color: #EFE7D9;
+      border-radius: 10px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-size: 13.5px; line-height: 1.55;
+      margin: 8px 0 16px;
+      border: 1px solid var(--line);
+    }
+
+    code.inline {
+      background: var(--surface-2); color: var(--code-ink);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 13px; border: 1px solid var(--line);
+    }
+
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+      background: var(--surface); color: var(--ink-soft);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    pre:hover .copy-btn { opacity: 1; }
+    pre .copy-btn { color: #B3A896; border-color: #4A4030; background: #2B2520; }
+    .copy-btn:hover { color: #E4BC5C; border-color: #E4BC5C; }
+    .copy-btn.copied { color: var(--dorado); border-color: var(--dorado); opacity: 1; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 12px 0 20px;
+      font-size: 14px;
+      max-width: 72ch;
+      line-height: 1.6;
+    }
+
+    .callout.warn { background: var(--vino-tint); border-left: 4px solid var(--vino); color: var(--ink); }
+    .callout.warn b, .callout.warn strong { color: var(--vino); }
+    .callout.note { background: var(--dorado-tint); border-left: 4px solid var(--dorado); color: var(--ink); }
+    .callout.note b, .callout.note strong { color: var(--dorado); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin: 10px 0 22px;
+      box-shadow: var(--shadow);
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0; font-size: 13.5px; text-align: left; }
+    th { background: var(--vino); color: #fff; padding: 11px 14px; font-weight: 600; letter-spacing: .02em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--surface-2); }
+
+    .rubric-weight { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--vino); }
+
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin: 14px 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    .diagram-caption {
+      font-size: 12.5px; color: var(--ink-soft);
+      text-align: center; margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    figure.ref {
+      margin: 14px 0 24px;
+      max-width: 640px;
+    }
+
+    figure.ref img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #fff;
+    }
+
+    figure.ref img.logo-img {
+      max-width: 180px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    figure.ref figcaption {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.5;
+    }
+
+    figure.ref figcaption a { color: var(--ink-soft); text-decoration: underline; }
+
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer; user-select: none;
+      transition: background .15s ease;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li:hover { background: var(--surface-2); }
+
+    .checklist .box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      margin-top: 2px; flex-shrink: 0;
+      background: var(--surface);
+      transition: all .15s ease;
+    }
+
+    .checklist li.done { opacity: .6; }
+    .checklist li.done .box { background: var(--vino); border-color: var(--vino); position: relative; }
+    .checklist li.done .box::after {
+      content: "";
+      position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px;
+      border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+    }
+    .checklist li.done span.text { text-decoration: line-through; }
+
+    #back-to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--vino); color: #fff; border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 998; font-size: 16px;
+    }
+    #back-to-top.show { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover { transform: translateY(-2px); }
+
+    #toc-toggle {
+      display: none;
+      position: fixed; bottom: 24px; left: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      border: 1px solid var(--line);
+      z-index: 998; box-shadow: var(--shadow);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      #toc-toggle { display: flex; }
+      nav.toc.mobile-open {
+        display: block; position: fixed; inset: 0;
+        height: 100vh; width: 85vw; max-width: 320px;
+        background: var(--surface); z-index: 997;
+        box-shadow: var(--shadow);
+        border-right: 1px solid var(--line);
+      }
+    }
+
+    footer.page {
+      max-width: 74ch;
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    @media print {
+      nav.toc, #progress-bar, #back-to-top, #toc-toggle, .copy-btn { display: none !important; }
+      .shell { grid-template-columns: 1fr !important; }
+      section.part { break-inside: avoid; }
+    }
+
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <div class="shell">
+    <nav class="toc" id="toc">
+      <p class="toc-label">Contenido</p>
+      <a href="#intro"><span class="badge">&middot;</span> Introducci&oacute;n</a>
+      <a href="#parteA"><span class="badge">1</span> Requisitos</a>
+      <a href="#parteB"><span class="badge">2</span> Instalaci&oacute;n en Windows</a>
+      <a href="#parteC"><span class="badge">3</span> Primer arranque y tokens</a>
+      <a href="#parteD"><span class="badge">4</span> Pr&aacute;ctica con CaribeMart</a>
+      <a href="#parteE"><span class="badge">5</span> Discernimiento</a>
+      <a href="#parteF"><span class="badge">6</span> Buenas pr&aacute;cticas</a>
+      <a href="#parteG"><span class="badge">7</span> Evidencias</a>
+      <a href="#troubleshooting"><span class="badge">?</span> Problemas en Windows</a>
+      <a href="#proximo"><span class="badge">&rarr;</span> Lo que viene</a>
+      <a href="#referencias"><span class="badge">r</span> Referencias</a>
+      <a href="#checklist"><span class="badge">v</span> Checklist</a>
+    </nav>
+
+    <div>
+      <header class="top portada">
+        <img class="portada-logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa (CUC)" onerror="this.style.display='none'">
+        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
+        <h1>Laboratorio 6: Tu primer agente de IA &mdash; opencode en Windows</h1>
+        <p class="sub">Instala un <b>agente de terminal</b> en tu PC, elige un modelo, y p&iacute;dele que
+        explique y modifique un archivo del caso <b>CaribeMart</b> mientras <b>t&uacute; revisas cada diff</b>.
+        <b>Individual &middot; actividad formativa (sin calificaci&oacute;n).</b></p>
+        <div class="accent-bar"></div>
+        <div class="author-block">
+          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span><strong>Universidad de la Costa (CUC)</strong></span>
+          <span><strong>2026-2 &middot; Semana 12 &middot; s&aacute;bado 31 de octubre de 2026 &middot; 3 h</strong></span>
+        </div>
+      </header>
+
+      <main>
+        <section id="intro">
+          <p class="lede">Hoy deja de existir la distancia entre t&uacute; y la IA: trabajas con un
+          <b>agente de IA dentro de tu terminal</b>. No es un chat en el navegador: es un programa que
+          <b>lee tus archivos</b>, <b>propone cambios</b> y <b>los escribe solo si t&uacute; lo apruebas</b>.
+          La regla de la actividad es una frase: <b>la IA propone, el humano verifica</b>.</p>
+
+          <p><b>&iquest;Qu&eacute; es un agente de IA de terminal?</b> Un programa que corre en tu
+          PowerShell (o en tu terminal) y que conecta tres piezas: <b>t&uacute;</b> (escribes la petici&oacute;n en
+          lenguaje natural), un <b>cliente</b> (aqu&iacute;, <code class="inline">opencode</code>) que organiza
+          la conversaci&oacute;n, lee y edita archivos, y un <b>modelo en la nube</b> que genera el texto y el
+          c&oacute;digo. El agente no adivina: trabaja sobre <b>la carpeta en la que lo arrancaste</b>.</p>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 320" width="100%" height="auto" role="img" aria-label="Flujo: estudiante, opencode, modelo en la nube y archivos del proyecto">
+              <rect x="16" y="16" width="888" height="288" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="46" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">TU PC WINDOWS &middot; QU&Eacute; PASA CUANDO LE HABLAS AL AGENTE</text>
+
+              <rect x="46" y="104" width="188" height="126" rx="10" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="140" y="136" text-anchor="middle" font-family="IBM Plex Sans" font-size="15" font-weight="700" fill="#A6192E">1 &middot; T&Uacute;</text>
+              <text x="140" y="162" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">escribes en lenguaje</text>
+              <text x="140" y="180" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">natural tu petici&oacute;n</text>
+              <text x="140" y="204" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">apruebas o rechazas</text>
+
+              <rect x="278" y="104" width="188" height="126" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="372" y="136" text-anchor="middle" font-family="IBM Plex Sans" font-size="15" font-weight="700" fill="#2A2A2A">2 &middot; opencode</text>
+              <text x="372" y="162" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">agente en la terminal</text>
+              <text x="372" y="180" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">lee y edita archivos</text>
+              <text x="372" y="204" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">muestra el diff</text>
+
+              <rect x="510" y="104" width="188" height="126" rx="10" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.5"></rect>
+              <text x="604" y="136" text-anchor="middle" font-family="IBM Plex Sans" font-size="15" font-weight="700" fill="#7E5A12">3 &middot; Modelo</text>
+              <text x="604" y="162" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">en la nube</text>
+              <text x="604" y="180" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">genera el texto y</text>
+              <text x="604" y="204" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">el c&oacute;digo propuesto</text>
+
+              <rect x="742" y="104" width="132" height="126" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5" stroke-dasharray="5 4"></rect>
+              <text x="808" y="136" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#2A2A2A">4 &middot; Tu</text>
+              <text x="808" y="156" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#2A2A2A">proyecto</text>
+              <text x="808" y="184" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">carpeta</text>
+              <text x="808" y="202" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">CaribeMart</text>
+
+              <line x1="234" y1="146" x2="278" y2="146" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="272,146 284,140 284,152" fill="#A6192E"></polygon>
+              <text x="256" y="94" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">petici&oacute;n</text>
+
+              <line x1="466" y1="146" x2="510" y2="146" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="504,146 516,140 516,152" fill="#6B6259"></polygon>
+              <text x="488" y="94" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">prompt</text>
+
+              <line x1="510" y1="192" x2="466" y2="192" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="472,192 460,186 460,198" fill="#6B6259"></polygon>
+              <text x="488" y="244" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">respuesta</text>
+
+              <line x1="698" y1="146" x2="742" y2="146" stroke="#A9791C" stroke-width="2"></line>
+              <polygon points="736,146 748,140 748,152" fill="#A9791C"></polygon>
+              <text x="720" y="94" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6B6259">diff</text>
+
+              <path d="M 742 252 L 372 252 L 372 238" fill="none" stroke="#A6192E" stroke-width="2" stroke-dasharray="6 5"></path>
+              <polygon points="372,244 366,232 378,232" fill="#A6192E"></polygon>
+              <text x="556" y="272" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#A6192E">el cambio se aplica solo si lo apruebas (o lo deshaces con /undo)</text>
+
+              <text x="460" y="292" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">el modelo nunca ve tu carpeta entera: solo lo que el agente le entrega</text>
+            </svg>
+            <p class="diagram-caption">El agente es el <b>intermediario</b>: traduce tu petici&oacute;n en
+            acciones sobre archivos y te muestra el resultado antes de tocar nada.
+            Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <p><b>Presupuesto de tiempo (180 minutos):</b></p>
+          <table>
+            <thead><tr><th>Parte</th><th>Tiempo</th></tr></thead>
+            <tbody>
+              <tr><td>0 &mdash; Objetivo y recorrido</td><td>5 min</td></tr>
+              <tr><td>1 &mdash; Requisitos del PC</td><td>10 min</td></tr>
+              <tr><td>2 &mdash; Instalaci&oacute;n en Windows</td><td>30 min</td></tr>
+              <tr><td>3 &mdash; Primer arranque: modelo, contexto y tokens</td><td>20 min</td></tr>
+              <tr><td>4 &mdash; Pr&aacute;ctica guiada con CaribeMart</td><td>50 min</td></tr>
+              <tr><td>5 &mdash; Discernimiento: encuentra el error</td><td>25 min</td></tr>
+              <tr><td>6 &mdash; Buenas pr&aacute;cticas y seguridad</td><td>10 min</td></tr>
+              <tr><td>7 &mdash; Evidencias y reflexi&oacute;n</td><td>20 min</td></tr>
+              <tr><td>8 &mdash; Problemas comunes en Windows</td><td>10 min</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout note">
+            <p><b>Es una actividad formativa, no se califica con porcentaje.</b> Trabajas en tu propio PC
+            Windows, individual, y no hay entrega autom&aacute;tica: lo que se revisa son tus <b>capturas</b>
+            y tu <b>reflexi&oacute;n</b> (parte 7). Lo que modifiques hoy vive en tu carpeta: el docente no
+            ve tu pantalla en vivo, por eso <b>captura mientras trabajas</b>.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteA">
+          <div class="part-head"><span class="part-badge">1</span><h2>Paso 1 &mdash; Requisitos de tu PC (~10 min)</h2></div>
+
+          <p>Antes de instalar nada, comprueba que tienes las cuatro piezas. Abre
+          <b>Windows Terminal</b> o <b>PowerShell</b> (men&uacute; inicio &rarr; escribe <code class="inline">PowerShell</code>)
+          y ejecuta:</p>
+
+          <pre><code>node -v
+npm -v
+git --version
+opencode --version</code></pre>
+
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> un n&uacute;mero de versi&oacute;n en los tres primeros
+          (el &uacute;ltimo fallar&aacute; todav&iacute;a: opencode se instala en el paso 2).</p>
+
+          <ol class="steps">
+            <li><b>Windows 10 o Windows 11</b>, 64 bits, con conexi&oacute;n a Internet (el modelo corre en
+            la nube).</li>
+            <li><b>Node.js LTS</b>: necesario para instalar opencode con <code class="inline">npm</code>.
+            Descarga la versi&oacute;n <b>LTS</b> desde <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>
+            si <code class="inline">node -v</code> no responde.</li>
+            <li><b>Git</b>: obligatorio. opencode usa Git para <b>deshacer cambios</b>
+            (<code class="inline">/undo</code> y <code class="inline">/redo</code> solo funcionan en carpetas que son
+            repositorio Git, seg&uacute;n la doc oficial).</li>
+            <li><b>Terminal</b>: <b>Windows Terminal</b> (recomendado) o <b>PowerShell</b>. Ambos vienen
+            instalados en Windows 10/11.</li>
+            <li><b>Opcional pero recomendado por la doc: WSL</b> (Windows Subsystem for Linux). La
+            documentaci&oacute;n de opencode dice que, para <b>la mejor experiencia en Windows</b>, WSL ofrece
+            mejor rendimiento y compatibilidad completa.</li>
+          </ol>
+
+          <div class="callout note">
+            <p><b>Si algo falta, instala primero lo que falte y vuelve.</b> Node.js y Git se instalan una
+            sola vez y te sirven para todos los laboratorios de la unidad.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteB">
+          <div class="part-head"><span class="part-badge">2</span><h2>Paso 2 &mdash; Instalaci&oacute;n en Windows (~30 min)</h2></div>
+
+          <p>La documentaci&oacute;n oficial (<a href="https://opencode.ai/docs" target="_blank" rel="noopener">opencode.ai/docs</a>)
+          ofrece <b>una opci&oacute;n recomendada</b> y <b>alternativas directas</b> para Windows. Elige
+          <b>una sola</b> y sigue hasta el final.</p>
+
+          <h3 class="sub">Opci&oacute;n A &middot; Recomendada por la doc: WSL</h3>
+          <ol class="steps">
+            <li>Instala WSL siguiendo la <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener">gu&iacute;a oficial de Microsoft</a>.</li>
+            <li>Abre la <b>terminal de WSL</b> y ejecuta el instalador oficial:
+              <pre><code>curl -fsSL https://opencode.ai/install | bash</code></pre>
+            </li>
+            <li>Ve a tu carpeta de trabajo dentro de WSL (los discos Windows se ven en
+            <code class="inline">/mnt/c/</code>, <code class="inline">/mnt/d/</code>…) y arranca:
+              <pre><code>cd /mnt/c/Users/TuNombre/caribe
+opencode</code></pre>
+            </li>
+          </ol>
+
+          <h3 class="sub">Opci&oacute;n B &middot; Alternativas directas en Windows (sin WSL)</h3>
+          <p>Si prefieres trabajar tal cual en PowerShell, la doc lista estos m&eacute;todos:</p>
+          <pre><code>npm install -g opencode-ai</code></pre>
+          <ul class="plain">
+            <li>Con <b>Chocolatey</b>: <code class="inline">choco install opencode</code></li>
+            <li>Con <b>Scoop</b>: <code class="inline">scoop install opencode</code></li>
+            <li>Con el <b>binario oficial</b>: desc&aacute;rgalo desde
+            <a href="https://github.com/anomalyco/opencode/releases" target="_blank" rel="noopener">Releases en GitHub</a>.</li>
+          </ul>
+
+          <h3 class="sub">Comprueba la versi&oacute;n instalada</h3>
+          <pre><code>opencode --version</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> un n&uacute;mero de versi&oacute;n. <b>Captura esta pantalla:
+          es tu evidencia n&uacute;mero 1.</b> Si la terminal dice que no reconoce el comando, cierra y vuelve
+          a abrir la terminal (secciones 8 y problemas de PATH).</p>
+
+          <div class="callout warn">
+            <p><b>OpenCode 1 y OpenCode 2 usan el mismo comando <code class="inline">opencode</code> y no se
+            pueden instalar uno al lado del otro.</b> Esta gu&iacute;a sigue la documentaci&oacute;n de
+            <code class="inline">opencode.ai/docs</code>. Si tu instalaci&oacute;n te ofrece migrar a
+            OpenCode 2 o te muestra un aviso de versi&oacute;n, <b>no aceptes a ciegas</b>: contin&uacute;a con
+            la opci&oacute;n A y <b>verifica en clase</b> con el docente qu&eacute; versi&oacute;n usa el curso.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteC">
+          <div class="part-head"><span class="part-badge">3</span><h2>Paso 3 &mdash; Primer arranque: modelo, contexto y tokens (~20 min)</h2></div>
+
+          <h3 class="sub">3.1 &middot; Arranca y conecta un modelo</h3>
+          <ol class="steps">
+            <li>Entra a la carpeta de tu pr&aacute;ctica y arranca el agente:
+              <pre><code>cd C:\caribe
+opencode</code></pre>
+            </li>
+            <li>Conecta el proveedor. La doc recomienda empezar por <b>OpenCode Zen</b>, la lista de
+            modelos que el equipo de opencode prueba y verifica:
+              <pre><code>/connect</code></pre>
+            </li>
+            <li>Selecciona <b>OpenCode Zen</b>, entra a <a href="https://opencode.ai/auth" target="_blank" rel="noopener">opencode.ai/auth</a>
+            con tu cuenta, <b>crea la API key</b> y p&eacute;gala donde te la pide la terminal.</li>
+            <li>Elige el modelo:
+              <pre><code>/models</code></pre>
+            </li>
+            <li>Opcional pero &uacute;til: que el agente analice tu proyecto y cree
+            <code class="inline">AGENTS.md</code> (instrucciones del proyecto):
+              <pre><code>/init</code></pre>
+            </li>
+          </ol>
+
+          <div class="callout">
+            <p><b>Modelos gratuitos sin cuenta.</b> opencode trae modelos gratuitos de OpenCode Zen (los que
+            terminan en <code class="inline">-free</code> en <code class="inline">/models</code>) que funcionan
+            <b>sin iniciar sesi&oacute;n ni tarjeta</b> (probado por el docente el 30-oct-2026). Usa uno de esos;
+            <b>no agregues datos de facturaci&oacute;n</b>. Si un modelo gratuito responde &laquo;rate limit&raquo;,
+            espera un minuto o elige otro <code class="inline">-free</code>. Anota el <b>nombre exacto del modelo</b>
+            (formato <code class="inline">proveedor/modelo</code>): es tu evidencia n&uacute;mero 2.</p>
+          </div>
+
+          <h3 class="sub">3.2 &middot; Contexto y tokens en 3 l&iacute;neas</h3>
+          <ul class="plain">
+            <li><b>Token</b>: el fragmento con el que el modelo lee y escribe (una palabra puede ser uno o
+            varios tokens).</li>
+            <li><b>Ventana de contexto</b>: lo que cabe en una sola conversaci&oacute;n; tu mensaje, el
+            archivo que le diste y las respuestas anteriores la van llenando.</li>
+            <li><b>Al llenarse</b>, la conversaci&oacute;n se comprime para seguir cabiendo (con
+            <code class="inline">/compact</code> lo haces t&uacute; cuando quieras).</li>
+          </ul>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 200" width="100%" height="auto" role="img" aria-label="La ventana de contexto como una barra que se llena con los tokens">
+              <rect x="16" y="16" width="888" height="168" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="44" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">VENTANA DE CONTEXTO: QU&Eacute; CABE EN LA CONVERSACI&Oacute;N</text>
+
+              <rect x="70" y="86" width="780" height="46" rx="8" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <rect x="70" y="86" width="330" height="46" rx="8" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="235" y="115" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#A6192E">tu mensaje + archivo + respuesta</text>
+              <text x="640" y="115" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">espacio libre del modelo</text>
+
+              <line x1="400" y1="80" x2="400" y2="72" stroke="#A6192E" stroke-width="1.5"></line>
+              <text x="400" y="66" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#A6192E">tokens usados</text>
+
+              <text x="460" y="164" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">cada archivo que adjuntas (@) y cada mensaje consume m&aacute;s espacio</text>
+            </svg>
+            <p class="diagram-caption">M&aacute;s archivos y mensajes &rarr; m&aacute;s tokens &rarr; se llena
+            la barra. Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <h3 class="sub">3.3 &middot; &iquest;D&oacute;nde se ven los tokens?</h3>
+          <ul class="plain">
+            <li><b>En la interfaz</b>: la documentaci&oacute;n de opencode <b>no describe</b> d&oacute;nde
+            est&aacute; el medidor de tokens en el TUI &rarr; <b>verificar en clase</b> (mira la barra de
+            estado o el panel lateral de tu versi&oacute;n y captura lo que encuentres).</li>
+            <li><b>Lo s&iacute; documentado, y lo que puedes capturar hoy:</b> el comando
+            <code class="inline">opencode stats</code>, que muestra el <b>uso de tokens y el costo</b> de tus
+            sesiones:</li>
+          </ul>
+          <pre><code>opencode stats
+opencode stats --models</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> el resumen de sesiones con sus tokens. Cierra y reabre
+          opencode para verlo desde la terminal. Cuando la conversaci&oacute;n crezca mucho:</p>
+          <pre><code>/compact</code></pre>
+        </section>
+
+        <section class="part" id="parteD">
+          <div class="part-head"><span class="part-badge">4</span><h2>Paso 4 &mdash; Pr&aacute;ctica guiada con CaribeMart (~50 min)</h2></div>
+
+          <p>Ya tienes el agente instalado y un modelo conectado. Ahora trabaja sobre una
+          <b>carpeta peque&ntilde;a del caso CaribeMart</b> (el mismo proyecto del Lab 5). Tres tareas:
+          <b>(a)</b> que te explique un archivo, <b>(b)</b> que proponga un cambio peque&ntilde;o,
+          <b>(c)</b> que revises el diff antes de aceptar.</p>
+
+          <h3 class="sub">4.1 &middot; Consigue la carpeta</h3>
+          <ol class="steps">
+            <li><b>Ruta A &mdash; si tienes el c&oacute;digo del Lab 5:</b> copia una carpeta peque&ntilde;a
+            del proyecto (por ejemplo <code class="inline">pedidos/</code>, con su
+            <code class="inline">server.js</code>) a tu PC en <code class="inline">C:\caribe\pedidos\</code>.
+            Puedes bajarla de la estaci&oacute;n del laboratorio <b>antes de cerrar la sesi&oacute;n</b> o
+            pedirla al docente.</li>
+            <li><b>Ruta B &mdash; si no tienes el c&oacute;digo:</b> descarga la carpeta del
+            <b>Laboratorio 5</b> del repositorio del curso (el enlace lo comparte el docente; si es
+            privado, <b>verificar en clase</b>) y gu&aacute;rdala en <code class="inline">C:\caribe\lab05\</code>.</li>
+            <li><b>Carpeta de pr&aacute;ctica mini (Ruta B):</b> si no tienes ning&uacute;n archivo de
+            CaribeMart, crea la carpeta y este archivo con los bloques de abajo. Es un servicio de
+            <b>pedidos</b> diminuto, suficiente para toda la pr&aacute;ctica:
+              <pre><code>mkdir C:\caribe\pedidos
+notepad C:\caribe\pedidos\server.js</code></pre>
+              <pre><code>const http = require('http');
+const fs = require('fs');
+
+const productos = [
+  { id: 1, nombre: 'Cafe de la Costa', precio: 12000 },
+  { id: 2, nombre: 'Coco rallado', precio: 4500 }
+];
+const archivo = 'pedidos.json';
+const leer = () =&gt; fs.existsSync(archivo) ? JSON.parse(fs.readFileSync(archivo, 'utf8')) : [];
+
+const servidor = http.createServer((req, res) =&gt; {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  if (req.method === 'GET' &amp;&amp; req.url === '/productos') {
+    res.end(JSON.stringify(productos));
+  } else if (req.method === 'GET' &amp;&amp; req.url === '/pedidos') {
+    res.end(JSON.stringify(leer()));
+  } else if (req.method === 'POST' &amp;&amp; req.url === '/pedidos') {
+    let cuerpo = '';
+    req.on('data', c =&gt; cuerpo += c);
+    req.on('end', () =&gt; {
+      const pedido = JSON.parse(cuerpo || '{}');
+      const lista = leer();
+      pedido.id = lista.length + 1;
+      lista.push(pedido);
+      fs.writeFileSync(archivo, JSON.stringify(lista, null, 2));
+      res.statusCode = 201;
+      res.end(JSON.stringify(pedido));
+    });
+  } else {
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: 'ruta no encontrada' }));
+  }
+});
+
+servidor.listen(3000, () =&gt; console.log('pedidos en http://localhost:3000'));</code></pre>
+            </li>
+            <li><b>Hazlo repositorio Git</b> (sin esto, <code class="inline">/undo</code> no funcionar&aacute;
+            y no podr&aacute;s comparar versiones):
+              <pre><code>cd C:\caribe
+git init
+git add .
+git commit -m "estado inicial"</code></pre>
+            </li>
+          </ol>
+          <p><b>Prueba que funciona</b> (en una segunda terminal):</p>
+          <pre><code>cd C:\caribe\pedidos
+node server.js</code></pre>
+          <pre><code>curl.exe -s http://localhost:3000/pedidos</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> <code class="inline">[]</code> en la primera llamada, y
+          un <code class="inline">pedidos.json</code> creado despu&eacute;s de un <code class="inline">POST</code>.
+          Det&eacute;nlo con <code class="inline">Ctrl+C</code>.</p>
+
+          <h3 class="sub">4.2 &middot; (a) Expl&iacute;cale qu&eacute; hace un archivo</h3>
+          <pre><code>cd C:\caribe
+opencode</code></pre>
+          <pre><code>Explica en 5 puntos que hace @pedidos/server.js: que rutas expone, que recibe y
+que devuelve. Si algo no esta claro en el archivo, marcalo como "duda".</code></pre>
+          <p>El signo <code class="inline">@</code> adjunta el archivo a la conversaci&oacute;n (as&iacute; lo
+          describe la doc). <b>Captura la explicaci&oacute;n: evidencia n&uacute;mero 3.</b></p>
+
+          <h3 class="sub">4.3 &middot; (b) P&iacute;dele un cambio peque&ntilde;o, primero como plan</h3>
+          <p>La doc recomienda <b>planificar antes de escribir</b>: con <code class="inline">Tab</code>
+          cambias al <b>modo plan</b> (el agente solo propone) y con otro <code class="inline">Tab</code>
+          vuelves al <b>modo build</b> (donde s&iacute; edita). P&eacute;galo en modo plan:</p>
+          <pre><code>Agrega un endpoint GET /salud que devuelva {"ok":true} y un campo opcional
+"direccion" en el pedido de POST /pedidos. No toques las demas rutas ni el
+archivo pedidos.json existente. Explica primero que vas a cambiar.</code></pre>
+          <p>Cuando el plan te parezca bien, cambia a modo build (<code class="inline">Tab</code>) y
+          apru&eacute;balo con una frase corta:</p>
+          <pre><code>De acuerdo, aplica los cambios.</code></pre>
+
+          <h3 class="sub">4.4 &middot; (c) Revisa el diff antes de aceptar</h3>
+          <p>Antes de que el archivo se escriba, opencode te pide <b>aprobaci&oacute;n</b> y te muestra el
+          cambio. La doc define tres opciones:</p>
+          <ul class="plain">
+            <li><code class="inline">once</code> &mdash; aprueba solo ese pedido;</li>
+            <li><code class="inline">always</code> &mdash; aprueba lo que se parezca a ese patr&oacute;n
+            durante la sesi&oacute;n (usalo con cuidado);</li>
+            <li><code class="inline">reject</code> &mdash; rechaza: el cambio no se aplica.</li>
+          </ul>
+          <p><b>Regla de oro: lee el diff completo antes de elegir.</b> Si algo no te convence, pulsa
+          <code class="inline">reject</code> y p&iacute;dele que lo haga de otra forma.</p>
+          <p>Compara t&uacute; mismo, desde otra terminal:</p>
+          <pre><code>cd C:\caribe
+git status
+git diff --stat
+git diff</code></pre>
+          <p><b>Qu&eacute; deber&iacute;as ver:</b> solo <code class="inline">pedidos/server.js</code>
+          modificado, con el <code class="inline">/salud</code> agregado y el campo
+          <code class="inline">direccion</code>. Si el agente toc&oacute; algo m&aacute;s,
+          <b>rechaza</b> o deshaz con <code class="inline">/undo</code> (funciona porque el Git
+          est&aacute; activo). <b>Captura el diff: evidencia n&uacute;mero 4.</b></p>
+          <div class="callout note">
+            <p><b>Pru&eacute;balo corriendo el servidor:</b> <code class="inline">node server.js</code> y luego
+            <code class="inline">curl.exe http://localhost:3000/salud</code> debe responder
+            <code class="inline">{"ok":true}</code>. Un cambio que no se prueba no est&aacute; terminado.</p>
+          </div>
+
+          <h3 class="sub">4.5 &middot; Conecta tu primer MCP: Context7 (~15 min)</h3>
+          <p>Un <b>MCP</b> (Model Context Protocol) es un conector est&aacute;ndar que le da al agente
+          <b>herramientas nuevas</b>. Context7 es un MCP remoto y gratuito que trae la documentaci&oacute;n
+          oficial y actualizada de librer&iacute;as (Express, Node, etc.). Sin instalar nada y sin clave.</p>
+          <svg viewBox="0 0 640 120" width="100%" role="img" aria-label="opencode consulta el MCP Context7 y recibe documentación">
+            <g font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">
+              <rect x="10" y="35" width="150" height="50" rx="8" fill="none" stroke="currentColor"/><text x="85" y="65">opencode</text>
+              <rect x="245" y="35" width="150" height="50" rx="8" fill="none" stroke="currentColor"/><text x="320" y="58">MCP</text><text x="320" y="76">Context7</text>
+              <rect x="480" y="35" width="150" height="50" rx="8" fill="none" stroke="currentColor"/><text x="555" y="58">Docs oficiales</text><text x="555" y="76">(Express&hellip;)</text>
+              <path d="M160 52h85M395 52h85" stroke="currentColor" marker-end="url(#fl)"/>
+              <path d="M245 70h-85M480 70h-85" stroke="currentColor" stroke-dasharray="4 3" marker-end="url(#fl)"/>
+              <text x="202" y="45" font-size="11">pregunta</text><text x="202" y="95" font-size="11">respuesta</text>
+            </g>
+            <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+          </svg>
+          <ol>
+            <li>Cierra opencode. En la carpeta de tu proyecto (<code class="inline">C:\caribe\lab05\</code>) crea el archivo
+            <code class="inline">opencode.json</code> con este contenido:</li>
+          </ol>
+          <pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    }
+  }
+}</code></pre>
+          <ol start="2">
+            <li>Abre opencode de nuevo en esa carpeta y p&iacute;dele:
+            <code class="inline">Usa context7 para consultar la documentaci&oacute;n de Express y dime si la ruta /salud de server.js sigue la forma recomendada.</code></li>
+            <li>Observa en la conversaci&oacute;n que el agente llama herramientas de <b>context7</b>
+            (por ejemplo <code class="inline">resolve-library-id</code> y <code class="inline">query-docs</code>).
+            <b>Captura esa llamada: evidencia n&uacute;mero 6.</b></li>
+            <li>Compara: &iquest;la respuesta cambi&oacute; respecto a la que te dio sin MCP? Eso es integrar
+            una herramienta externa a la IA.</li>
+          </ol>
+          <div class="callout note">
+            <p>Probado el 30-oct-2026 con un modelo <code class="inline">-free</code>. En la semana 13 (Lab A, 5 %)
+            conectar&aacute;s un MCP a la API de CaribeMart.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteE">
+          <div class="part-head"><span class="part-badge">5</span><h2>Paso 5 &mdash; Discernimiento: encuentra t&uacute; el error (~25 min)</h2></div>
+
+          <p>La IA propone; <b>t&uacute; verificas</b>. Los modelos se equivocan con toda naturalidad:
+          inventan rutas, olvidan manejar errores o escriben algo que funciona en su cabeza y no en tu PC.
+          Tu tarea de hoy es encontrar <b>al menos un error o imprecisi&oacute;n</b> en lo que propuso
+          opencode y corregirlo t&uacute;.</p>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 230" width="100%" height="auto" role="img" aria-label="Ciclo: la IA propone, el humano verifica, corrige y acepta">
+              <rect x="16" y="16" width="888" height="198" rx="16" fill="#FBF8F3" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="460" y="46" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="700" fill="#A6192E">LA IA PROPONE, EL HUMANO VERIFICA</text>
+
+              <rect x="50" y="76" width="188" height="94" rx="10" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.5"></rect>
+              <text x="144" y="110" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#7E5A12">1 &middot; Propone</text>
+              <text x="144" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">el modelo sugiere</text>
+              <text x="144" y="152" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">un cambio</text>
+
+              <rect x="278" y="76" width="188" height="94" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="372" y="110" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#2A2A2A">2 &middot; Revisas</text>
+              <text x="372" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">lees el diff y</text>
+              <text x="372" y="152" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">pruebas el archivo</text>
+
+              <rect x="506" y="76" width="188" height="94" rx="10" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="600" y="110" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#A6192E">3 &middot; Encuentras</text>
+              <text x="600" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">el error o la</text>
+              <text x="600" y="152" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">imprecisi&oacute;n</text>
+
+              <rect x="734" y="76" width="140" height="94" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="804" y="110" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="700" fill="#2A2A2A">4 &middot; Corriges</text>
+              <text x="804" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">t&uacute; mismo</text>
+              <text x="804" y="152" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6B6259">y aceptas</text>
+
+              <line x1="238" y1="123" x2="278" y2="123" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="272,123 284,117 284,129" fill="#6B6259"></polygon>
+              <line x1="466" y1="123" x2="506" y2="123" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="500,123 512,117 512,129" fill="#6B6259"></polygon>
+              <line x1="694" y1="123" x2="734" y2="123" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="728,123 740,117 740,129" fill="#A6192E"></polygon>
+
+              <path d="M 804 170 L 804 192 L 144 192 L 144 176" fill="none" stroke="#A6192E" stroke-width="2" stroke-dasharray="6 5"></path>
+              <polygon points="144,182 138,170 150,170" fill="#A6192E"></polygon>
+              <text x="474" y="181" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#A6192E">si el cambio no convence, vuelve a pedirlo</text>
+            </svg>
+            <p class="diagram-caption">El ciclo no termina en &ldquo;aceptar&rdquo;: termina cuando
+            <b>t&uacute;</b> entiendes y validaste el cambio. Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <h3 class="sub">5.1 &middot; D&oacute;nde suelen estar los errores</h3>
+          <ul class="plain">
+            <li><b>Rutas inventadas</b>: responde <code class="inline">/salud</code> pero la registr&oacute;
+            en <code class="inline">/health</code>, o toca un archivo que no pediste.</li>
+            <li><b>Dato sin validar</b>: acepta cualquier cuerpo en el <code class="inline">POST</code> y
+            revienta si llega vac&iacute;o o malformado.</li>
+            <li><b>Campos rotos</b>: el campo nuevo no se escribe en el JSON, o pisa un campo existente.</li>
+            <li><b>Instrucciones de tu PC</b>: el modelo sugiere comandos de Linux en tu PowerShell (o
+            al rev&eacute;s).</li>
+            <li><b>Respuesta convincente pero falsa</b>: explica un archivo con seguridad y se equivoca en
+            una l&iacute;nea clave.</li>
+          </ul>
+
+          <h3 class="sub">5.2 &middot; Tu encargo</h3>
+          <ol class="steps">
+            <li>Revisa con lupa la explicaci&oacute;n del <b>4.2</b> y el diff del <b>4.4</b>.</li>
+            <li>Encuentra <b>al menos un error o imprecisi&oacute;n</b> (si el agente se port&oacute; bien,
+            p&eacute;ndele un cambio m&aacute;s exigente: por ejemplo, valida el JSON del
+            <code class="inline">POST</code> y vuelve a buscar el error).</li>
+            <li><b>Corrígelo t&uacute;</b> en el archivo (a mano o pidiendo una correcci&oacute;n puntual y
+            volviendo a revisar el diff).</li>
+            <li>Verifica con <code class="inline">node server.js</code> + <code class="inline">curl.exe</code>
+            que todo sigue funcionando.</li>
+            <li>Escribe en tu cuaderno: <b>qu&eacute; dec&iacute;a la IA &rarr; qu&eacute; estaba mal &rarr;
+            c&oacute;mo lo corregiste</b>. <b>Captura antes/despu&eacute;s: evidencia n&uacute;mero 5.</b></li>
+          </ol>
+
+          <div class="callout warn">
+            <p><b>Si no encuentras ning&uacute;n error:</b> no lo inventes. Repite la prueba con otra
+            petici&oacute;n (por ejemplo: &ldquo;agrega el campo <code class="inline">telefono</code> y
+            actualiza tambi&eacute;n <code class="inline">pedidos.json</code>&rdquo;) y vuelve a revisar.
+            La ausencia de errores tambi&eacute;n es un hallazgo: escr&iacute;belo con el ejemplo exacto que
+            probaste.</p>
+          </div>
+        </section>
+
+        <section class="part" id="parteF">
+          <div class="part-head"><span class="part-badge">6</span><h2>Paso 6 &mdash; Buenas pr&aacute;cticas y seguridad (~10 min)</h2></div>
+
+          <ul class="plain">
+            <li><b>Nunca pegues claves ni datos personales</b> en los mensajes: API keys, contrase&ntilde;as,
+            c&eacute;dulas, correos de estudiantes o credenciales de la universidad. Lo que escribes viaja
+            al modelo en la nube.</li>
+            <li><b>Revisa cada cambio antes de aceptarlo</b>: lee el diff completo, elige
+            <code class="inline">once</code> o <code class="inline">reject</code> (evita
+            <code class="inline">always</code>) y comprueba con <code class="inline">git diff</code>.</li>
+            <li><b>Arranca opencode dentro de la carpeta del proyecto</b>, nunca en la ra&iacute;z de tu
+            disco: el agente trabaja sobre la carpeta donde lo arrancaste. Si algo lo saca de ah&iacute;,
+            opencode lo marca y <b>pide aprobaci&oacute;n</b> (permiso
+            <code class="inline">external_directory</code>).</li>
+            <li><b>Los archivos <code class="inline">.env</code> piden aprobaci&oacute;n por defecto</b>
+            (as&iacute; viene configurado): no los dejes &ldquo;aprobar siempre&rdquo;.</li>
+            <li><b>No arranques con <code class="inline">--auto</code></b> en esta actividad: esa opci&oacute;n
+            aprueba permisos autom&aacute;ticamente y justamente hoy quieres decidir t&uacute; cada paso.</li>
+            <li><b>La API key se guarda en tu PC</b> (en el archivo
+            <code class="inline">auth.json</code>, dentro del directorio de datos de opencode): no la
+            compartas ni la pegues en el chat del curso.</li>
+            <li><b>Cada conversaci&oacute;n consume tokens</b>: revisa el consumo con
+            <code class="inline">opencode stats</code> y usa <code class="inline">/new</code> para empezar
+            temas nuevos en vez de alargar una sesi&oacute;n infinita.</li>
+            <li><b>El agente no sustituye tu criterio</b>: &eacute;l propone, t&uacute; verificas. Si no
+            entiendes un cambio, no lo aceptes.</li>
+          </ul>
+        </section>
+
+        <section class="part" id="parteG">
+          <div class="part-head"><span class="part-badge">7</span><h2>Paso 7 &mdash; Evidencias a entregar (~20 min)</h2></div>
+
+          <p>Actividad <b>formativa</b>: no hay porcentaje, pero s&iacute; evidencia. Re&uacute;ne estas
+          <b>6 capturas</b> (m&aacute;s una de bono) y la reflexi&oacute;n. T&oacute;molas mientras
+          trabajas: al cerrar la clase, lo que hiciste en tu PC ya no lo puede ver nadie.</p>
+
+          <ul class="checklist">
+            <li><span class="box"></span><span class="text"><b>1. Versi&oacute;n instalada:</b> captura de
+            <code class="inline">opencode --version</code> (con el n&uacute;mero visible).</span></li>
+            <li><span class="box"></span><span class="text"><b>2. Modelo elegido:</b> captura de
+            <code class="inline">/models</code> (o de <code class="inline">opencode models</code>) con el
+            nombre exacto <code class="inline">proveedor/modelo</code>.</span></li>
+            <li><span class="box"></span><span class="text"><b>3. Explicaci&oacute;n del archivo:</b>
+            captura de la respuesta a <code class="inline">@pedidos/server.js</code> (o del archivo que
+            explic&oacute;).</span></li>
+            <li><span class="box"></span><span class="text"><b>4. Diff revisado:</b> captura del diff en
+            la terminal de opencode o de <code class="inline">git diff</code>, con la decisi&oacute;n que
+            tomaste.</span></li>
+            <li><span class="box"></span><span class="text"><b>5. Error encontrado y corregido:</b>
+            captura <b>antes</b> y <b>despu&eacute;s</b> del archivo, con tu explicaci&oacute;n del error.</span></li>
+            <li><span class="box"></span><span class="text"><b>6. MCP conectado:</b> captura de opencode
+            llamando una herramienta de <b>context7</b>.</span></li>
+            <li><span class="box"></span><span class="text"><b>Bono:</b> captura de
+            <code class="inline">opencode stats</code> (tokens/costo de tu sesi&oacute;n).</span></li>
+          </ul>
+
+          <p><b>Reflexi&oacute;n de 5 l&iacute;neas</b> (escrita por ti, en tu cuaderno o en un documento):</p>
+          <ol class="steps">
+            <li>&iquest;Qu&eacute; le delegaste al agente y qu&eacute; hiciste t&uacute;?</li>
+            <li>&iquest;Qu&eacute; error o imprecisi&oacute;n encontraste? &iquest;C&oacute;mo lo
+            detectaste?</li>
+            <li>&iquest;En qu&eacute; momento estuviste a punto de aceptar algo que no probaste?</li>
+            <li>&iquest;Qu&eacute; cambiar&iacute;as en tu forma de pedir las cosas?</li>
+            <li>&iquest;Qu&eacute; tarea de este curso delegar&iacute;as la pr&oacute;xima vez, y
+            qu&eacute; verificar&iacute;as siempre?</li>
+          </ol>
+          <div class="callout note">
+            <p><b>Entrega:</b> las 6 capturas + la reflexi&oacute;n, como te indique el docente (plataforma
+            del curso o Teams). La r&uacute;brica de esta actividad es de <b>verificaci&oacute;n</b>, no de
+            nota: se revisa que hiciste el ciclo completo <b>pedir &rarr; revisar &rarr; corregir</b>.</p>
+          </div>
+        </section>
+
+        <section class="part" id="troubleshooting">
+          <div class="part-head"><span class="part-badge">?</span><h2>Paso 8 &mdash; Problemas comunes en Windows (~10 min)</h2></div>
+          <table>
+            <thead><tr><th>S&iacute;ntoma</th><th>Causa probable</th><th>Qu&eacute; hacer</th></tr></thead>
+            <tbody>
+              <tr><td>PowerShell dice <i>running scripts is disabled on this system</i></td>
+                <td>Pol&iacute;tica de ejecuci&oacute;n de scripts bloqueada en tu PC</td>
+                <td>Consulta la pol&iacute;tica con <code class="inline">Get-ExecutionPolicy</code> y
+                <b>verifica en clase</b> antes de cambiarla: en PC administrado puede exigir permisos
+                (<code class="inline">Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>)</td></tr>
+              <tr><td>Instalaste con <code class="inline">npm</code> y dice que no se reconoce
+                <code class="inline">opencode</code></td>
+                <td>La terminal no recarg&oacute; el <code class="inline">PATH</code></td>
+                <td>Cierra <b>todos</b> los terminales y abre uno nuevo; revisa el prefijo de npm con
+                <code class="inline">npm config get prefix</code> y que esa carpeta est&eacute; en el PATH</td></tr>
+              <tr><td>Lentitud, errores de red o &ldquo;no puedo conectar con el modelo&rdquo;</td>
+                <td>Proxy de la universidad</td>
+                <td>Configura el proxy en PowerShell con las variables que la doc de opencode indica
+                (<code class="inline">$env:HTTPS_PROXY</code>,
+                <code class="inline">$env:HTTP_PROXY</code>) y <b>debes</b> excluir el servidor local:
+                <code class="inline">$env:NO_PROXY="localhost,127.0.0.1"</code> (si no, la terminal se
+                engancha en un ciclo)</td></tr>
+              <tr><td>El antivirus o el firewall bloquea la descarga o la llamada al modelo</td>
+                <td>Pol&iacute;tica de seguridad del PC o de la red de la universidad</td>
+                <td>No desactives el antivirus: la red de la CUC no bloquea los servicios de modelos (confirmado por el docente); si falla, revisa el antivirus del PC con el docente y prueba
+                tambi&eacute;n la <b>opci&oacute;n A (WSL)</b> de la doc</td></tr>
+              <tr><td>opencode arranca pero falla al autenticar o no encuentra el modelo</td>
+                <td>API key inv&aacute;lida o nombre de modelo mal escrito</td>
+                <td>Repite <code class="inline">/connect</code>, verifica el nombre con
+                <code class="inline">opencode models</code> (formato
+                <code class="inline">proveedor/modelo</code>) y revisa los logs</td></tr>
+              <tr><td>Quieres ver qu&eacute; fall&oacute;</td>
+                <td>Error guardado en log</td>
+                <td><code class="inline">opencode --print-logs</code> en la terminal, o en Windows pulsa
+                <code class="inline">WIN+R</code> y pega
+                <code class="inline">%USERPROFILE%\.local\share\opencode\log</code></td></tr>
+              <tr><td><code class="inline">/undo</code> no funciona</td>
+                <td>La carpeta no es repositorio Git</td>
+                <td><code class="inline">git init</code>, <code class="inline">git add .</code> y
+                <code class="inline">git commit</code> en la carpeta del proyecto</td></tr>
+              <tr><td>Todo va lento o raro en Windows</td>
+                <td>Problemas de rendimiento de opencode en Windows puro</td>
+                <td>La doc lo indica: instala <b>WSL</b> y corre opencode desde ah&iacute;</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="part" id="proximo">
+          <div class="part-head"><span class="part-badge">&rarr;</span><h2>Lo que viene</h2></div>
+          <p>Hoy conectaste un agente con un modelo y aprendiste a <b>verificarlo</b>. La
+          <b>semana 13 (s&aacute;bado 7 de noviembre)</b> da el siguiente paso: que el agente
+          <b>use herramientas</b> en lugar de solo leer y escribir texto.</p>
+          <ul class="plain">
+            <li><b>Lab A &mdash; 5 %:</b> conectar un <b>servidor MCP</b> en opencode (por ejemplo el de
+            sistema de archivos, o una API REST de CaribeMart) y que el agente <b>consulte inventario y
+            pedidos</b> por su cuenta, respondiendo con datos reales del proyecto.</li>
+            <li>Para llegar listo: conserva tu carpeta <code class="inline">C:\caribe</code>, tu
+            instalaci&oacute;n funcionando y esta gu&iacute;a (con tus capturas).</li>
+          </ul>
+          <div class="callout note">
+            <p><b>Esta semana no cuenta con porcentaje</b>: es la base t&eacute;cnica del Lab A. Lo que
+            practiques hoy (pedir, revisar el diff, corregir) es exactamente lo que se te pedir&aacute;
+            la pr&oacute;xima vez, pero ahora con el agente conectado a tus datos.</p>
+          </div>
+        </section>
+
+        <section class="part" id="referencias">
+          <div class="part-head"><span class="part-badge">r</span><h2>Referencias</h2></div>
+          <ul>
+            <li>opencode &mdash; Introducci&oacute;n, instalaci&oacute;n y primeros pasos:
+              <a href="https://opencode.ai/docs" target="_blank" rel="noopener">opencode.ai/docs</a></li>
+            <li>opencode &mdash; Windows (WSL), la ruta recomendada por la doc:
+              <a href="https://opencode.ai/docs/windows-wsl" target="_blank" rel="noopener">opencode.ai/docs/windows-wsl</a></li>
+            <li>opencode &mdash; CLI (banderas globales, <code class="inline">opencode models</code>,
+              <code class="inline">opencode stats</code>):
+              <a href="https://opencode.ai/docs/cli" target="_blank" rel="noopener">opencode.ai/docs/cli</a></li>
+            <li>opencode &mdash; TUI: comandos <code class="inline">/connect</code>,
+              <code class="inline">/models</code>, <code class="inline">/init</code>,
+              <code class="inline">/undo</code>, <code class="inline">/compact</code>:
+              <a href="https://opencode.ai/docs/tui" target="_blank" rel="noopener">opencode.ai/docs/tui</a></li>
+            <li>opencode &mdash; Proveedores y OpenCode Zen:
+              <a href="https://opencode.ai/docs/providers" target="_blank" rel="noopener">opencode.ai/docs/providers</a></li>
+            <li>opencode &mdash; Permisos (allow / ask / deny, <code class="inline">once</code>,
+              <code class="inline">always</code>, <code class="inline">reject</code>, archivos
+              <code class="inline">.env</code>):
+              <a href="https://opencode.ai/docs/permissions" target="_blank" rel="noopener">opencode.ai/docs/permissions</a></li>
+            <li>opencode &mdash; Red: proxy y certificados:
+              <a href="https://opencode.ai/docs/network" target="_blank" rel="noopener">opencode.ai/docs/network</a></li>
+            <li>opencode &mdash; Soluci&oacute;n de problemas (logs en Windows):
+              <a href="https://opencode.ai/docs/troubleshooting" target="_blank" rel="noopener">opencode.ai/docs/troubleshooting</a></li>
+            <li>Microsoft &mdash; Instalar WSL:
+              <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener">learn.microsoft.com/windows/wsl/install</a></li>
+            <li>Node.js (versi&oacute;n LTS): <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
+            <li>Git: <a href="https://git-scm.com" target="_blank" rel="noopener">git-scm.com</a></li>
+          </ul>
+        </section>
+
+        <section class="part" id="checklist">
+          <div class="part-head"><span class="part-badge">v</span><h2>Checklist antes de cerrar</h2></div>
+          <ol class="steps">
+            <li><code class="inline">opencode --version</code> responde y tienes la captura.</li>
+            <li>Conectaste un modelo con <code class="inline">/connect</code> y anotaste su nombre exacto
+            con <code class="inline">/models</code>.</li>
+            <li>Pediste la explicaci&oacute;n de un archivo con <code class="inline">@</code> y la
+            capturaste.</li>
+            <li>Pediste un cambio en modo plan, cambiaste a modo build y <b>le&iacute;ste el diff</b>
+            antes de aceptar.</li>
+            <li>Comparaste con <code class="inline">git diff</code> que solo se toc&oacute; lo que
+            pediste.</li>
+            <li>Encontraste al menos un error o imprecisi&oacute;n y lo corregiste, con captura
+            antes/despu&eacute;s.</li>
+            <li>Probaste el servidor con <code class="inline">node server.js</code> y
+            <code class="inline">curl.exe</code>.</li>
+            <li>Capturaste <code class="inline">opencode stats</code> (tokens) y redactaste tu
+            <b>reflexi&oacute;n de 5 l&iacute;neas</b>.</li>
+            <li>No pegaste claves ni datos personales en ning&uacute;n mensaje.</li>
+          </ol>
+        </section>
+      </main>
+
+      <footer class="page foot">
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes &middot; Semana 12 &middot; Actividad formativa (3 h)</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      function onScroll() {
+        var h = document.documentElement;
+        bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+        var active = targets[0];
+        for (var i = 0; i < targets.length; i++) if (targets[i].getBoundingClientRect().top <= 120) active = targets[i];
+        links.forEach(function (a) { a.classList.toggle('active', active && a.getAttribute('href') === '#' + active.id); });
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var b = document.createElement('button');
+        b.className = 'copy-btn'; b.type = 'button'; b.textContent = 'copiar';
+        b.onclick = function () {
+          var c = pre.querySelector('code');
+          navigator.clipboard.writeText(c ? c.innerText : pre.innerText);
+          b.textContent = 'copiado'; b.classList.add('copied');
+          setTimeout(function () { b.textContent = 'copiar'; b.classList.remove('copied'); }, 1400);
+        };
+        pre.appendChild(b);
+      });
+    })();
+  </script>
+</body>
+</html>
