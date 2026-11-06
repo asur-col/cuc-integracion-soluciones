@@ -205,6 +205,9 @@
   <text x="880" y="180" text-anchor="middle" font-size="15" fill="#2A2A2A">tools list y tools call</text>
   <text x="880" y="210" text-anchor="middle" font-size="15" fill="#2A2A2A">tools call con argumentos</text>
   <text x="880" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">El modelo elige</text>
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">No confundan una interfaz de programación de aplicaciones REST con MCP. REST expone recursos del servidor, como el pedido número mil uno, y la aplicación decide cuándo pedirlos. MCP expone herramientas con esquemas que el modelo lee y elige en el momento adecuado. REST habla de recursos. MCP habla de acciones para el modelo. Ambos usan JSON y HTTP o tuberías, pero su intención es distinta. REST conecta programas entre sí. MCP conecta un modelo con capacidades reales. En CaribeMart ustedes seguiremos usando REST para el servicio de pedidos y MCP encima para exponerlo a opencode.La coexistencia es normal en sistemas reales bien diseñados. El servicio de pedidos seguirá hablando REST con otros sistemas. Encima expondrán un servidor MCP para opencode. Así cada cliente usa el idioma que necesita sin romper lo existente. Esa arquitectura por capas protege la inversión ya hecha en CaribeMart.</aside>
 </section>
@@ -267,6 +270,9 @@
   <text x="650" y="180" font-size="15" fill="#2A2A2A">o error con código claro</text>
   <text x="650" y="220" font-size="14" fill="#5E5E5E">mismo identificador</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion"> Todo mensaje MCP viaja en un sobre JSON RPC con tres piezas obligatorias. La versión del protocolo, el nombre del método y los parámetros enviados. La respuesta copia el identificador original y trae el resultado o un error con código claro. Esa disciplina permite correlacionar cada petición con su respuesta sin ninguna ambigüedad. Las notificaciones son mensajes sin respuesta esperada, por ejemplo un aviso de lista cambiada. Fíjense en la utilidad práctica para depurar. Cuando revisen registros, leerán esos tres campos y sabrán si falló el método, los parámetros o el servidor. Esa claridad ahorra horas de adivinación en el laboratorio. Piensen además en la compatibilidad entre versiones diferentes. Si el cliente habla una revisión vieja y el servidor una nueva, el sobre lo revela con claridad. Esa negociación ordenada evita conexiones a medias que nadie entiende. En la próxima parte verán esos mensajes en el inspector al probar. </aside>
 </section>

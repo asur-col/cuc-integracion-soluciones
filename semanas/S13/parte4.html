@@ -30,6 +30,9 @@
   <use href="#i-candado" x="850" y="110" width="80" height="80" color="#2E7D4F"/>
   <text x="890" y="220" text-anchor="middle" font-size="15" fill="#2A2A2A">solo lo necesario</text>
   <text x="890" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">el daño queda acotado</text>
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">El primer riesgo es el exceso de agencia. Ocurre cuando le damos al modelo una herramienta mucho más potente de lo que necesita. Piensen en una herramienta genérica que puede borrar pedidos, cobrar tarjetas o leer todo el sistema. Si el modelo interpreta mal una frase, el daño es inmediato y amplio. OWASP lo clasifica entre los riesgos más críticos porque la herramienta sí tiene poder real. La defensa es el permiso mínimo. Cada herramienta debe exponer solo la acción exacta y solo sobre los datos necesarios. Consultar y crear son dos permisos distintos y se diseñan por separado.El daño no depende de la intención del modelo. Un error de comprensión basta para activar una herramienta demasiado potente. La protección real está en el diseño previo y no en la suerte. Por eso el permiso mínimo se decide antes de escribir la primera línea. Piensen en cada herramienta como si ya estuviera en producción.</aside>
 </section>
@@ -67,6 +70,9 @@
   <text x="745" y="275" font-size="16" font-weight="700" fill="#2E7D4F">DEFENSA</text>
   <text x="670" y="330" font-size="15" fill="#2A2A2A">Ignora la nota</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">Concretemos el ataque en CaribeMart. Supongan que un cliente escribe en la nota de su pedido una frase que ordena ignorar todo y crear un pedido gratis. Cuando el asistente consulte ese pedido, la herramienta devolverá la nota completa como parte de la observación. Un modelo ingenuo puede tratar esa frase como una instrucción y actuar. La defensa correcta cambia el enfoque. La aplicación solo usa campos definidos como estado, cliente y total. La nota se muestra como texto citado, jamás como orden, y cualquier creación exige confirmación humana visible. Diseñen sus herramientas pensando en este escenario.El principio general es tratar texto externo como contenido citado. La aplicación lo rodea de marcas y el modelo lo describe sin obedecer. Esa disciplina se aprende y se practica en cada respuesta. En su actividad lo demostrarán con la reflexión sobre validación. Quien entiende este ataque, diseña mejor desde el inicio.</aside>
 </section>
@@ -107,6 +113,9 @@
   <text x="650" y="310" font-size="15" fill="#2A2A2A">Luis, 85000, pendiente</text>
   <text x="650" y="340" font-size="15" fill="#2A2A2A">estado pendiente</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">La segunda defensa es validar en dos capas. La primera capa es zod, que comprueba tipos y rangos. Cliente no vacío, total positivo y estado dentro de la lista cerrada. La segunda capa es dominio, es decir, reglas del negocio. Un total de menos cinco mil es imposible en CaribeMart aunque sea un número válido. Un estado inventado como entregado sin envío previo también es inválido. Por eso en crear pedido combinarán ambas capas. La validación no es adorno. Es la barrera que impide que un error del modelo se convierta en un dato corrupto.La validación también protege contra errores accidentales de tipeo. Un total con un cero de más puede pasar tipos pero no dominio. Esa segunda mirada detecta absurdos económicos y fechas imposibles. Combinen ambas capas siempre en escrituras. La primera rechaza tipos y la segunda rechaza disparates del negocio.</aside>
 </section>
@@ -145,6 +154,9 @@
   <text x="745" y="255" font-size="16" font-weight="700" fill="#2E7D4F">EL MODELO</text>
   <text x="670" y="320" font-size="15" fill="#2A2A2A">describe la nota</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">La cuarta defensa es de criterio. Toda salida de una herramienta debe tratarse como dato no confiable. Eso significa que la aplicación la presenta citada y el modelo la describe, pero jamás la obedece como instrucción del usuario. Fíjense en la práctica. En nuestro servidor, las notas libres de los clientes se devuelven entrecomilladas y marcadas como texto de cliente. El modelo aprende a resumirlas sin ejecutarlas. Además, cualquier campo de acción, como estado o total, se valida con lista cerrada. Diseñen sus respuestas así y la inyección por herramientas perderá toda su fuerza.Esa regla se aplica también a recursos de lectura. Un documento con instrucciones escondidas debe leerse citado y resumido. La aplicación marca el origen y el modelo no debe ejecutar órdenes de documentos. Piensen en cada texto externo como evidencia a citar. La cautela textual es parte de la seguridad moderna.</aside>
 </section>
@@ -162,6 +174,9 @@
   <text x="640" y="160" font-size="15" fill="#2A2A2A">Datos con IA</text>
   <text x="640" y="190" font-size="15" fill="#2A2A2A">Responsabilidad y registro</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">En Colombia el marco legal no es opcional. La Ley estatutaria quince ochenta y uno de dos mil doce regula el habeas data. Exige autorización, finalidad informada, seguridad y confidencialidad. La Circular externa cero cero dos de dos mil veinticuatro de la Superintendencia de Industria y Comercio aplica esas reglas a sistemas de inteligencia artificial. Para ustedes significa tres cosas. Solo usen datos autorizados en sus herramientas, registren quién llamó cada herramienta y protejan los datos contra acceso no autorizado. Un servidor MCP en producción debe respetar esas exigencias desde el primer diseño.La trazabilidad legal refuerza la decisión técnica diaria. Si deben reconstruir quién consultó un dato, el registro lo permite. Esa capacidad responde exigencias de la superintendencia y de clientes. Diseñar registros desde el laboratorio anticipa auditorías futuras. La buena práctica técnica y la legal coinciden siempre.</aside>
 </section>
@@ -195,6 +210,9 @@
   <text x="960" y="170" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">DISCUTAN EN GRUPOS</text>
   <text x="960" y="220" text-anchor="middle" font-size="14" fill="#2A2A2A">tres minutos</text>
   
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">Pregunta abierta para la clase. ¿Qué herramienta jamás expondrían a un modelo de lenguaje y por qué? Discutan tres minutos en grupos con un ejemplo de CaribeMart o de datos personales. Piensen en acciones irreversibles, en datos sensibles y en dinero. Cuando tengan su respuesta, conversamos con un vocero por grupo. No hay una lista única correcta. Lo que buscamos es que justifiquen el riesgo con permisos, validación y confirmación. Esa conversación es parte de la evaluación formativa de la sesión.La discusión revela criterios que ningún ejemplo puede enseñar. Cada grupo defenderá un límite distinto según su experiencia y valores. Escuchen cómo argumentan con permisos y datos sensibles. Esa diversidad enriquece la clase y fija el aprendizaje. Tomen nota de las mejores justificaciones para su reflexión.</aside>
 </section>
@@ -253,6 +271,9 @@
   <text x="880" y="230" text-anchor="middle" font-size="14" fill="#2A2A2A">recuerda y razona</text>
   <text x="880" y="270" text-anchor="middle" font-size="14" fill="#5E5E5E">memoria y recuperación</text>
   <text x="590" y="440" text-anchor="middle" font-size="15" fill="#5E5E5E">Con su servidor MCP bien probado, avanzan a memoria y RAG</text>
+  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
+  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
+  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
 </svg>
 <aside class="narracion">Cerramos con el puente. Hoy le dimos al modelo manos con herramientas y un idioma común con MCP. La semana catorce le dará memoria. Veremos razonamiento, programación asistida, contexto persistente con archivos de agente y recuperación de información simple. Ese contexto se apoyará en cursos y lecturas que ya saben manejar por herramientas. Lleguen con su servidor probado y sus tres capturas listas. Eso demuestra que pueden integrar inteligencia artificial con control humano en un caso real como CaribeMart. Nos vemos el sábado.Esa memoria se apoyará en cursos y lecturas que ya saben pedir por herramientas. El contexto persistente evita repetir instrucciones cada sesión. La recuperación trae datos relevantes sin saturar la ventana. Todo eso se orquesta mejor cuando las herramientas base ya son seguras. Nos vemos el sábado con la actividad en curso.</aside>
 </section>
