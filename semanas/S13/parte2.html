@@ -1,299 +1,311 @@
-<section data-kicker="Mapa" data-titulo="MCP: el estándar para conectar herramientas" data-sub="Un solo idioma para descubrir herramientas y ejecutarlas en cualquier cliente." data-fuente="Fuente: MCP Introduction [cite:1] · Diagrama: elaboración propia">
+<section data-kicker="Mapa" data-titulo="MCP: el estándar para conectar herramientas" data-sub="Un solo idioma para descubrir herramientas y ejecutarlas en cualquier cliente." data-fuente="Fuente: MCP Introduction [cite:1] · Dibujo propio · Foto: Wikideas1, Wikimedia Commons (CC0)" data-siglas="MCP = Model Context Protocol · IA = inteligencia artificial">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="50" width="1120" height="120" rx="16" fill="#A6192E"/>
-  <text x="590" y="100" text-anchor="middle" font-size="21" font-weight="700" fill="#fff">MCP: USB-C para la inteligencia artificial</text>
-  <text x="590" y="135" text-anchor="middle" font-size="15" fill="#F3D9DE">conector estándar entre aplicaciones y sistemas</text>
-  <use href="#i-ia" x="80" y="220" width="72" height="72" color="#A6192E"/>
-  <text x="116" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">aplicación IA</text>
-  <rect x="250" y="200" width="300" height="140" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
-  <text x="400" y="235" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">PROTOCOLO MCP</text>
-  <text x="400" y="265" text-anchor="middle" font-size="14" fill="#2A2A2A">descubre y ejecuta</text>
-  <text x="400" y="290" text-anchor="middle" font-size="14" fill="#5E5E5E">con el mismo formato</text>
-  <use href="#i-bd" x="760" y="220" width="72" height="72" color="#9C7B16"/>
-  <text x="796" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">sistemas</text>
-  <use href="#i-documento" x="930" y="220" width="72" height="72" color="#2A2A2A"/>
-  <text x="966" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">datos</text>
-  <line x1="152" y1="256" x2="248" y2="256" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
-  <line x1="550" y1="256" x2="758" y2="256" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
-  <line x1="550" y1="280" x2="928" y2="280" stroke="#2A2A2A" stroke-width="3" stroke-dasharray="6 5"/>
+<clipPath id="clp7"><rect x="8" y="20" width="572" height="326" rx="16"/></clipPath><image href="@@FOTO:usbc@@" x="8" y="20" width="572" height="326" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp7)"/>
+<text x="290" y="400" text-anchor="middle" font-size="32" font-weight="700" fill="#2A2A2A">USB-C: un solo conector</text>
+<text x="290" y="440" text-anchor="middle" font-size="26" fill="#5E5E5E">para todos los dispositivos</text>
+<circle cx="880" cy="70" r="44" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="851" y="41" width="58" height="58" color="#A6192E"/><text x="880" y="142" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">APLICACIÓN IA</text>
+<line x1="880" y1="140" x2="880" y2="178.2" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="880,192 870.8,176.2 889.2,176.2" fill="#A6192E"/>
+<rect x="700" y="200" width="360" height="120" rx="18" fill="#A6192E"/>
+<g transform="translate(780,262) scale(0.875)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M-14,-40 V-16 M14,-40 V-16" /><path d="M-26,-16 H26 V8 a26,26 0 0 1 -52,0 Z" fill="#A6192E"/><path d="M0,28 V48 H30"/></g>
+<text x="830" y="252" font-size="26" font-weight="700" fill="#fff">PROTOCOLO MCP</text>
+<text x="830" y="286" font-size="22" fill="#F3D9DE">mismo formato</text>
+<line x1="880" y1="330" x2="880" y2="358.2" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="880,372 870.8,356.2 889.2,356.2" fill="#A6192E"/>
+<use href="#i-servidor" x="757" y="387" width="66" height="66" color="#2A2A2A"/>
+<text x="790" y="478" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">sistemas</text>
+<use href="#i-bd" x="937" y="387" width="66" height="66" color="#9C7B16"/>
+<text x="970" y="478" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">datos</text>
+<line x1="850" y1="330" x2="809.955" y2="368.443" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="800,378 805.027,360.421 817.769,373.695" fill="#A6192E"/>
+<line x1="910" y1="330" x2="950.045" y2="368.443" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="960,378 942.231,373.695 954.973,360.421" fill="#A6192E"/>
 </svg>
 <aside class="narracion">Entramos en el protocolo MCP. La sigla completa es Model Context Protocol, en español protocolo de contexto del modelo. La documentación oficial lo explica con una analogía que retengan. Igual que el puerto USB-C permite conectar cualquier dispositivo, MCP permite conectar cualquier aplicación de inteligencia artificial con cualquier sistema externo. Sin MCP cada cliente inventa su propio conector. Con MCP, el servidor expone herramientas, recursos y prompts con un formato único. En esta parte veremos quiénes participan, qué puede exponer cada servidor y por qué camino viajan los mensajes.Piensen en el beneficio práctico para un equipo pequeño. Sin estándar cada integración cuesta semanas enteras de desarrollo. Con estándar la tienda escribe su servidor una sola vez. Luego lo conecta en opencode o en otro cliente sin reescribir. Ese ahorro se acumula en cada proyecto nuevo de CaribeMart.</aside>
 </section>
-<section data-kicker="Participantes" data-titulo="Tres participantes: host, cliente y servidor" data-sub="El host coordina; el cliente mantiene la conexión; el servidor expone." data-fuente="Fuente: MCP Architecture, Participants [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Participantes" data-titulo="Tres participantes: host, cliente y servidor" data-sub="El host coordina; el cliente mantiene la conexión; el servidor expone." data-fuente="Fuente: MCP Architecture, Participants [cite:2] · Dibujo propio" data-siglas="MCP = Model Context Protocol · IA = inteligencia artificial">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="40" width="1120" height="130" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <text x="590" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">MCP HOST · LA APLICACIÓN IA</text>
-  <use href="#i-ia" x="80" y="90" width="60" height="60" color="#A6192E"/>
-  
-  
-  <rect x="30" y="200" width="540" height="260" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="300" y="240" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">MCP CLIENT</text>
-  <use href="#i-api" x="275" y="260" width="60" height="60" color="#2A2A2A"/>
-  <text x="300" y="345" text-anchor="middle" font-size="15" fill="#2A2A2A">mantiene una conexión</text>
-  <text x="300" y="370" text-anchor="middle" font-size="14" fill="#5E5E5E">pregunta y obtiene contexto</text>
-  <rect x="610" y="200" width="540" height="260" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
-  <text x="880" y="240" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">MCP SERVER</text>
-  <use href="#i-servidor" x="855" y="260" width="60" height="60" color="#9C7B16"/>
-  <text x="880" y="345" text-anchor="middle" font-size="15" fill="#2A2A2A">provee contexto</text>
-  <text x="880" y="370" text-anchor="middle" font-size="14" fill="#5E5E5E">herramientas, recursos y prompts</text>
-  <line x1="570" y1="330" x2="608" y2="330" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
+<rect x="20" y="30" width="700" height="440" rx="20" fill="#F9EEF0" stroke="#A6192E" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="50" y="74" font-size="26" font-weight="700" fill="#A6192E">MCP HOST · LA APLICACIÓN IA</text>
+<circle cx="140" cy="250" r="72" fill="#fff" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="94" y="204" width="92" height="92" color="#A6192E"/><text x="140" y="354" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">HOST</text><text x="140" y="382" text-anchor="middle" font-size="20" fill="#5E5E5E">la aplicación</text>
+<rect x="330" y="160" width="340" height="230" rx="16" fill="#fff" stroke="#A6192E" stroke-width="3"/>
+<g transform="translate(420,270) scale(0.875)" fill="none" stroke="#A6192E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M-14,-40 V-16 M14,-40 V-16" /><path d="M-26,-16 H26 V8 a26,26 0 0 1 -52,0 Z" fill="#fff"/><path d="M0,28 V48 H30"/></g>
+<text x="480" y="242" font-size="26" font-weight="700" fill="#A6192E">MCP CLIENT</text>
+<text x="480" y="276" font-size="22" fill="#2A2A2A">mantiene</text>
+<text x="480" y="304" font-size="22" fill="#2A2A2A">una conexión</text>
+<line x1="216" y1="275" x2="312" y2="275" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="328,275 310,285.5 310,264.5" fill="#A6192E"/>
+<rect x="850" y="30" width="310" height="440" rx="20" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<circle cx="1005" cy="200" r="72" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="959" y="154" width="92" height="92" color="#2A2A2A"/><text x="1005" y="304" text-anchor="middle" font-size="26" font-weight="700" fill="#2A2A2A">MCP SERVER</text><text x="1005" y="332" text-anchor="middle" font-size="20" fill="#5E5E5E">provee contexto</text>
+<text x="1005" y="380" text-anchor="middle" font-size="22" fill="#2A2A2A">herramientas,</text>
+<text x="1005" y="407.5" text-anchor="middle" font-size="22" fill="#2A2A2A">recursos y prompts</text>
+<line x1="688" y1="275" x2="832" y2="275" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="848,275 830,285.5 830,264.5" fill="#9C7B16"/><polygon points="672,275 690,264.5 690,285.5" fill="#9C7B16"/>
+<text x="760" y="246" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">pregunta</text>
+<text x="760" y="312" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">contexto</text>
 </svg>
 <aside class="narracion">La arquitectura de MCP es cliente servidor, pero con nombres precisos. El anfitrión, host en inglés, es la aplicación de inteligencia artificial que coordina todo. Ejemplos reales son opencode o Visual Studio Code. Por cada servidor que conecta, el anfitrión crea un cliente MCP. Ese cliente mantiene una conexión dedicada con su servidor. El servidor MCP es el programa que provee el contexto. Puede vivir en la misma computadora por stdio o en un servicio remoto por HTTP. Un solo anfitrión puede tener varios clientes y cada uno habla con un servidor distinto.Esa distinción evita errores frecuentes de diseño. El anfitrión no ejecuta la herramienta y el servidor no decide solo. Cada uno protege su responsabilidad con registros claros. Cuando algo falla, saben exactamente dónde mirar. Esa claridad es esencial para depurar con rapidez en el laboratorio.</aside>
 </section>
-<section data-kicker="Servidor" data-titulo="El servidor expone tres primitivas" data-sub="Herramientas para actuar, recursos para leer y prompts para guiar." data-fuente="Fuente: MCP Server concepts, Core Features [cite:3] · Diagrama: elaboración propia">
+<section data-kicker="Servidor" data-titulo="El servidor expone tres primitivas" data-sub="Herramientas para actuar, recursos para leer y prompts para guiar." data-fuente="Fuente: MCP Server concepts, Core Features [cite:3] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
 <svg viewBox="0 0 1180 500">
-  <rect x="420" y="30" width="340" height="110" rx="14" fill="#A6192E"/>
-  <use href="#i-servidor" x="445" y="55" width="56" height="56" color="#fff"/>
-  <text x="515" y="80" font-size="17" font-weight="700" fill="#fff">SERVIDOR MCP</text>
-  <text x="515" y="105" font-size="14" fill="#F3D9DE">provee tres tipos</text>
-  <line x1="590" y1="140" x2="200" y2="210" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
-  <line x1="590" y1="140" x2="590" y2="210" stroke="#2A2A2A" stroke-width="3" marker-end="url(#fl-negro)"/>
-  <line x1="590" y1="140" x2="980" y2="210" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
-  <rect x="40" y="212" width="320" height="230" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-funcion" x="160" y="235" width="60" height="60" color="#A6192E"/>
-  <text x="200" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">HERRAMIENTAS</text>
-  <text x="200" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">ejecutables</text>
-  <rect x="430" y="212" width="320" height="230" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-documento" x="550" y="235" width="60" height="60" color="#2A2A2A"/>
-  <text x="590" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">RECURSOS</text>
-  <text x="590" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">solo lectura</text>
-  <rect x="820" y="212" width="320" height="230" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <use href="#i-pregunta" x="940" y="235" width="60" height="60" color="#9C7B16"/>
-  <text x="980" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">PROMPTS</text>
-  <text x="980" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">plantillas guiadas</text>
+<circle cx="150" cy="250" r="84" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="96" y="196" width="108" height="108" color="#2A2A2A"/><text x="150" y="368" text-anchor="middle" font-size="28" font-weight="700" fill="#2A2A2A">SERVIDOR MCP</text><text x="150" y="396" text-anchor="middle" font-size="20" fill="#5E5E5E">provee tres tipos</text>
+<path d="M250,250 L330,250 L360,70 L406.2,70" fill="none" stroke="#A6192E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="420,70 404.2,79.2 404.2,60.8" fill="#A6192E"/>
+<rect x="430" y="14" width="352.315" height="112" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-funcion" x="448" y="42" width="56" height="56" color="#A6192E"/>
+<text x="520" y="66" font-size="30" font-weight="700" fill="#A6192E">HERRAMIENTAS</text>
+<text x="520" y="98" font-size="22" fill="#2A2A2A">ejecutables</text>
+<text x="808.315" y="78" font-size="24" font-weight="700" fill="#A6192E">las controla el modelo</text>
+<line x1="250" y1="250" x2="406.2" y2="250" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="420,250 404.2,259.2 404.2,240.8" fill="#9C7B16"/>
+<rect x="430" y="194" width="330" height="112" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-documento" x="448" y="222" width="56" height="56" color="#9C7B16"/>
+<text x="520" y="246" font-size="30" font-weight="700" fill="#9C7B16">RECURSOS</text>
+<text x="520" y="278" font-size="22" fill="#2A2A2A">solo lectura</text>
+<text x="786" y="258" font-size="24" font-weight="700" fill="#9C7B16">los controla la aplicación</text>
+<path d="M250,250 L330,250 L360,430 L406.2,430" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="420,430 404.2,439.2 404.2,420.8" fill="#2E7D4F"/>
+<rect x="430" y="374" width="330" height="112" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-codigo" x="448" y="402" width="56" height="56" color="#2E7D4F"/>
+<text x="520" y="426" font-size="30" font-weight="700" fill="#2E7D4F">PROMPTS</text>
+<text x="520" y="458" font-size="22" fill="#2A2A2A">plantillas guiadas</text>
+<text x="786" y="438" font-size="24" font-weight="700" fill="#2E7D4F">los controla el usuario</text>
 </svg>
 <aside class="narracion">Todo servidor MCP ofrece tres primitivas y deben distinguirlas con total claridad. Las herramientas son funciones ejecutables que el modelo puede invocar para actuar, por ejemplo consultar un pedido o crear uno. Los recursos son fuentes de datos de solo lectura, como el contenido de un archivo o el esquema de la base de datos. Los prompts son plantillas reutilizables que guían el trabajo, por ejemplo un resumen de pedidos pendientes. Cada primitiva se descubre con su propia lista y se usa con su propio método. Confundirlas lleva a diseñar mal la seguridad.En la práctica diseñarán primero herramientas para actuar en CaribeMart. Los recursos y prompts completarán después el contexto. Esa prioridad evita sobreconstruir datos pasivos sin uso real. Empiecen por la acción que el estudiante necesita hoy. El resto evoluciona con evidencia de uso.</aside>
 </section>
-<section data-kicker="Herramientas" data-titulo="Herramientas MCP: actúa el modelo" data-sub="El modelo descubre y elige; la aplicación puede pedir aprobación." data-fuente="Fuente: MCP Server concepts, Tools [cite:3] · Diagrama: elaboración propia">
+<section data-kicker="Herramientas" data-titulo="Herramientas MCP: actúa el modelo" data-sub="El modelo descubre y elige; la aplicación puede pedir aprobación." data-fuente="Fuente: MCP Server concepts, Tools [cite:3] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
 <svg viewBox="0 0 1180 500">
-  <rect x="40" y="50" width="340" height="380" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-ia" x="150" y="80" width="64" height="64" color="#A6192E"/>
-  <text x="210" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">EL MODELO</text>
-  <text x="210" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">descubre y elige</text>
-  <text x="210" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">control del modelo</text>
-  <line x1="380" y1="200" x2="468" y2="200" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
-  <text x="424" y="185" text-anchor="middle" font-size="14" fill="#A6192E">invoca</text>
-  <rect x="470" y="50" width="330" height="380" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-funcion" x="580" y="80" width="64" height="64" color="#2A2A2A"/>
-  <text x="635" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#2A2A2A">LA HERRAMIENTA</text>
-  <text x="635" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">ejecuta una acción</text>
-  <text x="635" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">escribe o consulta</text>
-  <line x1="800" y1="200" x2="858" y2="200" stroke="#2E7D4F" stroke-width="4" marker-end="url(#fl-verde)"/>
-  <rect x="860" y="50" width="280" height="380" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <use href="#i-candado" x="945" y="80" width="64" height="64" color="#9C7B16"/>
-  <text x="1000" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">APROBACIÓN</text>
-  <text x="1000" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">puede exigir permiso</text>
-  <text x="1000" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">control humano</text>
+<circle cx="130" cy="190" r="70" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="84" y="144" width="92" height="92" color="#A6192E"/><text x="130" y="292" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">EL MODELO</text><text x="130" y="320" text-anchor="middle" font-size="20" fill="#5E5E5E">descubre y elige</text>
+<rect x="540" y="70" width="100" height="350" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<circle cx="590" cy="160" r="46" fill="#fff" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-usuario" x="559" y="129" width="62" height="62" color="#9C7B16"/>
+<text x="590" y="470" text-anchor="middle" font-size="26" font-weight="700" fill="#9C7B16">APROBACIÓN</text>
+<text x="590" y="440" text-anchor="middle" font-size="20" fill="#5E5E5E">control humano</text>
+<use href="#i-candado" x="560" y="270" width="60" height="60" color="#9C7B16"/>
+<line x1="210" y1="190" x2="520" y2="190" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="536,190 518,200.5 518,179.5" fill="#A6192E"/>
+<text x="375" y="168" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">invoca</text>
+<circle cx="1050" cy="190" r="70" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-engranaje" x="1004" y="144" width="92" height="92" color="#2A2A2A"/><text x="1050" y="292" text-anchor="middle" font-size="26" font-weight="700" fill="#2A2A2A">LA HERRAMIENTA</text><text x="1050" y="320" text-anchor="middle" font-size="20" fill="#5E5E5E">ejecuta una acción</text>
+<line x1="644" y1="190" x2="960" y2="190" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round"/><polygon points="976,190 958,200.5 958,179.5" fill="#2E7D4F"/>
+<text x="810" y="168" text-anchor="middle" font-size="24" font-weight="700" fill="#2E7D4F">si aprueba</text>
 </svg>
 <aside class="narracion">Detallamos las herramientas MCP. Son la primitiva más poderosa porque permiten escribir en bases de datos, llamar servicios y modificar archivos. El modelo las descubre con el método tools list y las ejecuta con tools call. La documentación insiste en que son controladas por el modelo, pero eso no significa control total. La aplicación anfitriona puede mostrar las herramientas disponibles, pedir aprobación antes de ejecutar y registrar cada llamada. Para CaribeMart esto significa que crear pedido exigirá confirmación, mientras que consultar pedido podrá ser automático. El grado de permiso se diseña herramienta por herramienta.La aprobación no debe ser un obstáculo ciego para todo. Lean bien cada herramienta y clasifiquen su riesgo real. Una consulta de lectura puede aprobarse sola sin fricción. Una escritura que crea pedidos siempre pide tu visto bueno. Esa calibración mantiene la ayuda rápida sin perder control.</aside>
 </section>
-<section data-kicker="Recursos" data-titulo="Recursos MCP: datos para leer" data-sub="Identificados por URI con tipo MIME; la aplicación decide cómo usarlos." data-fuente="Fuente: MCP Server concepts, Resources [cite:3] · Diagrama: elaboración propia">
+<section data-kicker="Recursos" data-titulo="Recursos MCP: datos para leer" data-sub="Identificados por URI con tipo MIME; la aplicación decide cómo usarlos." data-fuente="Fuente: MCP Server concepts, Resources [cite:3] · Dibujo propio" data-siglas="MCP = Model Context Protocol · URI = identificador uniforme de recursos · MIME = tipo de contenido">
 <svg viewBox="0 0 1180 500">
-  <rect x="40" y="60" width="500" height="120" rx="12" fill="#211D18"/>
-  <text x="70" y="100" font-family="Roboto Mono, monospace" font-size="15" fill="#D4AF37">pedidos://esquema</text>
-  <text x="70" y="130" font-family="Roboto Mono, monospace" font-size="14" fill="#fff">application/json · solo lectura</text>
-  <rect x="40" y="220" width="500" height="120" rx="12" fill="#F4F4F4" stroke="#9b9b9b" stroke-width="2"/>
-  <text x="70" y="260" font-family="Roboto Mono, monospace" font-size="15" fill="#2A2A2A">archivo://docs/politica.txt</text>
-  <text x="70" y="290" font-family="Roboto Mono, monospace" font-size="14" fill="#5E5E5E">text/plain · contexto</text>
-  <rect x="620" y="60" width="520" height="280" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-documento" x="650" y="90" width="60" height="60" color="#A6192E"/>
-  <text x="725" y="115" font-size="16" font-weight="700" fill="#A6192E">LA APLICACIÓN DECIDE</text>
-  <text x="725" y="142" font-size="15" fill="#2A2A2A">qué contexto pasa al modelo</text>
-  
-  
-  
-  <rect x="620" y="370" width="520" height="80" rx="12" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
-  <use href="#i-check" x="645" y="385" width="48" height="48" color="#2E7D4F"/>
-  <text x="705" y="408" font-size="15" fill="#2A2A2A">Leer no cambia la base</text>
+<rect x="30" y="70" width="360.007" height="84" rx="12" fill="#fff" stroke="#9C7B16" stroke-width="2"/><use href="#i-documento" x="46" y="90" width="44" height="44" color="#9C7B16"/><text x="100" y="121.1" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9C7B16">pedidos://esquema</text>
+<text x="52" y="182" font-size="20" fill="#5E5E5E">application/json</text>
+<rect x="30" y="200" width="520.011" height="84" rx="12" fill="#fff" stroke="#9C7B16" stroke-width="2"/><use href="#i-documento" x="46" y="220" width="44" height="44" color="#9C7B16"/><text x="100" y="251.1" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9C7B16">archivo://docs/politica.txt</text>
+<text x="52" y="312" font-size="20" fill="#5E5E5E">text/plain</text>
+<path d="M640,112 L700,112 L730,190 L754,190" fill="none" stroke="#9C7B16" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="770,190 752,200.5 752,179.5" fill="#9C7B16"/>
+<path d="M640,242 L700,242 L730,200 L754,200" fill="none" stroke="#9C7B16" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="770,200 752,210.5 752,189.5" fill="#9C7B16"/>
+<circle cx="860" cy="190" r="70" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-laptop" x="814" y="144" width="92" height="92" color="#2A2A2A"/><text x="860" y="292" text-anchor="middle" font-size="26" font-weight="700" fill="#2A2A2A">LA APLICACIÓN DECIDE</text>
+<text x="860" y="330" text-anchor="middle" font-size="22" fill="#5E5E5E">qué contexto pasa al modelo</text>
+<line x1="940" y1="190" x2="1034" y2="190" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="1050,190 1032,200.5 1032,179.5" fill="#A6192E"/>
+<use href="#i-ia" x="1067" y="152" width="76" height="76" color="#A6192E"/>
+<rect x="60" y="380" width="1060" height="90" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-ojo" x="102" y="397" width="56" height="56" color="#2E7D4F"/>
+<text x="190" y="436" font-size="36" font-weight="700" fill="#2E7D4F">Leer no cambia la base</text>
 </svg>
 <aside class="narracion">Los recursos son el contraste perfecto con las herramientas. Mientras las herramientas actúan, los recursos solo informan. Cada recurso tiene un identificador único llamado URI, por ejemplo pedidos esquema, y declara su tipo MIME. La aplicación anfitriona decide cómo usarlos. Puede pasar todo el contenido al modelo, buscar un fragmento relevante o mostrar una vista previa al usuario. La clave es que el modelo no los invoca por sí solo. La aplicación los recupera y los ofrece como contexto. Para CaribeMart, el esquema de pedidos y la política de devoluciones serían recursos típicos.Esa flexibilidad de la aplicación evita depender del modelo para cada lectura. Ustedes eligen qué contexto pasa y en qué momento. Si el recurso es grande, seleccionan solo el fragmento útil. Así controlan costos de tokens y latencia. La aplicación siempre decide la dieta de información del modelo.</aside>
 </section>
-<section data-kicker="Prompts" data-titulo="Prompts MCP: plantillas que guía el usuario" data-sub="El usuario elige la plantilla; el sistema llena sus argumentos." data-fuente="Fuente: MCP Server concepts, Prompts [cite:3] · Diagrama: elaboración propia">
+<section data-kicker="Prompts" data-titulo="Prompts MCP: plantillas que guía el usuario" data-sub="El usuario elige la plantilla; el sistema llena sus argumentos." data-fuente="Fuente: MCP Server concepts, Prompts [cite:3] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
 <svg viewBox="0 0 1180 500">
-  <rect x="60" y="50" width="1060" height="110" rx="14" fill="#211D18"/>
-  <text x="90" y="95" font-family="Roboto Mono, monospace" font-size="16" fill="#D4AF37">/pedidos-resumen estado=pendiente</text>
-  <text x="90" y="125" font-family="Roboto Mono, monospace" font-size="14" fill="#fff">comando del usuario</text>
-  <rect x="60" y="210" width="500" height="230" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-usuario" x="90" y="240" width="60" height="60" color="#A6192E"/>
-  <text x="165" y="265" font-size="16" font-weight="700" fill="#A6192E">USUARIO</text>
-  <text x="165" y="290" font-size="15" fill="#2A2A2A">elige la plantilla</text>
-  <text x="165" y="315" font-size="14" fill="#5E5E5E">control del usuario</text>
-  <rect x="620" y="210" width="500" height="230" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
-  <use href="#i-documento" x="650" y="240" width="60" height="60" color="#9C7B16"/>
-  <text x="725" y="265" font-size="16" font-weight="700" fill="#9C7B16">PLANTILLA</text>
-  <text x="725" y="290" font-size="15" fill="#2A2A2A">instrucción lista para usar</text>
-  <text x="725" y="315" font-size="14" fill="#5E5E5E">guía herramientas juntas</text>
-  <line x1="560" y1="325" x2="618" y2="325" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+<circle cx="110" cy="120" r="58" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/><use href="#i-usuario" x="72" y="82" width="76" height="76" color="#9C7B16"/><text x="110" y="206" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">USUARIO</text><text x="110" y="233" text-anchor="middle" font-size="19" fill="#5E5E5E">elige la plantilla</text>
+<rect x="260" y="70" width="880" height="90" rx="45" fill="#1E1E1E"/>
+<text x="310" y="128" font-size="34" style="font-family:'Roboto Mono',Consolas,monospace" fill="#fff">/pedidos-resumen estado=pendiente</text>
+<line x1="190" y1="118" x2="242.225" y2="114.835" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="256,114 240.785,124.139 239.672,105.773" fill="#9C7B16"/>
+<text x="700" y="192" text-anchor="middle" font-size="22" fill="#5E5E5E">comando del usuario</text>
+<line x1="700" y1="205" x2="700" y2="234" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="700,250 689.5,232 710.5,232" fill="#9C7B16"/>
+<rect x="260" y="260" width="880" height="110" rx="16" fill="#fff" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-documento" x="297" y="282" width="66" height="66" color="#9C7B16"/>
+<text x="390" y="305" font-size="28" font-weight="700" fill="#9C7B16">PLANTILLA</text>
+<text x="390" y="345" font-size="24" fill="#2A2A2A">instrucción lista para usar</text>
+<circle cx="790" cy="315" r="34" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-funcion" x="768" y="293" width="44" height="44" color="#A6192E"/>
+<circle cx="880" cy="315" r="34" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-funcion" x="858" y="293" width="44" height="44" color="#A6192E"/>
+<circle cx="970" cy="315" r="34" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-funcion" x="948" y="293" width="44" height="44" color="#A6192E"/>
+<path d="M820,315 H846 M910,315 H936" fill="none" stroke="#A6192E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="700" y="440" text-anchor="middle" font-size="28" font-weight="700" fill="#A6192E">guía varias herramientas juntas</text>
 </svg>
 <aside class="narracion">Los prompts completan el trío. Son plantillas reutilizables que el servidor publica para guiar una tarea completa. A diferencia de las herramientas, nadie los dispara automáticamente. El usuario los elige explícitamente, muchas veces con una barra diagonal en opencode. Al elegirlos, entrega los argumentos y el servidor devuelve la instrucción estructurada que combina herramientas y recursos. Piensen en un prompt de resumen de pedidos pendientes. Esa plantilla indicaría qué herramienta llamar y cómo redactar la salida. Los prompts dan consistencia a los flujos repetidos en CaribeMart.La plantilla también documenta el flujo esperado para nuevos compañeros. Quien lee el prompt entiende qué herramientas combina y en qué orden. Esa trazabilidad ayuda a mantener soporte durante meses. No dejen prompts escondidos sin descripción clara en el servidor.</aside>
 </section>
-<section data-kicker="Protocolo" data-titulo="El ciclo MCP en tres intercambios" data-sub="Descubrir, listar herramientas y llamar una con datos claros." data-fuente="Fuente: MCP Architecture, Data Layer [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Protocolo" data-titulo="El ciclo MCP en tres intercambios" data-sub="Descubrir, listar herramientas y llamar una con datos claros." data-fuente="Fuente: MCP Architecture, Data Layer [cite:2] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
 <svg viewBox="0 0 1180 500">
-  <rect x="20" y="130" width="260" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
-  <text x="150" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">1 · DESCUBRIR</text>
-  <use href="#i-ojo" x="125" y="190" width="52" height="52" color="#A6192E"/>
-  <text x="150" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">qué sabe hacer</text>
-  <line x1="280" y1="230" x2="348" y2="230" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
-  <rect x="350" y="130" width="260" height="200" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="480" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#2A2A2A">2 · LISTAR</text>
-  <use href="#i-registro" x="455" y="190" width="52" height="52" color="#2A2A2A"/>
-  <text x="480" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">tools list</text>
-  <line x1="610" y1="230" x2="678" y2="230" stroke="#2A2A2A" stroke-width="4" marker-end="url(#fl-negro)"/>
-  <rect x="680" y="130" width="280" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <text x="820" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">3 · LLAMAR</text>
-  <use href="#i-funcion" x="795" y="190" width="52" height="52" color="#9C7B16"/>
-  <text x="820" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">tools call</text>
-  <rect x="990" y="130" width="170" height="200" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
-  <text x="1075" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#2E7D4F">RESULTADO</text>
-  <use href="#i-check" x="1050" y="190" width="52" height="52" color="#2E7D4F"/>
-  <text x="1075" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">dato verificable</text>
-  
+<rect x="100" y="20" width="300" height="100" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-laptop" x="130" y="40" width="60" height="60" color="#A6192E"/>
+<text x="200" y="78" font-size="28" font-weight="700" fill="#A6192E">CLIENTE</text>
+<rect x="780" y="20" width="300" height="100" rx="16" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<use href="#i-servidor" x="810" y="40" width="60" height="60" color="#2A2A2A"/>
+<text x="880" y="78" font-size="28" font-weight="700" fill="#2A2A2A">SERVIDOR</text>
+<line x1="250" y1="120" x2="250" y2="480" stroke="#A6192E" stroke-width="3" stroke-dasharray="8 8"/>
+<line x1="930" y1="120" x2="930" y2="480" stroke="#2A2A2A" stroke-width="3" stroke-dasharray="8 8"/>
+<line x1="252" y1="190" x2="910" y2="190" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="926,190 908,200.5 908,179.5" fill="#A6192E"/>
+<text x="590" y="160" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">1 · DESCUBRIR</text>
+<text x="590" y="182" text-anchor="middle" font-size="20" fill="#5E5E5E">qué sabe hacer</text>
+<line x1="252" y1="275" x2="910" y2="275" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="926,275 908,285.5 908,264.5" fill="#A6192E"/>
+<text x="590" y="245" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">2 · LISTAR</text>
+<text x="590" y="267" text-anchor="middle" font-size="20" style="font-family:'Roboto Mono',Consolas,monospace" fill="#5E5E5E">tools/list</text>
+<line x1="252" y1="360" x2="910" y2="360" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="926,360 908,370.5 908,349.5" fill="#A6192E"/>
+<text x="590" y="330" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">3 · LLAMAR</text>
+<text x="590" y="352" text-anchor="middle" font-size="20" style="font-family:'Roboto Mono',Consolas,monospace" fill="#5E5E5E">tools/call</text>
+<line x1="926" y1="440" x2="268" y2="440" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 7"/><polygon points="252,440 270,429.5 270,450.5" fill="#2E7D4F"/>
+<text x="590" y="424" text-anchor="middle" font-size="26" font-weight="700" fill="#2E7D4F">RESULTADO</text>
+<text x="590" y="470" text-anchor="middle" font-size="20" fill="#5E5E5E">dato verificable</text>
 </svg>
 <aside class="narracion">El protocolo organiza el trabajo en intercambios muy claros. Primero el cliente descubre qué versiones y capacidades soporta el servidor. Segundo lista las herramientas disponibles con su nombre, descripción y esquema de entrada. Tercero llama una herramienta concreta con sus argumentos y recibe el resultado. Todo mensaje usa JSON RPC, es decir, un objeto JSON con versión, método y resultado. Esa uniformidad permite que cualquier cliente hable con cualquier servidor. Fíjense que el descubrimiento elimina sorpresas. Nadie debe intentar una herramienta que el servidor no anunció.Las versiones importan para no romper clientes actuales. El cliente y el servidor negocian qué revisión hablan. Si uno no entiende la versión del otro, falla con claridad. Esa regla evita mensajes silenciosos que nadie sabe interpretar. En el laboratorio verán esa negociación en los registros del inspector.</aside>
 </section>
-<section data-kicker="Transporte" data-titulo="Transporte stdio: tubería local" data-sub="Entre procesos de la misma máquina, sin red y sin latencia extra." data-fuente="Fuente: MCP Architecture, Stdio transport [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Transporte" data-titulo="Transporte stdio: tubería local" data-sub="Entre procesos de la misma máquina, sin red y sin latencia extra." data-fuente="Fuente: MCP Architecture, Stdio transport [cite:2] · Dibujo propio" data-siglas="MCP = Model Context Protocol · stdio = entrada y salida estándar">
 <svg viewBox="0 0 1180 500">
-  <rect x="40" y="60" width="340" height="340" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <text x="210" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">OPENCODE</text>
-  <use href="#i-laptop" x="180" y="120" width="64" height="64" color="#A6192E"/>
-  <text x="210" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">cliente MCP</text>
-  <rect x="800" y="60" width="340" height="340" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
-  <text x="970" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">SERVIDOR NODE</text>
-  <use href="#i-servidor" x="940" y="120" width="64" height="64" color="#9C7B16"/>
-  <text x="970" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">server.js local</text>
-  <line x1="380" y1="180" x2="440" y2="180" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
-  <line x1="560" y1="180" x2="740" y2="180" stroke="#2A2A2A" stroke-width="4" marker-end="url(#fl-negro)"/>
-  <line x1="740" y1="180" x2="800" y2="180" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
-  <rect x="440" y="220" width="300" height="90" rx="12" fill="#211D18"/>
-  <text x="590" y="250" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" fill="#D4AF37">STDIN y STDOUT</text>
-  <text x="590" y="275" text-anchor="middle" font-size="14" fill="#fff">tubería local</text>
-  <text x="590" y="380" text-anchor="middle" font-size="15" fill="#5E5E5E">Sin servidor web ni puerto abierto</text>
+<rect x="20" y="20" width="1140" height="330" rx="20" fill="#F4F4F4" stroke="#9a9a9a" stroke-width="2.5" stroke-dasharray="10 7"/>
+<text x="50" y="62" font-size="22" font-weight="700" fill="#5E5E5E">TU MÁQUINA</text>
+<circle cx="190" cy="190" r="76" fill="#fff" stroke="#A6192E" stroke-width="2.5"/><use href="#i-codigo" x="141" y="141" width="98" height="98" color="#A6192E"/><text x="190" y="300" text-anchor="middle" font-size="28" font-weight="700" fill="#A6192E">OPENCODE</text><text x="190" y="330" text-anchor="middle" font-size="22" fill="#5E5E5E">cliente MCP</text>
+<circle cx="990" cy="190" r="76" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="941" y="141" width="98" height="98" color="#2A2A2A"/><text x="990" y="300" text-anchor="middle" font-size="28" font-weight="700" fill="#2A2A2A">SERVIDOR NODE</text><text x="990" y="330" text-anchor="middle" font-size="22" fill="#5E5E5E">server.js local</text>
+<rect x="290" y="150" width="600" height="70" rx="35" fill="#fff" stroke="#9C7B16" stroke-width="4"/>
+<rect x="290" y="150" width="600" height="70" rx="35" fill="#FBF6E7" opacity="0.9"/>
+<line x1="320" y1="172" x2="846.2" y2="172" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="860,172 844.2,181.2 844.2,162.8" fill="#A6192E"/>
+<line x1="860" y1="200" x2="333.8" y2="200" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="320,200 335.8,190.8 335.8,209.2" fill="#9C7B16"/>
+<text x="590" y="250" text-anchor="middle" font-size="28" font-weight="700" fill="#9C7B16">STDIN y STDOUT</text>
+<text x="590" y="286" text-anchor="middle" font-size="22" fill="#5E5E5E">tubería local</text>
+<use href="#i-internet" x="415" y="390" width="70" height="70" color="#9a9a9a"/>
+<circle cx="450" cy="425" r="46" fill="none" stroke="#B3261E" stroke-width="5"/>
+<line x1="418" y1="457" x2="482" y2="393" stroke="#B3261E" stroke-width="5"/>
+<text x="530" y="435" font-size="30" font-weight="700" fill="#2A2A2A">Sin servidor web ni puerto abierto</text>
 </svg>
 <aside class="narracion">El transporte stdio es el más simple y el que usarán en el laboratorio. Usa la entrada y salida estándar entre dos procesos de la misma máquina. Opencode inicia el programa Node y los mensajes JSON fluyen por una tubería interna. No hay red, no hay puerto abierto ni autenticación complicada. La documentación advierte una regla crítica. Nunca escriban mensajes normales por la salida estándar del servidor porque corrompen el protocolo. Todos los registros deben ir por la salida de error. Por eso en Node usaremos console error y jamás console log para mensajes del servidor.La simplicidad de stdio reduce superficie de ataque en clase. No hay puertos abiertos ni claves en la red local. El único riesgo es el archivo en disco, que ustedes controlan. Por eso el laboratorio exige stdio y no un servidor web. Aprendan lo esencial antes de escalar a remoto.</aside>
 </section>
-<section data-kicker="Transporte" data-titulo="Transporte HTTP: para servidores remotos" data-sub="Streamable HTTP con autenticación estándar para muchas conexiones." data-fuente="MCP = Model Context Protocol · HTTP = Hypertext Transfer Protocol. Fuente: MCP Architecture [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Transporte" data-titulo="Transporte HTTP: para servidores remotos" data-sub="Streamable HTTP con autenticación estándar para muchas conexiones." data-fuente="Fuente: MCP Architecture [cite:2] · Dibujo propio · Foto: Carl Lender, Wikimedia Commons (CC BY 2.0)" data-siglas="HTTP = Hypertext Transfer Protocol · OAuth = autorización delegada">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="60" width="340" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <text x="200" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">CLIENTES VARIOS</text>
-  <use href="#i-equipo" x="170" y="120" width="64" height="64" color="#A6192E"/>
-  <text x="200" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">muchas conexiones</text>
-  <rect x="470" y="60" width="240" height="300" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-internet" x="550" y="120" width="80" height="80" color="#2A2A2A"/>
-  <text x="590" y="230" text-anchor="middle" font-size="15" fill="#2A2A2A">INTERNET</text>
-  <text x="590" y="255" text-anchor="middle" font-size="14" fill="#5E5E5E">HTTP cifrado</text>
-  <rect x="810" y="60" width="340" height="300" rx="14" fill="#211D18"/>
-  <use href="#i-servidor" x="940" y="120" width="64" height="64" color="#D4AF37"/>
-  <text x="970" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="#D4AF37">SERVIDOR REMOTO</text>
-  <text x="970" y="240" text-anchor="middle" font-size="14" fill="#fff">OAuth y claves</text>
-  <line x1="370" y1="210" x2="468" y2="210" stroke="#2A2A2A" stroke-width="3" marker-end="url(#fl-negro)"/>
-  <line x1="710" y1="210" x2="808" y2="210" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
-  
+<use href="#i-laptop" x="65" y="75" width="70" height="70" color="#2A2A2A"/>
+<line x1="150" y1="110" x2="320.844" y2="242.878" stroke="#2A2A2A" stroke-width="3" stroke-linecap="round"/><polygon points="330,250 314.415,247.886 324.115,235.415" fill="#2A2A2A"/>
+<use href="#i-laptop" x="65" y="215" width="70" height="70" color="#2A2A2A"/>
+<line x1="150" y1="250" x2="318.4" y2="250" stroke="#2A2A2A" stroke-width="3" stroke-linecap="round"/><polygon points="330,250 316.4,257.9 316.4,242.1" fill="#2A2A2A"/>
+<use href="#i-laptop" x="65" y="355" width="70" height="70" color="#2A2A2A"/>
+<line x1="150" y1="390" x2="320.844" y2="257.122" stroke="#2A2A2A" stroke-width="3" stroke-linecap="round"/><polygon points="330,250 324.115,264.585 314.415,252.114" fill="#2A2A2A"/>
+<text x="110" y="452" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">CLIENTES VARIOS</text>
+<text x="110" y="479.5" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">muchas conexiones</text>
+<circle cx="420" cy="250" r="90" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-internet" x="370" y="185" width="100" height="100" color="#9C7B16"/>
+<rect x="350" y="300" width="140" height="40" rx="20" fill="#9C7B16"/>
+<use href="#i-candado" x="358" y="306" width="28" height="28" color="#fff"/>
+<text x="430" y="327" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">HTTP</text>
+<text x="420" y="380" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">INTERNET</text>
+<text x="420" y="408" text-anchor="middle" font-size="20" fill="#5E5E5E">HTTP cifrado</text>
+<line x1="520" y1="250" x2="634" y2="250" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="650,250 632,260.5 632,239.5" fill="#9C7B16"/>
+<clipPath id="clp8"><rect x="660" y="20" width="510" height="340" rx="16"/></clipPath><image href="@@FOTO:datacenter@@" x="660" y="20" width="510" height="340" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp8)"/>
+<linearGradient id="gr9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.8"/></linearGradient><rect x="660" y="250" width="510" height="110" rx="16" fill="url(#gr9)"/>
+<text x="690" y="340" font-size="30" font-weight="700" fill="#fff">SERVIDOR REMOTO</text>
+<use href="#i-llave" x="662" y="392" width="56" height="56" color="#9C7B16"/>
+<text x="740" y="432" font-size="30" font-weight="700" fill="#9C7B16">OAuth y claves</text>
 </svg>
 <aside class="narracion">El segundo transporte es Streamable HTTP, diseñado para servidores remotos. Permite que muchos clientes se conecten al mismo servidor por internet usando HTTP cifrado. La especificación recomienda OAuth para obtener tokens de autenticación. Context7, que conectamos en la semana doce, es un ejemplo real de servidor remoto. Comparen con stdio. Stdio es local y simple. HTTP es remoto y escalable. Los mensajes JSON RPC son los mismos en ambos casos. Solo cambia el canal. Para CaribeMart empezaremos en local con stdio y dejaremos el diseño remoto para producción.En producción el transporte remoto exige credenciales y registros sólidos. Un token filtrado puede exponer todas las herramientas del servidor. Por eso OAuth y claves rotadas son obligatorios fuera del laboratorio. No expongan un servidor stdio como si fuera remoto sin adaptarlo. Cada transporte tiene su propio nivel de exigencia.</aside>
 </section>
-<section data-kicker="Comparación" data-titulo="MCP frente a una API REST" data-sub="REST expone recursos; MCP expone herramientas para que el modelo actúe." data-fuente="API = Application Programming Interface · REST = Representational State Transfer. Fuente: MCP Architecture [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Comparación" data-titulo="MCP frente a una API REST" data-sub="REST expone recursos; MCP expone herramientas para que el modelo actúe." data-fuente="Fuente: MCP Architecture [cite:2] · Dibujo propio" data-siglas="MCP = Model Context Protocol · API = interfaz de programación de aplicaciones · REST = Representational State Transfer · IA = inteligencia artificial">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="40" width="540" height="420" rx="14" fill="#F4F4F4" stroke="#9b9b9b" stroke-width="2"/>
-  <text x="300" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#555">API REST CLÁSICA</text>
-  <use href="#i-api" x="270" y="95" width="56" height="56" color="#555"/>
-  <text x="300" y="180" text-anchor="middle" font-size="15" fill="#2A2A2A">GET pedidos</text>
-  <text x="300" y="210" text-anchor="middle" font-size="15" fill="#2A2A2A">POST pedidos</text>
-  <text x="300" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">La aplicación decide</text>
-  <rect x="610" y="40" width="540" height="420" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <text x="880" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">MCP PARA IA</text>
-  <use href="#i-funcion" x="850" y="95" width="56" height="56" color="#A6192E"/>
-  <text x="880" y="180" text-anchor="middle" font-size="15" fill="#2A2A2A">tools list y tools call</text>
-  <text x="880" y="210" text-anchor="middle" font-size="15" fill="#2A2A2A">tools call con argumentos</text>
-  <text x="880" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">El modelo elige</text>
-  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
-  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
-  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
+<rect x="10" y="20" width="560" height="460" rx="20" fill="#F4F4F4" stroke="#9a9a9a" stroke-width="2.5"/>
+<rect x="610" y="20" width="560" height="460" rx="20" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<text x="290" y="74" text-anchor="middle" font-size="30" font-weight="700" fill="#2A2A2A">API REST CLÁSICA</text>
+<text x="890" y="74" text-anchor="middle" font-size="30" font-weight="700" fill="#A6192E">MCP PARA IA</text>
+<rect x="70" y="120" width="302.774" height="68" rx="12" fill="#fff" stroke="#2A2A2A" stroke-width="2"/><use href="#i-api" x="92" y="134" width="40" height="40" color="#2A2A2A"/><text x="142" y="163.8" font-size="28" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">GET /pedidos</text>
+<rect x="70" y="210" width="320.006" height="68" rx="12" fill="#fff" stroke="#2A2A2A" stroke-width="2"/><use href="#i-api" x="92" y="224" width="40" height="40" color="#2A2A2A"/><text x="142" y="253.8" font-size="28" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">POST /pedidos</text>
+<rect x="670" y="120" width="268.312" height="68" rx="12" fill="#fff" stroke="#A6192E" stroke-width="2"/><use href="#i-funcion" x="692" y="134" width="40" height="40" color="#A6192E"/><text x="742" y="163.8" font-size="28" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">tools/list</text>
+<rect x="670" y="210" width="268.312" height="68" rx="12" fill="#fff" stroke="#A6192E" stroke-width="2"/><use href="#i-funcion" x="692" y="224" width="40" height="40" color="#A6192E"/><text x="742" y="253.8" font-size="28" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">tools/call</text>
+<use href="#i-laptop" x="115" y="345" width="70" height="70" color="#2A2A2A"/>
+<text x="210" y="392" font-size="28" font-weight="700" fill="#2A2A2A">La aplicación decide</text>
+<use href="#i-ia" x="665" y="345" width="70" height="70" color="#A6192E"/>
+<text x="760" y="392" font-size="28" font-weight="700" fill="#A6192E">El modelo elige</text>
+<circle cx="590" cy="250" r="28" fill="#fff" stroke="#9C7B16" stroke-width="3"/>
+<text x="590" y="260" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">vs</text>
 </svg>
 <aside class="narracion">No confundan una interfaz de programación de aplicaciones REST con MCP. REST expone recursos del servidor, como el pedido número mil uno, y la aplicación decide cuándo pedirlos. MCP expone herramientas con esquemas que el modelo lee y elige en el momento adecuado. REST habla de recursos. MCP habla de acciones para el modelo. Ambos usan JSON y HTTP o tuberías, pero su intención es distinta. REST conecta programas entre sí. MCP conecta un modelo con capacidades reales. En CaribeMart ustedes seguiremos usando REST para el servicio de pedidos y MCP encima para exponerlo a opencode.La coexistencia es normal en sistemas reales bien diseñados. El servicio de pedidos seguirá hablando REST con otros sistemas. Encima expondrán un servidor MCP para opencode. Así cada cliente usa el idioma que necesita sin romper lo existente. Esa arquitectura por capas protege la inversión ya hecha en CaribeMart.</aside>
 </section>
-<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿herramienta, recurso o prompt?" data-sub="Clasifiquen tres tareas de CaribeMart según su primitiva correcta." data-fuente="Ejercicio de elaboración propia">
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿herramienta, recurso o prompt?" data-sub="Clasifiquen tres tareas de CaribeMart según su primitiva correcta." data-fuente="Ejercicio de elaboración propia" data-siglas="">
 <svg viewBox="0 0 1180 500">
-  <rect x="40" y="40" width="1100" height="110" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2.5" stroke-dasharray="10 6"/>
-  <use href="#i-pregunta" x="70" y="60" width="60" height="60" color="#9C7B16"/>
-  <text x="150" y="85" font-size="16" font-weight="700" fill="#9C7B16">PAUSA Y CLASIFICA</text>
-  <text x="150" y="115" font-size="14" fill="#2A2A2A">¿Qué primitiva usarías en cada caso?</text>
-  <rect x="40" y="190" width="340" height="260" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-documento" x="160" y="215" width="56" height="56" color="#A6192E"/>
-  <text x="200" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">A · LEER ESQUEMA</text>
-  
-  <rect x="420" y="190" width="340" height="260" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-funcion" x="540" y="215" width="56" height="56" color="#2A2A2A"/>
-  <text x="590" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#2A2A2A">B · CREAR PEDIDO</text>
-  
-  <rect x="800" y="190" width="340" height="260" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <use href="#i-pregunta" x="920" y="215" width="56" height="56" color="#9C7B16"/>
-  <text x="980" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">C · RESUMEN GUÍA</text>
-  <text x="980" y="325" text-anchor="middle" font-size="14" fill="#2A2A2A">plantilla repetible</text>
+<circle cx="70" cy="70" r="44" fill="#FBF6E7" stroke="#9C7B16" stroke-width="4"/><rect x="53" y="50" width="12" height="40" rx="3" fill="#9C7B16"/><rect x="75" y="50" width="12" height="40" rx="3" fill="#9C7B16"/>
+<text x="140" y="62" font-size="30" font-weight="700" fill="#9C7B16">PAUSA Y CLASIFICA</text>
+<text x="140" y="96" font-size="24" fill="#2A2A2A">¿Qué primitiva usarías en cada caso?</text>
+<circle cx="60" cy="190" r="28" fill="#9C7B16"/>
+<text x="60" y="200" text-anchor="middle" font-size="28" font-weight="700" fill="#fff">A</text>
+<rect x="100" y="158" width="201.172" height="64" rx="12" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2"/><text x="120" y="199.1" font-size="26" font-weight="700" fill="#9C7B16">leer esquema</text>
+<circle cx="60" cy="300" r="28" fill="#9C7B16"/>
+<text x="60" y="310" text-anchor="middle" font-size="28" font-weight="700" fill="#fff">B</text>
+<rect x="100" y="268" width="191.32" height="64" rx="12" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2"/><text x="120" y="309.1" font-size="26" font-weight="700" fill="#9C7B16">crear pedido</text>
+<circle cx="60" cy="410" r="28" fill="#9C7B16"/>
+<text x="60" y="420" text-anchor="middle" font-size="28" font-weight="700" fill="#fff">C</text>
+<rect x="100" y="378" width="234.727" height="64" rx="12" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2"/><text x="120" y="419.1" font-size="26" font-weight="700" fill="#9C7B16">resumen guiado</text>
+<rect x="780" y="150" width="390" height="80" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-funcion" x="804" y="164" width="52" height="52" color="#A6192E"/>
+<text x="880" y="200" font-size="28" font-weight="700" fill="#A6192E">HERRAMIENTA</text>
+<rect x="780" y="260" width="390" height="80" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-documento" x="804" y="274" width="52" height="52" color="#9C7B16"/>
+<text x="880" y="310" font-size="28" font-weight="700" fill="#9C7B16">RECURSO</text>
+<rect x="780" y="370" width="390" height="80" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-codigo" x="804" y="384" width="52" height="52" color="#2E7D4F"/>
+<text x="880" y="420" font-size="28" font-weight="700" fill="#2E7D4F">PROMPT</text>
+<line x1="400" y1="190" x2="770" y2="190" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="190" x2="770" y2="300" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="190" x2="770" y2="410" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="300" x2="770" y2="190" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="300" x2="770" y2="300" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="300" x2="770" y2="410" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="410" x2="770" y2="190" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="410" x2="770" y2="300" stroke="#cfcfcf" stroke-width="2.5"/>
+<line x1="400" y1="410" x2="770" y2="410" stroke="#cfcfcf" stroke-width="2.5"/>
+<circle cx="585" cy="300" r="40" fill="#fff" stroke="#9C7B16" stroke-width="4"/>
+<text x="585" y="316" text-anchor="middle" font-size="44" font-weight="700" fill="#9C7B16">?</text>
 </svg>
 <aside class="narracion">Segundo mini reto. Pausen el video y clasifiquen tres tareas de CaribeMart. Caso A, leer el esquema de pedidos sin cambiar nada. Caso B, crear un pedido nuevo que escribe en la base. Caso C, un resumen guiado de pendientes que siempre sigue los mismos pasos. Fin de la pausa. La respuesta es recurso para A, herramienta para B y prompt para C. Fíjense que el criterio no es la dificultad. Es la naturaleza de la acción. Leer es recurso, actuar es herramienta y guiar es prompt. Si clasificaron así, van por buen camino.Esa clasificación se practica en cada diseño nuevo que hagan. Antes de escribir código, pregunten si leen, actúan o guían. La respuesta define la primitiva correcta y su control. Si dudan, elijan la opción más leída y menos potente. La prudencia inicial evita incidentes costosos después.</aside>
 </section>
-<section data-kicker="Ecosistema" data-titulo="Context7 y el ecosistema MCP" data-sub="Servidores reales que ya usan este estándar en desarrollo." data-fuente="Fuente: MCP Introduction, gran ecosistema [cite:1] · Diagrama: elaboración propia">
+<section data-kicker="Ecosistema" data-titulo="Context7 y el ecosistema MCP" data-sub="Servidores reales que ya usan este estándar en desarrollo." data-fuente="Fuente: MCP Introduction, gran ecosistema [cite:1] · Dibujo propio · Foto: Michael Coghlan, Wikimedia Commons (CC BY-SA 2.0)" data-siglas="MCP = Model Context Protocol">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="40" width="1120" height="120" rx="14" fill="#A6192E"/>
-  <text x="590" y="90" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">ECOSISTEMA MCP EN 2026</text>
-  <text x="590" y="120" text-anchor="middle" font-size="14" fill="#F3D9DE">Escribir una vez, integrar en muchos clientes</text>
-  <rect x="40" y="200" width="350" height="250" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-documento" x="160" y="225" width="60" height="60" color="#A6192E"/>
-  <text x="215" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">CONTEXT7</text>
-  <text x="215" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">documentación viva</text>
-  
-  <rect x="415" y="200" width="350" height="250" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-documento" x="540" y="225" width="60" height="60" color="#2A2A2A"/>
-  <text x="590" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">ARCHIVOS</text>
-  <text x="590" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">acceso a archivos</text>
-  
-  <rect x="790" y="200" width="350" height="250" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <use href="#i-alerta" x="910" y="225" width="60" height="60" color="#9C7B16"/>
-  <text x="965" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">SENTRY</text>
-  <text x="965" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">errores y monitoreo</text>
-  <text x="965" y="363" text-anchor="middle" font-size="14" fill="#5E5E5E">servidor remoto</text>
+<clipPath id="clp10"><rect x="8" y="20" width="512" height="460" rx="16"/></clipPath><image href="@@FOTO:centralita@@" x="8" y="20" width="512" height="460" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp10)"/>
+<linearGradient id="gr11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.85"/></linearGradient><rect x="8" y="330" width="512" height="150" rx="16" fill="url(#gr11)"/>
+<text x="260" y="440" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">Escribir una vez, usar en muchos</text>
+<line x1="640" y1="70" x2="640" y2="430" stroke="#9C7B16" stroke-width="6" stroke-linecap="round"/>
+<line x1="640" y1="70" x2="684" y2="70" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="700,70 682,80.5 682,59.5" fill="#9C7B16"/>
+<circle cx="760" cy="70" r="52" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-documento" x="727" y="37" width="66" height="66" color="#A6192E"/>
+<text x="840" y="68" font-size="30" font-weight="700" fill="#A6192E">CONTEXT7</text>
+<text x="840" y="100" font-size="22" fill="#5E5E5E">documentación viva</text>
+<line x1="640" y1="250" x2="684" y2="250" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="700,250 682,260.5 682,239.5" fill="#9C7B16"/>
+<circle cx="760" cy="250" r="52" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-documento" x="727" y="217" width="66" height="66" color="#2A2A2A"/>
+<text x="840" y="248" font-size="30" font-weight="700" fill="#2A2A2A">ARCHIVOS</text>
+<text x="840" y="280" font-size="22" fill="#5E5E5E">acceso a archivos</text>
+<line x1="640" y1="430" x2="684" y2="430" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="700,430 682,440.5 682,419.5" fill="#9C7B16"/>
+<circle cx="760" cy="430" r="52" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-alerta" x="727" y="397" width="66" height="66" color="#2E7D4F"/>
+<text x="840" y="428" font-size="30" font-weight="700" fill="#2E7D4F">SENTRY</text>
+<text x="840" y="460" font-size="22" fill="#5E5E5E">errores y monitoreo · remoto</text>
 </svg>
 <aside class="narracion">Context7 no es un juguete. La documentación oficial describe un ecosistema amplio con clientes como Claude, ChatGPT, Visual Studio Code y herramientas de desarrollo que ya soportan MCP. Eso significa que un servidor bien escrito funciona en muchos lugares sin cambios. Los ejemplos oficiales incluyen servidores de archivos, bases de datos y monitoreo como Sentry. La lección para ustedes es clara. Si aprenden a construir un servidor MCP correcto, ganan una habilidad portable. No dependen de una sola aplicación ni de un solo proveedor. Esa portabilidad es el valor real del estándar.La lista de clientes compatibles sigue creciendo cada mes. Eso valida la apuesta por un estándar abierto y documentado. Su servidor de hoy funcionará con clientes futuros sin cambios. Esa longevidad es un argumento fuerte para invertir tiempo en aprender. No gasten esfuerzo en conectores desechables de un solo producto.</aside>
 </section>
-<section data-kicker="Protocolo" data-titulo="JSON RPC: el sobre de cada mensaje" data-sub="Versión, método y resultado en un objeto JSON uniforme." data-fuente="JSON RPC = JavaScript Object Notation Remote Procedure Call. Fuente: JSON RPC 2.0 [cite:10] y MCP [cite:2] · Diagrama: elaboración propia">
+<section data-kicker="Protocolo" data-titulo="JSON RPC: el sobre de cada mensaje" data-sub="Versión, método y resultado en un objeto JSON uniforme." data-fuente="Fuente: JSON RPC 2.0 [cite:10] y MCP [cite:2] · Dibujo propio" data-siglas="JSON RPC = JSON Remote Procedure Call">
 <svg viewBox="0 0 1180 500">
-  <rect x="40" y="40" width="540" height="360" rx="14" fill="#211D18"/>
-  <text x="70" y="80" font-family="Roboto Mono, monospace" font-size="14" fill="#D4AF37">PETICIÓN</text>
-  <text x="70" y="115" font-family="Roboto Mono, monospace" font-size="15" fill="#fff">jsonrpc version 2.0</text>
-  <text x="70" y="145" font-family="Roboto Mono, monospace" font-size="15" fill="#fff">method tools call</text>
-  <text x="70" y="175" font-family="Roboto Mono, monospace" font-size="15" fill="#7CC48D">params con argumentos</text>
-  <text x="70" y="215" font-family="Roboto Mono, monospace" font-size="14" fill="#8a8a8a">id interno para correlación</text>
-  <rect x="620" y="40" width="520" height="360" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-documento" x="650" y="70" width="60" height="60" color="#A6192E"/>
-  <text x="725" y="95" font-size="16" font-weight="700" fill="#A6192E">RESPUESTA</text>
-  <text x="650" y="150" font-size="15" fill="#2A2A2A">result real</text>
-  <text x="650" y="180" font-size="15" fill="#2A2A2A">o error con código claro</text>
-  <text x="650" y="220" font-size="14" fill="#5E5E5E">mismo identificador</text>
-  
-  <rect x="10" y="10" width="1160" height="480" rx="16" fill="none" stroke="#E3D9C6" stroke-width="1"/>
-  <circle cx="1110" cy="20" r="8" fill="#F9EEF0" stroke="#E3D9C6"/>
-  <circle cx="1140" cy="20" r="8" fill="#FBF6E7" stroke="#E3D9C6"/>
+<rect x="40" y="14" width="153.959" height="48" rx="24" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><text x="62" y="46.4" font-size="24" font-weight="700" fill="#A6192E">PETICIÓN</text>
+<rect x="760" y="14" width="184.589" height="48" rx="24" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2"/><text x="782" y="46.4" font-size="24" font-weight="700" fill="#2E7D4F">RESPUESTA</text>
+<rect x="40" y="90" width="425.24" height="252.8" rx="12" fill="#1E1E1E"/><text x="64" y="134.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">{</text><text x="64" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "jsonrpc"</text><text x="226.466" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="256.005" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#9BD1A8" xml:space="preserve">"2.0"</text><text x="329.853" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">,</text><text x="64" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "method"</text><text x="211.696" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="241.235" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#9BD1A8" xml:space="preserve">"tools/call"</text><text x="418.47" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">,</text><text x="64" y="239.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "params"</text><text x="211.696" y="239.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: { ... },</text><text x="64" y="274" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "id"</text><text x="152.618" y="274" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="182.157" y="274" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#8EC3E6" xml:space="preserve">7</text><text x="64" y="308.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">}</text>
+<rect x="760" y="90" width="351.392" height="218" rx="12" fill="#1E1E1E"/><text x="784" y="134.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">{</text><text x="784" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "jsonrpc"</text><text x="946.466" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="976.005" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#9BD1A8" xml:space="preserve">"2.0"</text><text x="1049.85" y="169.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">,</text><text x="784" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "result"</text><text x="931.696" y="204.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: { ... },</text><text x="784" y="239.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">  "id"</text><text x="872.618" y="239.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="902.157" y="239.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#8EC3E6" xml:space="preserve">7</text><text x="784" y="274" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">}</text>
+<line x1="471.24" y1="280.8" x2="738.12" y2="247.954" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="754,246 737.417,258.62 734.852,237.777" fill="#9C7B16"/>
+<text x="612.62" y="258.8" text-anchor="middle" font-size="26" font-weight="700" fill="#9C7B16">mismo id</text>
+<text x="590" y="420" text-anchor="middle" font-size="30" font-weight="700" fill="#A6192E">Un sobre uniforme para cada mensaje</text>
 </svg>
 <aside class="narracion"> Todo mensaje MCP viaja en un sobre JSON RPC con tres piezas obligatorias. La versión del protocolo, el nombre del método y los parámetros enviados. La respuesta copia el identificador original y trae el resultado o un error con código claro. Esa disciplina permite correlacionar cada petición con su respuesta sin ninguna ambigüedad. Las notificaciones son mensajes sin respuesta esperada, por ejemplo un aviso de lista cambiada. Fíjense en la utilidad práctica para depurar. Cuando revisen registros, leerán esos tres campos y sabrán si falló el método, los parámetros o el servidor. Esa claridad ahorra horas de adivinación en el laboratorio. Piensen además en la compatibilidad entre versiones diferentes. Si el cliente habla una revisión vieja y el servidor una nueva, el sobre lo revela con claridad. Esa negociación ordenada evita conexiones a medias que nadie entiende. En la próxima parte verán esos mensajes en el inspector al probar. </aside>
 </section>
-<section data-kicker="Síntesis" data-titulo="La Parte 2 en cuatro ideas maestras" data-sub="Participantes, primitivas, protocolo y transportes." data-fuente="Síntesis de la Parte 2 · Diagrama: elaboración propia">
+<section data-kicker="Síntesis" data-titulo="La Parte 2 en cuatro ideas maestras" data-sub="Participantes, primitivas, protocolo y transportes." data-fuente="Síntesis de la Parte 2 · Dibujo propio" data-siglas="JSON RPC = JSON Remote Procedure Call · HTTP = Hypertext Transfer Protocol · stdio = entrada y salida estándar">
 <svg viewBox="0 0 1180 500">
-  <rect x="30" y="30" width="550" height="210" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
-  <use href="#i-ia" x="60" y="55" width="56" height="56" color="#A6192E"/>
-  <text x="130" y="80" font-size="16" font-weight="700" fill="#A6192E">HOST, CLIENTE, SERVIDOR</text>
-  
-  <rect x="600" y="30" width="550" height="210" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
-  <use href="#i-funcion" x="630" y="55" width="56" height="56" color="#2A2A2A"/>
-  <text x="700" y="80" font-size="16" font-weight="700" fill="#2A2A2A">TRES PRIMITIVAS CLARAS</text>
-  
-  <rect x="30" y="270" width="550" height="210" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
-  <use href="#i-documento" x="60" y="295" width="56" height="56" color="#9C7B16"/>
-  <text x="130" y="320" font-size="16" font-weight="700" fill="#9C7B16">JSON RPC SIEMPRE</text>
-  
-  <rect x="600" y="270" width="550" height="210" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
-  <use href="#i-laptop" x="630" y="295" width="56" height="56" color="#2E7D4F"/>
-  <text x="700" y="320" font-size="16" font-weight="700" fill="#2E7D4F">STDIO LOCAL O HTTP</text>
-  
+<rect x="30" y="340" width="268" height="150" rx="14" fill="#A6192E"/>
+<circle cx="164" cy="360" r="48" fill="#fff" stroke="#A6192E" stroke-width="4"/>
+<use href="#i-servidor" x="133" y="329" width="62" height="62" color="#A6192E"/>
+<text x="164" y="444" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">Host, cliente</text>
+<text x="164" y="476.5" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">y servidor</text>
+<rect x="318" y="250" width="268" height="240" rx="14" fill="#9C7B16"/>
+<circle cx="452" cy="270" r="48" fill="#fff" stroke="#9C7B16" stroke-width="4"/>
+<use href="#i-funcion" x="421" y="239" width="62" height="62" color="#9C7B16"/>
+<text x="452" y="354" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">Tres</text>
+<text x="452" y="386.5" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">primitivas</text>
+<rect x="606" y="160" width="268" height="330" rx="14" fill="#2A2A2A"/>
+<circle cx="740" cy="180" r="48" fill="#fff" stroke="#2A2A2A" stroke-width="4"/>
+<use href="#i-api" x="709" y="149" width="62" height="62" color="#2A2A2A"/>
+<text x="740" y="264" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">JSON RPC</text>
+<text x="740" y="296.5" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">siempre</text>
+<rect x="894" y="70" width="268" height="420" rx="14" fill="#2E7D4F"/>
+<circle cx="1028" cy="90" r="48" fill="#fff" stroke="#2E7D4F" stroke-width="4"/>
+<use href="#i-internet" x="997" y="59" width="62" height="62" color="#2E7D4F"/>
+<text x="1028" y="174" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">stdio local</text>
+<text x="1028" y="206.5" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">o HTTP</text>
 </svg>
 <aside class="narracion">Cerramos la parte dos con el mapa completo. Host, cliente y servidor reparten responsabilidades sin ambigüedad. Las tres primitivas se diseñan por separado. Herramientas para actuar, recursos para leer y prompts para guiar. El protocolo usa JSON RPC para descubrir, listar y llamar. Y el transporte puede ser stdio local o HTTP remoto sin cambiar los mensajes. Si pueden explicar eso con un ejemplo de CaribeMart y con Context7, tienen dominio del estándar. En la siguiente parte escribiremos nuestro propio servidor MCP.Con ese mapa entran preparados a la siguiente parte. Allí convertirán la teoría en un servidor que responde de verdad. Cada concepto de hoy reaparecerá en comandos y archivos. Mantengan el ejemplo del pedido mil uno a la mano. La teoría sin código se olvida rápido y la práctica la fija.</aside>
 </section>

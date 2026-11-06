@@ -20,7 +20,7 @@
     {
       "titulo": "Construir un servidor MCP para CaribeMart",
       "resumen": "Servidor en Node con zod, registro en opencode y flujo completo de una petición real.",
-      "narracion": "Parte tres. Construir un servidor MCP para CaribeMart. En esta parte bajamos a código. Creamos un servidor MCP en Node con validación zod, lo registramos en opencode con su formato vigente y recorremos el flujo completo de la pregunta sobre el pedido número mil uno. Fíjense en cada comando y en qué debe verse en pantalla. Esto es exactamente lo que harán en la actividad evaluada."
+      "narracion": "Parte tres. Construir un servidor MCP para CaribeMart. En esta parte bajamos a código. Creamos un servidor MCP en Node con validación zod, lo registramos en opencode con su formato recomendado y recorremos el flujo completo de la pregunta sobre el pedido número mil uno. Fíjense en cada comando y en qué debe verse en pantalla. Esto es exactamente lo que harán en la actividad evaluada."
     },
     {
       "titulo": "Riesgos, buenas prácticas y actividad",
@@ -33,52 +33,62 @@
     {
       "n": 1,
       "ref": "Model Context Protocol (MCP), «What is the Model Context Protocol», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
-      "url": "https://modelcontextprotocol.io/introduction"
+      "url": "https://modelcontextprotocol.io/introduction",
+      "corta": "MCP, «What is the Model Context Protocol», modelcontextprotocol.io"
     },
     {
       "n": 2,
       "ref": "Model Context Protocol (MCP), «Architecture overview: Host, Client, Server, JSON RPC and transports», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
-      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture"
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+      "corta": "MCP, «Architecture overview», modelcontextprotocol.io"
     },
     {
       "n": 3,
       "ref": "Model Context Protocol (MCP), «Understanding MCP servers: Tools, Resources and Prompts», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
-      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts"
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts",
+      "corta": "MCP, «Understanding MCP servers: Tools, Resources and Prompts», modelcontextprotocol.io"
     },
     {
       "n": 4,
       "ref": "Model Context Protocol (MCP), «Build an MCP server» guía TypeScript con Node y stdio, modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
-      "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server"
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server",
+      "corta": "MCP, «Build an MCP server» (TypeScript, Node y stdio), modelcontextprotocol.io"
     },
     {
       "n": 5,
       "ref": "npm, «@modelcontextprotocol/sdk» versión 1.32.2, SDK TypeScript de MCP (verificado 6 de noviembre de 2026)",
-      "url": "https://www.npmjs.com/package/@modelcontextprotocol/sdk"
+      "url": "https://www.npmjs.com/package/@modelcontextprotocol/sdk",
+      "corta": "npm, «@modelcontextprotocol/sdk» 1.32.2, npmjs.com"
     },
     {
       "n": 6,
       "ref": "OpenCode (opencode), «MCP servers: opencode.json con mcp.servers local y remoto», opencode.ai docs (consultado 6 de noviembre de 2026)",
-      "url": "https://opencode.ai/docs/mcp-servers/"
+      "url": "https://opencode.ai/docs/mcp-servers/",
+      "corta": "OpenCode, «MCP servers», opencode.ai/docs"
     },
     {
       "n": 7,
       "ref": "OWASP Foundation, «OWASP Top 10 for Large Language Model Applications 2026» (3 de agosto de 2026)",
-      "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
+      "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/",
+      "corta": "OWASP, «Top 10 for LLM Applications 2026» (3 de agosto de 2026)"
     },
     {
       "n": 8,
       "ref": "Congreso de la República de Colombia, «Ley Estatutaria 1581 de 2012: Régimen General de Protección de Datos Personales» (Diario Oficial 48587)",
-      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=49981"
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=49981",
+      "corta": "Congreso de Colombia, Ley Estatutaria 1581 de 2012 (Habeas Data)"
     },
     {
       "n": 9,
       "ref": "Superintendencia de Industria y Comercio (SIC), «Circular Externa 002 del 21 de agosto de 2024: Lineamientos sobre el Tratamiento de Datos Personales en Sistemas de Inteligencia Artificial»",
-      "url": "https://sedeelectronica.sic.gov.co/transparencia/normativa/circular-externa-2-de-2024-de-la-superintendencia-de-industria-y-comercio-lineamientos-sobre-el-tratamiento-de-datos"
+      "url": "https://sedeelectronica.sic.gov.co/transparencia/normativa/circular-externa-2-de-2024-de-la-superintendencia-de-industria-y-comercio-lineamientos-sobre-el-tratamiento-de-datos",
+      "corta": "SIC, Circular Externa 002 del 21 de agosto de 2024 (IA y datos personales)"
     },
     {
       "n": 10,
       "ref": "JSON RPC Working Group, «JSON RPC 2.0 Specification» (jsonrpc.org, consultado 6 de noviembre de 2026)",
-      "url": "https://www.jsonrpc.org/specification"
+      "url": "https://www.jsonrpc.org/specification",
+      "corta": "JSON RPC Working Group, «JSON RPC 2.0 Specification», jsonrpc.org"
     }
   ]
 }
