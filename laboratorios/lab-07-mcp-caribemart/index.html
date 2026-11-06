@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio 6 &mdash; Tu primer agente de IA: opencode en Windows &middot; CUC</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #FBF8F3;
+      --surface: #FFFFFF;
+      --surface-2: #F4EEE3;
+      --ink: #2A2A2A;
+      --ink-soft: #6B6259;
+      --vino: #A6192E;
+      --vino-strong: #7E1223;
+      --vino-tint: #FBEBEC;
+      --dorado: #A9791C;
+      --dorado-tint: #FBF3DE;
+      --line: #E5DCCB;
+      --code-bg: #F1EADA;
+      --code-ink: #4A4030;
+      --shadow: 0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #181411;
+        --surface: #221D18;
+        --surface-2: #2B2520;
+        --ink: #EFE7D9;
+        --ink-soft: #B3A896;
+        --vino: #E2536B;
+        --vino-strong: #F0748A;
+        --vino-tint: #3A1E22;
+        --dorado: #E4BC5C;
+        --dorado-tint: #3B321C;
+        --line: #3D352A;
+        --code-bg: #1F1914;
+        --code-ink: #E4D9C3;
+        --shadow: 0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+    a { color: var(--vino); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3.5px; width: 0%;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+      z-index: 1000; transition: width .1s ease-out;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      nav.toc { display: none; }
+    }
+
+    header.top.portada {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .portada-logo {
+      height: 72px;
+      width: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .portada-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: var(--vino);
+      background: var(--vino-tint);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    header.top h1 {
+      color: var(--vino);
+      font-size: clamp(26px, 3.8vw, 36px);
+      margin: 0 0 10px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    header.top .sub {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+      max-width: 62ch;
+      margin-inline: auto;
+    }
+
+    .accent-bar {
+      width: 200px;
+      height: 4px;
+      margin: 0 auto 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .author-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      padding-top: 4px;
+    }
+
+    .author-block span { display: inline-flex; align-items: center; gap: 6px; }
+    .author-block strong { color: var(--ink); }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 18px 40px;
+      border-right: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    nav.toc .toc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+      margin: 0 0 14px 8px;
+      font-weight: 700;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    nav.toc a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+    nav.toc a.active { background: var(--vino-tint); color: var(--vino); font-weight: 600; }
+
+    nav.toc a .badge {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-2); color: var(--ink-soft);
+      display: grid; place-items: center;
+      font-size: 11.5px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    nav.toc a.active .badge { background: var(--vino); color: #fff; }
+
+    main { padding: 40px 48px 90px; min-width: 0; }
+
+    @media (max-width: 650px) {
+      main { padding: 24px 18px 70px; }
+      header.top.portada { padding: 32px 18px 24px; }
+    }
+
+    .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 72ch; margin: 16px 0 24px; }
+    .lede b, .lede strong { color: var(--ink); }
+
+    section.part {
+      padding-top: 44px;
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+
+    section.part:first-of-type { border-top: none; padding-top: 10px; }
+
+    .part-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+    .part-badge {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--vino); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700; font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(166,25,46,.25);
+    }
+
+    .part-head h2 { margin: 0; font-size: 24px; font-weight: 600; }
+
+    h3.sub {
+      font-size: 16.5px;
+      margin: 32px 0 12px;
+      color: var(--vino);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin: 0 0 14px; max-width: 74ch; }
+
+    .docref {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      margin: -4px 0 18px;
+    }
+    .docref a { color: var(--vino); text-decoration: underline; }
+
+    ol.steps { list-style: none; margin: 8px 0 20px; padding: 0; counter-reset: step; }
+
+    ol.steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 2px 0 18px 38px;
+      max-width: 72ch;
+    }
+
+    ol.steps > li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px; font-weight: 700;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--vino);
+      box-shadow: var(--shadow);
+    }
+
+    ol.steps > li:not(:last-child)::after {
+      content: "";
+      position: absolute; left: 12.5px; top: 30px; bottom: 0;
+      width: 1.5px; background: var(--line);
+    }
+
+    ul.plain { padding-left: 20px; margin: 6px 0 14px; }
+    ul.plain li { margin-bottom: 6px; max-width: 68ch; }
+
+    pre {
+      position: relative;
+      background: #211D18; color: #EFE7D9;
+      border-radius: 10px;
+      padding: 14px 18px;
+      overflow-x: auto;
+      font-size: 13.5px; line-height: 1.55;
+      margin: 8px 0 16px;
+      border: 1px solid var(--line);
+    }
+
+    code.inline {
+      background: var(--surface-2); color: var(--code-ink);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 13px; border: 1px solid var(--line);
+    }
+
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+      background: var(--surface); color: var(--ink-soft);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    pre:hover .copy-btn { opacity: 1; }
+    pre .copy-btn { color: #B3A896; border-color: #4A4030; background: #2B2520; }
+    .copy-btn:hover { color: #E4BC5C; border-color: #E4BC5C; }
+    .copy-btn.copied { color: var(--dorado); border-color: var(--dorado); opacity: 1; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 12px 0 20px;
+      font-size: 14px;
+      max-width: 72ch;
+      line-height: 1.6;
+    }
+
+    .callout.warn { background: var(--vino-tint); border-left: 4px solid var(--vino); color: var(--ink); }
+    .callout.warn b, .callout.warn strong { color: var(--vino); }
+    .callout.note { background: var(--dorado-tint); border-left: 4px solid var(--dorado); color: var(--ink); }
+    .callout.note b, .callout.note strong { color: var(--dorado); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin: 10px 0 22px;
+      box-shadow: var(--shadow);
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0; font-size: 13.5px; text-align: left; }
+    th { background: var(--vino); color: #fff; padding: 11px 14px; font-weight: 600; letter-spacing: .02em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--surface-2); }
+
+    .rubric-weight { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--vino); }
+
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin: 14px 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--vino), var(--dorado));
+    }
+
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    .diagram-caption {
+      font-size: 12.5px; color: var(--ink-soft);
+      text-align: center; margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    figure.ref {
+      margin: 14px 0 24px;
+      max-width: 640px;
+    }
+
+    figure.ref img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #fff;
+    }
+
+    figure.ref img.logo-img {
+      max-width: 180px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    figure.ref figcaption {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.5;
+    }
+
+    figure.ref figcaption a { color: var(--ink-soft); text-decoration: underline; }
+
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer; user-select: none;
+      transition: background .15s ease;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li:hover { background: var(--surface-2); }
+
+    .checklist .box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      margin-top: 2px; flex-shrink: 0;
+      background: var(--surface);
+      transition: all .15s ease;
+    }
+
+    .checklist li.done { opacity: .6; }
+    .checklist li.done .box { background: var(--vino); border-color: var(--vino); position: relative; }
+    .checklist li.done .box::after {
+      content: "";
+      position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px;
+      border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(40deg);
+    }
+    .checklist li.done span.text { text-decoration: line-through; }
+
+    #back-to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--vino); color: #fff; border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 998; font-size: 16px;
+    }
+    #back-to-top.show { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover { transform: translateY(-2px); }
+
+    #toc-toggle {
+      display: none;
+      position: fixed; bottom: 24px; left: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); color: var(--vino);
+      border: 1px solid var(--line);
+      z-index: 998; box-shadow: var(--shadow);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      #toc-toggle { display: flex; }
+      nav.toc.mobile-open {
+        display: block; position: fixed; inset: 0;
+        height: 100vh; width: 85vw; max-width: 320px;
+        background: var(--surface); z-index: 997;
+        box-shadow: var(--shadow);
+        border-right: 1px solid var(--line);
+      }
+    }
+
+    footer.page {
+      max-width: 74ch;
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    @media print {
+      nav.toc, #progress-bar, #back-to-top, #toc-toggle, .copy-btn { display: none !important; }
+      .shell { grid-template-columns: 1fr !important; }
+      section.part { break-inside: avoid; }
+    }
+
+    /* Celular: la columna de contenido no puede ser más ancha que la pantalla */
+    .shell > * { min-width: 0; }
+    @media (max-width: 900px) {
+      header.top.portada { padding: 32px 16px 28px; }
+      .portada-badge { white-space: normal; letter-spacing: .06em; }
+      header.top h1 { overflow-wrap: anywhere; }
+      pre, .tbl-wrap, svg { max-width: 100%; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      pre { overflow-x: auto; }
+      main a { overflow-wrap: anywhere; word-break: break-word; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <div class="shell">
+    <nav class="toc" id="toc">
+      <p class="toc-label">Contenido</p>
+      <a href="#intro"><span class="badge">0</span> Qu&eacute; vas a construir</a>
+      <a href="#paso1"><span class="badge">1</span> Verificar Node.js</a>
+      <a href="#paso2"><span class="badge">2</span> Descargar el esqueleto</a>
+      <a href="#paso3"><span class="badge">3</span> Instalar dependencias</a>
+      <a href="#paso4"><span class="badge">4</span> Conocer el esqueleto</a>
+      <a href="#paso5"><span class="badge">5</span> Registrar en opencode.json</a>
+      <a href="#paso6"><span class="badge">6</span> Verificar la conexi&oacute;n</a>
+      <a href="#paso7"><span class="badge">7</span> Probar consultar_pedido</a>
+      <a href="#paso8"><span class="badge">8</span> Agregar listar_pedidos_por_estado</a>
+      <a href="#paso9"><span class="badge">9</span> Agregar crear_pedido</a>
+      <a href="#paso10"><span class="badge">10</span> Entrega y reflexi&oacute;n</a>
+      <a href="#problemas"><span class="badge">?</span> Problemas comunes</a>
+      <a href="#proximo"><span class="badge">&rarr;</span> Lo que viene</a>
+    </nav>
+
+    <div>
+      <header class="top portada">
+        <img class="portada-logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa (CUC)" onerror="this.style.display='none'">
+        <div class="portada-badge">Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones</div>
+        <h1>Actividad pr&aacute;ctica: tu servidor MCP para CaribeMart en opencode</h1>
+        <p class="sub">Construyes tu <b>propio servidor MCP</b> en Node y lo conectas a opencode en Windows.
+        El modelo <b>propone</b> la herramienta, tu servidor la <b>ejecuta</b> y t&uacute; <b>verificas</b> cada resultado.
+        <b>Individual &middot; 10 % &middot; Corte 3 &middot; Actividad 2 &middot; entrega hasta el domingo 15 de noviembre de 2026, 23:59.</b></p>
+        <div class="accent-bar"></div>
+        <div class="author-block">
+          <span>Docente: <strong>Ing. Rodolfo Ca&ntilde;as Cervantes</strong></span>
+          <span><strong>Universidad de la Costa (CUC)</strong></span>
+          <span><strong>2026-2 &middot; Semana 13 &middot; s&aacute;bado 7 de noviembre de 2026 &middot; ~2,5 h</strong></span>
+        </div>
+      </header>
+
+      <main>
+        <section id="intro">
+          <div class="part-head"><span class="part-badge">0</span><h2>Qu&eacute; vas a construir hoy</h2></div>
+          <p class="lede">En la Semana 12 conectaste un servidor MCP <b>remoto</b> (Context7). Hoy construiste la otra cara:
+          un servidor MCP <b>propio</b> que expone datos de <b>CaribeMart</b> y que opencode usa como anfitri&oacute;n.
+          La regla de la semana: <b>el modelo propone, tu servidor ejecuta y t&uacute; verificas</b>.</p>
+
+          <ul class="plain">
+            <li>Un servidor MCP en <b>Node.js</b> con el SDK oficial y validaci&oacute;n <b>zod</b>, en Windows.</li>
+            <li>Tres herramientas: <b>consultar_pedido</b> (te la damos), <b>listar_pedidos_por_estado</b> y <b>crear_pedido</b> (las agregas t&uacute;).</li>
+            <li>Registro vigente en <b>opencode.json</b> (<code class="inline">mcp.servers</code> tipo <code class="inline">local</code>), verificado con <code class="inline">opencode mcp list</code>.</li>
+          </ul>
+
+          <div class="diagram-card">
+            <svg viewBox="0 0 920 210" width="100%" role="img" aria-label="Flujo: estudiante, opencode, servidor MCP y datos">
+              <rect x="20" y="55" width="190" height="100" rx="10" fill="#FBEBEC" stroke="#A6192E" stroke-width="2"></rect>
+              <text x="115" y="98" text-anchor="middle" font-family="IBM Plex Sans" font-size="17" font-weight="700" fill="#A6192E">Estudiante</text>
+              <text x="115" y="125" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">pregunta y revisa</text>
+
+              <rect x="270" y="55" width="190" height="100" rx="10" fill="#FFFFFF" stroke="#6B6259" stroke-width="1.5"></rect>
+              <text x="365" y="98" text-anchor="middle" font-family="IBM Plex Sans" font-size="17" font-weight="700" fill="#2A2A2A">opencode</text>
+              <text x="365" y="125" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">anfitri&oacute;n MCP</text>
+
+              <rect x="520" y="55" width="170" height="100" rx="10" fill="#FBF3DE" stroke="#A9791C" stroke-width="1.5"></rect>
+              <text x="605" y="98" text-anchor="middle" font-family="IBM Plex Sans" font-size="17" font-weight="700" fill="#7E5A12">Tu servidor</text>
+              <text x="605" y="125" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">server.js local</text>
+
+              <rect x="750" y="55" width="150" height="100" rx="10" fill="#FFFFFF" stroke="#A6192E" stroke-width="1.5" stroke-dasharray="5 4"></rect>
+              <text x="825" y="98" text-anchor="middle" font-family="IBM Plex Sans" font-size="17" font-weight="700" fill="#2A2A2A">Pedidos</text>
+              <text x="825" y="125" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">pedidos.json</text>
+
+              <line x1="210" y1="105" x2="268" y2="105" stroke="#A6192E" stroke-width="2"></line>
+              <polygon points="262,105 274,99 274,111" fill="#A6192E"></polygon>
+              <line x1="460" y1="105" x2="518" y2="105" stroke="#6B6259" stroke-width="2"></line>
+              <polygon points="512,105 524,99 524,111" fill="#6B6259"></polygon>
+              <line x1="690" y1="105" x2="748" y2="105" stroke="#A9791C" stroke-width="2"></line>
+              <polygon points="742,105 754,99 754,111" fill="#A9791C"></polygon>
+              <text x="460" y="35" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#6B6259">t&uacute; &rarr; opencode &rarr; tu servidor MCP &rarr; datos reales</text>
+              <text x="460" y="190" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#A6192E">todo local por stdio, sin red</text>
+            </svg>
+            <p class="diagram-caption">Diagrama: elaboraci&oacute;n propia.</p>
+          </div>
+
+          <p>Esta actividad <b>vale 10 %</b> (Corte 3, Actividad 2). Entregas el c&oacute;digo con tus 3 herramientas,
+          <b>3 capturas</b> de opencode llamando cada herramienta y <b>un p&aacute;rrafo</b> sobre qu&eacute; pasar&iacute;a sin validaci&oacute;n (Paso 10).
+          Ya tienes opencode instalado y el servicio de pedidos de la Semana 12; no reinstalas nada.</p>
+          <p>La <b>soluci&oacute;n completa no est&aacute; en el repositorio</b>. Aqu&iacute; solo va el esqueleto con <b>una</b> herramienta.
+          Las otras dos las escribes t&uacute; siguiendo el mismo patr&oacute;n.</p>
+        </section>
+
+        <section class="part" id="paso1">
+          <div class="part-head"><span class="part-badge">1</span><h2>Paso 1 &mdash; Verificar Node.js</h2></div>
+          <p>Tu servidor MCP est&aacute; escrito en <b>Node.js</b>, igual que en la Semana 12. No instalas nada nuevo:
+          solo compruebas que Node sigue disponible.</p>
+          <ol class="steps">
+            <li>Abre <b>PowerShell</b>: men&uacute; Inicio, escribe <code class="inline">PowerShell</code> y pulsa Enter.
+            Si ya ten&iacute;as una ventana abierta, ci&eacute;rrala y abre una nueva.</li>
+            <li>Escribe estos dos comandos:
+<pre><code>node --version
+npm --version</code></pre></li>
+          </ol>
+          <p><b>Qu&eacute; debes ver:</b> un n&uacute;mero de versi&oacute;n en cada comando (como en la Figura 1 del Laboratorio 6).
+          Cualquier versi&oacute;n LTS reciente sirve.</p>
+          <p><b>Si no lo ves:</b> cierra PowerShell, &aacute;brelo de nuevo y repite; si sigue igual, mira &ldquo;Problemas comunes&rdquo;.</p>
+        </section>
+
+        <section class="part" id="paso2">
+          <div class="part-head"><span class="part-badge">2</span><h2>Paso 2 &mdash; Descargar el esqueleto y descomprimir</h2></div>
+          <p>Te damos el esqueleto listo: carpeta <code class="inline">mcp-caribemart/</code> con <code class="inline">package.json</code>,
+          <code class="inline">server.js</code> (una herramienta) y <code class="inline">pedidos.json</code>.</p>
+          <ol class="steps">
+            <li><b>Descarga</b> <a href="lab07.zip" download><b>lab07.zip</b></a>.</li>
+            <li>En el Explorador de archivos crea la carpeta <code class="inline">C:\caribe\lab07</code>, haz clic derecho sobre
+            <code class="inline">lab07.zip</code> &rarr; <b>Extraer todo&hellip;</b> y elige <code class="inline">C:\caribe\lab07</code>.
+            Debe quedar <code class="inline">C:\caribe\lab07\mcp-caribemart\server.js</code>.</li>
+            <li>En PowerShell entra a la carpeta:
+<pre><code>cd C:\caribe\lab07\mcp-caribemart</code></pre></li>
+            <li>Comprueba que est&aacute;n los archivos:
+<pre><code>dir</code></pre>
+            Debes ver <code class="inline">server.js</code>, <code class="inline">package.json</code> y <code class="inline">pedidos.json</code>.</li>
+          </ol>
+          <p><b>Qu&eacute; debes ver:</b> la lista con los tres archivos. A&uacute;n <b>no</b> existe <code class="inline">opencode.json</code>: lo crear&aacute;s en el Paso 5.</p>
+          <p><b>Si no lo ves:</b> escribe <code class="inline">dir</code>; los nombres no deben terminar en <code class="inline">.txt</code> (mira &ldquo;Problemas comunes&rdquo;).</p>
+        </section>
+
+        <section class="part" id="paso3">
+          <div class="part-head"><span class="part-badge">3</span><h2>Paso 3 &mdash; Instalar dependencias</h2></div>
+          <p>El esqueleto ya declara sus dos librer&iacute;as en <code class="inline">package.json</code>: el SDK oficial de MCP y <code class="inline">zod</code> para validar.
+          Inst&aacute;lalas localmente:</p>
+<pre><code>npm install</code></pre>
+          <p><b>Qu&eacute; debes ver:</b> mensajes de instalaci&oacute;n sin errores y una carpeta nueva <code class="inline">node_modules</code>.</p>
+          <p><b>Si no lo ves:</b> espera a que termine; si falla por ejecuci&oacute;n de scripts, mira &ldquo;Problemas comunes&rdquo;.</p>
+          <div class="callout note"><b>Nota:</b> no necesitas internet para el servidor en s&iacute;: stdio es local.
+          Solo la instalaci&oacute;n descarga paquetes.</div>
+        </section>
+
+        <section class="part" id="paso4">
+          <div class="part-head"><span class="part-badge">4</span><h2>Paso 4 &mdash; Conocer el esqueleto (una herramienta)</h2></div>
+          <p>Abre <code class="inline">server.js</code> en el Bloc de notas para ver la herramienta que ya funciona.
+          Tambi&eacute;n abre <code class="inline">pedidos.json</code>: all&iacute; est&aacute; el pedido <b>1001</b> (Luis, enviado).</p>
+<pre><code>notepad server.js
+notepad pedidos.json</code></pre>
+          <p>En <code class="inline">server.js</code> busca la l&iacute;nea con <code class="inline">consultar_pedido</code>:
+          recibe <code class="inline">pedidoId</code> (entero positivo validado con zod), lee <code class="inline">pedidos.json</code> y devuelve cliente, estado y total.
+          La &uacute;ltima l&iacute;nea usa <code class="inline">console.error</code> para decir que est&aacute; listo: <b>nunca</b> uses <code class="inline">console.log</code> en un servidor stdio,
+          porque corrompe el protocolo.</p>
+          <p><b>Qu&eacute; debes ver:</b> el c&oacute;digo legible de una sola herramienta. Tu tarea ser&aacute; copiar ese patr&oacute;n para las dos nuevas.</p>
+          <p><b>Si no lo ves:</b> el Bloc de notas es suficiente; no necesitas Visual Studio Code.</p>
+        </section>
+
+
+        <section class="part" id="paso5">
+          <div class="part-head"><span class="part-badge">5</span><h2>Paso 5 &mdash; Registrar el servidor en opencode.json</h2></div>
+          <p>opencode descubre tu servidor desde <b>opencode.json</b> en la carpeta del proyecto.
+          Usa el <b>formato vigente</b> (versión 2): los servidores van bajo <code class="inline">mcp.servers</code>, no directamente bajo <code class="inline">mcp</code>.
+          El ejemplo de Context7 de la Semana 12 usaba otro formato; no lo copies.</p>
+          <ol class="steps">
+            <li>En PowerShell, dentro de <code class="inline">C:\caribe\lab07\mcp-caribemart</code>, crea el archivo:
+<pre><code>notepad opencode.json</code></pre>
+            Responde <b>S&iacute;</b> para crearlo, pega <b>exactamente</b> este contenido y guarda con Ctrl + S:
+<pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "caribemart": {
+        "type": "local",
+        "command": ["node", "server.js"]
+      }
+    }
+  }
+}</code></pre></li>
+          </ol>
+          <p><b>Qu&eacute; debes ver:</b> el archivo guardado sin errores. Detalles clave: el nombre es <code class="inline">caribemart</code>,
+          el tipo es <code class="inline">local</code> (stdio) y el comando es una lista con <code class="inline">node</code> y <code class="inline">server.js</code>.
+          Como opencode arrancar&aacute; en esta misma carpeta, la ruta relativa funciona.</p>
+          <div class="callout warn"><b>No confundir:</b> el formato viejo de la Semana 12 pon&iacute;a los nombres bajo <code class="inline">mcp</code> con <code class="inline">enabled</code>.
+          En versi&oacute;n 2 el camino es <code class="inline">mcp.servers</code> y se usa <code class="inline">disabled</code> (aqu&iacute; lo dejamos en <code class="inline">false</code> por defecto, sin escribir nada).</div>
+          <p><b>Si no lo ves:</b> comprueba que <code class="inline">opencode.json</code> est&aacute; en la misma carpeta que <code class="inline">server.js</code>
+          (no <code class="inline">opencode.json.txt</code>) y que abriste opencode desde esa carpeta.</p>
+        </section>
+
+        <section class="part" id="paso6">
+          <div class="part-head"><span class="part-badge">6</span><h2>Paso 6 &mdash; Verificar la conexi&oacute;n</h2></div>
+          <p>Antes de preguntar nada, comprueba que opencode ve tu servidor:</p>
+<pre><code>opencode mcp list</code></pre>
+          <p><b>Qu&eacute; debes ver:</b> <code class="inline">caribemart</code> como <b>connected</b> (conectado). Si aparece desconectado, para y corrige antes de seguir.</p>
+          <p>Si quieres otra vista, abre opencode y escribe <code class="inline">/mcps</code>:
+          ver&aacute;s el estado y eventuales errores de arranque.</p>
+          <p><b>Si no lo ves:</b> revisa la ruta del comando y que hiciste <code class="inline">npm install</code> (Paso 3). Abre <code class="inline">opencode.json</code> y compara con el Paso 5 letra por letra.</p>
+        </section>
+
+        <section class="part" id="paso7">
+          <div class="part-head"><span class="part-badge">7</span><h2>Paso 7 &mdash; Probar consultar_pedido (capture 1)</h2></div>
+          <p>Arranca opencode <b>dentro</b> de la carpeta del servidor y escribe la pregunta exacta:</p>
+<pre><code>opencode</code></pre>
+<pre><code>¿Cuál es el estado del pedido 1001?</code></pre>
+          <p><b>Qu&eacute; debes ver:</b> una l&iacute;nea con <code class="inline">caribemart_consultar_pedido</code> (la llamada a la herramienta) y luego la respuesta
+          con el dato real: <b>Pedido 1001 de Luis: estado enviado</b>. Esa captura es tu <b>evidencia 1</b>. Gu&aacute;rdala con nombre <code class="inline">evidencia-1-consultar.png</code>.</p>
+          <p>Verifica a mano: abre <code class="inline">pedidos.json</code> y confirma que el 1001 dice <code class="inline">"estado": "enviado"</code>.
+          Si opencode responde sin llamar la herramienta, algo est&aacute; mal: repite el Paso 6.</p>
+          <p><b>Si no lo ves:</b> espera unos segundos; si un modelo Free da error de l&iacute;mite, elige otro con <code class="inline">/models</code> y repite.</p>
+        </section>
+
+        <section class="part" id="paso8">
+          <div class="part-head"><span class="part-badge">8</span><h2>Paso 8 &mdash; Agregar listar_pedidos_por_estado (capture 2)</h2></div>
+          <p>Ahora agregas la primera herramienta propia. Copia el <b>patr&oacute;n exacto</b> de <code class="inline">consultar_pedido</code> en <code class="inline">server.js</code>:</p>
+          <ol class="steps">
+            <li>Cierra opencode escribiendo <code class="inline">/exit</code> (o Ctrl + C dos veces) para editar sin que el servidor est&eacute; en uso.</li>
+            <li>Abre <code class="inline">server.js</code> con <code class="inline">notepad server.js</code> y, <b>despu&eacute;s</b> del bloque de <code class="inline">consultar_pedido</code>, pega este bloque nuevo antes de la l&iacute;nea <code class="inline">StdioServerTransport</code>:</li>
+          </ol>
+<pre><code>// Tarea del estudiante 1: listar pedidos por estado.
+server.tool(
+  "listar_pedidos_por_estado",
+  {
+    estado: z.enum(["pendiente", "enviado", "entregado", "cancelado"]).describe("Estado permitido"),
+  },
+  async ({ estado }) => {
+    const pedidos = await leerPedidos();
+    const filtrados = pedidos.filter((p) => p.estado === estado);
+    if (filtrados.length === 0) {
+      return { content: [{ type: "text", text: "No hay pedidos con estado " + estado }] };
+    }
+    const lineas = filtrados.map((p) => "- Pedido " + p.pedidoId + " de " + p.cliente + ": " + p.estado + ", total " + p.total);
+    const texto = "Pedidos con estado " + estado + " (" + filtrados.length + "):\n" + lineas.join("\n");
+    return { content: [{ type: "text", text: texto }] };
+  }
+);</code></pre>
+          <ol class="steps">
+            <li>Guarda con Ctrl + S, vuelve a ejecutar <code class="inline">npm install</code> (no instala nada nuevo, pero confirma) y comprueba con:
+<pre><code>opencode mcp list</code></pre>
+            <li>Abre opencode y escribe:
+<pre><code>Lista los pedidos pendientes de CaribeMart usando mi herramienta</code></pre>
+          </ol>
+          <p><b>Qu&eacute; debes ver:</b> una l&iacute;nea con <code class="inline">caribemart_listar_pedidos_por_estado</code> y la lista de pendientes
+          (Ana 1002 y Maria 1004, seg&uacute;n tu <code class="inline">pedidos.json</code> inicial). Esa captura es tu <b>evidencia 2</b> (<code class="inline">evidencia-2-listar.png</code>).</p>
+          <div class="callout note"><b>Por qu&eacute; <code class="inline">z.enum</code>:</b> solo acepta los cuatro estados permitidos. Si el modelo inventa otro estado, la llamada se rechaza antes de tocar datos. Cambia el estado a otro valor v&aacute;lido y funciona.</div>
+          <p><b>Si no lo ves:</b> si la herramienta no aparece, revisa que guardaste <code class="inline">server.js</code> y que cerraste opencode antes de editar.</p>
+        </section>
+
+        <section class="part" id="paso9">
+          <div class="part-head"><span class="part-badge">9</span><h2>Paso 9 &mdash; Agregar crear_pedido con validaci&oacute;n (capture 3)</h2></div>
+          <p>La segunda herramienta escribe en la base: exige la validaci&oacute;n m&aacute;s estricta. Cierra opencode y pega este bloque despu&eacute;s de <code class="inline">listar_pedidos_por_estado</code>:</p>
+<pre><code>// Tarea del estudiante 2: crear un pedido con validacion estricta.
+server.tool(
+  "crear_pedido",
+  {
+    cliente: z.string().min(1).max(50).describe("Nombre del cliente, no vacio"),
+    total: z.number().positive().max(10000000).describe("Total en pesos, mayor que 0"),
+    estado: z.enum(["pendiente", "enviado", "entregado", "cancelado"]).default("pendiente").describe("Estado inicial"),
+  },
+  async ({ cliente, total, estado }) => {
+    const nombre = cliente.trim();
+    if (!nombre) {
+      return { content: [{ type: "text", text: "El cliente no puede estar vacio" }], isError: true };
+    }
+    const pedidos = await leerPedidos();
+    const maxId = pedidos.reduce((m, p) => Math.max(m, p.pedidoId), 1000);
+    const nuevo = { pedidoId: maxId + 1, cliente: nombre, total, estado };
+    pedidos.push(nuevo);
+    await guardarPedidos(pedidos);
+    const texto = "Pedido creado: " + nuevo.pedidoId + " de " + nuevo.cliente + ", estado " + nuevo.estado + ", total " + nuevo.total;
+    return { content: [{ type: "text", text: texto }] };
+  }
+);</code></pre>
+          <p>Guarda con Ctrl + S, comprueba <code class="inline">opencode mcp list</code>, abre opencode y escribe:</p>
+<pre><code>Crea un pedido pendiente para Luis con total 50000 usando mi herramienta</code></pre>
+          <p><b>Qu&eacute; debes ver:</b> una l&iacute;nea con <code class="inline">caribemart_crear_pedido</code>, la confirmaci&oacute;n con el n&uacute;mero nuevo (por ejemplo 1005)
+          y el registro guardado en <code class="inline">pedidos.json</code>. Esa captura es tu <b>evidencia 3</b> (<code class="inline">evidencia-3-crear.png</code>).
+          Abre <code class="inline">pedidos.json</code> y confirma que el pedido nuevo est&aacute; al final.</p>
+          <p>Prueba la validaci&oacute;n: pide de nuevo <code class="inline">Crea un pedido con total menos 100</code>.
+          Debes ver el rechazo de zod (<code class="inline">Number must be greater than 0</code>) y <b>ning&uacute;n</b> registro nuevo. Eso demuestra la barrera.</p>
+          <p><b>Si no lo ves:</b> si se guarda un total negativo, revisa que pegaste el bloque completo con <code class="inline">z.number().positive()</code>.</p>
+        </section>
+
+
+        <section class="part" id="paso10">
+          <div class="part-head"><span class="part-badge">10</span><h2>Paso 10 &mdash; Entrega y reflexi&oacute;n (10 %)</h2></div>
+          <p>Entrega <b>3 capturas numeradas</b>, tu <code class="inline">server.js</code> completo y <b>un p&aacute;rrafo</b> de reflexi&oacute;n. Peso <b>10 %</b>.</p>
+          <ul class="checklist">
+            <li><span class="box"></span><span class="text"><b>1. Consultar</b> (Paso 7): <code class="inline">caribemart_consultar_pedido</code> con el 1001 y su estado real.</span></li>
+            <li><span class="box"></span><span class="text"><b>2. Listar</b> (Paso 8): <code class="inline">caribemart_listar_pedidos_por_estado</code> con la lista filtrada.</span></li>
+            <li><span class="box"></span><span class="text"><b>3. Crear</b> (Paso 9): <code class="inline">caribemart_crear_pedido</code> con el n&uacute;mero nuevo y la prueba del rechazo por total negativo.</span></li>
+          </ul>
+          <p><b>C&oacute;mo entregar:</b> crea un repositorio (GitHub o similar) o un <b>.zip</b> con <code class="inline">server.js</code>, <code class="inline">package.json</code>,
+          <code class="inline">pedidos.json</code> y <code class="inline">opencode.json</code> (logra los tres pasos sin errores) m&aacute;s las 3 capturas y el p&aacute;rrafo.
+          No incluyas <code class="inline">node_modules</code> (se recrea con <code class="inline">npm install</code>).</p>
+          <p><b>Reflexi&oacute;n de un p&aacute;rrafo</b> (escrita por ti, m&iacute;nimo 5 l&iacute;neas):</p>
+          <ol class="steps">
+            <li>&iquest;Qu&eacute; pasar&iacute;a si <code class="inline">crear_pedido</code> no validara con zod? Piensa en totales negativos, estados inventados y datos vac&iacute;os.</li>
+          </ol>
+          <p>La rúbrica (0 a 5) est&aacute; resumida abajo. La soluci&oacute;n de referencia <b>no</b> est&aacute; en el repositorio: solo tu trabajo prueban que lo escribiste t&uacute;.</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Criterio</th><th>Puntos</th><th>C&oacute;mo se ve bien</th></tr></thead>
+            <tbody>
+              <tr><td>Funciona en opencode</td><td class="rubric-weight">0-5</td><td><code class="inline">opencode mcp list</code> muestra <code class="inline">caribemart</code> conectado y las 3 llamadas responden con datos reales.</td></tr>
+              <tr><td>Las 2 herramientas nuevas</td><td class="rubric-weight">0-5</td><td><code class="inline">listar_pedidos_por_estado</code> y <code class="inline">crear_pedido</code> existen y se llaman desde opencode.</td></tr>
+              <tr><td>Validaci&oacute;n zod</td><td class="rubric-weight">0-5</td><td>Estados cerrados, cliente no vac&iacute;o, total positivo; un intento inv&aacute;lido se rechaza sin guardar.</td></tr>
+              <tr><td>Evidencias</td><td class="rubric-weight">0-5</td><td>3 capturas legibles, cada una con su llamada y resultado. La 3 muestra tambi&eacute;n el rechazo.</td></tr>
+              <tr><td>Reflexi&oacute;n</td><td class="rubric-weight">0-5</td><td>P&aacute;rrafo propio que explica consecuencias concretas sin validaci&oacute;n, con ejemplo de CaribeMart.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="part" id="problemas">
+          <div class="part-head"><span class="part-badge">?</span><h2>Problemas comunes</h2></div>
+          <p>Si algo falla, busca aqu&iacute; en orden:</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>S&iacute;ntoma</th><th>Qu&eacute; hacer</th></tr></thead>
+            <tbody>
+              <tr><td>PowerShell dice que la ejecuci&oacute;n de scripts est&aacute; deshabilitada (al usar <code class="inline">npm</code>)</td>
+                  <td>Escribe <code class="inline">Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>, responde <b>S</b> y repite el comando.</td></tr>
+              <tr><td><code class="inline">node</code> o <code class="inline">npm</code> &ldquo;no se reconoce como comando&rdquo;</td>
+                  <td>Cierra PowerShell y abre uno nuevo (el PATH se actualiza al abrir). Si persiste, reinstala Node LTS.</td></tr>
+              <tr><td><code class="inline">opencode mcp list</code> no muestra <code class="inline">caribemart</code> o dice desconectado</td>
+                  <td>Est&aacute;s en <code class="inline">C:\caribe\lab07\mcp-caribemart</code> y <code class="inline">npm install</code> termin&oacute;. Revisa <code class="inline">opencode.json</code> del Paso 5.</td></tr>
+              <tr><td>El archivo se guard&oacute; como <code class="inline">server.js.txt</code> u <code class="inline">opencode.json.txt</code></td>
+                  <td>En el Explorador: pesta&ntilde;a Vista &rarr; marca <b>Extensiones de nombre de archivo</b> y c&aacute;mbiale el nombre.</td></tr>
+              <tr><td>El modelo responde sin llamar tu herramienta</td>
+                  <td>Verifica <code class="inline">/mcps</code> dentro de opencode y que el servidor est&aacute; conectado; repite la pregunta exacta del paso.</td></tr>
+              <tr><td>Un modelo Free responde <i>Free usage limit reached</i> (l&iacute;mite)</td>
+                  <td>Espera unos minutos o elige otro modelo Free con <code class="inline">/models</code>.</td></tr>
+              <tr><td>El servidor falla con <code class="inline">console.log</code> o no conecta</td>
+                  <td>Busca <code class="inline">console.log</code> en <code class="inline">server.js</code> y c&aacute;mbialo por <code class="inline">console.error</code>. En stdio, el log normal rompe el protocolo.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section class="part" id="proximo">
+          <div class="part-head"><span class="part-badge">&rarr;</span><h2>Lo que viene</h2></div>
+          <p><b>Semana 14:</b> memoria y recuperaci&oacute;n de informaci&oacute;n (RAG) sobre lo que ya construyeron. Tu servidor MCP bien probado es la base.</p>
+          <p><b>Recordatorio:</b> entrega hasta el <b>domingo 15 de noviembre de 2026, 23:59</b>. Revisa que las 3 capturas muestren la llamada completa, no solo la respuesta.</p>
+        </section>
+      </main>
+
+      <footer class="page foot">
+        <p><strong>Universidad de la Costa (CUC)</strong> &middot; Ingenier&iacute;a de Sistemas &middot; Integraci&oacute;n de Soluciones &middot; 2026-2</p>
+        <p>Docente: Ing. Rodolfo Ca&ntilde;as Cervantes &middot; Semana 13 &middot; Actividad 2 - 10 % &middot; entrega hasta dom 15 nov 2026, 23:59</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      function onScroll() {
+        var h = document.documentElement;
+        bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+        var active = targets[0];
+        for (var i = 0; i < targets.length; i++) if (targets[i].getBoundingClientRect().top <= 120) active = targets[i];
+        links.forEach(function (a) { a.classList.toggle('active', active && a.getAttribute('href') === '#' + active.id); });
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var b = document.createElement('button');
+        b.className = 'copy-btn'; b.type = 'button'; b.textContent = 'copiar';
+        b.onclick = function () {
+          var c = pre.querySelector('code');
+          navigator.clipboard.writeText(c ? c.innerText : pre.innerText);
+          b.textContent = 'copiado'; b.classList.add('copied');
+          setTimeout(function () { b.textContent = 'copiar'; b.classList.remove('copied'); }, 1400);
+        };
+        pre.appendChild(b);
+      });
+      document.querySelectorAll('.checklist li').forEach(function (li) {
+        li.addEventListener('click', function () { li.classList.toggle('done'); });
+      });
+    })();
+  </script>
+</body>
+</html>
