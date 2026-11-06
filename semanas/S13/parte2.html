@@ -1,0 +1,293 @@
+<section data-kicker="Mapa" data-titulo="MCP: el estándar para conectar herramientas" data-sub="Un solo idioma para descubrir herramientas y ejecutarlas en cualquier cliente." data-fuente="Fuente: MCP Introduction [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="50" width="1120" height="120" rx="16" fill="#A6192E"/>
+  <text x="590" y="100" text-anchor="middle" font-size="21" font-weight="700" fill="#fff">MCP: USB-C para la inteligencia artificial</text>
+  <text x="590" y="135" text-anchor="middle" font-size="15" fill="#F3D9DE">conector estándar entre aplicaciones y sistemas</text>
+  <use href="#i-ia" x="80" y="220" width="72" height="72" color="#A6192E"/>
+  <text x="116" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">aplicación IA</text>
+  <rect x="250" y="200" width="300" height="140" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+  <text x="400" y="235" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">PROTOCOLO MCP</text>
+  <text x="400" y="265" text-anchor="middle" font-size="14" fill="#2A2A2A">descubre y ejecuta</text>
+  <text x="400" y="290" text-anchor="middle" font-size="14" fill="#5E5E5E">con el mismo formato</text>
+  <use href="#i-bd" x="760" y="220" width="72" height="72" color="#9C7B16"/>
+  <text x="796" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">sistemas</text>
+  <use href="#i-documento" x="930" y="220" width="72" height="72" color="#2A2A2A"/>
+  <text x="966" y="315" text-anchor="middle" font-size="15" fill="#2A2A2A">datos</text>
+  <line x1="152" y1="256" x2="248" y2="256" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="550" y1="256" x2="758" y2="256" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <line x1="550" y1="280" x2="928" y2="280" stroke="#2A2A2A" stroke-width="3" stroke-dasharray="6 5"/>
+</svg>
+<aside class="narracion">Entramos en el protocolo MCP. La sigla completa es Model Context Protocol, en español protocolo de contexto del modelo. La documentación oficial lo explica con una analogía que retengan. Igual que el puerto USB-C permite conectar cualquier dispositivo, MCP permite conectar cualquier aplicación de inteligencia artificial con cualquier sistema externo. Sin MCP cada cliente inventa su propio conector. Con MCP, el servidor expone herramientas, recursos y prompts con un formato único. En esta parte veremos quiénes participan, qué puede exponer cada servidor y por qué camino viajan los mensajes.Piensen en el beneficio práctico para un equipo pequeño. Sin estándar cada integración cuesta semanas enteras de desarrollo. Con estándar la tienda escribe su servidor una sola vez. Luego lo conecta en opencode o en otro cliente sin reescribir. Ese ahorro se acumula en cada proyecto nuevo de CaribeMart.</aside>
+</section>
+<section data-kicker="Participantes" data-titulo="Tres participantes: host, cliente y servidor" data-sub="El host coordina; el cliente mantiene la conexión; el servidor expone." data-fuente="Fuente: MCP Architecture, Participants [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="40" width="1120" height="130" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="590" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">MCP HOST · LA APLICACIÓN IA</text>
+  <use href="#i-ia" x="80" y="90" width="60" height="60" color="#A6192E"/>
+  
+  
+  <rect x="30" y="200" width="540" height="260" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <text x="300" y="240" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">MCP CLIENT</text>
+  <use href="#i-api" x="275" y="260" width="60" height="60" color="#2A2A2A"/>
+  <text x="300" y="345" text-anchor="middle" font-size="15" fill="#2A2A2A">mantiene una conexión</text>
+  <text x="300" y="370" text-anchor="middle" font-size="14" fill="#5E5E5E">pregunta y obtiene contexto</text>
+  <rect x="610" y="200" width="540" height="260" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="880" y="240" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">MCP SERVER</text>
+  <use href="#i-servidor" x="855" y="260" width="60" height="60" color="#9C7B16"/>
+  <text x="880" y="345" text-anchor="middle" font-size="15" fill="#2A2A2A">provee contexto</text>
+  <text x="880" y="370" text-anchor="middle" font-size="14" fill="#5E5E5E">herramientas, recursos y prompts</text>
+  <line x1="570" y1="330" x2="608" y2="330" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
+</svg>
+<aside class="narracion">La arquitectura de MCP es cliente servidor, pero con nombres precisos. El anfitrión, host en inglés, es la aplicación de inteligencia artificial que coordina todo. Ejemplos reales son opencode o Visual Studio Code. Por cada servidor que conecta, el anfitrión crea un cliente MCP. Ese cliente mantiene una conexión dedicada con su servidor. El servidor MCP es el programa que provee el contexto. Puede vivir en la misma computadora por stdio o en un servicio remoto por HTTP. Un solo anfitrión puede tener varios clientes y cada uno habla con un servidor distinto.Esa distinción evita errores frecuentes de diseño. El anfitrión no ejecuta la herramienta y el servidor no decide solo. Cada uno protege su responsabilidad con registros claros. Cuando algo falla, saben exactamente dónde mirar. Esa claridad es esencial para depurar con rapidez en el laboratorio.</aside>
+</section>
+<section data-kicker="Servidor" data-titulo="El servidor expone tres primitivas" data-sub="Herramientas para actuar, recursos para leer y prompts para guiar." data-fuente="Fuente: MCP Server concepts, Core Features [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="420" y="30" width="340" height="110" rx="14" fill="#A6192E"/>
+  <use href="#i-servidor" x="445" y="55" width="56" height="56" color="#fff"/>
+  <text x="515" y="80" font-size="17" font-weight="700" fill="#fff">SERVIDOR MCP</text>
+  <text x="515" y="105" font-size="14" fill="#F3D9DE">provee tres tipos</text>
+  <line x1="590" y1="140" x2="200" y2="210" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+  <line x1="590" y1="140" x2="590" y2="210" stroke="#2A2A2A" stroke-width="3" marker-end="url(#fl-negro)"/>
+  <line x1="590" y1="140" x2="980" y2="210" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  <rect x="40" y="212" width="320" height="230" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-funcion" x="160" y="235" width="60" height="60" color="#A6192E"/>
+  <text x="200" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">HERRAMIENTAS</text>
+  <text x="200" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">ejecutables</text>
+  <rect x="430" y="212" width="320" height="230" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-documento" x="550" y="235" width="60" height="60" color="#2A2A2A"/>
+  <text x="590" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">RECURSOS</text>
+  <text x="590" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">solo lectura</text>
+  <rect x="820" y="212" width="320" height="230" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-pregunta" x="940" y="235" width="60" height="60" color="#9C7B16"/>
+  <text x="980" y="320" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">PROMPTS</text>
+  <text x="980" y="348" text-anchor="middle" font-size="14" fill="#2A2A2A">plantillas guiadas</text>
+</svg>
+<aside class="narracion">Todo servidor MCP ofrece tres primitivas y deben distinguirlas con total claridad. Las herramientas son funciones ejecutables que el modelo puede invocar para actuar, por ejemplo consultar un pedido o crear uno. Los recursos son fuentes de datos de solo lectura, como el contenido de un archivo o el esquema de la base de datos. Los prompts son plantillas reutilizables que guían el trabajo, por ejemplo un resumen de pedidos pendientes. Cada primitiva se descubre con su propia lista y se usa con su propio método. Confundirlas lleva a diseñar mal la seguridad.En la práctica diseñarán primero herramientas para actuar en CaribeMart. Los recursos y prompts completarán después el contexto. Esa prioridad evita sobreconstruir datos pasivos sin uso real. Empiecen por la acción que el estudiante necesita hoy. El resto evoluciona con evidencia de uso.</aside>
+</section>
+<section data-kicker="Herramientas" data-titulo="Herramientas MCP: actúa el modelo" data-sub="El modelo descubre y elige; la aplicación puede pedir aprobación." data-fuente="Fuente: MCP Server concepts, Tools [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="50" width="340" height="380" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-ia" x="150" y="80" width="64" height="64" color="#A6192E"/>
+  <text x="210" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">EL MODELO</text>
+  <text x="210" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">descubre y elige</text>
+  <text x="210" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">control del modelo</text>
+  <line x1="380" y1="200" x2="468" y2="200" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
+  <text x="424" y="185" text-anchor="middle" font-size="14" fill="#A6192E">invoca</text>
+  <rect x="470" y="50" width="330" height="380" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-funcion" x="580" y="80" width="64" height="64" color="#2A2A2A"/>
+  <text x="635" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#2A2A2A">LA HERRAMIENTA</text>
+  <text x="635" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">ejecuta una acción</text>
+  <text x="635" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">escribe o consulta</text>
+  <line x1="800" y1="200" x2="858" y2="200" stroke="#2E7D4F" stroke-width="4" marker-end="url(#fl-verde)"/>
+  <rect x="860" y="50" width="280" height="380" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-candado" x="945" y="80" width="64" height="64" color="#9C7B16"/>
+  <text x="1000" y="175" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">APROBACIÓN</text>
+  <text x="1000" y="205" text-anchor="middle" font-size="15" fill="#2A2A2A">puede exigir permiso</text>
+  <text x="1000" y="230" text-anchor="middle" font-size="14" fill="#5E5E5E">control humano</text>
+</svg>
+<aside class="narracion">Detallamos las herramientas MCP. Son la primitiva más poderosa porque permiten escribir en bases de datos, llamar servicios y modificar archivos. El modelo las descubre con el método tools list y las ejecuta con tools call. La documentación insiste en que son controladas por el modelo, pero eso no significa control total. La aplicación anfitriona puede mostrar las herramientas disponibles, pedir aprobación antes de ejecutar y registrar cada llamada. Para CaribeMart esto significa que crear pedido exigirá confirmación, mientras que consultar pedido podrá ser automático. El grado de permiso se diseña herramienta por herramienta.La aprobación no debe ser un obstáculo ciego para todo. Lean bien cada herramienta y clasifiquen su riesgo real. Una consulta de lectura puede aprobarse sola sin fricción. Una escritura que crea pedidos siempre pide tu visto bueno. Esa calibración mantiene la ayuda rápida sin perder control.</aside>
+</section>
+<section data-kicker="Recursos" data-titulo="Recursos MCP: datos para leer" data-sub="Identificados por URI con tipo MIME; la aplicación decide cómo usarlos." data-fuente="Fuente: MCP Server concepts, Resources [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="60" width="500" height="120" rx="12" fill="#211D18"/>
+  <text x="70" y="100" font-family="Roboto Mono, monospace" font-size="15" fill="#D4AF37">pedidos://esquema</text>
+  <text x="70" y="130" font-family="Roboto Mono, monospace" font-size="14" fill="#fff">application/json · solo lectura</text>
+  <rect x="40" y="220" width="500" height="120" rx="12" fill="#F4F4F4" stroke="#9b9b9b" stroke-width="2"/>
+  <text x="70" y="260" font-family="Roboto Mono, monospace" font-size="15" fill="#2A2A2A">archivo://docs/politica.txt</text>
+  <text x="70" y="290" font-family="Roboto Mono, monospace" font-size="14" fill="#5E5E5E">text/plain · contexto</text>
+  <rect x="620" y="60" width="520" height="280" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-documento" x="650" y="90" width="60" height="60" color="#A6192E"/>
+  <text x="725" y="115" font-size="16" font-weight="700" fill="#A6192E">LA APLICACIÓN DECIDE</text>
+  <text x="725" y="142" font-size="15" fill="#2A2A2A">qué contexto pasa al modelo</text>
+  
+  
+  
+  <rect x="620" y="370" width="520" height="80" rx="12" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
+  <use href="#i-check" x="645" y="385" width="48" height="48" color="#2E7D4F"/>
+  <text x="705" y="408" font-size="15" fill="#2A2A2A">Leer no cambia la base</text>
+</svg>
+<aside class="narracion">Los recursos son el contraste perfecto con las herramientas. Mientras las herramientas actúan, los recursos solo informan. Cada recurso tiene un identificador único llamado URI, por ejemplo pedidos esquema, y declara su tipo MIME. La aplicación anfitriona decide cómo usarlos. Puede pasar todo el contenido al modelo, buscar un fragmento relevante o mostrar una vista previa al usuario. La clave es que el modelo no los invoca por sí solo. La aplicación los recupera y los ofrece como contexto. Para CaribeMart, el esquema de pedidos y la política de devoluciones serían recursos típicos.Esa flexibilidad de la aplicación evita depender del modelo para cada lectura. Ustedes eligen qué contexto pasa y en qué momento. Si el recurso es grande, seleccionan solo el fragmento útil. Así controlan costos de tokens y latencia. La aplicación siempre decide la dieta de información del modelo.</aside>
+</section>
+<section data-kicker="Prompts" data-titulo="Prompts MCP: plantillas que guía el usuario" data-sub="El usuario elige la plantilla; el sistema llena sus argumentos." data-fuente="Fuente: MCP Server concepts, Prompts [cite:3] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="60" y="50" width="1060" height="110" rx="14" fill="#211D18"/>
+  <text x="90" y="95" font-family="Roboto Mono, monospace" font-size="16" fill="#D4AF37">/pedidos-resumen estado=pendiente</text>
+  <text x="90" y="125" font-family="Roboto Mono, monospace" font-size="14" fill="#fff">comando del usuario</text>
+  <rect x="60" y="210" width="500" height="230" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-usuario" x="90" y="240" width="60" height="60" color="#A6192E"/>
+  <text x="165" y="265" font-size="16" font-weight="700" fill="#A6192E">USUARIO</text>
+  <text x="165" y="290" font-size="15" fill="#2A2A2A">elige la plantilla</text>
+  <text x="165" y="315" font-size="14" fill="#5E5E5E">control del usuario</text>
+  <rect x="620" y="210" width="500" height="230" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <use href="#i-documento" x="650" y="240" width="60" height="60" color="#9C7B16"/>
+  <text x="725" y="265" font-size="16" font-weight="700" fill="#9C7B16">PLANTILLA</text>
+  <text x="725" y="290" font-size="15" fill="#2A2A2A">instrucción lista para usar</text>
+  <text x="725" y="315" font-size="14" fill="#5E5E5E">guía herramientas juntas</text>
+  <line x1="560" y1="325" x2="618" y2="325" stroke="#A6192E" stroke-width="3" marker-end="url(#fl-vino)"/>
+</svg>
+<aside class="narracion">Los prompts completan el trío. Son plantillas reutilizables que el servidor publica para guiar una tarea completa. A diferencia de las herramientas, nadie los dispara automáticamente. El usuario los elige explícitamente, muchas veces con una barra diagonal en opencode. Al elegirlos, entrega los argumentos y el servidor devuelve la instrucción estructurada que combina herramientas y recursos. Piensen en un prompt de resumen de pedidos pendientes. Esa plantilla indicaría qué herramienta llamar y cómo redactar la salida. Los prompts dan consistencia a los flujos repetidos en CaribeMart.La plantilla también documenta el flujo esperado para nuevos compañeros. Quien lee el prompt entiende qué herramientas combina y en qué orden. Esa trazabilidad ayuda a mantener soporte durante meses. No dejen prompts escondidos sin descripción clara en el servidor.</aside>
+</section>
+<section data-kicker="Protocolo" data-titulo="El ciclo MCP en tres intercambios" data-sub="Descubrir, listar herramientas y llamar una con datos claros." data-fuente="Fuente: MCP Architecture, Data Layer [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="20" y="130" width="260" height="200" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+  <text x="150" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">1 · DESCUBRIR</text>
+  <use href="#i-ojo" x="125" y="190" width="52" height="52" color="#A6192E"/>
+  <text x="150" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">qué sabe hacer</text>
+  <line x1="280" y1="230" x2="348" y2="230" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
+  <rect x="350" y="130" width="260" height="200" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <text x="480" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#2A2A2A">2 · LISTAR</text>
+  <use href="#i-registro" x="455" y="190" width="52" height="52" color="#2A2A2A"/>
+  <text x="480" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">tools list</text>
+  <line x1="610" y1="230" x2="678" y2="230" stroke="#2A2A2A" stroke-width="4" marker-end="url(#fl-negro)"/>
+  <rect x="680" y="130" width="280" height="200" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <text x="820" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#9C7B16">3 · LLAMAR</text>
+  <use href="#i-funcion" x="795" y="190" width="52" height="52" color="#9C7B16"/>
+  <text x="820" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">tools call</text>
+  <rect x="990" y="130" width="170" height="200" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
+  <text x="1075" y="170" text-anchor="middle" font-size="17" font-weight="700" fill="#2E7D4F">RESULTADO</text>
+  <use href="#i-check" x="1050" y="190" width="52" height="52" color="#2E7D4F"/>
+  <text x="1075" y="270" text-anchor="middle" font-size="14" fill="#2A2A2A">dato verificable</text>
+  
+</svg>
+<aside class="narracion">El protocolo organiza el trabajo en intercambios muy claros. Primero el cliente descubre qué versiones y capacidades soporta el servidor. Segundo lista las herramientas disponibles con su nombre, descripción y esquema de entrada. Tercero llama una herramienta concreta con sus argumentos y recibe el resultado. Todo mensaje usa JSON RPC, es decir, un objeto JSON con versión, método y resultado. Esa uniformidad permite que cualquier cliente hable con cualquier servidor. Fíjense que el descubrimiento elimina sorpresas. Nadie debe intentar una herramienta que el servidor no anunció.Las versiones importan para no romper clientes actuales. El cliente y el servidor negocian qué revisión hablan. Si uno no entiende la versión del otro, falla con claridad. Esa regla evita mensajes silenciosos que nadie sabe interpretar. En el laboratorio verán esa negociación en los registros del inspector.</aside>
+</section>
+<section data-kicker="Transporte" data-titulo="Transporte stdio: tubería local" data-sub="Entre procesos de la misma máquina, sin red y sin latencia extra." data-fuente="Fuente: MCP Architecture, Stdio transport [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="60" width="340" height="340" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="210" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">OPENCODE</text>
+  <use href="#i-laptop" x="180" y="120" width="64" height="64" color="#A6192E"/>
+  <text x="210" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">cliente MCP</text>
+  <rect x="800" y="60" width="340" height="340" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2"/>
+  <text x="970" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">SERVIDOR NODE</text>
+  <use href="#i-servidor" x="940" y="120" width="64" height="64" color="#9C7B16"/>
+  <text x="970" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">server.js local</text>
+  <line x1="380" y1="180" x2="440" y2="180" stroke="#A6192E" stroke-width="4" marker-end="url(#fl-vino)"/>
+  <line x1="560" y1="180" x2="740" y2="180" stroke="#2A2A2A" stroke-width="4" marker-end="url(#fl-negro)"/>
+  <line x1="740" y1="180" x2="800" y2="180" stroke="#9C7B16" stroke-width="4" marker-end="url(#fl-dorado)"/>
+  <rect x="440" y="220" width="300" height="90" rx="12" fill="#211D18"/>
+  <text x="590" y="250" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" fill="#D4AF37">STDIN y STDOUT</text>
+  <text x="590" y="275" text-anchor="middle" font-size="14" fill="#fff">tubería local</text>
+  <text x="590" y="380" text-anchor="middle" font-size="15" fill="#5E5E5E">Sin servidor web ni puerto abierto</text>
+</svg>
+<aside class="narracion">El transporte stdio es el más simple y el que usarán en el laboratorio. Usa la entrada y salida estándar entre dos procesos de la misma máquina. Opencode inicia el programa Node y los mensajes JSON fluyen por una tubería interna. No hay red, no hay puerto abierto ni autenticación complicada. La documentación advierte una regla crítica. Nunca escriban mensajes normales por la salida estándar del servidor porque corrompen el protocolo. Todos los registros deben ir por la salida de error. Por eso en Node usaremos console error y jamás console log para mensajes del servidor.La simplicidad de stdio reduce superficie de ataque en clase. No hay puertos abiertos ni claves en la red local. El único riesgo es el archivo en disco, que ustedes controlan. Por eso el laboratorio exige stdio y no un servidor web. Aprendan lo esencial antes de escalar a remoto.</aside>
+</section>
+<section data-kicker="Transporte" data-titulo="Transporte HTTP: para servidores remotos" data-sub="Streamable HTTP con autenticación estándar para muchas conexiones." data-fuente="MCP = Model Context Protocol · HTTP = Hypertext Transfer Protocol. Fuente: MCP Architecture [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="60" width="340" height="300" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="200" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">CLIENTES VARIOS</text>
+  <use href="#i-equipo" x="170" y="120" width="64" height="64" color="#A6192E"/>
+  <text x="200" y="210" text-anchor="middle" font-size="14" fill="#2A2A2A">muchas conexiones</text>
+  <rect x="470" y="60" width="240" height="300" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-internet" x="550" y="120" width="80" height="80" color="#2A2A2A"/>
+  <text x="590" y="230" text-anchor="middle" font-size="15" fill="#2A2A2A">INTERNET</text>
+  <text x="590" y="255" text-anchor="middle" font-size="14" fill="#5E5E5E">HTTP cifrado</text>
+  <rect x="810" y="60" width="340" height="300" rx="14" fill="#211D18"/>
+  <use href="#i-servidor" x="940" y="120" width="64" height="64" color="#D4AF37"/>
+  <text x="970" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="#D4AF37">SERVIDOR REMOTO</text>
+  <text x="970" y="240" text-anchor="middle" font-size="14" fill="#fff">OAuth y claves</text>
+  <line x1="370" y1="210" x2="468" y2="210" stroke="#2A2A2A" stroke-width="3" marker-end="url(#fl-negro)"/>
+  <line x1="710" y1="210" x2="808" y2="210" stroke="#9C7B16" stroke-width="3" marker-end="url(#fl-dorado)"/>
+  
+</svg>
+<aside class="narracion">El segundo transporte es Streamable HTTP, diseñado para servidores remotos. Permite que muchos clientes se conecten al mismo servidor por internet usando HTTP cifrado. La especificación recomienda OAuth para obtener tokens de autenticación. Context7, que conectamos en la semana doce, es un ejemplo real de servidor remoto. Comparen con stdio. Stdio es local y simple. HTTP es remoto y escalable. Los mensajes JSON RPC son los mismos en ambos casos. Solo cambia el canal. Para CaribeMart empezaremos en local con stdio y dejaremos el diseño remoto para producción.En producción el transporte remoto exige credenciales y registros sólidos. Un token filtrado puede exponer todas las herramientas del servidor. Por eso OAuth y claves rotadas son obligatorios fuera del laboratorio. No expongan un servidor stdio como si fuera remoto sin adaptarlo. Cada transporte tiene su propio nivel de exigencia.</aside>
+</section>
+<section data-kicker="Comparación" data-titulo="MCP frente a una API REST" data-sub="REST expone recursos; MCP expone herramientas para que el modelo actúe." data-fuente="API = Application Programming Interface · REST = Representational State Transfer. Fuente: MCP Architecture [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="40" width="540" height="420" rx="14" fill="#F4F4F4" stroke="#9b9b9b" stroke-width="2"/>
+  <text x="300" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#555">API REST CLÁSICA</text>
+  <use href="#i-api" x="270" y="95" width="56" height="56" color="#555"/>
+  <text x="300" y="180" text-anchor="middle" font-size="15" fill="#2A2A2A">GET pedidos</text>
+  <text x="300" y="210" text-anchor="middle" font-size="15" fill="#2A2A2A">POST pedidos</text>
+  <text x="300" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">La aplicación decide</text>
+  <rect x="610" y="40" width="540" height="420" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <text x="880" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#A6192E">MCP PARA IA</text>
+  <use href="#i-funcion" x="850" y="95" width="56" height="56" color="#A6192E"/>
+  <text x="880" y="180" text-anchor="middle" font-size="15" fill="#2A2A2A">tools list y tools call</text>
+  <text x="880" y="210" text-anchor="middle" font-size="15" fill="#2A2A2A">tools call con argumentos</text>
+  <text x="880" y="250" text-anchor="middle" font-size="14" fill="#5E5E5E">El modelo elige</text>
+</svg>
+<aside class="narracion">No confundan una interfaz de programación de aplicaciones REST con MCP. REST expone recursos del servidor, como el pedido número mil uno, y la aplicación decide cuándo pedirlos. MCP expone herramientas con esquemas que el modelo lee y elige en el momento adecuado. REST habla de recursos. MCP habla de acciones para el modelo. Ambos usan JSON y HTTP o tuberías, pero su intención es distinta. REST conecta programas entre sí. MCP conecta un modelo con capacidades reales. En CaribeMart ustedes seguiremos usando REST para el servicio de pedidos y MCP encima para exponerlo a opencode.La coexistencia es normal en sistemas reales bien diseñados. El servicio de pedidos seguirá hablando REST con otros sistemas. Encima expondrán un servidor MCP para opencode. Así cada cliente usa el idioma que necesita sin romper lo existente. Esa arquitectura por capas protege la inversión ya hecha en CaribeMart.</aside>
+</section>
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿herramienta, recurso o prompt?" data-sub="Clasifiquen tres tareas de CaribeMart según su primitiva correcta." data-fuente="Ejercicio de elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="40" width="1100" height="110" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2.5" stroke-dasharray="10 6"/>
+  <use href="#i-pregunta" x="70" y="60" width="60" height="60" color="#9C7B16"/>
+  <text x="150" y="85" font-size="16" font-weight="700" fill="#9C7B16">PAUSA Y CLASIFICA</text>
+  <text x="150" y="115" font-size="14" fill="#2A2A2A">¿Qué primitiva usarías en cada caso?</text>
+  <rect x="40" y="190" width="340" height="260" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-documento" x="160" y="215" width="56" height="56" color="#A6192E"/>
+  <text x="200" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">A · LEER ESQUEMA</text>
+  
+  <rect x="420" y="190" width="340" height="260" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-funcion" x="540" y="215" width="56" height="56" color="#2A2A2A"/>
+  <text x="590" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#2A2A2A">B · CREAR PEDIDO</text>
+  
+  <rect x="800" y="190" width="340" height="260" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-pregunta" x="920" y="215" width="56" height="56" color="#9C7B16"/>
+  <text x="980" y="295" text-anchor="middle" font-size="15" font-weight="700" fill="#9C7B16">C · RESUMEN GUÍA</text>
+  <text x="980" y="325" text-anchor="middle" font-size="14" fill="#2A2A2A">plantilla repetible</text>
+</svg>
+<aside class="narracion">Segundo mini reto. Pausen el video y clasifiquen tres tareas de CaribeMart. Caso A, leer el esquema de pedidos sin cambiar nada. Caso B, crear un pedido nuevo que escribe en la base. Caso C, un resumen guiado de pendientes que siempre sigue los mismos pasos. Fin de la pausa. La respuesta es recurso para A, herramienta para B y prompt para C. Fíjense que el criterio no es la dificultad. Es la naturaleza de la acción. Leer es recurso, actuar es herramienta y guiar es prompt. Si clasificaron así, van por buen camino.Esa clasificación se practica en cada diseño nuevo que hagan. Antes de escribir código, pregunten si leen, actúan o guían. La respuesta define la primitiva correcta y su control. Si dudan, elijan la opción más leída y menos potente. La prudencia inicial evita incidentes costosos después.</aside>
+</section>
+<section data-kicker="Ecosistema" data-titulo="Context7 y el ecosistema MCP" data-sub="Servidores reales que ya usan este estándar en desarrollo." data-fuente="Fuente: MCP Introduction, gran ecosistema [cite:1] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="40" width="1120" height="120" rx="14" fill="#A6192E"/>
+  <text x="590" y="90" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">ECOSISTEMA MCP EN 2026</text>
+  <text x="590" y="120" text-anchor="middle" font-size="14" fill="#F3D9DE">Escribir una vez, integrar en muchos clientes</text>
+  <rect x="40" y="200" width="350" height="250" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-documento" x="160" y="225" width="60" height="60" color="#A6192E"/>
+  <text x="215" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">CONTEXT7</text>
+  <text x="215" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">documentación viva</text>
+  
+  <rect x="415" y="200" width="350" height="250" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-documento" x="540" y="225" width="60" height="60" color="#2A2A2A"/>
+  <text x="590" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#2A2A2A">ARCHIVOS</text>
+  <text x="590" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">acceso a archivos</text>
+  
+  <rect x="790" y="200" width="350" height="250" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-alerta" x="910" y="225" width="60" height="60" color="#9C7B16"/>
+  <text x="965" y="310" text-anchor="middle" font-size="16" font-weight="700" fill="#9C7B16">SENTRY</text>
+  <text x="965" y="338" text-anchor="middle" font-size="14" fill="#2A2A2A">errores y monitoreo</text>
+  <text x="965" y="363" text-anchor="middle" font-size="14" fill="#5E5E5E">servidor remoto</text>
+</svg>
+<aside class="narracion">Context7 no es un juguete. La documentación oficial describe un ecosistema amplio con clientes como Claude, ChatGPT, Visual Studio Code y herramientas de desarrollo que ya soportan MCP. Eso significa que un servidor bien escrito funciona en muchos lugares sin cambios. Los ejemplos oficiales incluyen servidores de archivos, bases de datos y monitoreo como Sentry. La lección para ustedes es clara. Si aprenden a construir un servidor MCP correcto, ganan una habilidad portable. No dependen de una sola aplicación ni de un solo proveedor. Esa portabilidad es el valor real del estándar.La lista de clientes compatibles sigue creciendo cada mes. Eso valida la apuesta por un estándar abierto y documentado. Su servidor de hoy funcionará con clientes futuros sin cambios. Esa longevidad es un argumento fuerte para invertir tiempo en aprender. No gasten esfuerzo en conectores desechables de un solo producto.</aside>
+</section>
+<section data-kicker="Protocolo" data-titulo="JSON RPC: el sobre de cada mensaje" data-sub="Versión, método y resultado en un objeto JSON uniforme." data-fuente="JSON RPC = JavaScript Object Notation Remote Procedure Call. Fuente: JSON RPC 2.0 [cite:10] y MCP [cite:2] · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="40" y="40" width="540" height="360" rx="14" fill="#211D18"/>
+  <text x="70" y="80" font-family="Roboto Mono, monospace" font-size="14" fill="#D4AF37">PETICIÓN</text>
+  <text x="70" y="115" font-family="Roboto Mono, monospace" font-size="15" fill="#fff">jsonrpc version 2.0</text>
+  <text x="70" y="145" font-family="Roboto Mono, monospace" font-size="15" fill="#fff">method tools call</text>
+  <text x="70" y="175" font-family="Roboto Mono, monospace" font-size="15" fill="#7CC48D">params con argumentos</text>
+  <text x="70" y="215" font-family="Roboto Mono, monospace" font-size="14" fill="#8a8a8a">id interno para correlación</text>
+  <rect x="620" y="40" width="520" height="360" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-documento" x="650" y="70" width="60" height="60" color="#A6192E"/>
+  <text x="725" y="95" font-size="16" font-weight="700" fill="#A6192E">RESPUESTA</text>
+  <text x="650" y="150" font-size="15" fill="#2A2A2A">result real</text>
+  <text x="650" y="180" font-size="15" fill="#2A2A2A">o error con código claro</text>
+  <text x="650" y="220" font-size="14" fill="#5E5E5E">mismo identificador</text>
+  
+</svg>
+<aside class="narracion"> Todo mensaje MCP viaja en un sobre JSON RPC con tres piezas obligatorias. La versión del protocolo, el nombre del método y los parámetros enviados. La respuesta copia el identificador original y trae el resultado o un error con código claro. Esa disciplina permite correlacionar cada petición con su respuesta sin ninguna ambigüedad. Las notificaciones son mensajes sin respuesta esperada, por ejemplo un aviso de lista cambiada. Fíjense en la utilidad práctica para depurar. Cuando revisen registros, leerán esos tres campos y sabrán si falló el método, los parámetros o el servidor. Esa claridad ahorra horas de adivinación en el laboratorio. Piensen además en la compatibilidad entre versiones diferentes. Si el cliente habla una revisión vieja y el servidor una nueva, el sobre lo revela con claridad. Esa negociación ordenada evita conexiones a medias que nadie entiende. En la próxima parte verán esos mensajes en el inspector al probar. </aside>
+</section>
+<section data-kicker="Síntesis" data-titulo="La Parte 2 en cuatro ideas maestras" data-sub="Participantes, primitivas, protocolo y transportes." data-fuente="Síntesis de la Parte 2 · Diagrama: elaboración propia">
+<svg viewBox="0 0 1180 500">
+  <rect x="30" y="30" width="550" height="210" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/>
+  <use href="#i-ia" x="60" y="55" width="56" height="56" color="#A6192E"/>
+  <text x="130" y="80" font-size="16" font-weight="700" fill="#A6192E">HOST, CLIENTE, SERVIDOR</text>
+  
+  <rect x="600" y="30" width="550" height="210" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+  <use href="#i-funcion" x="630" y="55" width="56" height="56" color="#2A2A2A"/>
+  <text x="700" y="80" font-size="16" font-weight="700" fill="#2A2A2A">TRES PRIMITIVAS CLARAS</text>
+  
+  <rect x="30" y="270" width="550" height="210" rx="14" fill="#FBF6E7" stroke="#D4AF37" stroke-width="2"/>
+  <use href="#i-documento" x="60" y="295" width="56" height="56" color="#9C7B16"/>
+  <text x="130" y="320" font-size="16" font-weight="700" fill="#9C7B16">JSON RPC SIEMPRE</text>
+  
+  <rect x="600" y="270" width="550" height="210" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
+  <use href="#i-laptop" x="630" y="295" width="56" height="56" color="#2E7D4F"/>
+  <text x="700" y="320" font-size="16" font-weight="700" fill="#2E7D4F">STDIO LOCAL O HTTP</text>
+  
+</svg>
+<aside class="narracion">Cerramos la parte dos con el mapa completo. Host, cliente y servidor reparten responsabilidades sin ambigüedad. Las tres primitivas se diseñan por separado. Herramientas para actuar, recursos para leer y prompts para guiar. El protocolo usa JSON RPC para descubrir, listar y llamar. Y el transporte puede ser stdio local o HTTP remoto sin cambiar los mensajes. Si pueden explicar eso con un ejemplo de CaribeMart y con Context7, tienen dominio del estándar. En la siguiente parte escribiremos nuestro propio servidor MCP.Con ese mapa entran preparados a la siguiente parte. Allí convertirán la teoría en un servidor que responde de verdad. Cada concepto de hoy reaparecerá en comandos y archivos. Mantengan el ejemplo del pedido mil uno a la mano. La teoría sin código se olvida rápido y la práctica la fija.</aside>
+</section>

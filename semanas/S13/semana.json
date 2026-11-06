@@ -1,0 +1,84 @@
+{
+  "semana": 13,
+  "etiqueta_semana": "Semana 13",
+  "archivo": "2026-2-S13-integracion-soluciones-function-calling-mcp",
+  "titulo": "Integrar la IA con herramientas: function calling y MCP",
+  "unidad": "Unidad 3",
+  "subtitulo": "Por qué el modelo necesita herramientas, cómo habla MCP y cómo construir uno propio para CaribeMart en opencode",
+  "narracion_portada": "Bienvenidos a la semana trece de Integración de Soluciones para Plataformas Cloud. En la Unidad tres ya aprendimos que la inteligencia artificial es un servicio que se consume por interfaz de programación de aplicaciones. Hoy damos el paso decisivo. Veremos por qué un modelo necesita herramientas externas, qué es la llamada a funciones y cómo el protocolo MCP conecta esas herramientas de forma estándar. Lo construiremos para CaribeMart y lo probaremos en opencode con control humano en cada paso.",
+  "partes": [
+    {
+      "titulo": "Por qué el modelo necesita herramientas",
+      "resumen": "El modelo solo devuelve texto; para consultar y actuar necesita herramientas que la aplicación ejecuta.",
+      "narracion": "Parte uno. Por qué el modelo necesita herramientas. En la semana anterior dejamos al modelo en su límite. Recibe texto y devuelve texto, pero no puede consultar en vivo el estado de un pedido ni crear uno nuevo. En esta parte definimos la llamada a funciones. El modelo propone una herramienta con nombre y argumentos, la aplicación la ejecuta y le devuelve el resultado para que responda con datos reales."
+    },
+    {
+      "titulo": "MCP: el estándar para conectar herramientas",
+      "resumen": "Cliente, servidor, herramientas, recursos y prompts sobre JSON RPC con transporte stdio o HTTP.",
+      "narracion": "Parte dos. MCP, el estándar para conectar herramientas. La llamada a funciones necesita un idioma común para descubrir herramientas, ejecutarlas y notificar cambios. Ese idioma es el protocolo MCP. Veremos sus tres participantes, sus tres primitivas, el intercambio por JSON RPC y los dos transportes. Compararemos con una interfaz de programación de aplicaciones REST clásica y resolveremos el segundo mini reto."
+    },
+    {
+      "titulo": "Construir un servidor MCP para CaribeMart",
+      "resumen": "Servidor en Node con zod, registro en opencode y flujo completo de una petición real.",
+      "narracion": "Parte tres. Construir un servidor MCP para CaribeMart. En esta parte bajamos a código. Creamos un servidor MCP en Node con validación zod, lo registramos en opencode con su formato vigente y recorremos el flujo completo de la pregunta sobre el pedido número mil uno. Fíjense en cada comando y en qué debe verse en pantalla. Esto es exactamente lo que harán en la actividad evaluada."
+    },
+    {
+      "titulo": "Riesgos, buenas prácticas y actividad",
+      "resumen": "Permisos mínimos, validación, confirmación humana, inyección por herramientas y la actividad del curso.",
+      "narracion": "Parte cuatro. Riesgos, buenas prácticas y actividad. Toda herramienta es poder. Un modelo que puede escribir en la base de datos puede causar daño si alguien lo manipula. Veremos permisos mínimos, validación de entradas, confirmación humana e inyección de instrucciones a través de herramientas. Cerramos con el marco colombiano, la pregunta abierta y la explicación completa de la actividad evaluada."
+    }
+  ],
+  "narracion_fuentes": "En esta diapositiva final quedan las referencias oficiales consultadas para construir la semana. Si quieren verificar un dato, abran el enlace y compárenlo con lo dicho en clase.",
+  "fuentes": [
+    {
+      "n": 1,
+      "ref": "Model Context Protocol (MCP), «What is the Model Context Protocol», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
+      "url": "https://modelcontextprotocol.io/introduction"
+    },
+    {
+      "n": 2,
+      "ref": "Model Context Protocol (MCP), «Architecture overview: Host, Client, Server, JSON RPC and transports», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture"
+    },
+    {
+      "n": 3,
+      "ref": "Model Context Protocol (MCP), «Understanding MCP servers: Tools, Resources and Prompts», modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts"
+    },
+    {
+      "n": 4,
+      "ref": "Model Context Protocol (MCP), «Build an MCP server» guía TypeScript con Node y stdio, modelcontextprotocol.io (consultado 6 de noviembre de 2026)",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server"
+    },
+    {
+      "n": 5,
+      "ref": "npm, «@modelcontextprotocol/sdk» versión 1.32.2, SDK TypeScript de MCP (verificado 6 de noviembre de 2026)",
+      "url": "https://www.npmjs.com/package/@modelcontextprotocol/sdk"
+    },
+    {
+      "n": 6,
+      "ref": "OpenCode (opencode), «MCP servers: opencode.json con mcp.servers local y remoto», opencode.ai docs (consultado 6 de noviembre de 2026)",
+      "url": "https://opencode.ai/docs/mcp-servers/"
+    },
+    {
+      "n": 7,
+      "ref": "OWASP Foundation, «OWASP Top 10 for Large Language Model Applications 2026» (3 de agosto de 2026)",
+      "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
+    },
+    {
+      "n": 8,
+      "ref": "Congreso de la República de Colombia, «Ley Estatutaria 1581 de 2012: Régimen General de Protección de Datos Personales» (Diario Oficial 48587)",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=49981"
+    },
+    {
+      "n": 9,
+      "ref": "Superintendencia de Industria y Comercio (SIC), «Circular Externa 002 del 21 de agosto de 2024: Lineamientos sobre el Tratamiento de Datos Personales en Sistemas de Inteligencia Artificial»",
+      "url": "https://sedeelectronica.sic.gov.co/transparencia/normativa/circular-externa-2-de-2024-de-la-superintendencia-de-industria-y-comercio-lineamientos-sobre-el-tratamiento-de-datos"
+    },
+    {
+      "n": 10,
+      "ref": "JSON RPC Working Group, «JSON RPC 2.0 Specification» (jsonrpc.org, consultado 6 de noviembre de 2026)",
+      "url": "https://www.jsonrpc.org/specification"
+    }
+  ]
+}
