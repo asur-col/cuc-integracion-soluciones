@@ -1,0 +1,282 @@
+<section data-kicker="Contexto" data-titulo="El límite de la semana 12: solo texto" data-sub="El modelo responde con palabras; no conoce el estado real de los pedidos." data-fuente="Basado en: Semana 12 del curso, caso CaribeMart · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="170" cy="170" r="72" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-documento" x="124" y="124" width="92" height="92" color="#2A2A2A"/><text x="170" y="274" text-anchor="middle" font-size="26" font-weight="700" fill="#2A2A2A">CHAT</text><text x="170" y="301" text-anchor="middle" font-size="19" fill="#5E5E5E">pregunta escrita</text>
+<circle cx="590" cy="170" r="82" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="536" y="116" width="108" height="108" color="#A6192E"/><text x="590" y="286" text-anchor="middle" font-size="28" font-weight="700" fill="#A6192E">MODELO</text><text x="590" y="313" text-anchor="middle" font-size="19" fill="#5E5E5E">solo devuelve texto</text>
+<circle cx="1010" cy="170" r="72" fill="#F4F4F4" stroke="#8a8a8a" stroke-width="2.5"/><use href="#i-bd" x="964" y="124" width="92" height="92" color="#8a8a8a"/><text x="1010" y="274" text-anchor="middle" font-size="26" font-weight="700" fill="#5E5E5E">PEDIDOS</text>
+<line x1="248" y1="170" x2="486" y2="170" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="502,170 484,180.5 484,159.5" fill="#A6192E"/>
+<text x="375" y="150" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">texto</text>
+<line x1="682" y1="170" x2="914" y2="170" stroke="#9a9a9a" stroke-width="5" stroke-linecap="round" stroke-dasharray="9 8"/><polygon points="930,170 912,180.5 912,159.5" fill="#9a9a9a"/>
+<circle cx="806" cy="170" r="22" fill="#B3261E"/><path d="M798.08,162.08 L813.92,177.92 M813.92,162.08 L798.08,177.92" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="806" y="224" text-anchor="middle" font-size="20" font-weight="700" fill="#B3261E">sin conexión</text>
+<rect x="311.361" y="380" width="557.278" height="70" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><text x="339.361" y="425.5" font-size="30" font-weight="700" fill="#A6192E">El modelo no conoce el pedido 1001</text>
+</svg>
+<aside class="narracion">En la semana doce aprendimos a consumir un modelo por interfaz de programación de aplicaciones. El flujo parecía completo. La aplicación enviaba texto y recibía texto de vuelta. Hoy fíjense dónde queda el límite. El modelo no conoce el pedido número mil uno de CaribeMart. No sabe si fue enviado ni si ya se entregó. Si le preguntamos sin más, puede inventar una respuesta con gramática perfecta pero totalmente falsa. Por eso un modelo solo no basta para integrar un sistema real. Necesita herramientas externas para consultar datos y actuar sobre ellos. En esta parte definimos el mecanismo que le permite proponer una herramienta y recibir su resultado.En producción ese error parece inocente al inicio y luego crece sin control. Cada respuesta inventada obliga a soporte a corregir datos a mano. Por eso el criterio de diseño es estricto desde el primer día. Si el sistema necesita un dato vivo primero se crea la herramienta que lo consulta.</aside>
+</section>
+<section data-kicker="Fundamentos" data-titulo="Tres cosas que el modelo no puede hacer solo" data-sub="Sin memoria de pedidos, sin reloj real y sin capacidad de actuar sobre el sistema." data-fuente="Basado en: caso del curso CaribeMart · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="190" cy="250" r="96" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="130" y="190" width="120" height="120" color="#A6192E"/><text x="190" y="382" text-anchor="middle" font-size="30" font-weight="700" fill="#A6192E">MODELO</text>
+<line x1="292" y1="212.6" x2="547.631" y2="86.1198" stroke="#9a9a9a" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 8"/><polygon points="560,80 549.918,95.2526 541.759,78.7608" fill="#9a9a9a"/>
+<circle cx="430" cy="148" r="18" fill="#B3261E"/><path d="M423.52,141.52 L436.48,154.48 M436.48,141.52 L423.52,154.48" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="620" cy="80" r="56" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-bd" x="584" y="44" width="72" height="72" color="#A6192E"/>
+<text x="702" y="78" font-size="30" font-weight="700" fill="#A6192E">NO CONSULTA</text>
+<text x="702" y="112" font-size="24" fill="#5E5E5E">Pedidos en vivo</text>
+<line x1="292" y1="250" x2="546.2" y2="250" stroke="#9a9a9a" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 8"/><polygon points="560,250 544.2,259.2 544.2,240.8" fill="#9a9a9a"/>
+<circle cx="430" cy="250" r="18" fill="#B3261E"/><path d="M423.52,243.52 L436.48,256.48 M436.48,243.52 L423.52,256.48" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="620" cy="250" r="56" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-reloj" x="584" y="214" width="72" height="72" color="#2A2A2A"/>
+<text x="702" y="248" font-size="30" font-weight="700" fill="#2A2A2A">NO SABE LA HORA</text>
+<text x="702" y="282" font-size="24" fill="#5E5E5E">Fecha y estado actual</text>
+<line x1="292" y1="287.4" x2="547.631" y2="413.88" stroke="#9a9a9a" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 8"/><polygon points="560,420 541.759,421.239 549.918,404.747" fill="#9a9a9a"/>
+<circle cx="430" cy="352" r="18" fill="#B3261E"/><path d="M423.52,345.52 L436.48,358.48 M436.48,345.52 L423.52,358.48" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="620" cy="420" r="56" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-funcion" x="584" y="384" width="72" height="72" color="#9C7B16"/>
+<text x="702" y="418" font-size="30" font-weight="700" fill="#9C7B16">NO ACTÚA</text>
+<text x="702" y="452" font-size="24" fill="#5E5E5E">Crear o cancelar pedido</text>
+</svg>
+<aside class="narracion">Piensen en lo que ocurre cuando en CaribeMart un cliente pregunta por su pedido. El estado real vive en la base de datos de pedidos, no en el entrenamiento del modelo. El modelo nunca vio ese pedido porque fue creado después de su entrenamiento. Tampoco sabe la fecha de hoy con certeza si nadie se la dice en el mensaje. Y frente a una solicitud para crear un pedido nuevo, el modelo no puede escribir en la base por sí mismo. Solo puede producir palabras. Para resolver estos tres vacíos necesitamos darle acceso a funciones reales. Esas funciones serán ejecutadas por nuestra aplicación, no por el modelo.Piensen en el caso de inventario en Barranquilla. El modelo puede describir productos en general con fluidez. Pero no sabe cuántas unidades quedan hoy ni en qué almacén. La herramienta es el puente entre el texto fluido y el hecho actualizado cada mañana.</aside>
+</section>
+<section data-kicker="Herramientas" data-titulo="Herramientas: funciones reales fuera del modelo" data-sub="La aplicación abre la puerta; el modelo solo pide qué herramienta usar." data-fuente="Basado en: concepto de function calling [cite:3] · Dibujo propio · Foto: Syced, Wikimedia Commons (CC0)" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp1"><rect x="8" y="20" width="422" height="460" rx="16"/></clipPath><image href="@@FOTO:herramientas@@" x="8" y="20" width="422" height="460" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp1)"/>
+<linearGradient id="gr2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.8"/></linearGradient><rect x="8" y="330" width="422" height="150" rx="16" fill="url(#gr2)"/>
+<text x="215" y="452" text-anchor="middle" font-size="28" font-weight="700" fill="#fff">Funciones reales</text>
+<circle cx="560" cy="110" r="54" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-ia" x="525" y="75" width="70" height="70" color="#A6192E"/>
+<text x="640" y="108" font-size="28" font-weight="700" fill="#A6192E">EL MODELO PROPONE</text>
+<text x="640" y="140" font-size="22" fill="#5E5E5E">nombre y argumentos</text>
+<circle cx="560" cy="250" r="54" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-servidor" x="525" y="215" width="70" height="70" color="#2A2A2A"/>
+<text x="640" y="248" font-size="28" font-weight="700" fill="#2A2A2A">LA APLICACIÓN EJECUTA</text>
+<text x="640" y="280" font-size="22" fill="#5E5E5E">la función real</text>
+<circle cx="560" cy="390" r="54" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-bd" x="525" y="355" width="70" height="70" color="#9C7B16"/>
+<text x="640" y="388" font-size="28" font-weight="700" fill="#9C7B16">VUELVE EL DATO</text>
+<text x="640" y="420" font-size="22" fill="#5E5E5E">verificable</text>
+<line x1="560" y1="168" x2="560" y2="178.2" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="560,192 550.8,176.2 569.2,176.2" fill="#A6192E"/>
+<line x1="560" y1="308" x2="560" y2="318.2" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="560,332 550.8,316.2 569.2,316.2" fill="#2A2A2A"/>
+</svg>
+<aside class="narracion">La solución tiene una frase que deben retener para todo el curso. El modelo propone la llamada. La aplicación la ejecuta. El modelo recibe el resultado y responde. Fíjense en el reparto de poderes. El modelo nunca toca directamente la base de datos de CaribeMart. Solo genera un nombre de herramienta y unos argumentos. Nuestra aplicación valida ese pedido, ejecuta la función real y le entrega al modelo una observación con el dato verificado. Así el modelo deja de inventar y empieza a razonar sobre hechos. Este ciclo es la base de la llamada a funciones.Esa frase organiza todo el diseño posterior. No basta con encender un modelo y esperar respuestas útiles. Hay que describirle cada herramienta con honestidad y límites claros. Recuerden que la herramienta queda fuera del modelo y bajo su control total. Esa separación protege a CaribeMart y hace auditable cada acción del asistente.</aside>
+</section>
+<section data-kicker="Definición" data-titulo="Function calling en una frase" data-sub="El modelo pide una herramienta con nombre y argumentos; la aplicación la ejecuta." data-fuente="Fuente: MCP Server concepts, Tools [cite:3] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="30" y="20" width="1120" height="150" rx="18" fill="#A6192E"/>
+<text x="590" y="92" text-anchor="middle" font-size="42" font-weight="700" fill="#fff">El modelo propone, la aplicación ejecuta</text>
+<text x="590" y="138" text-anchor="middle" font-size="24" fill="#F3D9DE">y le devuelve el resultado verificado</text>
+<circle cx="190" cy="300" r="62" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="149" y="259" width="82" height="82" color="#A6192E"/><text x="190" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">MODELO</text>
+<circle cx="590" cy="300" r="62" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="549" y="259" width="82" height="82" color="#2A2A2A"/><text x="590" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#2A2A2A">APLICACIÓN</text>
+<circle cx="990" cy="300" r="62" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/><use href="#i-bd" x="949" y="259" width="82" height="82" color="#9C7B16"/><text x="990" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">DATO</text>
+<line x1="258" y1="290" x2="504" y2="290" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="520,290 502,300.5 502,279.5" fill="#A6192E"/>
+<text x="389" y="268" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">propone</text>
+<line x1="658" y1="290" x2="904" y2="290" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="920,290 902,300.5 902,279.5" fill="#9C7B16"/>
+<text x="789" y="268" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">ejecuta</text>
+<path d="M990,232 L990,215 L190,215 L190,212.2" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 7"/><polygon points="190,226 180.8,210.2 199.2,210.2" fill="#2E7D4F"/>
+<text x="590" y="206" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D4F">resultado</text>
+</svg>
+<aside class="narracion">Definamos con precisión el término llamada a funciones. No es una magia del modelo. Es un contrato entre el modelo y nuestra aplicación. Nosotros describimos cada herramienta con su nombre, su descripción y sus parámetros. El modelo lee esas descripciones y, cuando lo necesita, responde con un objeto que indica qué herramienta quiere llamar y con qué argumentos. Nuestra aplicación intercepta ese objeto, ejecuta el código real y le devuelve la salida como una observación. Recién entonces el modelo redacta la respuesta final. La separación es total. El modelo decide y la aplicación actúa.En el examen definirán llamada a funciones con exactitud. Eviten decir que el modelo ejecuta código. El modelo propone una estructura y la aplicación decide si la acepta. Esa precisión marca la diferencia entre una respuesta ingenua y una respuesta profesional. Si dominan esa frase, dominan el fundamento de toda esta semana.</aside>
+</section>
+<section data-kicker="Bucle" data-titulo="El bucle en 4 pasos" data-sub="Pregunta, propuesta, ejecución y respuesta final con el dato verificado." data-fuente="Basado en: MCP Architecture, Tool Execution [cite:2] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="130" cy="100" r="62" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-usuario" x="90" y="60" width="80" height="80" color="#2A2A2A"/>
+<circle cx="84" cy="54" r="20" fill="#2A2A2A"/><text x="84" y="61.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">1</text>
+<text x="212" y="98" font-size="28" font-weight="700" fill="#2A2A2A">PREGUNTA</text>
+<text x="212" y="130" font-size="22" fill="#5E5E5E">¿Estado del pedido?</text>
+<circle cx="720" cy="100" r="62" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-funcion" x="680" y="60" width="80" height="80" color="#A6192E"/>
+<circle cx="674" cy="54" r="20" fill="#A6192E"/><text x="674" y="61.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">2</text>
+<text x="802" y="98" font-size="28" font-weight="700" fill="#A6192E">PROPUESTA</text>
+<text x="802" y="130" font-size="22" fill="#5E5E5E">consultar_pedido</text>
+<circle cx="720" cy="400" r="62" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-servidor" x="680" y="360" width="80" height="80" color="#2A2A2A"/>
+<circle cx="674" cy="354" r="20" fill="#2A2A2A"/><text x="674" y="361.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">3</text>
+<text x="802" y="398" font-size="28" font-weight="700" fill="#2A2A2A">EJECUCIÓN</text>
+<text x="802" y="430" font-size="22" fill="#5E5E5E">la app ejecuta</text>
+<circle cx="130" cy="400" r="62" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-bd" x="90" y="360" width="80" height="80" color="#9C7B16"/>
+<circle cx="84" cy="354" r="20" fill="#9C7B16"/><text x="84" y="361.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">4</text>
+<text x="212" y="398" font-size="28" font-weight="700" fill="#9C7B16">DATO</text>
+<text x="212" y="430" font-size="22" fill="#5E5E5E">responde real</text>
+<line x1="440" y1="100" x2="624" y2="100" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="640,100 622,110.5 622,89.5" fill="#A6192E"/>
+<line x1="720" y1="168" x2="720" y2="314" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="720,330 709.5,312 730.5,312" fill="#A6192E"/>
+<line x1="640" y1="400" x2="456" y2="400" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="440,400 458,389.5 458,410.5" fill="#A6192E"/>
+<line x1="130" y1="332" x2="130" y2="186" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="130,170 140.5,188 119.5,188" fill="#A6192E"/>
+<use href="#i-engranaje" x="382" y="202" width="96" height="96" color="#9C7B16"/>
+<text x="430" y="330" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">se repite</text>
+</svg>
+<aside class="narracion">Recorramos el bucle paso a paso con un ejemplo de CaribeMart. El estudiante escribe en opencode la pregunta sobre el estado del pedido número mil uno. Ese texto llega al modelo junto con la lista de herramientas disponibles. El modelo decide que necesita consultar el pedido y devuelve una propuesta con el nombre consultar pedido y el número mil uno como argumento. Nuestra aplicación toma esa propuesta y ejecuta la función que lee la base de datos. El resultado, enviado, vuelve al modelo como observación y recién ahí el modelo responde en lenguaje natural. Fíjense que hay dos respuestas del modelo. La primera es la propuesta estructurada.Fíjense en lo que ocurre si el modelo necesita dos herramientas seguidas. El bucle se repite sin salir de la conversación. Primero consulta el pedido y luego lista los pendientes. Cada vuelta pasa por la aplicación con validación completa. El proceso puede durar varios segundos y eso es normal en el diseño.</aside>
+</section>
+<section data-kicker="Llamada" data-titulo="Anatomía de una llamada" data-sub="Nombre de la herramienta y argumentos en JSON con tipos claros." data-fuente="Basado en: MCP tools call, name y arguments [cite:2] · Dibujo propio" data-siglas="JSON = JavaScript Object Notation">
+<svg viewBox="0 0 1180 500">
+<rect x="40" y="14" width="348.238" height="44" rx="22" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><use href="#i-ia" x="54" y="21" width="30" height="30" color="#A6192E"/><text x="94" y="43.7" font-size="22" font-weight="700" fill="#A6192E">PROPUESTA DEL MODELO</text>
+<rect x="40" y="90" width="724.632" height="222" rx="12" fill="#1E1E1E"/><text x="66" y="142.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">{</text><text x="66" y="186" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#E8C56A" xml:space="preserve">  "nombre"</text><text x="250.62" y="186" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">: </text><text x="287.544" y="186" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#9BD1A8" xml:space="preserve">"consultar_pedido"</text><text x="619.86" y="186" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">,</text><text x="66" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#E8C56A" xml:space="preserve">  "argumentos"</text><text x="324.468" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">: { </text><text x="398.316" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#E8C56A" xml:space="preserve">"pedidoId"</text><text x="582.936" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">: </text><text x="619.86" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#8EC3E6" xml:space="preserve">1001</text><text x="693.708" y="229.5" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve"> }</text><text x="66" y="273" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="30" fill="#F2F2F2" xml:space="preserve">}</text>
+<line x1="720" y1="135" x2="790" y2="135" stroke="#A6192E" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="790" cy="135" r="17" fill="#A6192E"/><text x="790" y="141.48" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">1</text>
+<text x="822" y="128" font-size="28" font-weight="700" fill="#A6192E">NOMBRE</text>
+<text x="822" y="158" font-size="20" fill="#5E5E5E">exacto, sin inventar</text>
+<line x1="720" y1="190" x2="790" y2="235" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="790" cy="235" r="17" fill="#9C7B16"/><text x="790" y="241.48" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">2</text>
+<text x="822" y="235" font-size="28" font-weight="700" fill="#9C7B16">ARGUMENTOS</text>
+<text x="822" y="265" font-size="20" fill="#5E5E5E">valores según el esquema</text>
+<line x1="390" y1="322" x2="390" y2="376.2" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="390,390 380.8,374.2 399.2,374.2" fill="#2A2A2A"/>
+<rect x="160.468" y="400" width="459.065" height="64" rx="12" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2"/><use href="#i-servidor" x="182.468" y="407" width="50" height="50" color="#2A2A2A"/><text x="242.468" y="441.1" font-size="26" font-weight="700" fill="#2A2A2A">La aplicación valida y ejecuta</text>
+</svg>
+<aside class="narracion">Miren la anatomía de una llamada real. El modelo no escribe una frase libre. Devuelve un objeto con dos piezas. La primera es el nombre exacto de la herramienta, por ejemplo consultar pedido. La segunda es un bloque de argumentos estructurado según el esquema que nosotros definimos. En CaribeMart ese argumento será el número de pedido, mil uno, como entero. Si el modelo escribe un nombre distinto o un número como texto con letras, la aplicación debe rechazarlo. La estructura estricta es lo que hace posible validar cada llamada antes de tocar datos sensibles. Piensen en este objeto como una orden de trabajo firmada por el modelo.La estructura estricta evita ambigüedad en la comunicación. Sin nombre exacto no hay forma de enrutar la llamada. Sin argumentos tipados no hay validación posible. Por eso el ejemplo usa un entero y no una frase libre. En su actividad harán lo mismo con cliente, total y estado.</aside>
+</section>
+<section data-kicker="Esquema" data-titulo="Esquema: cómo se describe cada herramienta" data-sub="JSON Schema dice qué parámetros acepta y cuáles son obligatorios." data-fuente="Fuente: MCP Tools, inputSchema JSON Schema [cite:3] · Dibujo propio" data-siglas="JSON = JavaScript Object Notation">
+<svg viewBox="0 0 1180 500">
+<rect x="40" y="20" width="690" height="460" rx="18" fill="#fff" stroke="#2A2A2A" stroke-width="3"/>
+<text x="70" y="62" font-size="28" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">consultar_pedido</text>
+<rect x="66" y="90" width="640" height="100" rx="12" fill="#F9EEF0"/>
+<rect x="66" y="90" width="10" height="100" rx="4" fill="#A6192E"/>
+<use href="#i-documento" x="108" y="108" width="64" height="64" color="#A6192E"/>
+<text x="196" y="136" font-size="28" font-weight="700" fill="#A6192E">DESCRIPCIÓN</text>
+<text x="196" y="168" font-size="22" fill="#2A2A2A">qué hace y cuándo usarla</text>
+<rect x="66" y="210" width="640" height="100" rx="12" fill="#FBF6E7"/>
+<rect x="66" y="210" width="10" height="100" rx="4" fill="#9C7B16"/>
+<use href="#i-engranaje" x="108" y="228" width="64" height="64" color="#9C7B16"/>
+<text x="196" y="256" font-size="28" font-weight="700" fill="#9C7B16">PARÁMETROS</text>
+<text x="196" y="288" font-size="22" fill="#2A2A2A">pedidoId: entero positivo</text>
+<rect x="66" y="330" width="640" height="100" rx="12" fill="#E8F3EC"/>
+<rect x="66" y="330" width="10" height="100" rx="4" fill="#2E7D4F"/>
+<use href="#i-escudo" x="108" y="348" width="64" height="64" color="#2E7D4F"/>
+<text x="196" y="376" font-size="28" font-weight="700" fill="#2E7D4F">VALIDACIÓN</text>
+<text x="196" y="408" font-size="22" fill="#2A2A2A">rechaza lo inválido</text>
+<line x1="730" y1="250" x2="864" y2="250" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="880,250 862,260.5 862,239.5" fill="#A6192E"/>
+<text x="805" y="226" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">la lee</text>
+<circle cx="990" cy="220" r="80" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="938" y="168" width="104" height="104" color="#A6192E"/><text x="990" y="334" text-anchor="middle" font-size="28" font-weight="700" fill="#A6192E">MODELO</text><text x="990" y="362" text-anchor="middle" font-size="20" fill="#5E5E5E">elige con la descripción</text>
+</svg>
+<aside class="narracion">Toda herramienta bien definida tiene tres piezas. Primero una descripción clara en español que le dice al modelo qué hace y cuándo debe usarla. Segundo una lista de parámetros con su tipo y sus reglas, por ejemplo un identificador entero mayor que cero. Tercero una validación que rechaza cualquier valor fuera de rango antes de ejecutar código. En MCP esa descripción usa JSON Schema, un estándar para validar datos. Fíjense que el esquema cumple doble función. Ayuda al modelo a elegir bien y ayuda a la aplicación a protegerse. Cuando diseñen sus herramientas en la actividad, piensen siempre en esas tres piezas.Un buen esquema también ayuda a detectar errores de diseño temprano. Si no pueden describir un parámetro, probablemente la herramienta es confusa. Piensen en validar siempre en el servidor y nunca solo en la interfaz. Toda entrada del modelo se trata como sospechosa hasta demostrar lo contrario.</aside>
+</section>
+<section data-kicker="Responsabilidad" data-titulo="Quién ejecuta: la aplicación, no el modelo" data-sub="El modelo no toca la base de datos; la aplicación valida y ejecuta." data-fuente="Basado en: MCP Server concepts, User Interaction [cite:3] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="20" y="30" width="540" height="440" rx="18" fill="#F9EEF0"/>
+<rect x="620" y="30" width="540" height="440" rx="18" fill="#F4F4F4"/>
+<circle cx="290" cy="200" r="84" fill="#fff" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="236" y="146" width="108" height="108" color="#A6192E"/><text x="290" y="318" text-anchor="middle" font-size="28" font-weight="700" fill="#A6192E">EL MODELO DECIDE</text><text x="290" y="348" text-anchor="middle" font-size="22" fill="#5E5E5E">propone herramienta</text>
+<circle cx="890" cy="130" r="62" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="850" y="90" width="80" height="80" color="#2A2A2A"/><text x="890" y="226" text-anchor="middle" font-size="28" font-weight="700" fill="#2A2A2A">LA APLICACIÓN ACTÚA</text><text x="890" y="256" text-anchor="middle" font-size="22" fill="#5E5E5E">valida y ejecuta</text>
+<use href="#i-bd" x="852" y="362" width="76" height="76" color="#9C7B16"/>
+<line x1="890" y1="320" x2="890" y2="342.2" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="890,356 880.8,340.2 899.2,340.2" fill="#2A2A2A"/>
+<line x1="590" y1="30" x2="590" y2="470" stroke="#A6192E" stroke-width="5" stroke-dasharray="14 10"/>
+<line x1="390" y1="150" x2="804.039" y2="121.114" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="820,120 802.774,131.727 801.313,110.778" fill="#A6192E"/>
+<text x="520" y="112" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">ordena</text>
+<circle cx="590" cy="290" r="48" fill="#fff" stroke="#A6192E" stroke-width="4"/>
+<use href="#i-candado" x="561" y="261" width="58" height="58" color="#A6192E"/>
+<rect x="471.574" y="360" width="236.852" height="44" rx="22" fill="#A6192E"/><text x="487.574" y="389" font-size="20" font-weight="700" fill="#fff">Frontera de seguridad</text>
+</svg>
+<aside class="narracion">Insistan en esta frontera porque es la idea más importante de la parte. El modelo decide qué herramienta conviene, pero jamás ejecuta nada directamente. No tiene acceso a la base de datos ni al sistema de archivos. Quien valida los argumentos, comprueba permisos y ejecuta la función es la aplicación. Esa separación protege a CaribeMart de un modelo manipulado o equivocado. Si la aplicación valida bien, una instrucción extraña del modelo se detiene en la frontera. Piensen en el modelo como un gerente que propone y en la aplicación como el equipo que verifica y hace el trabajo.Esa frontera también simplifica permisos y auditoría. Cada ejecución queda registrada bajo control de la aplicación. Si algo sale mal, el registro muestra qué herramienta se llamó y con qué datos. Sin esa frontera todo sería caja negra. El modelo propone ideas, pero la responsabilidad final es de ustedes como ingenieros.</aside>
+</section>
+<section data-kicker="Bucle" data-titulo="El resultado vuelve como observación" data-sub="La salida de la herramienta entra al modelo para redactar la respuesta." data-fuente="Basado en: MCP Architecture, Tool Execution [cite:2] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="110" cy="150" r="62" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-servidor" x="70" y="110" width="80" height="80" color="#2A2A2A"/><text x="110" y="240" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">HERRAMIENTA</text>
+<rect x="250" y="80" width="303.083" height="139.6" rx="12" fill="#1E1E1E"/><rect x="250" y="80" width="303.083" height="30" rx="12" fill="#2d2d2d"/><rect x="250" y="94" width="303.083" height="16" rx="0" fill="#2d2d2d"/><circle cx="268" cy="95" r="5" fill="#E5645A"/><circle cx="286" cy="95" r="5" fill="#E8C56A"/><circle cx="304" cy="95" r="5" fill="#6DBE7D"/><text x="401.542" y="100" text-anchor="middle" font-size="14" fill="#bdbdbd">OBSERVACIÓN</text><text x="272" y="152.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">estado</text><text x="360.618" y="152.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="390.157" y="152.8" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#9BD1A8" xml:space="preserve">"enviado"</text><text x="272" y="187.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#E8C56A" xml:space="preserve">cliente</text><text x="375.387" y="187.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#F2F2F2" xml:space="preserve">: </text><text x="404.926" y="187.6" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="24" fill="#9BD1A8" xml:space="preserve">"Luis"</text>
+<circle cx="740" cy="150" r="62" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="700" y="110" width="80" height="80" color="#A6192E"/><text x="740" y="240" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">MODELO</text><text x="740" y="267" text-anchor="middle" font-size="19" fill="#5E5E5E">lee el dato real</text>
+<rect x="900" y="70" width="260" height="130" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><polygon points="922,199 912,220 946,199" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5" stroke-linejoin="round"/><rect x="923.25" y="196.5" width="26" height="4.5" fill="#F9EEF0"/>
+<text x="1030" y="118" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">Su pedido</text>
+<text x="1030" y="150.5" text-anchor="middle" font-size="26" font-weight="700" fill="#A6192E">fue enviado</text>
+<line x1="176" y1="140" x2="232.2" y2="140" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="246,140 230.2,149.2 230.2,130.8" fill="#2A2A2A"/>
+<line x1="557.083" y1="140" x2="654.2" y2="140" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="668,140 652.2,149.2 652.2,130.8" fill="#9C7B16"/>
+<line x1="808" y1="140" x2="882.232" y2="134.939" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="896,134 880.862,144.253 879.611,125.896" fill="#A6192E"/>
+<text x="1030" y="250" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">RESPUESTA FINAL</text>
+<rect x="60" y="330" width="1060" height="120" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-llave" x="118" y="358" width="64" height="64" color="#9C7B16"/>
+<text x="210" y="382" font-size="20" font-weight="700" fill="#9C7B16">REGLA DE ORO</text>
+<text x="210" y="424" font-size="34" font-weight="700" fill="#2A2A2A">Sin observación no hay respuesta</text>
+</svg>
+<aside class="narracion">Sigan el camino del dato. La herramienta responde con una observación breve, por ejemplo estado enviado y cliente Luis. Esa observación entra a la ventana de contexto del modelo junto con la pregunta original. Ahora el modelo ya no inventa. Redacta su respuesta apoyado en un hecho verificado por la aplicación. Fíjense que la observación es información, no una orden. Si dentro del pedido viniera texto con instrucciones, el modelo no debe obedecerlo como si fuera del usuario. Retengan esa advertencia porque la retomaremos en la parte cuatro con el ataque de inyección por herramientas.La observación debe ser breve y solo con campos definidos. Eviten devolver notas libres sin marcar dentro de la respuesta. Cada palabra extra de la herramienta aumenta el riesgo de confusión. En la práctica, menos datos bien estructurados rinden más que párrafos largos. El modelo agradece respuestas cortas y precisas.</aside>
+</section>
+<section data-kicker="Integración" data-titulo="Antes de MCP: integración a medida" data-sub="Cada aplicación diseñaba su propio formato para pedir herramientas." data-fuente="Basado en: MCP Introduction, granja de integraciones [cite:1] · Dibujo propio · Foto: Esteffect, Wikimedia Commons (Public domain)" data-siglas="MCP = Model Context Protocol">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp3"><rect x="8" y="20" width="462" height="460" rx="16"/></clipPath><image href="@@FOTO:enredo@@" x="8" y="20" width="462" height="460" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp3)"/>
+<linearGradient id="gr4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.85"/></linearGradient><rect x="8" y="330" width="462" height="150" rx="16" fill="url(#gr4)"/>
+<text x="235" y="440" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">Un desarrollo por conexión</text>
+<use href="#i-laptop" x="525" y="55" width="70" height="70" color="#A6192E"/>
+<text x="560" y="152" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">APP A</text>
+<line x1="620" y1="90" x2="916.2" y2="90" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="930,90 914.2,99.2 914.2,80.8" fill="#A6192E"/>
+<text x="775" y="76" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">formato propio</text>
+<use href="#i-funcion" x="972" y="52" width="76" height="76" color="#A6192E"/>
+<use href="#i-laptop" x="525" y="215" width="70" height="70" color="#9C7B16"/>
+<text x="560" y="312" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">APP B</text>
+<line x1="620" y1="250" x2="916.2" y2="250" stroke="#9C7B16" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 7"/><polygon points="930,250 914.2,259.2 914.2,240.8" fill="#9C7B16"/>
+<text x="775" y="236" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">otro formato</text>
+<use href="#i-funcion" x="972" y="212" width="76" height="76" color="#9C7B16"/>
+<use href="#i-laptop" x="525" y="375" width="70" height="70" color="#2A2A2A"/>
+<text x="560" y="472" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">APP C</text>
+<line x1="620" y1="410" x2="916.2" y2="410" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 7"/><polygon points="930,410 914.2,419.2 914.2,400.8" fill="#2A2A2A"/>
+<text x="775" y="396" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">otro más</text>
+<use href="#i-funcion" x="972" y="372" width="76" height="76" color="#2A2A2A"/>
+</svg>
+<aside class="narracion">Antes de MCP, cada aplicación que quería darle herramientas al modelo diseñaba su propio formato privado. Un integrador definía un esquema, otro usaba otro nombre de campo y un tercero inventaba un protocolo distinto. El resultado era una granja de integraciones incomunicadas. Cada nueva aplicación obligaba a reescribir el conector. Esa es la razón de ser de un estándar abierto. MCP propone un único idioma para descubrir herramientas, ejecutarlas y compartir datos. La idea es sencilla y poderosa. Escribir una vez e integrar en cualquier cliente.Ese costo se repetía con cada nuevo cliente de inteligencia artificial. Cada conector exigía semanas de trabajo y pruebas distintas. La frustración de los equipos era comprensible en todo el sector. Por eso un estándar abierto como MCP reduce el esfuerzo repetido. Ahora escribirán un servidor y lo conectarán en cualquier cliente.</aside>
+</section>
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿qué debe hacer el modelo?" data-sub="Pregunta sobre el pedido 1001 sin inventar el estado." data-fuente="Ejercicio de elaboración propia" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="20" y="20" width="1140" height="460" rx="22" fill="#FBF6E7" stroke="#9C7B16" stroke-width="4" stroke-dasharray="14 9"/>
+<circle cx="160" cy="170" r="80" fill="#FBF6E7" stroke="#9C7B16" stroke-width="4"/><rect x="143" y="150" width="12" height="40" rx="3" fill="#9C7B16"/><rect x="165" y="150" width="12" height="40" rx="3" fill="#9C7B16"/>
+<text x="160" y="300" text-anchor="middle" font-size="28" font-weight="700" fill="#9C7B16">PAUSA</text>
+<text x="160" y="335" text-anchor="middle" font-size="28" font-weight="700" fill="#9C7B16">Y RESPONDE</text>
+<text x="300" y="130" font-size="44" font-weight="700" fill="#A6192E">¿Cuál es el estado del pedido 1001?</text>
+<text x="300" y="195" font-size="34" fill="#2A2A2A">¿Qué debe hacer el modelo?</text>
+<rect x="300" y="280" width="800" height="150" rx="16" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-llave" x="335" y="320" width="70" height="70" color="#9C7B16"/>
+<text x="440" y="335" font-size="22" font-weight="700" fill="#9C7B16">PISTA</text>
+<text x="440" y="385" font-size="28" font-weight="700" fill="#2A2A2A">Llamar consultar_pedido con el número 1001</text>
+</svg>
+<aside class="narracion">Mini reto. Pausen el video y piensen con calma. El cliente pregunta cuál es el estado del pedido número mil uno. ¿Qué debe hacer el modelo y qué no debe hacer? La respuesta correcta es proponer la llamada a la herramienta consultar pedido con el número mil uno como argumento y esperar la observación real. No debe responder de memoria ni inventar un estado probable. Cuando tengan su respuesta, continuemos y contrastemos con el caso completo de CaribeMart. Si dudaron entre responder directo y llamar una herramienta, quédense con la segunda opción.No se preocupen si su primera respuesta genera dudas razonables. Lo importante es que ya piensan en términos de herramientas. Comparen su idea con el camino de la actividad. Allí practicarán el mismo juicio con el pedido número mil uno. La práctica convierte la duda en criterio sólido.</aside>
+</section>
+<section data-kicker="CaribeMart" data-titulo="CaribeMart: tres herramientas mínimas" data-sub="Consultar, listar por estado y crear con validación estricta." data-fuente="Basado en: caso del curso CaribeMart, servicio de pedidos · Dibujo propio · Foto: Joe Ross, Wikimedia Commons (CC BY-SA 2.0)" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp5"><rect x="8" y="8" width="1164" height="202" rx="16"/></clipPath><image href="@@FOTO:tienda@@" x="8" y="8" width="1164" height="202" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp5)"/>
+<linearGradient id="gr6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.75"/></linearGradient><rect x="8" y="100" width="1164" height="110" rx="16" fill="url(#gr6)"/>
+<text x="30" y="192" font-size="30" font-weight="700" fill="#fff">CaribeMart</text>
+<rect x="40" y="250" width="352.006" height="78" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><use href="#i-bd" x="58" y="265" width="48" height="48" color="#A6192E"/><text x="116" y="298.1" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">consultar_pedido</text>
+<rect x="426.006" y="250" width="368.007" height="78" rx="12" fill="#F9EEF0" stroke="#A6192E" stroke-width="2"/><use href="#i-registro" x="444.006" y="265" width="48" height="48" color="#A6192E"/><text x="502.006" y="298.1" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">listar_por_estado</text>
+<rect x="828.013" y="250" width="288.005" height="78" rx="12" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2"/><use href="#i-funcion" x="846.013" y="265" width="48" height="48" color="#9C7B16"/><text x="904.013" y="298.1" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9C7B16">crear_pedido</text>
+<path d="M40,350 V372 H794.013 V350" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="417.007" y="412" text-anchor="middle" font-size="30" font-weight="700" fill="#2E7D4F">LEEN: solo consultan</text>
+<path d="M828.013,350 V372 H1140 V350" fill="none" stroke="#B3261E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="984.007" y="412" text-anchor="middle" font-size="28" font-weight="700" fill="#B3261E">ESCRIBE: exige confirmación</text>
+<text x="984.007" y="452" text-anchor="middle" font-size="22" fill="#5E5E5E">validación estricta con zod</text>
+</svg>
+<aside class="narracion">Para CaribeMart empezaremos con tres herramientas mínimas. La primera consulta un pedido por su número. La segunda lista pedidos filtrados por estado, por ejemplo solo los pendientes. La tercera crea un pedido nuevo y escribe en la base de datos. Fíjense en la diferencia. Las dos primeras solo leen información. La tercera cambia el estado del negocio y por eso exigirá la validación más estricta y la confirmación humana. Esas tres herramientas serán exactamente el alcance de su actividad evaluada. Empiecen simple, con lectura, y dejen la escritura para el final con todos los controles.Ese alcance limitado es intencional para aprender bien. Tres herramientas permiten comparar lectura y escritura sin abrumar. Dominar consultar y listar da confianza para luego crear. La semana siguiente reutiliza esa base para memoria y recuperación. Un avance sólido vale más que un sistema frágil y complicado.</aside>
+</section>
+<section data-kicker="Error común" data-titulo="El error clásico: alucinar el estado" data-sub="Responder sin llamar la herramienta produce una mentira segura." data-fuente="Basado en: S12, alucinaciones del modelo · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="10" y="20" width="570" height="460" rx="20" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<rect x="600" y="20" width="570" height="460" rx="20" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<text x="295" y="72" text-anchor="middle" font-size="30" font-weight="700" fill="#B3261E">SIN HERRAMIENTA</text>
+<text x="885" y="72" text-anchor="middle" font-size="30" font-weight="700" fill="#2E7D4F">CON HERRAMIENTA</text>
+<use href="#i-ia" x="65" y="155" width="90" height="90" color="#B3261E"/>
+<rect x="190" y="130" width="360" height="120" rx="18" fill="#fff" stroke="#B3261E" stroke-width="2.5"/><polygon points="212,249 202,270 236,249" fill="#fff" stroke="#B3261E" stroke-width="2.5" stroke-linejoin="round"/><rect x="213.25" y="246.5" width="26" height="4.5" fill="#fff"/>
+<text x="370" y="180" text-anchor="middle" font-size="28" font-weight="700" fill="#B3261E">Su pedido 1001</text>
+<text x="370" y="215" text-anchor="middle" font-size="28" font-weight="700" fill="#B3261E">fue entregado</text>
+<circle cx="110" cy="330" r="30" fill="#B3261E"/><path d="M99.2,319.2 L120.8,340.8 M120.8,319.2 L99.2,340.8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="160" y="342" font-size="24" font-weight="700" fill="#2A2A2A">suena seguro, es inventado</text>
+<use href="#i-ia" x="645" y="155" width="90" height="90" color="#2E7D4F"/>
+<line x1="740" y1="200" x2="786.2" y2="200" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round"/><polygon points="800,200 784.2,209.2 784.2,190.8" fill="#2E7D4F"/>
+<use href="#i-bd" x="813" y="163" width="74" height="74" color="#2E7D4F"/>
+<rect x="690" y="290" width="400" height="90" rx="18" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/><polygon points="712,379 702,400 736,379" fill="#fff" stroke="#2E7D4F" stroke-width="2.5" stroke-linejoin="round"/><rect x="713.25" y="376.5" width="26" height="4.5" fill="#fff"/>
+<text x="890" y="345" text-anchor="middle" font-size="28" font-weight="700" fill="#2E7D4F">Consultó 1001: enviado</text>
+<circle cx="690" cy="430" r="26" fill="#2E7D4F"/><path d="M679.08,430.52 L687.4,439.36 L702.48,422.2" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="735" y="440" font-size="24" font-weight="700" fill="#2A2A2A">dato verificado de la base</text>
+</svg>
+<aside class="narracion">Miren el contraste. Sin herramienta, el modelo puede responder que el pedido mil uno ya fue entregado con total seguridad gramatical. El cliente cree esa frase y cancela otra compra. Con herramienta, el modelo primero consulta la base de datos y solo después responde con el estado enviado verificado. La diferencia no es de estilo. Es de responsabilidad. Las alucinaciones que vimos en la semana doce se reducen drasticamente cuando cada afirmación sobre datos depende de una llamada verificable. Por eso en producción prohibimos responder sobre pedidos sin pasar por la herramienta.La lección va más allá del ejemplo del estado. Todo dato que no se consulta puede ser inventado con seguridad. Esa regla aplica a inventario, precios y fechas. Por eso en producción todo dato sensible pasa por herramienta. El modelo redacta bien, pero los hechos los entrega la aplicación.</aside>
+</section>
+<section data-kicker="Síntesis" data-titulo="La Parte 1 en cuatro ideas maestras" data-sub="Qué repasaremos en la actividad de esta semana." data-fuente="Síntesis de la Parte 1 · Dibujo propio" data-siglas="JSON = JavaScript Object Notation">
+<svg viewBox="0 0 1180 500">
+<line x1="70" y1="250" x2="1110" y2="250" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 18"/>
+<circle cx="160" cy="250" r="58" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<use href="#i-documento" x="122" y="212" width="76" height="76" color="#2A2A2A"/>
+<circle cx="204" cy="206" r="20" fill="#2A2A2A"/><text x="204" y="213.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">1</text>
+<text x="160" y="130" text-anchor="middle" font-size="30" font-weight="700" fill="#2A2A2A">El texto no basta</text>
+<circle cx="440" cy="250" r="58" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-funcion" x="402" y="212" width="76" height="76" color="#A6192E"/>
+<circle cx="484" cy="206" r="20" fill="#A6192E"/><text x="484" y="213.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">2</text>
+<text x="440" y="392" text-anchor="middle" font-size="30" font-weight="700" fill="#A6192E">Propone y ejecuta</text>
+<circle cx="720" cy="250" r="58" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-codigo" x="682" y="212" width="76" height="76" color="#9C7B16"/>
+<circle cx="764" cy="206" r="20" fill="#9C7B16"/><text x="764" y="213.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">3</text>
+<text x="720" y="130" text-anchor="middle" font-size="30" font-weight="700" fill="#9C7B16">Esquema JSON</text>
+<circle cx="1000" cy="250" r="58" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-ojo" x="962" y="212" width="76" height="76" color="#2E7D4F"/>
+<circle cx="1044" cy="206" r="20" fill="#2E7D4F"/><text x="1044" y="213.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">4</text>
+<text x="1000" y="392" text-anchor="middle" font-size="30" font-weight="700" fill="#2E7D4F">Observación</text>
+</svg>
+<aside class="narracion">Cerramos la primera parte con cuatro ideas. El texto solo no basta porque el modelo inventa estados. La llamada a funciones separa poderes. El modelo propone y la aplicación ejecuta. Cada herramienta se describe con nombre y argumentos según un esquema estricto. Y la respuesta final depende de una observación real devuelta por la herramienta. Si saben explicar esas cuatro ideas con el ejemplo del pedido mil uno, ya tienen el fundamento para entrar en MCP. En la siguiente parte veremos cómo todos los clientes hablan ese mismo idioma sin reescribir conectores.Esas cuatro ideas reaparecerán en cada parte posterior. Las retomarán con MCP, con código y con riesgos. Si las tienen claras, el resto será aplicación directa. Lleven el ejemplo del pedido mil uno como hilo conductor. En la próxima parte convertiremos ese bucle en un protocolo estándar.</aside>
+</section>
