@@ -85,12 +85,12 @@
   <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" referrerpolicy="no-referrer" onerror="this.style.display='none'">
   <p class="eyebrow">Proyecto de aula · Tercer Corte · Unidad 3</p>
   <h1>Proyecto de aula Corte 3: el asistente de operaciones de CaribeMart</h1>
-  <p class="sub">Cierras la Unidad 3 integrando la IA con los sistemas de CaribeMart: tomas el servidor MCP del Laboratorio 7, le agregas herramientas propias, le das contexto al agente con <code>AGENTS.md</code>, lo pones a resolver una tarea de varios pasos <b>con verificación humana</b> y lo proteges contra <i>prompt injection</i>. Lo entregas por Teams y lo sustentas en vivo.</p>
+  <p class="sub">Cierras la Unidad 3 integrando la IA con los sistemas de CaribeMart: tomas el servidor MCP del Laboratorio 7, le agregas herramientas propias, le das contexto al agente con <code>AGENTS.md</code>, lo pones a resolver una tarea de varios pasos <b>con verificación humana</b> y lo proteges contra <i>prompt injection</i>. Lo entregas por Teams con evidencia que el docente pueda reproducir.</p>
   <div class="accent-bar"></div>
   <p class="meta">
     <b>Curso:</b> Integración de Soluciones para Plataformas Cloud — Ingeniería de Sistemas<br>
     <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
-    <b>Modalidad:</b> individual &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Entrega:</b> viernes 20 de noviembre de 2026, 23:59 &nbsp;·&nbsp; <b>Sustentación:</b> sábado 21 de noviembre, en clase
+    <b>Modalidad:</b> individual &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Entrega:</b> viernes 20 de noviembre de 2026, 23:59
   </p>
 </header>
 
@@ -102,9 +102,8 @@
   <a href="#s4">4. Lo que construyes</a>
   <a href="#s5">5. Rúbrica (5 criterios)</a>
   <a href="#s6">6. Qué entregas</a>
-  <a href="#s7">7. Sustentación</a>
-  <a href="#s8">8. Lo que no cuenta</a>
-  <a href="#s9">9. Antes de entregar</a>
+  <a href="#s7">7. Lo que no cuenta</a>
+  <a href="#s8">8. Antes de entregar</a>
 </nav>
 <div class="wrap">
 
@@ -122,14 +121,13 @@
   <h2><span class="paso">2</span> Fechas y reglas</h2>
   <div class="tbl-wrap"><table>
     <tr><th>Campo</th><th>Detalle</th></tr>
-    <tr><td>Modalidad</td><td><b>Individual</b> (la sustentación es de cada estudiante)</td></tr>
+    <tr><td>Modalidad</td><td><b>Individual</b></td></tr>
     <tr><td>Ponderación</td><td>20% del corte 3</td></tr>
     <tr><td>Entrega</td><td><b>Viernes 20 de noviembre de 2026, 23:59</b>, por la tarea de <b>Teams</b></td></tr>
-    <tr><td>Sustentación</td><td><b>Sábado 21 de noviembre</b>, en clase, en tu propio computador (unos 7 minutos por estudiante)</td></tr>
     <tr><td>Herramientas</td><td>Las mismas de los Laboratorios 6 y 7: Windows, Node.js, <code>opencode</code> con su modelo gratuito y el proyecto <code>mcp-caribemart</code>. No necesitas tarjeta de crédito ni claves de pago.</td></tr>
     <tr><td>Evaluación</td><td>5 criterios de 1,0 cada uno = 5,0</td></tr>
   </table></div>
-  <div class="danger">Si no te presentas a la sustentación, los criterios 1 a 4 no se pueden verificar y la nota es <b>0,0</b>, aunque hayas subido el archivo.</div>
+  <div class="danger">El docente califica <b>solo con lo que entregas</b>. Descomprime tu .zip en otra carpeta, corre <code>npm install</code> y prueba con opencode antes de subirlo: lo que no se pueda verificar vale 0,0.</div>
 </section>
 
 <section id="s3">
@@ -165,7 +163,7 @@
     <tr><td><b>2. Contexto y memoria (AGENTS.md)</b></td><td>Reglas de negocio claras y comparación evidente sin/con contexto (capturas de ambas respuestas).</td><td>Archivo presente pero genérico, o sin comparación.</td><td>Archivo vacío o copiado sin relación con CaribeMart.</td></tr>
     <tr><td><b>3. Agente con verificación humana</b></td><td>La tarea de varios pasos encadena herramientas; <code>cancelar_pedido</code> pide aprobación; bitácora de lo aprobado y rechazado.</td><td>Encadena herramientas pero cancela sin pedir permiso, o sin bitácora.</td><td>Solo consultas sueltas, sin tarea de varios pasos.</td></tr>
     <tr><td><b>4. Seguridad: prompt injection</b></td><td>Ataque demostrado, 2 defensas (contexto + código) y prueba de que el ataque ya no funciona.</td><td>Una sola defensa o sin prueba posterior.</td><td>Solo describe el riesgo, sin demostrarlo.</td></tr>
-    <tr><td><b>5. Sustentación</b></td><td>Corre la demo en vivo y explica con sus palabras cada decisión, incluidas las respuestas a las preguntas del docente.</td><td>Demo con fallas o explicación con lagunas en 1 o 2 criterios.</td><td>No logra correr la demo o leyó sin entender.</td></tr>
+    <tr><td><b>5. Evidencia y reproducibilidad</b></td><td>El .zip corre tal cual (<code>npm install</code> + opencode) y el PDF muestra cada criterio con capturas y explica con sus palabras por qué tomó cada decisión.</td><td>Corre con ajustes menores, o el PDF tiene capturas sin explicación.</td><td>No corre o el PDF no corresponde al código entregado.</td></tr>
   </table></div>
   <p>Un criterio sin evidencia vale <b>0,0</b>. La nota es la suma de los cinco (máximo 5,0).</p>
 </section>
@@ -177,32 +175,22 @@
     <li><b>Un PDF de máximo 5 páginas</b>, con tu nombre, que muestre con capturas: las 2 herramientas nuevas funcionando, la comparación sin/con <code>AGENTS.md</code>, la tarea de varios pasos con lo que aprobaste y rechazaste, y el ataque antes y después de tus defensas.</li>
   </ol>
   <p>Nombre de los archivos: <code>P3_Apellido_Nombre.zip</code> y <code>P3_Apellido_Nombre.pdf</code>.</p>
-  <div class="tip">Usa la IA para programar: está permitido y es parte del curso. Pero en la sustentación tú respondes, no el agente: entiende cada línea que entregues.</div>
+  <div class="tip">Usa la IA para programar: está permitido y es parte del curso. Las explicaciones del PDF deben ser tuyas: di qué decidiste y por qué, no copies la respuesta del agente.</div>
 </section>
+
 
 <section id="s7">
-  <h2><span class="paso">7</span> Sustentación (sábado 21 de noviembre)</h2>
-  <p>En clase, en tu computador, unos <b>7 minutos</b>:</p>
-  <ol>
-    <li>Abres <code>opencode</code> en tu proyecto y corres la tarea de varios pasos: el docente verá la solicitud de aprobación.</li>
-    <li>Lanzas el ataque del pedido malicioso y muestras que tus defensas lo detienen.</li>
-    <li>El docente te pide un cambio pequeño en vivo (por ejemplo, otro valor de N o un nuevo caso de error) y te hace preguntas sobre tres de tus decisiones.</li>
-  </ol>
-  <p>Lleva el proyecto instalado y probado: <code>npm install</code> y la conexión del modelo no se arreglan durante la sustentación.</p>
-</section>
-
-<section id="s8">
-  <h2><span class="paso">8</span> Lo que no cuenta</h2>
+  <h2><span class="paso">7</span> Lo que no cuenta</h2>
   <ul>
     <li>Capturas de herramientas que <b>no existen</b> en el <code>server.js</code> entregado.</li>
     <li>Un «ataque» que no está en los datos (escribirle la instrucción maliciosa directamente al agente no es <i>prompt injection</i> indirecto).</li>
     <li>Una cancelación que se ejecuta sin pedir aprobación, aunque el resultado sea correcto.</li>
-    <li>Entregas idénticas entre compañeros: ambas quedan en revisión y se aclaran en la sustentación.</li>
+    <li>Entregas idénticas entre compañeros: ambas quedan en revisión.</li>
   </ul>
 </section>
 
-<section id="s9">
-  <h2><span class="paso">9</span> Antes de entregar</h2>
+<section id="s8">
+  <h2><span class="paso">8</span> Antes de entregar</h2>
   <ul>
     <li><code>pedidos.json</code> tiene 12 o más pedidos y uno con nota maliciosa.</li>
     <li><code>pedidos_atrasados</code> y <code>cancelar_pedido</code> aparecen en opencode y responden bien a casos de error.</li>
@@ -210,7 +198,7 @@
     <li>Tienes las capturas sin/con <code>AGENTS.md</code>.</li>
     <li>El ataque funcionaba antes y ya no funciona después.</li>
     <li>Subiste el .zip (sin <code>node_modules</code>) y el PDF a Teams antes del viernes 20, 23:59.</li>
-    <li>Puedes explicar cada decisión sin leer un papel.</li>
+    <li>Descomprimiste el .zip en otra carpeta y corrió con <code>npm install</code> y opencode.</li>
   </ul>
   <p>Dudas → por Teams antes del jueves 19 de noviembre.</p>
 </section>
