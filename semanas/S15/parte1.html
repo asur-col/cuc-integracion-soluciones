@@ -1,0 +1,409 @@
+<section data-kicker="Mapa" data-titulo="Ruta de hoy: agentes con control humano y defensa" data-sub="Cuatro pasos para llevar el asistente de CaribeMart al Proyecto Corte 3." data-fuente="Basado en: caso del curso CaribeMart · Dibujo propio · Foto: Joe Ross, Wikimedia Commons (CC BY-SA 2.0)" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp1"><rect x="8" y="8" width="1164" height="484" rx="18"/></clipPath><image href="@@FOTO:tienda@@" x="8" y="8" width="1164" height="484" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp1)"/>
+<rect x="8" y="8" width="1164" height="484" rx="18" fill="#1d1d1d" opacity="0.34"/>
+<linearGradient id="gr2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.88"/></linearGradient><rect x="8" y="140" width="1164" height="352" rx="18" fill="url(#gr2)"/>
+<text x="40" y="86" font-size="42" font-weight="700" fill="#fff">De consultas sueltas a agentes seguros</text>
+<text x="40" y="132" font-size="24" fill="#F3D9DE">Ruta de la Semana 15 en cuatro paradas</text>
+<rect x="40" y="315" width="248" height="140" rx="16" fill="#fff" stroke="#A6192E" stroke-width="4"/>
+<circle cx="78" cy="362" r="20" fill="#A6192E"/><text x="78" y="369.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">1</text>
+<text x="114" y="368" font-size="24" font-weight="700" fill="#A6192E">AGENTES</text>
+<text x="68" y="418" font-size="20" fill="#2A2A2A">bucle y pasos</text>
+<line x1="292" y1="385" x2="306.2" y2="385" stroke="#fff" stroke-width="4" stroke-linecap="round"/><polygon points="320,385 304.2,394.2 304.2,375.8" fill="#fff"/>
+<rect x="324" y="315" width="248" height="140" rx="16" fill="#fff" stroke="#9C7B16" stroke-width="4"/>
+<circle cx="362" cy="362" r="20" fill="#9C7B16"/><text x="362" y="369.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">2</text>
+<text x="398" y="368" font-size="24" font-weight="700" fill="#9C7B16">CONTROL</text>
+<text x="352" y="418" font-size="20" fill="#2A2A2A">permission ask</text>
+<line x1="576" y1="385" x2="590.2" y2="385" stroke="#fff" stroke-width="4" stroke-linecap="round"/><polygon points="604,385 588.2,394.2 588.2,375.8" fill="#fff"/>
+<rect x="608" y="315" width="248" height="140" rx="16" fill="#fff" stroke="#B3261E" stroke-width="4"/>
+<circle cx="646" cy="362" r="20" fill="#B3261E"/><text x="646" y="369.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">3</text>
+<text x="682" y="368" font-size="24" font-weight="700" fill="#B3261E">ATAQUE</text>
+<text x="636" y="418" font-size="20" fill="#2A2A2A">prompt injection</text>
+<line x1="860" y1="385" x2="874.2" y2="385" stroke="#fff" stroke-width="4" stroke-linecap="round"/><polygon points="888,385 872.2,394.2 872.2,375.8" fill="#fff"/>
+<rect x="892" y="315" width="248" height="140" rx="16" fill="#fff" stroke="#2E7D4F" stroke-width="4"/>
+<circle cx="930" cy="362" r="20" fill="#2E7D4F"/><text x="930" y="369.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">4</text>
+<text x="966" y="368" font-size="24" font-weight="700" fill="#2E7D4F">DEFENSA</text>
+<text x="920" y="418" font-size="20" fill="#2A2A2A">proyecto Corte 3</text>
+</svg>
+<aside class="narracion">Bienvenidos a la semana quince. Hoy cerramos el diseño técnico del asistente operativo de CaribeMart, conectando lo construido en la Unidad tres. A la izquierda ven el caso del curso, CaribeMart, una cadena ficticia del Caribe colombiano con sesenta almacenes, centro de datos principal en Barranquilla y respaldo en Bogotá. Sigan las cuatro tarjetas debajo de la fotografía. En la primera parada veremos qué convierte una llamada suelta a una herramienta en un agente capaz de encadenar varios pasos [cite:1]. En la segunda parada configuraremos la verificación humana mediante permisos de pregunta antes de modificar pedidos [cite:5]. En la tercera parada analizaremos el riesgo de inyección de instrucciones escondido en datos externos [cite:2]. Y en la cuarta parada construiremos la defensa en profundidad, revisaremos el marco legal colombiano [cite:11,12] y repasaremos las reglas del proyecto del tercer corte.</aside>
+</section>
+<section data-kicker="Contexto" data-titulo="De llamadas sueltas a tareas encadenadas" data-sub="El modelo deja de responder una consulta aislada para resolver un objetivo operativo." data-fuente="Basado en: proyecto CaribeMart Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="14" y="20" width="560" height="460" rx="18" fill="#F4F4F4" stroke="#9a9a9a" stroke-width="3"/>
+<rect x="606" y="20" width="560" height="460" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<text x="294" y="68" text-anchor="middle" font-size="24" font-weight="700" fill="#2A2A2A">SEMANA 13 · LLAMADA ÚNICA</text>
+<text x="886" y="68" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">SEMANA 15 · AGENTE ENCADENADO</text>
+<circle cx="130" cy="175" r="50" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-usuario" x="98" y="143" width="64" height="64" color="#2A2A2A"/><text x="130" y="251" text-anchor="middle" font-size="20" font-weight="700" fill="#2A2A2A">META</text><text x="130" y="277" text-anchor="middle" font-size="18" fill="#5E5E5E">¿Pedido 1001?</text>
+<circle cx="450" cy="175" r="50" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-funcion" x="418" y="143" width="64" height="64" color="#2A2A2A"/><text x="450" y="251" text-anchor="middle" font-size="20" font-weight="700" fill="#2A2A2A">1 LLAMADA</text><text x="450" y="277" text-anchor="middle" font-size="18" fill="#5E5E5E">consultar_pedido</text>
+<line x1="186" y1="175" x2="380.2" y2="175" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="394,175 378.2,184.2 378.2,165.8" fill="#2A2A2A"/>
+<rect x="50" y="345" width="488" height="100" rx="14" fill="#fff" stroke="#9a9a9a" stroke-width="2"/>
+<text x="294" y="388" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">Una pregunta, una respuesta</text>
+<text x="294" y="422" text-anchor="middle" font-size="20" fill="#5E5E5E">y el flujo termina de inmediato</text>
+<circle cx="710" cy="165" r="46" fill="#fff" stroke="#A6192E" stroke-width="2.5"/><use href="#i-funcion" x="681" y="136" width="58" height="58" color="#A6192E"/><text x="710" y="235" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">1. ATRASOS</text><text x="710" y="259" text-anchor="middle" font-size="16" fill="#5E5E5E">pedidos_atrasados</text>
+<circle cx="900" cy="165" r="46" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/><use href="#i-documento" x="871" y="136" width="58" height="58" color="#9C7B16"/><text x="900" y="235" text-anchor="middle" font-size="18" font-weight="700" fill="#9C7B16">2. REGLAS</text><text x="900" y="259" text-anchor="middle" font-size="16" fill="#5E5E5E">AGENTS.md</text>
+<circle cx="1070" cy="165" r="46" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/><use href="#i-candado" x="1041" y="136" width="58" height="58" color="#2E7D4F"/><text x="1070" y="235" text-anchor="middle" font-size="18" font-weight="700" fill="#2E7D4F">3. PROPONER</text><text x="1070" y="259" text-anchor="middle" font-size="16" fill="#5E5E5E">cancelar_pedido</text>
+<line x1="760" y1="165" x2="834.2" y2="165" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="848,165 832.2,174.2 832.2,155.8" fill="#A6192E"/>
+<line x1="950" y1="165" x2="1004.2" y2="165" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="1018,165 1002.2,174.2 1002.2,155.8" fill="#9C7B16"/>
+<rect x="640" y="345" width="492" height="100" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+<text x="886" y="388" text-anchor="middle" font-size="22" font-weight="700" fill="#A6192E">Encadena pasos, pide aprobación</text>
+<text x="886" y="422" text-anchor="middle" font-size="20" fill="#2A2A2A">y redacta el mensaje al cliente</text>
+</svg>
+<aside class="narracion">Comparen detenidamente los dos paneles que tienen en pantalla. A la izquierda recordamos el alcance que logramos construir en la semana trece. Un operador preguntaba por el pedido mil uno, el modelo llamaba una sola vez a consultar pedido y devolvía el estado en texto plano. Ahí terminaba por completo su trabajo sin tomar más iniciativas. Ahora miren el panel derecho en tono vino. En la semana quince damos el salto de una llamada suelta a un agente que encadena varios pasos hacia una meta operativa completa. Primero consulta los pedidos atrasados en la base de datos. Luego cruza esos resultados contra las políticas de negocio escritas en AGENTS punto md. Después propone cuáles cancelar mediante cancelar pedido, pero se detiene ante el candado humano. Finalmente redacta el aviso cordial personalizado para cada comprador afectado en la región Caribe.</aside>
+</section>
+<section data-kicker="Arquitectura" data-titulo="Flujo determinista frente a agente autónomo" data-sub="El flujo fijo ejecuta una receta invariable; el agente decide qué herramienta usar según el contexto." data-fuente="Basado en: OWASP LLM06:2025 Excessive Agency [cite:1] y OpenCode MCP [cite:6] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="20" y="26" width="1140" height="200" rx="18" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<text x="48" y="66" font-size="24" font-weight="700" fill="#2A2A2A">FLUJO DETERMINISTA (script fijo)</text>
+<rect x="48" y="104" width="210" height="84" rx="12" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/>
+<text x="153" y="152" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">Paso 1: leer</text>
+<rect x="348" y="104" width="230" height="84" rx="12" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/>
+<text x="463" y="152" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">Paso 2: filtrar</text>
+<rect x="668" y="104" width="230" height="84" rx="12" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/>
+<text x="783" y="152" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">Paso 3: guardar</text>
+<rect x="980" y="104" width="150" height="84" rx="12" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<text x="1055" y="152" text-anchor="middle" font-size="21" font-weight="700" fill="#2E7D4F">Fin fijo</text>
+<line x1="262" y1="146" x2="330.2" y2="146" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="344,146 328.2,155.2 328.2,136.8" fill="#2A2A2A"/>
+<line x1="582" y1="146" x2="650.2" y2="146" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="664,146 648.2,155.2 648.2,136.8" fill="#2A2A2A"/>
+<line x1="902" y1="146" x2="962.2" y2="146" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="976,146 960.2,155.2 960.2,136.8" fill="#2A2A2A"/>
+<rect x="20" y="260" width="1140" height="215" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<text x="48" y="300" font-size="24" font-weight="700" fill="#A6192E">AGENTE AUTÓNOMO</text>
+<circle cx="140" cy="385" r="46" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/><use href="#i-usuario" x="111" y="356" width="58" height="58" color="#2A2A2A"/><text x="140" y="457" text-anchor="middle" font-size="20" font-weight="700" fill="#2A2A2A">META</text>
+<circle cx="410" cy="385" r="52" fill="#fff" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="377" y="352" width="66" height="66" color="#A6192E"/><text x="410" y="463" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">RAZONA</text>
+<circle cx="710" cy="385" r="52" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/><use href="#i-funcion" x="677" y="352" width="66" height="66" color="#9C7B16"/><text x="710" y="463" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">ELIGE TOOL</text>
+<circle cx="1020" cy="385" r="46" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/><use href="#i-bd" x="991" y="356" width="58" height="58" color="#2E7D4F"/><text x="1020" y="457" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D4F">OBSERVA</text>
+<line x1="192" y1="385" x2="338.2" y2="385" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="352,385 336.2,394.2 336.2,375.8" fill="#A6192E"/>
+<line x1="468" y1="385" x2="638.2" y2="385" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="652,385 636.2,394.2 636.2,375.8" fill="#A6192E"/>
+<line x1="768" y1="385" x2="954.2" y2="385" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="968,385 952.2,394.2 952.2,375.8" fill="#9C7B16"/>
+<path d="M1020,334 L1020,294 L410,294 L410,312.2" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6"/><polygon points="410,326 400.8,310.2 419.2,310.2" fill="#2E7D4F"/>
+<text x="740" y="284" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">repite hasta cumplir o pedir ayuda</text>
+</svg>
+<aside class="narracion">Fíjense en la diferencia estructural entre los dos carriles horizontales del diagrama. Arriba en gris tienen un flujo determinista clásico escrito por un programador. El software ejecuta exactamente el paso uno para leer, el paso dos para filtrar y el paso tres para guardar, recorriendo siempre el mismo camino predecible sin importar qué datos particulares aparezcan en la base. Abajo ven en cambio un agente autónomo en color vino. Al agente le entregamos una meta abierta en lenguaje natural y un catálogo de herramientas disponibles mediante el protocolo de contexto de modelo, MCP[cite:6]. El modelo razona qué hacer, elige qué herramienta invocar, observa la respuesta real que regresa el servidor y, sigan la flecha punteada verde superior, repite el ciclo hasta completar la meta o pedir ayuda. Esa flexibilidad resulta valiosa para CaribeMart, aunque exige controles estrictos porque no conocemos cada llamada por adelantado[cite:1].</aside>
+</section>
+<section data-kicker="Fundamentos" data-titulo="El bucle observar, razonar y actuar" data-sub="Cada iteración incorpora la respuesta real de la herramienta antes de decidir el siguiente paso." data-fuente="Basado en: OWASP LLM06:2025 Excessive Agency [cite:1] y MCP [cite:6] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
+<svg viewBox="0 0 1180 500">
+<circle cx="590" cy="250" r="92" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-engranaje" x="552" y="188" width="76" height="76" color="#9C7B16"/>
+<text x="590" y="296" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">BUCLE</text>
+<text x="590" y="324" text-anchor="middle" font-size="19" fill="#2A2A2A">del agente</text>
+<rect x="75" y="58" width="350" height="124" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-ojo" x="104" y="92" width="56" height="56" color="#2E7D4F"/>
+<text x="176" y="112" font-size="24" font-weight="700" fill="#2E7D4F">1. OBSERVAR</text>
+<text x="176" y="146" font-size="19" fill="#2A2A2A">meta y datos previos</text>
+<rect x="755" y="58" width="350" height="124" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-ia" x="784" y="92" width="56" height="56" color="#A6192E"/>
+<text x="856" y="112" font-size="24" font-weight="700" fill="#A6192E">2. RAZONAR</text>
+<text x="856" y="146" font-size="19" fill="#2A2A2A">qué paso falta</text>
+<rect x="755" y="318" width="350" height="124" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-funcion" x="784" y="352" width="56" height="56" color="#9C7B16"/>
+<text x="856" y="372" font-size="24" font-weight="700" fill="#9C7B16">3. ACTUAR</text>
+<text x="856" y="406" font-size="19" fill="#2A2A2A">invocar herramienta MCP</text>
+<rect x="75" y="318" width="350" height="124" rx="18" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<use href="#i-bd" x="104" y="352" width="56" height="56" color="#2A2A2A"/>
+<text x="176" y="372" font-size="24" font-weight="700" fill="#2A2A2A">4. RECIBIR</text>
+<text x="176" y="406" font-size="19" fill="#2A2A2A">resultado real del servidor</text>
+<line x1="430" y1="120" x2="732" y2="120" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="748,120 730,130.5 730,109.5" fill="#A6192E"/>
+<line x1="930" y1="186" x2="930" y2="296" stroke="#9C7B16" stroke-width="5" stroke-linecap="round"/><polygon points="930,312 919.5,294 940.5,294" fill="#9C7B16"/>
+<line x1="748" y1="380" x2="446" y2="380" stroke="#2A2A2A" stroke-width="5" stroke-linecap="round"/><polygon points="430,380 448,369.5 448,390.5" fill="#2A2A2A"/>
+<line x1="250" y1="312" x2="250" y2="202" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round"/><polygon points="250,186 260.5,204 239.5,204" fill="#2E7D4F"/>
+</svg>
+<aside class="narracion">Recorramos este ciclo [cite:1] en sentido horario empezando arriba a la izquierda en la caja verde. En el paso uno, observar, el agente recibe la instrucción inicial del operador junto con las reglas vigentes del proyecto y los resultados previos. En el paso dos, razonar, el modelo evalúa qué información real le falta para responder y qué herramienta del servidor MCP puede obtenerla [cite:6]. Sigan ahora la flecha dorada hacia abajo a la derecha. En el paso tres, actuar, propone una llamada estructurada con nombre de herramienta y argumentos en notación de objetos JavaScript, JSON, que el entorno ejecuta si cuenta con permiso. En el paso cuatro, recibir, vuelve la respuesta real desde la base de datos o servicio y queda registrada en la conversación. Luego sube nuevamente a observar con esa nueva evidencia acumulada hasta completar la meta o encontrar una pausa humana.</aside>
+</section>
+<section data-kicker="Protocolo" data-titulo="Cómo el historial guía el siguiente paso" data-sub="El host opencode conserva cada llamada y cada observación para alimentar el siguiente turno." data-fuente="Basado en: OpenCode MCP docs [cite:6] · Dibujo propio" data-siglas="MCP = Model Context Protocol · JSON = JavaScript Object Notation">
+<svg viewBox="0 0 1180 500">
+<rect x="60" y="20" width="260" height="72" rx="14" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-usuario" x="89" y="35" width="42" height="42" color="#2A2A2A"/>
+<text x="150" y="64" font-size="22" font-weight="700" fill="#2A2A2A">OPERADOR</text>
+<rect x="460" y="20" width="260" height="72" rx="14" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-ia" x="489" y="35" width="42" height="42" color="#A6192E"/>
+<text x="550" y="64" font-size="22" font-weight="700" fill="#A6192E">HOST · MODELO</text>
+<rect x="830" y="20" width="320" height="72" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-servidor" x="857" y="35" width="42" height="42" color="#9C7B16"/>
+<text x="916" y="64" font-size="21" font-weight="700" fill="#9C7B16">MCP CARIBEMART</text>
+<line x1="190" y1="92" x2="190" y2="480" stroke="#2A2A2A" stroke-width="3" stroke-dasharray="8 8"/>
+<line x1="590" y1="92" x2="590" y2="480" stroke="#A6192E" stroke-width="3" stroke-dasharray="8 8"/>
+<line x1="990" y1="92" x2="990" y2="480" stroke="#9C7B16" stroke-width="3" stroke-dasharray="8 8"/>
+<line x1="190" y1="155" x2="576.2" y2="155" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="590,155 574.2,164.2 574.2,145.8" fill="#A6192E"/>
+<rect x="265.821" y="121" width="248.359" height="28" rx="6" fill="#fff"/>
+<text x="390" y="142" text-anchor="middle" font-size="19" font-weight="700" fill="#A6192E">1. Meta: revisar atrasados</text>
+<line x1="590" y1="225" x2="976.2" y2="225" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="990,225 974.2,234.2 974.2,215.8" fill="#A6192E"/>
+<rect x="655.583" y="191" width="268.835" height="28" rx="6" fill="#fff"/>
+<text x="790" y="212" text-anchor="middle" font-size="19" font-weight="700" fill="#A6192E">2. Llama pedidos_atrasados</text>
+<line x1="990" y1="295" x2="603.8" y2="295" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 6"/><polygon points="590,295 605.8,285.8 605.8,304.2" fill="#2E7D4F"/>
+<rect x="666.328" y="261" width="247.343" height="28" rx="6" fill="#fff"/>
+<text x="790" y="282" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">3. Devuelve lista en JSON</text>
+<line x1="590" y1="365" x2="976.2" y2="365" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="990,365 974.2,374.2 974.2,355.8" fill="#9C7B16"/>
+<rect x="656.098" y="331" width="267.804" height="28" rx="6" fill="#fff"/>
+<text x="790" y="352" text-anchor="middle" font-size="19" font-weight="700" fill="#9C7B16">4. Propone cancelar_pedido</text>
+<line x1="590" y1="435" x2="203.8" y2="435" stroke="#A6192E" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 6"/><polygon points="190,435 205.8,425.8 205.8,444.2" fill="#A6192E"/>
+<rect x="243.283" y="401" width="293.433" height="28" rx="6" fill="#fff"/>
+<text x="390" y="422" text-anchor="middle" font-size="19" font-weight="700" fill="#A6192E">5. Pide aprobar y redacta aviso</text>
+</svg>
+<aside class="narracion">Este diagrama de secuencia muestra quién dialoga con quién durante una tarea multipaso. A la izquierda tienen al operador humano, en el centro al host opencode junto con el modelo de lenguaje, y a la derecha al servidor MCP caribemart corriendo sobre Node[cite:6]. En el mensaje uno, el operador escribe su meta inicial de revisar pedidos atrasados. En el mensaje dos, el modelo invoca la herramienta de solo lectura pedidos atrasados. En el mensaje tres, señalado con línea punteada verde, el servidor responde con los pedidos filtrados en formato JSON. Con esa observación ya incorporada dentro del historial de contexto, en el mensaje cuatro el modelo razona qué registros superan el umbral permitido y propone llamar cancelar pedido. Finalmente, en el mensaje cinco, la plataforma frena cualquier cambio real para pedir aprobación al operador y prepara el borrador del aviso.</aside>
+</section>
+<section data-kicker="CaribeMart" data-titulo="El caso operativo de CaribeMart en el Corte 3" data-sub="Sesenta tiendas ficticias en el Caribe con dos reglas gerenciales estrictas antes de automatizar." data-fuente="Basado en: Proyecto de Aula Corte 3 · Foto: Axisadman, Wikimedia Commons (CC BY-SA 3.0)" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp3"><rect x="14" y="20" width="440" height="460" rx="16"/></clipPath><image href="@@FOTO:bodega@@" x="14" y="20" width="440" height="460" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp3)"/>
+<linearGradient id="gr4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.85"/></linearGradient><rect x="14" y="320" width="440" height="160" rx="16" fill="url(#gr4)"/>
+<text x="40" y="412" font-size="26" font-weight="700" fill="#fff">CaribeMart · 60 almacenes</text>
+<text x="40" y="448" font-size="20" fill="#F3D9DE">Barranquilla · respaldo Bogotá</text>
+<rect x="484" y="20" width="676" height="132" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-alerta" x="509" y="59" width="54" height="54" color="#A6192E"/>
+<text x="584" y="68" font-size="22" font-weight="700" fill="#A6192E">EL PROBLEMA DIARIO</text>
+<text x="584" y="102" font-size="21" fill="#2A2A2A">Horas revisando atrasos a mano</text>
+<text x="584" y="132" font-size="21" fill="#2A2A2A">y redactando avisos por cliente</text>
+<rect x="484" y="180" width="676" height="132" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-ia" x="509" y="219" width="54" height="54" color="#9C7B16"/>
+<text x="584" y="228" font-size="22" font-weight="700" fill="#9C7B16">LA META DEL ASISTENTE</text>
+<text x="584" y="262" font-size="21" fill="#2A2A2A">Detectar atrasos, proponer cancelación</text>
+<text x="584" y="292" font-size="21" fill="#2A2A2A">y preparar el texto de respuesta</text>
+<rect x="484" y="340" width="676" height="140" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-escudo" x="509" y="383" width="54" height="54" color="#2E7D4F"/>
+<text x="584" y="390" font-size="22" font-weight="700" fill="#2E7D4F">DOS CONDICIONES NO NEGOCIABLES</text>
+<text x="584" y="424" font-size="21" fill="#2A2A2A">1. Nada escribe sin permiso humano</text>
+<text x="584" y="456" font-size="21" fill="#2A2A2A">2. Ignora órdenes ocultas en datos</text>
+</svg>
+<aside class="narracion">Aterricemos estos conceptos arquitectónicos en el hilo conductor de nuestro curso. CaribeMart opera sesenta almacenes en el país, con centro de datos principal en Barranquilla y respaldo pasivo en Bogotá para garantizar continuidad operativa. Cada mañana el equipo de servicio al cliente perdía horas valiosas revisando manualmente qué envíos estaban atrasados en Cartagena, Santa Marta o Montería, decidiendo cuáles cancelar y redactando correos uno por uno. Como muestra la tarjeta dorada del centro a la derecha, la gerencia aprobó construir un asistente en opencode conectado al servidor MCP de CaribeMart, pero fijó dos condiciones estrictas que no se negocian, visibles abajo en la tarjeta verde. Primera condición: ninguna herramienta que modifique pedidos corre sin autorización humana previa. Segunda condición: el asistente jamás debe obedecer instrucciones escondidas dentro de los datos almacenados. Ambas reglas guiarán toda la semana.</aside>
+</section>
+<section data-kicker="Flujo" data-titulo="Cadena completa de herramientas en CaribeMart" data-sub="El prompt del Proyecto Corte 3 dispara cuatro etapas ordenadas sobre pedidos de prueba." data-fuente="Basado en: Proyecto de Aula Corte 3 y Zod docs [cite:9] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="30" y="356" width="262" height="124" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-bd" x="46" y="370" width="40" height="40" color="#2E7D4F"/>
+<text x="96" y="398" font-size="20" font-weight="700" fill="#2E7D4F">1. CONSULTAR</text>
+<text x="52" y="434" font-size="17" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">pedidos_atrasados</text>
+<text x="52" y="464" font-size="17" fill="#5E5E5E">solo lectura con zod</text>
+<path d="M292,416 L305,416 L305,316 L298.2,316" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="312,316 296.2,325.2 296.2,306.8" fill="#2E7D4F"/>
+<rect x="316" y="256" width="262" height="124" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-documento" x="332" y="270" width="40" height="40" color="#9C7B16"/>
+<text x="382" y="298" font-size="20" font-weight="700" fill="#9C7B16">2. EVALUAR</text>
+<text x="338" y="334" font-size="17" font-weight="700" fill="#2A2A2A">reglas AGENTS.md</text>
+<text x="338" y="364" font-size="17" fill="#5E5E5E">días límite y tono</text>
+<path d="M578,316 L591,316 L591,216 L584.2,216" fill="none" stroke="#9C7B16" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="598,216 582.2,225.2 582.2,206.8" fill="#9C7B16"/>
+<rect x="602" y="156" width="262" height="124" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-candado" x="618" y="170" width="40" height="40" color="#A6192E"/>
+<text x="668" y="198" font-size="20" font-weight="700" fill="#A6192E">3. PROPONER</text>
+<text x="624" y="234" font-size="17" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">cancelar_pedido</text>
+<text x="624" y="264" font-size="17" fill="#5E5E5E">pide permiso ask</text>
+<path d="M864,216 L877,216 L877,116 L870.2,116" fill="none" stroke="#A6192E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="884,116 868.2,125.2 868.2,106.8" fill="#A6192E"/>
+<rect x="888" y="56" width="262" height="124" rx="16" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<use href="#i-usuario" x="904" y="70" width="40" height="40" color="#2A2A2A"/>
+<text x="954" y="98" font-size="20" font-weight="700" fill="#2A2A2A">4. REDACTAR</text>
+<text x="910" y="134" font-size="17" font-weight="700" fill="#2A2A2A">aviso al cliente</text>
+<text x="910" y="164" font-size="17" fill="#5E5E5E">tono claro y cordial</text>
+<rect x="36" y="36" width="520" height="112" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+<text x="60" y="74" font-size="19" font-weight="700" fill="#A6192E">INSTRUCCIÓN AL AGENTE</text>
+<text x="60" y="108" font-size="18" fill="#2A2A2A">«Revisa los pedidos atrasados, propón cuáles</text>
+<text x="60" y="134" font-size="18" fill="#2A2A2A">cancelar y redacta el mensaje para cada cliente»</text>
+</svg>
+<aside class="narracion">Miren esta escalera ascendente de cuatro peldaños que describe el recorrido completo del proyecto. Arriba a la izquierda ven la instrucción literal que le enviarán a opencode en la prueba del tercer corte: revisar los pedidos atrasados, proponer cuáles cancelar y redactar el mensaje para cada cliente. En el primer peldaño abajo en verde, el agente llama automáticamente a pedidos atrasados, una herramienta de solo lectura con entrada validada usando zod [cite:9]. En el segundo peldaño en dorado, contrasta las fechas y estados de cada registro contra las políticas escritas en AGENTS punto md para determinar cuáles superan el límite de días. En el tercer peldaño en vino, propone invocar cancelar pedido únicamente sobre los casos que aplican, deteniéndose frente al candado humano. Y en el cuarto peldaño redacta el mensaje claro y cordial adaptado a cada comprador afectado.</aside>
+</section>
+<section data-kicker="Control" data-titulo="Cuatro condiciones para detener el bucle" data-sub="Un agente seguro nunca gira sin fin: debe saber parar cuando cumple, duda, falla o alcanza un tope." data-fuente="Basado en: MCP Security Best Practices [cite:7] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="140" cy="250" r="66" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-engranaje" x="102" y="212" width="76" height="76" color="#A6192E"/><text x="140" y="342" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">TURNO DEL</text><text x="140" y="370" text-anchor="middle" font-size="20" fill="#5E5E5E">AGENTE</text>
+<path d="M212,250 L280,250 L305,75 L336.2,75" fill="none" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="350,75 334.2,84.2 334.2,65.8" fill="#2E7D4F"/>
+<rect x="354" y="31" width="380" height="88" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-check" x="374" y="53" width="44" height="44" color="#2E7D4F"/>
+<text x="432" y="69" font-size="20" font-weight="700" fill="#2E7D4F">META CUMPLIDA</text>
+<text x="432" y="99" font-size="18" fill="#2A2A2A">ya tiene todos los datos</text>
+<line x1="738" y1="75" x2="800.2" y2="75" stroke="#2E7D4F" stroke-width="4" stroke-linecap="round"/><polygon points="814,75 798.2,84.2 798.2,65.8" fill="#2E7D4F"/>
+<rect x="818" y="31" width="342" height="88" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<text x="989" y="83" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">Responde al operador</text>
+<path d="M212,250 L280,250 L305,195 L336.2,195" fill="none" stroke="#9C7B16" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="350,195 334.2,204.2 334.2,185.8" fill="#9C7B16"/>
+<rect x="354" y="151" width="380" height="88" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-candado" x="374" y="173" width="44" height="44" color="#9C7B16"/>
+<text x="432" y="189" font-size="20" font-weight="700" fill="#9C7B16">PIDE APROBACIÓN</text>
+<text x="432" y="219" font-size="18" fill="#2A2A2A">va a escribir o cancelar</text>
+<line x1="738" y1="195" x2="800.2" y2="195" stroke="#9C7B16" stroke-width="4" stroke-linecap="round"/><polygon points="814,195 798.2,204.2 798.2,185.8" fill="#9C7B16"/>
+<rect x="818" y="151" width="342" height="88" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<text x="989" y="203" text-anchor="middle" font-size="19" font-weight="700" fill="#9C7B16">Pausa esperando al humano</text>
+<path d="M212,250 L280,250 L305,315 L336.2,315" fill="none" stroke="#B3261E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="350,315 334.2,324.2 334.2,305.8" fill="#B3261E"/>
+<rect x="354" y="271" width="380" height="88" rx="14" fill="#FBEAE8" stroke="#B3261E" stroke-width="2.5"/>
+<use href="#i-alerta" x="374" y="293" width="44" height="44" color="#B3261E"/>
+<text x="432" y="309" font-size="20" font-weight="700" fill="#B3261E">ERROR CONTROLADO</text>
+<text x="432" y="339" font-size="18" fill="#2A2A2A">pedido inexistente o inválido</text>
+<line x1="738" y1="315" x2="800.2" y2="315" stroke="#B3261E" stroke-width="4" stroke-linecap="round"/><polygon points="814,315 798.2,324.2 798.2,305.8" fill="#B3261E"/>
+<rect x="818" y="271" width="342" height="88" rx="14" fill="#fff" stroke="#B3261E" stroke-width="2.5"/>
+<text x="989" y="323" text-anchor="middle" font-size="19" font-weight="700" fill="#B3261E">Informa sin estrellarse</text>
+<path d="M212,250 L280,250 L305,435 L336.2,435" fill="none" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polygon points="350,435 334.2,444.2 334.2,425.8" fill="#2A2A2A"/>
+<rect x="354" y="391" width="380" height="88" rx="14" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-reloj" x="374" y="413" width="44" height="44" color="#2A2A2A"/>
+<text x="432" y="429" font-size="20" font-weight="700" fill="#2A2A2A">LÍMITE DE PASOS</text>
+<text x="432" y="459" font-size="18" fill="#2A2A2A">evita bucles infinitos</text>
+<line x1="738" y1="435" x2="800.2" y2="435" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="814,435 798.2,444.2 798.2,425.8" fill="#2A2A2A"/>
+<rect x="818" y="391" width="342" height="88" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/>
+<text x="989" y="443" text-anchor="middle" font-size="19" font-weight="700" fill="#2A2A2A">Corta y pide intervención</text>
+</svg>
+<aside class="narracion">Un error frecuente cuando alguien diseña su primer agente es dejar el bucle abierto sin criterios explícitos de terminación [cite:7]. Sigan de arriba hacia abajo las cuatro ramas que salen desde el nodo central del turno. La primera rama en verde representa la salida normal y esperada: la meta quedó resuelta con todos los datos necesarios y el modelo entrega su respuesta final al operador. La segunda rama en dorado aparece cuando el agente pretende invocar una herramienta de escritura como cancelar pedido y el host congela el turno esperando confirmación de la persona. La tercera rama en rojo ocurre frente a un error controlado, por ejemplo consultar un identificador inexistente o intentar cancelar un envío entregado, donde el servidor responde texto claro sin estrellarse. Finalmente, la cuarta rama fija un límite máximo de pasos para cortar bucles repetitivos y evitar consumo desbordado de recursos.</aside>
+</section>
+<section data-kicker="Frontera" data-titulo="Separar lectura de escritura en CaribeMart" data-sub="Las cinco herramientas del proyecto se dividen según su impacto sobre pedidos.json." data-fuente="Basado en: Proyecto Corte 3, OpenCode [cite:5] y Zod [cite:9] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="18" y="24" width="540" height="452" rx="20" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<rect x="622" y="24" width="540" height="452" rx="20" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<text x="288" y="68" text-anchor="middle" font-size="26" font-weight="700" fill="#2E7D4F">ZONA DE SOLO LECTURA</text>
+<text x="892" y="68" text-anchor="middle" font-size="26" font-weight="700" fill="#B3261E">ZONA DE ESCRITURA</text>
+<line x1="590" y1="24" x2="590" y2="476" stroke="#A6192E" stroke-width="5" stroke-dasharray="12 10"/>
+<circle cx="590" cy="250" r="42" fill="#fff" stroke="#A6192E" stroke-width="3.5"/>
+<use href="#i-escudo" x="564" y="224" width="52" height="52" color="#A6192E"/>
+<rect x="62" y="130" width="452" height="68" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-ojo" x="83" y="145" width="38" height="38" color="#2E7D4F"/>
+<text x="136" y="172" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2E7D4F">consultar_pedido</text>
+<rect x="62" y="230" width="452" height="68" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-ojo" x="83" y="245" width="38" height="38" color="#2E7D4F"/>
+<text x="136" y="272" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2E7D4F">listar_pedidos_por_estado</text>
+<rect x="62" y="330" width="452" height="68" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-ojo" x="83" y="345" width="38" height="38" color="#2E7D4F"/>
+<text x="136" y="372" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2E7D4F">pedidos_atrasados</text>
+<text x="288" y="444" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">No alteran pedidos.json · seguras en bucle</text>
+<rect x="666" y="150" width="452" height="92" rx="14" fill="#fff" stroke="#B3261E" stroke-width="2.5"/>
+<use href="#i-candado" x="686" y="176" width="40" height="40" color="#B3261E"/>
+<text x="740" y="188" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#B3261E">crear_pedido</text>
+<text x="740" y="220" font-size="18" fill="#2A2A2A">inserta registro nuevo</text>
+<rect x="666" y="280" width="452" height="92" rx="14" fill="#fff" stroke="#B3261E" stroke-width="2.5"/>
+<use href="#i-candado" x="686" y="306" width="40" height="40" color="#B3261E"/>
+<text x="740" y="318" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#B3261E">cancelar_pedido</text>
+<text x="740" y="350" font-size="18" fill="#2A2A2A">cambia estado y motivo</text>
+<text x="892" y="444" text-anchor="middle" font-size="19" font-weight="700" fill="#B3261E">Exigen validación zod + permiso humano</text>
+</svg>
+<aside class="narracion">Miren la frontera vertical vino que divide el lienzo exactamente por la mitad con un escudo en el centro. A la izquierda dentro de la zona verde viven las tres herramientas de solo lectura de CaribeMart: consultar pedido y listar pedidos por estado heredadas del laboratorio siete, más la nueva herramienta pedidos atrasados que agregan en el proyecto. Ninguna de estas tres funciones altera el archivo pedidos punto json, de modo que el agente puede invocarlas libremente dentro de su bucle sin riesgo de corromper registros comerciales. A la derecha dentro de la zona roja están ubicadas las dos herramientas que sí modifican estado: crear pedido y cancelar pedido. Toda llamada que pretenda cruzar esa frontera de seguridad hacia la derecha debe superar dos barreras complementarias: validación estricta con zod [cite:9] en el servidor y permiso humano explícito en opencode [cite:5] antes de guardar.</aside>
+</section>
+<section data-kicker="Riesgo" data-titulo="OWASP LLM06:2025 — Agencia Excesiva en agentes" data-sub="Cuando un modelo mal encaminado ejecuta acciones dañinas por permisos o autonomía sin freno." data-fuente="Basado en: OWASP LLM06:2025 Excessive Agency [cite:1] · Dibujo propio" data-siglas="OWASP = Open Worldwide Application Security Project">
+<svg viewBox="0 0 1180 500">
+<circle cx="210" cy="250" r="86" fill="#FBEAE8" stroke="#B3261E" stroke-width="2.5"/><use href="#i-alerta" x="160" y="200" width="100" height="100" color="#B3261E"/><text x="210" y="366" text-anchor="middle" font-size="24" font-weight="700" fill="#B3261E">OWASP LLM06 [1]</text><text x="210" y="394" text-anchor="middle" font-size="20" fill="#5E5E5E">Agencia Excesiva</text>
+<line x1="302" y1="206.6" x2="443.044" y2="104.389" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="456,95 447.586,114.065 435.263,97.0601" fill="#B3261E"/>
+<rect x="462" y="39" width="694" height="112" rx="16" fill="#fff" stroke="#B3261E" stroke-width="3"/>
+<circle cx="522" cy="95" r="36" fill="#FBEAE8" stroke="#B3261E" stroke-width="2"/>
+<use href="#i-funcion" x="500" y="73" width="44" height="44" color="#B3261E"/>
+<text x="578" y="87" font-size="22" font-weight="700" fill="#B3261E">FUNCIONALIDAD EXCESIVA</text>
+<text x="578" y="121" font-size="19" fill="#2A2A2A">Expone herramientas de más (ej. borrar todo)</text>
+<line x1="302" y1="250" x2="440" y2="250" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="456,250 438,260.5 438,239.5" fill="#B3261E"/>
+<rect x="462" y="194" width="694" height="112" rx="16" fill="#fff" stroke="#B3261E" stroke-width="3"/>
+<circle cx="522" cy="250" r="36" fill="#FBEAE8" stroke="#B3261E" stroke-width="2"/>
+<use href="#i-llave" x="500" y="228" width="44" height="44" color="#B3261E"/>
+<text x="578" y="242" font-size="22" font-weight="700" fill="#B3261E">PERMISOS EXCESIVOS</text>
+<text x="578" y="276" font-size="19" fill="#2A2A2A">Credenciales de administrador sin mínimo privilegio</text>
+<line x1="302" y1="293.4" x2="443.044" y2="395.611" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="456,405 435.263,402.94 447.586,385.935" fill="#B3261E"/>
+<rect x="462" y="349" width="694" height="112" rx="16" fill="#fff" stroke="#B3261E" stroke-width="3"/>
+<circle cx="522" cy="405" r="36" fill="#FBEAE8" stroke="#B3261E" stroke-width="2"/>
+<use href="#i-engranaje" x="500" y="383" width="44" height="44" color="#B3261E"/>
+<text x="578" y="397" font-size="22" font-weight="700" fill="#B3261E">AUTONOMÍA EXCESIVA</text>
+<text x="578" y="431" font-size="19" fill="#2A2A2A">Ejecuta acciones críticas sin verificación humana</text>
+</svg>
+<aside class="narracion">Según la guía internacional de seguridad OWASP para aplicaciones basadas en modelos de lenguaje grandes, el sexto riesgo crítico lleva por nombre Agencia Excesiva, identificado como LLM cero seis [cite:1]. Esta vulnerabilidad aparece cuando concedemos al agente demasiado margen de acción frente a salidas inesperadas, interpretaciones ambiguas o entradas manipuladas por terceros. Miren las tres causas raíz documentadas por OWASP en las tarjetas de la derecha. Primera causa, funcionalidad excesiva: conectar herramientas que el asistente realmente no necesita, como funciones capaces de vaciar tablas completas de la tienda. Segunda causa, permisos excesivos: ejecutar el servidor con credenciales de administrador sin aplicar mínimo privilegio sobre los archivos. Tercera causa, autonomía excesiva: permitir que invoque operaciones destructivas o de escritura sin confirmación humana previa. Atacar simultáneamente estas tres raíces es indispensable para operar agentes confiables dentro de CaribeMart.</aside>
+</section>
+<section data-kicker="Impacto" data-titulo="El efecto dominó de automatizar sin frenos" data-sub="Un fallo aislado de razonamiento puede multiplicarse rápido si la escritura no tiene compuerta." data-fuente="Basado en: OWASP LLM06:2025 Excessive Agency [cite:1] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="24" y="34" width="290" height="120" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-alerta" x="50" y="70" width="48" height="48" color="#9C7B16"/>
+<text x="114" y="82" font-size="21" font-weight="700" fill="#9C7B16">FALLA INICIAL</text>
+<text x="114" y="114" font-size="18" fill="#2A2A2A">dato mal interpretado</text>
+<line x1="320" y1="94" x2="394" y2="94" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="410,94 392,104.5 392,83.5" fill="#B3261E"/>
+<rect x="416" y="34" width="330" height="120" rx="16" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<use href="#i-funcion" x="442" y="70" width="48" height="48" color="#B3261E"/>
+<text x="504" y="82" font-size="21" font-weight="700" fill="#B3261E">LLAMADA EN BUCLE</text>
+<text x="504" y="114" font-size="18" fill="#2A2A2A">cancela diez pedidos</text>
+<line x1="752" y1="94" x2="826" y2="94" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="842,94 824,104.5 824,83.5" fill="#B3261E"/>
+<rect x="848" y="34" width="308" height="120" rx="16" fill="#B3261E"/>
+<circle cx="898" cy="94" r="32" fill="#fff"/>
+<use href="#i-dinero" x="875" y="71" width="46" height="46" color="#B3261E"/>
+<text x="938" y="82" font-size="22" font-weight="700" fill="#fff">DAÑO REAL</text>
+<text x="938" y="114" font-size="19" fill="#F9EEF0">clientes sin envío</text>
+<rect x="24" y="224" width="1132" height="240" rx="18" fill="#fff" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-escudo" x="66" y="306" width="76" height="76" color="#A6192E"/>
+<text x="178" y="286" font-size="24" font-weight="700" fill="#A6192E">POR QUÉ NO BASTA CON «CONFIAR EN EL PROMPT»</text>
+<text x="178" y="332" font-size="21" fill="#2A2A2A">Un modelo probabilístico puede equivocarse incluso sin atacantes.</text>
+<text x="178" y="368" font-size="21" fill="#2A2A2A">Sin validación en código ni permiso ask, un error escala en segundos.</text>
+<text x="178" y="412" font-size="21" font-weight="700" fill="#2E7D4F">La seguridad real vive en la arquitectura fuera del modelo.</text>
+</svg>
+<aside class="narracion">Fíjense en la cadena superior de izquierda a derecha, porque ilustra un problema serio de confiabilidad. No hace falta siquiera enfrentar a un atacante malicioso para sufrir un incidente operativo grave con un agente autónomo. Basta una fecha mal interpretada, una zona horaria confusa o una equivocación ocasional del modelo sobre los días de retraso para que encadene varias llamadas en segundos y termine cancelando diez pedidos válidos en Barranquilla o Cartagena, dejando clientes reales sin despacho. Lean ahora la tarjeta vino inferior. Confiar únicamente en advertencias amables escritas dentro del prompt del sistema resulta insuficiente porque los modelos de lenguaje son probabilísticos y cometen errores incluso sin malicia. Como subraya la línea verde de cierre, la seguridad real debe vivir en la arquitectura fuera del modelo: en los permisos del host, en server punto js y en la revisión humana [cite:1].</aside>
+</section>
+<section data-kicker="Criterio" data-titulo="Matriz de autonomía: qué delegar y qué frenar" data-sub="El nivel de control depende del impacto sobre el negocio y de si la acción puede deshacerse." data-fuente="Basado en: NIST AI RMF [cite:10] y OWASP LLM06 [cite:1] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="156" y="24" width="476" height="200" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<rect x="654" y="24" width="476" height="200" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<rect x="156" y="244" width="476" height="200" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<rect x="654" y="244" width="476" height="200" rx="14" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<line x1="122" y1="444" x2="122" y2="37.8" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="122,24 131.2,39.8 112.8,39.8" fill="#2A2A2A"/>
+<line x1="156" y1="462" x2="1116.2" y2="462" stroke="#2A2A2A" stroke-width="4" stroke-linecap="round"/><polygon points="1130,462 1114.2,471.2 1114.2,452.8" fill="#2A2A2A"/>
+<use href="#i-ojo" x="183" y="51" width="38" height="38" color="#2E7D4F"/>
+<text x="394" y="70" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D4F">BAJO IMPACTO · REVERSIBLE</text>
+<text x="394" y="118" text-anchor="middle" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">consultar_pedido</text>
+<text x="394" y="158" text-anchor="middle" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">pedidos_atrasados</text>
+<text x="394" y="200" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">Permiso: allow (automático)</text>
+<use href="#i-documento" x="681" y="51" width="38" height="38" color="#9C7B16"/>
+<text x="892" y="70" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">ALTO IMPACTO · REVERSIBLE</text>
+<text x="892" y="122" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">redactar borrador de mensaje</text>
+<text x="892" y="162" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">crear_pedido de prueba</text>
+<text x="892" y="200" text-anchor="middle" font-size="19" font-weight="700" fill="#9C7B16">Revisión humana recomendada</text>
+<use href="#i-alerta" x="183" y="271" width="38" height="38" color="#9C7B16"/>
+<text x="394" y="290" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">BAJO IMPACTO · IRREVERSIBLE</text>
+<text x="394" y="342" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">enviar correo automático al cliente</text>
+<text x="394" y="382" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">marcar nota interna permanente</text>
+<text x="394" y="420" text-anchor="middle" font-size="19" font-weight="700" fill="#9C7B16">Permiso: ask o flujo aprobado</text>
+<use href="#i-candado" x="681" y="271" width="38" height="38" color="#B3261E"/>
+<text x="892" y="290" text-anchor="middle" font-size="20" font-weight="700" fill="#B3261E">ALTO IMPACTO · IRREVERSIBLE</text>
+<text x="892" y="340" text-anchor="middle" font-size="24" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#B3261E">cancelar_pedido</text>
+<text x="892" y="380" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">borrar base o emitir reembolso</text>
+<text x="892" y="420" text-anchor="middle" font-size="19" font-weight="700" fill="#B3261E">Permiso: ask obligatorio o deny</text>
+<text x="64" y="120" text-anchor="middle" font-size="20" font-weight="700" fill="#5E5E5E">BAJO</text>
+<text x="64" y="148" text-anchor="middle" font-size="18" font-weight="700" fill="#5E5E5E">RIESGO</text>
+<text x="64" y="340" text-anchor="middle" font-size="20" font-weight="700" fill="#B3261E">ALTO</text>
+<text x="64" y="368" text-anchor="middle" font-size="18" font-weight="700" fill="#B3261E">RIESGO</text>
+<text x="394" y="490" text-anchor="middle" font-size="18" font-weight="700" fill="#5E5E5E">OPERACIÓN REVERSIBLE</text>
+<text x="892" y="490" text-anchor="middle" font-size="18" font-weight="700" fill="#B3261E">OPERACIÓN IRREVERSIBLE</text>
+</svg>
+<aside class="narracion">Esta matriz dos por dos les entrega un criterio de ingeniería claro aplicable a cualquier plataforma cloud del mercado [cite:1,10]. En el eje horizontal distinguimos entre operaciones fáciles de revertir y operaciones irreversibles sobre el negocio. En el eje vertical evaluamos si el impacto operativo y financiero es bajo o alto. Arriba a la izquierda en verde habitan las consultas de solo lectura como consultar pedido y pedidos atrasados: no alteran datos y corren en modo automático sin fricción. En los cuadrantes dorados quedan tareas como preparar borradores de respuesta, crear pedidos de prueba o enviar comunicaciones externas automáticas que conviene supervisar. Abajo a la derecha en rojo aparece cancelar pedido: implica alto impacto comercial y no se deshace fácilmente frente al comprador, por lo que exige confirmación humana obligatoria mediante ask. Las operaciones destructivas masivas simplemente se prohíben con deny.</aside>
+</section>
+<section data-kicker="Error común" data-titulo="Tres fallos clásicos al pasar de función a agente" data-sub="Corregir estas prácticas antes de probar evita pérdidas de datos y bloqueos en el proyecto." data-fuente="Basado en: Proyecto Corte 3 y MCP Security [cite:7] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="26" y="40" width="500" height="118" rx="16" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<circle cx="76" cy="99" r="26" fill="#B3261E"/><path d="M66.64,89.64 L85.36,108.36 M85.36,89.64 L66.64,108.36" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="120" y="90" font-size="22" font-weight="700" fill="#B3261E">DAR PERMISO TOTAL</text>
+<text x="120" y="126" font-size="19" fill="#2A2A2A">todas las herramientas en allow</text>
+<line x1="536" y1="99" x2="620" y2="99" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="636,99 618,109.5 618,88.5" fill="#A6192E"/>
+<rect x="646" y="40" width="508" height="118" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="696" cy="99" r="26" fill="#2E7D4F"/><path d="M685.08,99.52 L693.4,108.36 L708.48,91.2" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="740" y="106" font-size="22" font-weight="700" fill="#2E7D4F">dejar solo lectura en allow</text>
+<rect x="26" y="190" width="500" height="118" rx="16" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<circle cx="76" cy="249" r="26" fill="#B3261E"/><path d="M66.64,239.64 L85.36,258.36 M85.36,239.64 L66.64,258.36" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="120" y="240" font-size="22" font-weight="700" fill="#B3261E">SIN TOPE DE CAMBIOS</text>
+<text x="120" y="276" font-size="19" fill="#2A2A2A">puede cancelar cien en una orden</text>
+<line x1="536" y1="249" x2="620" y2="249" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="636,249 618,259.5 618,238.5" fill="#A6192E"/>
+<rect x="646" y="190" width="508" height="118" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="696" cy="249" r="26" fill="#2E7D4F"/><path d="M685.08,249.52 L693.4,258.36 L708.48,241.2" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="740" y="256" font-size="22" font-weight="700" fill="#2E7D4F">limitar alcance y exigir ask</text>
+<rect x="26" y="340" width="500" height="118" rx="16" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<circle cx="76" cy="399" r="26" fill="#B3261E"/><path d="M66.64,389.64 L85.36,408.36 M85.36,389.64 L66.64,408.36" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="120" y="390" font-size="22" font-weight="700" fill="#B3261E">IGNORAR EL ERROR</text>
+<text x="120" y="426" font-size="19" fill="#2A2A2A">lanza excepción y tumba el servidor</text>
+<line x1="536" y1="399" x2="620" y2="399" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="636,399 618,409.5 618,388.5" fill="#A6192E"/>
+<rect x="646" y="340" width="508" height="118" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="696" cy="399" r="26" fill="#2E7D4F"/><path d="M685.08,399.52 L693.4,408.36 L708.48,391.2" fill="none" stroke="#fff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="740" y="406" font-size="22" font-weight="700" fill="#2E7D4F">devolver mensaje claro controlado</text>
+</svg>
+<aside class="narracion">Revisen estos tres tropiezos clásicos que aparecen con mucha frecuencia al pasar de herramientas sueltas a un agente completo en clase. En la primera fila arriba, habilitar permiso automático total por pereza de aprobar en consola permite que el modelo escriba sin supervisión alguna; la corrección verde a la derecha consiste en dejar únicamente las consultas de lectura en modo automático. En la fila central, permitir que una sola llamada altere decenas o cientos de registros multiplica inmediatamente el radio de daño ante cualquier fallo; la práctica segura limita el alcance a un registro por turno y exige verificación humana. En la fila inferior, dejar que un dato inválido o un pedido ya entregado lance una excepción no capturada tumba el servidor MCP que corre sobre entrada y salida estándar; siempre atrapen errores y devuelvan mensajes claros al modelo [cite:7].</aside>
+</section>
+<section data-kicker="Síntesis" data-titulo="La Parte 1 en cuatro ideas maestras" data-sub="Ya sabemos cómo razona un agente y por qué debemos acotar su autonomía desde el inicio." data-fuente="Basado en: OWASP LLM06:2025 [cite:1] · Dibujo propio" data-siglas="OWASP = Open Worldwide Application Security Project">
+<svg viewBox="0 0 1180 500">
+<line x1="70" y1="250" x2="1110" y2="250" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 18"/>
+<circle cx="160" cy="250" r="56" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-engranaje" x="124" y="214" width="72" height="72" color="#A6192E"/>
+<circle cx="202" cy="206" r="20" fill="#A6192E"/><text x="202" y="213.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">1</text>
+<text x="160" y="110" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">Bucle dinámico</text>
+<text x="160" y="142" text-anchor="middle" font-size="18" fill="#2A2A2A">observar, razonar, actuar</text>
+<circle cx="445" cy="250" r="56" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-funcion" x="409" y="214" width="72" height="72" color="#9C7B16"/>
+<circle cx="487" cy="206" r="20" fill="#9C7B16"/><text x="487" y="213.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">2</text>
+<text x="445" y="388" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">Encadenar pasos</text>
+<text x="445" y="420" text-anchor="middle" font-size="18" fill="#2A2A2A">atrasos hacia cancelación</text>
+<circle cx="730" cy="250" r="56" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<use href="#i-alerta" x="694" y="214" width="72" height="72" color="#B3261E"/>
+<circle cx="772" cy="206" r="20" fill="#B3261E"/><text x="772" y="213.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">3</text>
+<text x="730" y="110" text-anchor="middle" font-size="24" font-weight="700" fill="#B3261E">OWASP LLM06 [1]</text>
+<text x="730" y="142" text-anchor="middle" font-size="18" fill="#2A2A2A">acotar permisos y alcance</text>
+<circle cx="1015" cy="250" r="56" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-escudo" x="979" y="214" width="72" height="72" color="#2E7D4F"/>
+<circle cx="1057" cy="206" r="20" fill="#2E7D4F"/><text x="1057" y="213.2" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">4</text>
+<text x="1015" y="388" text-anchor="middle" font-size="24" font-weight="700" fill="#2E7D4F">Lectura vs escritura</text>
+<text x="1015" y="420" text-anchor="middle" font-size="18" fill="#2A2A2A">frenar antes de modificar</text>
+</svg>
+<aside class="narracion">Cerramos esta primera parte resumiendo cuatro ideas maestras fundamentales que sostienen todo el diseño de la semana quince. Primero, un agente no sigue un guion estático: opera dentro de un bucle dinámico de observar, razonar, actuar y recibir que aprovecha el historial acumulado de cada conversación. Segundo, en CaribeMart esa cadena conecta la consulta de pedidos atrasados con las reglas de AGENTS punto md, propone cancelar pedido y prepara avisos cordiales por ciudad. Tercero, entregar herramientas sobrantes, credenciales demasiado amplias o autonomía sin freno produce Agencia Excesiva, documentada como OWASP LLM cero seis [cite:1]. Cuarto, trazar una frontera nítida entre lectura segura y escritura controlada nos indica exactamente dónde instalar las compuertas. En la segunda parte aplicaremos el marco cuatro D de fluidez con inteligencia artificial [cite:8] y configuraremos el permiso ask paso a paso dentro del archivo opencode punto json [cite:5].</aside>
+</section>

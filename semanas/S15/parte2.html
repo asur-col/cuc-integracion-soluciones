@@ -1,0 +1,381 @@
+<section data-kicker="Verificación humana" data-titulo="Human-in-the-loop: delegar análisis, no autoridad" data-sub="El principio HITL coloca una pausa obligatoria antes de que una herramienta modifique datos." data-fuente="Basado en: OWASP LLM06 [cite:1] y MCP Security [cite:7] · Foto: Michael Coghlan, Wikimedia Commons (CC BY-SA 2.0)" data-siglas="HITL = human-in-the-loop (verificación humana) · JSON = JavaScript Object Notation · IA = inteligencia artificial">
+<svg viewBox="0 0 1180 500">
+<clipPath id="clp5"><rect x="14" y="20" width="440" height="460" rx="16"/></clipPath><image href="@@FOTO:centralita@@" x="14" y="20" width="440" height="460" preserveAspectRatio="xMidYMid slice" clip-path="url(#clp5)"/>
+<linearGradient id="gr6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d" stop-opacity="0"/><stop offset="1" stop-color="#1d1d1d" stop-opacity="0.85"/></linearGradient><rect x="14" y="320" width="440" height="160" rx="16" fill="url(#gr6)"/>
+<text x="40" y="412" font-size="24" font-weight="700" fill="#fff">Human-in-the-loop (HITL)</text>
+<text x="40" y="446" font-size="19" fill="#F3D9DE">la persona mantiene el mando</text>
+<circle cx="590" cy="180" r="58" fill="#F9EEF0" stroke="#A6192E" stroke-width="2.5"/><use href="#i-ia" x="554" y="144" width="72" height="72" color="#A6192E"/><text x="590" y="264" text-anchor="middle" font-size="20" font-weight="700" fill="#A6192E">AGENTE</text><text x="590" y="289" text-anchor="middle" font-size="17" fill="#5E5E5E">propone acción</text>
+<rect x="726" y="60" width="140" height="260" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-usuario" x="765" y="99" width="62" height="62" color="#9C7B16"/>
+<use href="#i-candado" x="769" y="197" width="54" height="54" color="#9C7B16"/>
+<text x="796" y="294" text-anchor="middle" font-size="20" font-weight="700" fill="#9C7B16">APROBAR</text>
+<circle cx="1050" cy="180" r="58" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/><use href="#i-bd" x="1014" y="144" width="72" height="72" color="#2E7D4F"/><text x="1050" y="264" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D4F">PEDIDOS.JSON</text><text x="1050" y="289" text-anchor="middle" font-size="17" fill="#5E5E5E">se modifica solo</text>
+<line x1="652" y1="180" x2="706" y2="180" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="722,180 704,190.5 704,169.5" fill="#A6192E"/>
+<line x1="870" y1="180" x2="972" y2="180" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round"/><polygon points="988,180 970,190.5 970,169.5" fill="#2E7D4F"/>
+<rect x="490" y="355" width="670" height="125" rx="16" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+<text x="520" y="396" font-size="21" font-weight="700" fill="#A6192E">La IA acelera el análisis y la redacción.</text>
+<text x="520" y="434" font-size="21" fill="#2A2A2A">El operador humano autoriza los cambios reales.</text>
+</svg>
+<aside class="narracion">Arrancamos la segunda parte observando a la izquierda la fotografía histórica de una centralita telefónica manual. En aquella época ninguna llamada quedaba enlazada entre dos ciudades hasta que la operadora conectaba físicamente el cable en el tablero después de verificar el destino. En ingeniería de agentes modernos rescatamos exactamente ese principio bajo el nombre human-in-the-loop, abreviado HITL [cite:1,7]. Sigan el flujo horizontal a la derecha. Nuestro agente de inteligencia artificial lee decenas de pedidos atrasados, compara fechas y redacta propuestas en cuestión de segundos, pero justo antes de tocar el archivo pedidos punto json se encuentra con la compuerta dorada del operador humano y el candado. Ahí la ejecución se congela esperando autorización expresa. De este modo aprovechamos la enorme velocidad analítica del modelo, pero conservamos siempre la autoridad operativa, financiera y legal en manos de las personas responsables de CaribeMart.</aside>
+</section>
+<section data-kicker="Marco 4D" data-titulo="Las cuatro D para trabajar con agentes de IA" data-sub="Delegación, Descripción, Discernimiento y Diligencia guían el uso responsable en CaribeMart." data-fuente="Basado en: Anthropic Academy, AI Fluency Framework (4D) [cite:8] · Dibujo propio" data-siglas="IA = inteligencia artificial">
+<svg viewBox="0 0 1180 500">
+<rect x="30" y="24" width="1120" height="72" rx="14" fill="#A6192E"/>
+<text x="590" y="68" text-anchor="middle" font-size="24" font-weight="700" fill="#fff">MARCO 4D DE FLUIDEZ CON INTELIGENCIA ARTIFICIAL [8]</text>
+<rect x="30" y="124" width="258" height="350" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<circle cx="159" cy="206" r="44" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-llave" x="132" y="179" width="54" height="54" color="#A6192E"/>
+<text x="159" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#A6192E">1. DELEGACIÓN</text>
+<text x="159" y="344" text-anchor="middle" font-size="20" fill="#2A2A2A">qué hace la IA</text>
+<text x="159" y="371" text-anchor="middle" font-size="20" fill="#2A2A2A">y qué conserva</text>
+<text x="159" y="398" text-anchor="middle" font-size="20" fill="#2A2A2A">el humano</text>
+<rect x="317" y="124" width="258" height="350" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<circle cx="446" cy="206" r="44" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-documento" x="419" y="179" width="54" height="54" color="#9C7B16"/>
+<text x="446" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#9C7B16">2. DESCRIPCIÓN</text>
+<text x="446" y="344" text-anchor="middle" font-size="20" fill="#2A2A2A">metas claras y</text>
+<text x="446" y="371" text-anchor="middle" font-size="20" fill="#2A2A2A">reglas escritas</text>
+<text x="446" y="398" text-anchor="middle" font-size="20" fill="#2A2A2A">en AGENTS.md</text>
+<rect x="604" y="124" width="258" height="350" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="733" cy="206" r="44" fill="#fff" stroke="#2E7D4F" stroke-width="2.5"/>
+<use href="#i-ojo" x="706" y="179" width="54" height="54" color="#2E7D4F"/>
+<text x="733" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#2E7D4F">3. DISCERNIMIENTO</text>
+<text x="733" y="344" text-anchor="middle" font-size="20" fill="#2A2A2A">revisar si la</text>
+<text x="733" y="371" text-anchor="middle" font-size="20" fill="#2A2A2A">propuesta tiene</text>
+<text x="733" y="398" text-anchor="middle" font-size="20" fill="#2A2A2A">sentido real</text>
+<rect x="891" y="124" width="258" height="350" rx="18" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<circle cx="1020" cy="206" r="44" fill="#fff" stroke="#2A2A2A" stroke-width="2.5"/>
+<use href="#i-escudo" x="993" y="179" width="54" height="54" color="#2A2A2A"/>
+<text x="1020" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#2A2A2A">4. DILIGENCIA</text>
+<text x="1020" y="344" text-anchor="middle" font-size="20" fill="#2A2A2A">asumir autoría,</text>
+<text x="1020" y="371" text-anchor="middle" font-size="20" fill="#2A2A2A">probar defensas</text>
+<text x="1020" y="398" text-anchor="middle" font-size="20" fill="#2A2A2A">y dejar bitácora</text>
+</svg>
+<aside class="narracion">Para ordenar con rigor la colaboración cotidiana entre el operador humano y el asistente inteligente aplicamos el marco cuatro D de fluidez con inteligencia artificial [cite:8]. Sigan las cuatro columnas de izquierda a derecha debajo del encabezado vino. La primera D es Delegación: decidir con criterio técnico qué subtareas encargamos al modelo, como consultar atrasos o redactar borradores, y cuáles reservamos al humano, como confirmar cambios definitivos. La segunda D es Descripción: expresar con total precisión tanto la meta de la sesión como las reglas permanentes escritas en AGENTS punto md. La tercera D es Discernimiento: examinar críticamente la propuesta del agente para detectar errores de fecha, motivos pobres o textos sospechosos. La cuarta D es Diligencia: asumir autoría responsable sobre el resultado final, probar las defensas antes y después y documentar cada decisión en bitácora antes de entregar.</aside>
+</section>
+<section data-kicker="Marco 4D" data-titulo="Delegación y Descripción aplicadas a CaribeMart" data-sub="Antes de ejecutar nada, definimos quién tiene autoridad y bajo qué reglas debe operar el agente." data-fuente="Basado en: Anthropic AI Fluency (4D) [cite:8] y Proyecto Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="24" y="30" width="1132" height="200" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<circle cx="110" cy="130" r="56" fill="#fff" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-llave" x="76" y="96" width="68" height="68" color="#A6192E"/>
+<text x="196" y="84" font-size="26" font-weight="700" fill="#A6192E">D1 · DELEGACIÓN: repartir bien el trabajo</text>
+<text x="196" y="126" font-size="20" fill="#2A2A2A">• Agente lee pedidos_atrasados, cruza fechas y redacta mensajes.</text>
+<text x="196" y="162" font-size="20" fill="#2A2A2A">• Humano decide si un pedido realmente debe cancelarse.</text>
+<text x="196" y="198" font-size="20" font-weight="700" fill="#A6192E">• Nunca delegar decisiones irreversibles sin verificación.</text>
+<rect x="24" y="260" width="1132" height="210" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<circle cx="110" cy="365" r="56" fill="#fff" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-documento" x="76" y="331" width="68" height="68" color="#9C7B16"/>
+<text x="196" y="314" font-size="26" font-weight="700" fill="#9C7B16">D2 · DESCRIPCIÓN: dar contexto y límites precisos</text>
+<text x="196" y="356" font-size="20" fill="#2A2A2A">• Prompt concreto: revisar atrasos, proponer cancelación y redactar aviso.</text>
+<text x="196" y="392" font-size="20" fill="#2A2A2A">• Reglas permanentes en AGENTS.md: días límite y tono cordial.</text>
+<text x="196" y="428" font-size="20" font-weight="700" fill="#9C7B16">• Sin buena descripción el agente inventa criterios propios.</text>
+</svg>
+<aside class="narracion">Profundicemos ahora en las dos primeras competencias del marco [cite:8] aplicándolas directamente sobre el proyecto de aula de CaribeMart. En el bloque superior vino, Delegación significa trazar una línea limpia entre asistir en el análisis y decidir sobre el negocio. Delegamos al modelo invocar pedidos atrasados, cruzar fechas de despacho y preparar los borradores de mensaje por ciudad del Caribe, porque ahí multiplica nuestra productividad operativa diaria. Pero jamás le delegamos cancelar compras reales de clientes sin revisión humana previa. En el bloque inferior dorado, Descripción consiste en darle al asistente instrucciones inequívocas tanto en el prompt de la sesión como en el archivo permanente AGENTS punto md. Allí fijamos con exactitud cuántos días definen un atraso, qué tono cordial mantenemos con cada comprador y la regla estricta de que ningún texto almacenado puede reemplazar las políticas oficiales de la tienda.</aside>
+</section>
+<section data-kicker="Marco 4D" data-titulo="Discernimiento y Diligencia frente al asistente" data-sub="Aprobar a ciegas anula la supervisión humana; debemos auditar y asumir responsabilidad." data-fuente="Basado en: Anthropic AI Fluency (4D) [cite:8], Ley 1581/2012 [cite:11] y Proyecto Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="20" y="26" width="554" height="448" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<rect x="606" y="26" width="554" height="448" rx="18" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<circle cx="297" cy="108" r="48" fill="#fff" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-ojo" x="267" y="78" width="60" height="60" color="#2E7D4F"/>
+<text x="297" y="190" text-anchor="middle" font-size="26" font-weight="700" fill="#2E7D4F">D3 · DISCERNIMIENTO</text>
+<text x="297" y="224" text-anchor="middle" font-size="19" fill="#5E5E5E">Evaluar con ojo crítico antes de aprobar</text>
+<rect x="54" y="256" width="486" height="188" rx="14" fill="#fff" stroke="#2E7D4F" stroke-width="2"/>
+<text x="80" y="296" font-size="19" fill="#2A2A2A">1. ¿El pedido lleva más de N días?</text>
+<text x="80" y="336" font-size="19" fill="#2A2A2A">2. ¿Sigue pendiente o ya fue entregado?</text>
+<text x="80" y="376" font-size="19" fill="#2A2A2A">3. ¿El motivo coincide con el caso real?</text>
+<text x="80" y="416" font-size="19" font-weight="700" fill="#B3261E">4. ¿Hay notas sospechosas manipulándolo?</text>
+<circle cx="883" cy="108" r="48" fill="#fff" stroke="#2A2A2A" stroke-width="3"/>
+<use href="#i-escudo" x="853" y="78" width="60" height="60" color="#2A2A2A"/>
+<text x="883" y="190" text-anchor="middle" font-size="26" font-weight="700" fill="#2A2A2A">D4 · DILIGENCIA</text>
+<text x="883" y="224" text-anchor="middle" font-size="19" fill="#5E5E5E">Responder por el resultado ante el cliente</text>
+<rect x="640" y="256" width="486" height="188" rx="14" fill="#fff" stroke="#2A2A2A" stroke-width="2"/>
+<text x="666" y="296" font-size="19" fill="#2A2A2A">1. Probar defensas antes y después.</text>
+<text x="666" y="336" font-size="19" fill="#2A2A2A">2. Llevar bitácora de aprobado y rechazado.</text>
+<text x="666" y="376" font-size="19" fill="#2A2A2A">3. Verificar cumplimiento de Ley 1581 [11].</text>
+<text x="666" y="416" font-size="19" font-weight="700" fill="#A6192E">4. Explicar las decisiones en el PDF.</text>
+</svg>
+<aside class="narracion">Ahora revisen las dos competencias que entran en acción cuando el agente ya presenta su propuesta concreta en pantalla. A la izquierda en verde tienen el Discernimiento [cite:8]. Si un operador presiona aprobar por inercia sin leer los argumentos, la supervisión humana se vuelve un teatro inútil y pierde todo su valor de control. Discernir exige comprobar cuatro preguntas puntuales: confirmar cuántos días lleva realmente el pedido, revisar que siga pendiente y no haya sido entregado, validar que el motivo tenga sentido real y vigilar si aparece alguna nota sospechosa intentando desviar la respuesta. A la derecha en gris está la Diligencia: responder profesionalmente por las consecuencias ante el cliente. En el Proyecto Corte tres esto implica probar sus defensas, llevar bitácora fiel de lo aprobado y rechazado, cumplir la Ley mil quinientos ochenta y uno [cite:11] y redactar explicaciones con palabras propias.</aside>
+</section>
+<section data-kicker="Permisos" data-titulo="Tres efectos de permiso en opencode: allow, ask y deny" data-sub="OpenCode permite ajustar herramienta por herramienta si corre sola, pide permiso o se bloquea." data-fuente="Basado en: OpenCode Permissions docs [cite:5] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="24" y="24" width="1132" height="128" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<rect x="54" y="62" width="102" height="52" rx="26" fill="#2E7D4F"/><circle cx="130" cy="88" r="21" fill="#fff"/>
+<use href="#i-ojo" x="182" y="60" width="56" height="56" color="#2E7D4F"/>
+<text x="264" y="82" font-size="30" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2E7D4F">"allow"</text>
+<text x="430" y="82" font-size="26" font-weight="700" fill="#2A2A2A">Ejecuta sin preguntar</text>
+<text x="264" y="122" font-size="20" fill="#2A2A2A">Ideal para herramientas de solo lectura como pedidos_atrasados</text>
+<circle cx="1096" cy="88" r="30" fill="#2E7D4F"/><path d="M1083.4,88.6 L1093,98.8 L1110.4,79" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="24" y="188" width="1132" height="128" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<rect x="54" y="226" width="102" height="52" rx="26" fill="#9C7B16"/><circle cx="130" cy="252" r="21" fill="#fff"/>
+<use href="#i-usuario" x="182" y="224" width="56" height="56" color="#9C7B16"/>
+<text x="264" y="246" font-size="30" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9C7B16">"ask"</text>
+<text x="430" y="246" font-size="26" font-weight="700" fill="#2A2A2A">Pausa y pide confirmación</text>
+<text x="264" y="286" font-size="20" fill="#2A2A2A">Obligatorio para caribemart_cancelar_pedido antes de escribir</text>
+<circle cx="1096" cy="252" r="30" fill="#9C7B16"/>
+<text x="1096" y="262" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">?</text>
+<rect x="24" y="352" width="1132" height="128" rx="18" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<rect x="54" y="390" width="102" height="52" rx="26" fill="#9a9a9a"/><circle cx="80" cy="416" r="21" fill="#fff"/>
+<use href="#i-candado" x="182" y="388" width="56" height="56" color="#B3261E"/>
+<text x="264" y="410" font-size="30" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#B3261E">"deny"</text>
+<text x="430" y="410" font-size="26" font-weight="700" fill="#2A2A2A">Bloquea por completo</text>
+<text x="264" y="450" font-size="20" fill="#2A2A2A">Impide usar comandos destructivos aunque el agente los pida</text>
+<circle cx="1096" cy="416" r="30" fill="#B3261E"/><path d="M1085.2,405.2 L1106.8,426.8 M1106.8,405.2 L1085.2,426.8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<aside class="narracion">Pasemos ahora del marco conceptual a la configuración práctica directamente dentro de opencode. La documentación oficial de opencode define tres efectos de permiso [cite:5] para gobernar qué puede ejecutar un agente sobre cada herramienta conectada, representados aquí mediante estos tres interruptores horizontales. Arriba en verde está allow, que deja correr la función en automático sin interrumpir el trabajo del operador; resulta muy ágil y seguro para consultas de solo lectura como pedidos atrasados. En el centro en dorado aparece ask, que detiene la llamada justo antes de enviarla al servidor y pregunta al humano si autoriza continuar; este efecto es obligatorio para caribemart cancelar pedido. Abajo en rojo está deny, que bloquea la herramienta por completo aunque el modelo insista en invocarla dentro de su razonamiento. Combinar estos tres niveles por herramienta equilibra eficiencia operativa y protección efectiva de datos.</aside>
+</section>
+<section data-kicker="Configuración" data-titulo="Cómo configurar permission ask en opencode.json" data-sub="Se agrega la sección &quot;permission&quot; junto a &quot;mcp&quot; apuntando al nombre exacto de la herramienta." data-fuente="Basado en: Proyecto Corte 3 y OpenCode docs [cite:5,6] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
+<svg viewBox="0 0 1180 500">
+<rect x="26" y="20" width="456.934" height="40" rx="20" fill="#2A2A2A"/><text x="44" y="46.3" font-size="18" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#fff">opencode.json · raíz de mcp-caribemart</text>
+<rect x="26" y="74" width="810" height="261.15" rx="12" fill="#1E1E1E"/><text x="50" y="117.95" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#F2F2F2" xml:space="preserve">{</text><text x="50" y="148.4" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#9BD1A8" xml:space="preserve">  "$schema": "https://opencode.ai/config.json",</text><text x="50" y="178.85" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#F2F2F2" xml:space="preserve">  "mcp": { "servers": { "caribemart": { ... } } },</text><text x="50" y="209.3" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#E8C56A" xml:space="preserve">  "permission": {</text><text x="50" y="239.75" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#E8C56A" xml:space="preserve">    "caribemart_cancelar_pedido": "ask"</text><text x="50" y="270.2" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#E8C56A" xml:space="preserve">  }</text><text x="50" y="300.65" style="font-family:'Roboto Mono',Consolas,monospace;white-space:pre" font-size="21" fill="#F2F2F2" xml:space="preserve">}</text>
+<line x1="838" y1="172.13" x2="886" y2="175" stroke="#9C7B16" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="886" cy="175" r="17" fill="#9C7B16"/><text x="886" y="181.48" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">1</text>
+<text x="916" y="170" font-size="22" font-weight="700" fill="#9C7B16">Servidor MCP</text>
+<text x="916" y="198" font-size="18" fill="#2A2A2A">nombre: caribemart</text>
+<line x1="838" y1="233.03" x2="886" y2="290" stroke="#A6192E" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="886" cy="290" r="17" fill="#A6192E"/><text x="886" y="296.48" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">2</text>
+<text x="916" y="284" font-size="22" font-weight="700" fill="#A6192E">Freno humano</text>
+<text x="916" y="312" font-size="18" fill="#2A2A2A">prefijo + herramienta</text>
+<rect x="26" y="368" width="1128" height="110" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-alerta" x="58" y="397" width="52" height="52" color="#9C7B16"/>
+<text x="136" y="408" font-size="21" font-weight="700" fill="#2A2A2A">Usa exactamente la clave "permission" indicada en la guía del Proyecto Corte 3.</text>
+<text x="136" y="444" font-size="19" fill="#5E5E5E">En opencode 2 del curso funciona junto a "mcp"; no cambies los nombres.</text>
+</svg>
+<aside class="narracion">Aquí tienen la configuración exacta que deben guardar dentro del archivo opencode punto json, ubicado en la raíz de su carpeta de trabajo mcp caribemart. Fíjense en las dos llamadas numeradas a la derecha de la ventana de código oscura. En la llamada número uno conservan intacto el bloque mcp con servers y el nombre caribemart que ya venían usando desde el laboratorio siete. Justo debajo, en la llamada número dos, añaden la clave permission con la entrada caribemart guion bajo cancelar guion bajo pedido igual al valor ask. Presten especial atención al recuadro dorado inferior: aunque las versiones más recientes de la documentación oficial muestran reglas en listas bajo otra clave, en el entorno opencode dos instalado para el curso funciona exactamente esta sintaxis con permission [cite:5] junto a mcp [cite:6]. Mantengan exactamente estos mismos nombres para cumplir toda la rúbrica.</aside>
+</section>
+<section data-kicker="Detalle técnico" data-titulo="Por qué importa el prefijo caribemart_ en el permiso" data-sub="OpenCode registra las herramientas combinando el nombre del servidor y el de la función." data-fuente="Basado en: OpenCode MCP docs [cite:6] y Proyecto Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="40" y="48" width="340" height="146" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<text x="210" y="96" text-anchor="middle" font-size="19" font-weight="700" fill="#A6192E">NOMBRE EN opencode.json</text>
+<text x="210" y="144" text-anchor="middle" font-size="32" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">caribemart</text>
+<text x="420" y="134" text-anchor="middle" font-size="42" font-weight="700" fill="#9C7B16">+</text>
+<rect x="460" y="48" width="120" height="146" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<text x="520" y="96" text-anchor="middle" font-size="18" font-weight="700" fill="#9C7B16">SEPARADOR</text>
+<text x="520" y="148" text-anchor="middle" font-size="38" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">_</text>
+<text x="620" y="134" text-anchor="middle" font-size="42" font-weight="700" fill="#9C7B16">+</text>
+<rect x="660" y="48" width="480" height="146" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<text x="900" y="96" text-anchor="middle" font-size="19" font-weight="700" fill="#2E7D4F">NOMBRE EN server.js</text>
+<text x="900" y="144" text-anchor="middle" font-size="30" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">cancelar_pedido</text>
+<line x1="590" y1="206" x2="590" y2="250" stroke="#A6192E" stroke-width="5" stroke-linecap="round"/><polygon points="590,266 579.5,248 600.5,248" fill="#A6192E"/>
+<rect x="140" y="274" width="900" height="86" rx="14" fill="#1E1E1E"/>
+<text x="590" y="326" text-anchor="middle" font-size="30" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#E8C56A">caribemart_cancelar_pedido</text>
+<rect x="40" y="390" width="520" height="92" rx="14" fill="#FBEAE8" stroke="#B3261E" stroke-width="2.5"/>
+<circle cx="88" cy="436" r="22" fill="#B3261E"/><path d="M80.08,428.08 L95.92,443.92 M95.92,428.08 L80.08,443.92" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="128" y="428" font-size="19" font-weight="700" fill="#B3261E">Error común: poner solo "cancelar_pedido"</text>
+<text x="128" y="458" font-size="18" fill="#2A2A2A">No coincide y se ejecuta sin pedir permiso</text>
+<rect x="620" y="390" width="520" height="92" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<circle cx="668" cy="436" r="22" fill="#2E7D4F"/><path d="M658.76,436.44 L665.8,443.92 L678.56,429.4" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="708" y="428" font-size="19" font-weight="700" fill="#2E7D4F">Verificación rápida en opencode</text>
+<text x="708" y="458" font-size="18" fill="#2A2A2A">El prefijo visible en el chat debe ser idéntico</text>
+</svg>
+<aside class="narracion">Este detalle técnico en apariencia pequeño evita uno de los errores más comunes cuando los estudiantes preparan su entrega final. Observen en las tres cajas superiores cómo construye internamente opencode el identificador único de cualquier herramienta expuesta por un servidor MCP [cite:6]. Toma primero la clave del servidor registrada bajo servers en opencode punto json, que en nuestro proyecto debe llamarse caribemart. Añade un guion bajo como separador obligatorio y lo une sin espacios con el nombre declarado dentro de server punto js, que es cancelar guion bajo pedido. El identificador compuesto resultante aparece en la barra oscura central: caribemart guion bajo cancelar guion bajo pedido. Miren las dos tarjetas de abajo. Si escriben solamente cancelar pedido sin prefijo, la regla no coincide y la herramienta corre sin preguntar. Verifiquen siempre el nombre completo en consola.</aside>
+</section>
+<section data-kicker="Ejecución" data-titulo="Cómo se ve la pausa humana en opencode" data-sub="Antes de ejecutar cancelar_pedido, la interfaz muestra los argumentos y espera tu decisión." data-fuente="Basado en: OpenCode Permissions docs [cite:5] y Proyecto Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="40" y="24" width="680" height="452" rx="18" fill="#1E1E1E" stroke="#2A2A2A" stroke-width="3"/>
+<rect x="40" y="24" width="680" height="44" rx="10" fill="#2d2d2d"/>
+<text x="70" y="53" font-size="18" font-weight="700" fill="#E8C56A">opencode · esperando confirmación humana</text>
+<text x="70" y="114" font-size="19" fill="#bdbdbd">Propuesta de herramienta:</text>
+<text x="70" y="148" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#8EC3E6">caribemart_cancelar_pedido</text>
+<text x="70" y="196" font-size="19" fill="#bdbdbd">Argumentos:</text>
+<text x="70" y="228" font-size="20" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9BD1A8">{ "id": 1002,</text>
+<text x="70" y="258" font-size="20" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9BD1A8">  "motivo": "ATRASO: &gt; 5 días" }</text>
+<rect x="70" y="326" width="260" height="58" rx="12" fill="#2E7D4F"/>
+<text x="200" y="362" text-anchor="middle" font-size="21" font-weight="700" fill="#fff">1. Aprobar (Allow)</text>
+<rect x="360" y="326" width="260" height="58" rx="12" fill="#B3261E"/>
+<text x="490" y="362" text-anchor="middle" font-size="21" font-weight="700" fill="#fff">2. Rechazar (Deny)</text>
+<text x="70" y="442" font-size="18" fill="#E8C56A">El proceso queda en pausa hasta tu respuesta.</text>
+<rect x="754" y="24" width="386" height="210" rx="16" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<use href="#i-ojo" x="788" y="58" width="48" height="48" color="#A6192E"/>
+<text x="854" y="90" font-size="22" font-weight="700" fill="#A6192E">QUÉ REVISAR AQUÍ</text>
+<text x="784" y="136" font-size="19" fill="#2A2A2A">• Que el id corresponda a un</text>
+<text x="784" y="166" font-size="19" fill="#2A2A2A">  pedido realmente atrasado.</text>
+<text x="784" y="202" font-size="19" fill="#2A2A2A">• Que el motivo sea válido.</text>
+<rect x="754" y="266" width="386" height="210" rx="16" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<use href="#i-documento" x="788" y="300" width="48" height="48" color="#9C7B16"/>
+<text x="854" y="332" font-size="22" font-weight="700" fill="#9C7B16">PARA TU PDF</text>
+<text x="784" y="378" font-size="19" fill="#2A2A2A">• Toma captura de esta pausa</text>
+<text x="784" y="408" font-size="19" fill="#2A2A2A">  antes de aprobar o rechazar.</text>
+<text x="784" y="444" font-size="19" font-weight="700" fill="#9C7B16">• Prueba ambos caminos.</text>
+</svg>
+<aside class="narracion">Cuando la regla de permisos queda bien escrita y lanzan la tarea de varios pasos, opencode detiene el flujo mostrando una pantalla de confirmación humana [cite:5] muy similar a la de la izquierda. Fíjense en los tres datos críticos que deben inspeccionar antes de tomar una decisión. Primero aparece el nombre exacto de la herramienta propuesta: caribemart guion bajo cancelar guion bajo pedido. Debajo ven los argumentos concretos en formato JSON, en este ejemplo el identificador mil dos y el texto del motivo indicando más de cinco días de atraso. Justo abajo figuran los botones para aprobar o rechazar la ejecución. Mientras ustedes no respondan, el servidor Node no recibe ninguna llamada y el archivo permanece intacto. A la derecha recordamos dos acciones clave para el entregable: auditar si el pedido aplica y capturar esta pausa antes y después de decidir.</aside>
+</section>
+<section data-kicker="Flujo" data-titulo="Qué ocurre al aprobar o rechazar una llamada" data-sub="Ambas respuestas del humano devuelven control limpio al flujo sin romper el bucle del agente." data-fuente="Basado en: OpenCode Permissions docs [cite:5] y Zod [cite:9] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<circle cx="130" cy="250" r="66" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/><use href="#i-usuario" x="92" y="212" width="76" height="76" color="#9C7B16"/><text x="130" y="344" text-anchor="middle" font-size="22" font-weight="700" fill="#9C7B16">DECISIÓN</text><text x="130" y="371" text-anchor="middle" font-size="19" fill="#5E5E5E">del operador</text>
+<path d="M202,250 L310,250 L350,120 L404,120" fill="none" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="420,120 402,130.5 402,109.5" fill="#2E7D4F"/>
+<text x="270" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D4F">APRUEBA</text>
+<rect x="426" y="46" width="340" height="148" rx="16" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<use href="#i-servidor" x="452" y="96" width="48" height="48" color="#2E7D4F"/>
+<text x="518" y="98" font-size="22" font-weight="700" fill="#2E7D4F">server.js ejecuta</text>
+<text x="518" y="134" font-size="19" fill="#2A2A2A">Valida estado con zod</text>
+<text x="518" y="166" font-size="19" fill="#2A2A2A">Actualiza pedidos.json</text>
+<line x1="772" y1="120" x2="844" y2="120" stroke="#2E7D4F" stroke-width="5" stroke-linecap="round"/><polygon points="860,120 842,130.5 842,109.5" fill="#2E7D4F"/>
+<rect x="866" y="46" width="290" height="148" rx="16" fill="#fff" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="914" cy="120" r="24" fill="#2E7D4F"/><path d="M903.92,120.48 L911.6,128.64 L925.52,112.8" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="952" y="108" font-size="22" font-weight="700" fill="#2E7D4F">Cancelado</text>
+<text x="952" y="142" font-size="18" fill="#2A2A2A">Redacta aviso real</text>
+<path d="M202,250 L310,250 L350,380 L404,380" fill="none" stroke="#B3261E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="420,380 402,390.5 402,369.5" fill="#B3261E"/>
+<text x="270" y="344" text-anchor="middle" font-size="20" font-weight="700" fill="#B3261E">RECHAZA</text>
+<rect x="426" y="306" width="340" height="148" rx="16" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<use href="#i-candado" x="452" y="356" width="48" height="48" color="#B3261E"/>
+<text x="518" y="358" font-size="22" font-weight="700" fill="#B3261E">opencode bloquea</text>
+<text x="518" y="394" font-size="19" fill="#2A2A2A">No llama a server.js</text>
+<text x="518" y="426" font-size="19" font-weight="700" fill="#B3261E">pedidos.json intacto</text>
+<line x1="772" y1="380" x2="844" y2="380" stroke="#B3261E" stroke-width="5" stroke-linecap="round"/><polygon points="860,380 842,390.5 842,369.5" fill="#B3261E"/>
+<rect x="866" y="306" width="290" height="148" rx="16" fill="#fff" stroke="#B3261E" stroke-width="3"/>
+<circle cx="914" cy="380" r="24" fill="#B3261E"/><path d="M905.36,371.36 L922.64,388.64 M922.64,371.36 L905.36,388.64" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="952" y="368" font-size="22" font-weight="700" fill="#B3261E">Sin cambios</text>
+<text x="952" y="402" font-size="18" fill="#2A2A2A">Agente sigue o replantea</text>
+</svg>
+<aside class="narracion">Analicen en este diagrama de bifurcación cómo responde exactamente la arquitectura según la decisión tomada por el operador humano. Si siguen la rama superior en verde cuando ustedes aprueban la llamada propuesta en consola, opencode deja pasar la solicitud hacia el servidor Node server punto js. Allí el manejador ejecuta las validaciones de esquema con zod [cite:9] y las reglas de estado [cite:5], actualiza el registro correspondiente dentro de pedidos punto json y devuelve confirmación al modelo para que redacte el aviso definitivo dirigido al cliente. Ahora sigan la rama inferior en rojo cuando ustedes rechazan la propuesta, por ejemplo porque saben que el despacho hacia Montería sale mañana temprano. En ese escenario opencode bloquea el envío y ni siquiera invoca a server punto js. El archivo queda intacto, el agente recibe la negativa limpia y reformula su respuesta sin colgarse.</aside>
+</section>
+<section data-kicker="Trazabilidad" data-titulo="Bitácora de decisiones: qué aprobaste y qué rechazaste" data-sub="Registrar el motivo de cada aprobación y rechazo convierte la pausa en evidencia auditable." data-fuente="Basado en: Proyecto Corte 3 y NIST AI RMF [cite:10] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="24" y="24" width="1132" height="62" rx="14" fill="#A6192E"/>
+<text x="56" y="62" font-size="20" font-weight="700" fill="#fff">PEDIDO</text>
+<text x="200" y="62" font-size="20" font-weight="700" fill="#fff">PROPUESTA DEL AGENTE</text>
+<text x="560" y="62" font-size="20" font-weight="700" fill="#fff">DECISIÓN</text>
+<text x="750" y="62" font-size="20" font-weight="700" fill="#fff">RAZÓN DOCUMENTADA POR EL OPERADOR</text>
+<rect x="24" y="102" width="1132" height="88" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<text x="56" y="152" font-size="19" font-weight="700" fill="#2A2A2A">1002 · Ana</text>
+<text x="200" y="152" font-size="19" fill="#2A2A2A">Cancelar (Cartagena, 10 días)</text>
+<rect x="548" y="122" width="168" height="48" rx="10" fill="#2E7D4F"/>
+<text x="632" y="153" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">APROBADO</text>
+<text x="750" y="152" font-size="19" fill="#2A2A2A">Cumple &gt; 5 días pendiente; sin guía</text>
+<rect x="24" y="208" width="1132" height="88" rx="14" fill="#FBEAE8" stroke="#B3261E" stroke-width="2.5"/>
+<text x="56" y="258" font-size="19" font-weight="700" fill="#2A2A2A">1004 · María</text>
+<text x="200" y="258" font-size="19" fill="#2A2A2A">Cancelar (Montería, 7 días)</text>
+<rect x="548" y="228" width="168" height="48" rx="10" fill="#B3261E"/>
+<text x="632" y="259" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">RECHAZADO</text>
+<text x="750" y="258" font-size="19" fill="#2A2A2A">Despacho sale mañana; avisar demora</text>
+<rect x="24" y="314" width="1132" height="88" rx="14" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="2.5"/>
+<text x="56" y="364" font-size="19" font-weight="700" fill="#2A2A2A">1007 · Vale</text>
+<text x="200" y="364" font-size="19" fill="#2A2A2A">Cancelar (Santa Marta, 11 días)</text>
+<rect x="548" y="334" width="168" height="48" rx="10" fill="#2E7D4F"/>
+<text x="632" y="365" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">APROBADO</text>
+<text x="750" y="364" font-size="19" fill="#2A2A2A">Sin inventario; autoriza supervisor</text>
+<rect x="24" y="420" width="1132" height="60" rx="14" fill="#FBF6E7" stroke="#9C7B16" stroke-width="2.5"/>
+<use href="#i-registro" x="45" y="431" width="38" height="38" color="#9C7B16"/>
+<text x="102" y="458" font-size="20" font-weight="700" fill="#2A2A2A">Criterio 3 de la rúbrica: la bitácora prueba que ejerciste criterio humano y no aprobaste todo a ciegas.</text>
+</svg>
+<aside class="narracion">Fíjense en esta tabla de auditoría operativa pensada para acompañar la evidencia de su entrega. La guía del Proyecto Corte tres exige explícitamente construir una bitácora con las propuestas que aprobaron y con las propuestas que rechazaron durante la ejecución multipaso, explicando la razón de cada decisión. Miren las tres filas de ejemplo ambientadas en tiendas del Caribe colombiano. El pedido mil dos de Ana en Cartagena llevaba diez días pendiente sin despacho asignado, de modo que el operador aprueba su cancelación. En cambio, en la fila central en rojo, aunque el agente sugirió cancelar el pedido mil cuatro en Montería, el humano rechaza esa cancelación porque conoce que el camión sale mañana y prefiere enviar aviso de demora. En la tercera fila aprueba el mil siete por falta de inventario. Documentar el porqué respalda la trazabilidad de riesgo [cite:10] y demuestra discernimiento humano.</aside>
+</section>
+<section data-kicker="CaribeMart" data-titulo="Recorrido completo de la tarea multi-paso en CaribeMart" data-sub="El operador lanza un único pedido en opencode y supervisa el punto exacto de riesgo." data-fuente="Basado en: Proyecto de Aula Corte 3 · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="40" y="22" width="1100" height="66" rx="14" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="2"/>
+<text x="590" y="62" text-anchor="middle" font-size="22" font-weight="700" fill="#2A2A2A">FLUJO COMPLETO: DE LA CONSULTA AL MENSAJE AL CLIENTE</text>
+<rect x="40" y="116" width="254" height="240" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="167" cy="158" r="22" fill="#2E7D4F"/><text x="167" y="165.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">1</text>
+<text x="167" y="222" text-anchor="middle" font-size="18" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2E7D4F">pedidos_atrasados(5)</text>
+<text x="167" y="274" text-anchor="middle" font-size="18" fill="#2A2A2A">Devuelve 1002, 1004 y 1007</text>
+<text x="167" y="306" text-anchor="middle" font-size="18" fill="#2A2A2A">en estado pendiente</text>
+<rect x="322" y="116" width="254" height="240" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<circle cx="449" cy="158" r="22" fill="#9C7B16"/><text x="449" y="165.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">2</text>
+<text x="449" y="222" text-anchor="middle" font-size="18" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#9C7B16">Lectura de AGENTS.md</text>
+<text x="449" y="274" text-anchor="middle" font-size="18" fill="#2A2A2A">Aplica umbral 5 días</text>
+<text x="449" y="306" text-anchor="middle" font-size="18" fill="#2A2A2A">y regla anti-inyección</text>
+<rect x="604" y="116" width="254" height="240" rx="18" fill="#F9EEF0" stroke="#A6192E" stroke-width="3"/>
+<circle cx="731" cy="158" r="22" fill="#A6192E"/><text x="731" y="165.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">3</text>
+<text x="731" y="222" text-anchor="middle" font-size="18" font-weight="700" fill="#A6192E">Pausa permission ask</text>
+<text x="731" y="274" text-anchor="middle" font-size="18" fill="#2A2A2A">Propone 1002 y 1007;</text>
+<text x="731" y="306" text-anchor="middle" font-size="18" fill="#2A2A2A">humano aprueba 1002</text>
+<rect x="886" y="116" width="254" height="240" rx="18" fill="#F4F4F4" stroke="#2A2A2A" stroke-width="3"/>
+<circle cx="1013" cy="158" r="22" fill="#2A2A2A"/><text x="1013" y="165.92" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">4</text>
+<text x="1013" y="222" text-anchor="middle" font-size="18" font-weight="700" fill="#2A2A2A">Mensajes al cliente</text>
+<text x="1013" y="274" text-anchor="middle" font-size="18" fill="#2A2A2A">1002: aviso cancelado</text>
+<text x="1013" y="306" text-anchor="middle" font-size="18" fill="#2A2A2A">1004: aviso en camino</text>
+<line x1="296" y1="236" x2="306.2" y2="236" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="320,236 304.2,245.2 304.2,226.8" fill="#A6192E"/>
+<line x1="578" y1="236" x2="588.2" y2="236" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="602,236 586.2,245.2 586.2,226.8" fill="#A6192E"/>
+<line x1="860" y1="236" x2="870.2" y2="236" stroke="#A6192E" stroke-width="4" stroke-linecap="round"/><polygon points="884,236 868.2,245.2 868.2,226.8" fill="#A6192E"/>
+<rect x="40" y="384" width="1100" height="92" rx="16" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+<use href="#i-check" x="68" y="406" width="48" height="48" color="#2E7D4F"/>
+<text x="136" y="422" font-size="20" font-weight="700" fill="#2A2A2A">Resultado observable: herramienta de lectura automática, escritura pausada,</text>
+<text x="136" y="454" font-size="20" fill="#5E5E5E">al menos un rechazo documentado y borradores adaptados a cada comprador.</text>
+</svg>
+<aside class="narracion">Así luce la tarea multipaso completa cuando la ejecutan de principio a fin sobre el servidor MCP de CaribeMart. Sigan las cuatro tarjetas numeradas de izquierda a derecha para ver cómo encajan todas las piezas del corte. En la tarjeta uno en verde, el modelo invoca automáticamente pedidos atrasados con cinco días y recupera los registros mil dos, mil cuatro y mil siete en estado pendiente. En la tarjeta dos en dorado, consulta las políticas de negocio definidas en AGENTS punto md para interpretar cuáles ameritan cancelación y con qué tono dirigirse al comprador. En la tarjeta tres en vino aparece la compuerta humana de permission ask [cite:5]: el asistente propone cancelar, el humano aprueba mil dos y rechaza mil cuatro. En la tarjeta cuatro redacta avisos diferenciados: confirmación de cancelación para Ana y notificación cordial de envío próximo para María.</aside>
+</section>
+<section data-kicker="Mini-reto" data-titulo="Pausa el video: ¿allow, ask o deny para cada herramienta?" data-sub="Clasifica estas tres operaciones según su impacto y reversibilidad antes de ver la respuesta." data-fuente="Basado en: OpenCode Permissions docs [cite:5] · Dibujo propio" data-siglas="">
+<svg viewBox="0 0 1180 500">
+<rect x="20" y="20" width="1140" height="460" rx="22" fill="#FBF6E7" stroke="#9C7B16" stroke-width="4" stroke-dasharray="14 9"/>
+<circle cx="150" cy="160" r="74" fill="#FBF6E7" stroke="#9C7B16" stroke-width="4"/><rect x="133" y="140" width="12" height="40" rx="3" fill="#9C7B16"/><rect x="155" y="140" width="12" height="40" rx="3" fill="#9C7B16"/>
+<text x="150" y="286" text-anchor="middle" font-size="26" font-weight="700" fill="#9C7B16">PAUSA</text>
+<text x="150" y="318.5" text-anchor="middle" font-size="26" font-weight="700" fill="#9C7B16">Y DECIDE</text>
+<text x="290" y="96" font-size="32" font-weight="700" fill="#A6192E">Mini-reto 1: asigna permisos en CaribeMart</text>
+<text x="290" y="138" font-size="22" fill="#2A2A2A">¿Qué valor pondrías en opencode.json (allow, ask o deny)?</text>
+<rect x="290" y="184" width="830" height="74" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<text x="316" y="218" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">A. caribemart_pedidos_atrasados</text>
+<text x="316" y="246" font-size="18" fill="#5E5E5E">consulta lista pendiente sin cambiar nada</text>
+<rect x="290" y="272" width="830" height="74" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<text x="316" y="306" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">B. caribemart_cancelar_pedido</text>
+<text x="316" y="334" font-size="18" fill="#5E5E5E">modifica el estado de un pedido real</text>
+<rect x="290" y="360" width="830" height="74" rx="14" fill="#fff" stroke="#9C7B16" stroke-width="2.5"/>
+<text x="316" y="394" font-size="21" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#A6192E">C. borrar_todos_los_pedidos</text>
+<text x="316" y="422" font-size="18" fill="#5E5E5E">herramienta hipotética destructiva masiva</text>
+</svg>
+<aside class="narracion">Llegamos al primer mini reto de esta clase para poner a prueba su criterio de seguridad antes de avanzar. Pausen el video durante treinta segundos y decidan qué efecto de permiso asignarían dentro de opencode punto json a cada una de las tres herramientas mostradas a la derecha. La opción A es caribemart guion bajo pedidos guion bajo atrasados, una función de solo lectura que consulta el archivo JSON y devuelve pedidos pendientes sin modificar ningún registro. La opción B es caribemart guion bajo cancelar guion bajo pedido, que escribe un cambio definitivo de estado y guarda el motivo en el pedido seleccionado. La opción C es una herramienta hipotética llamada borrar todos los pedidos, capaz de eliminar de golpe toda la base comercial. Evalúen impacto sobre el negocio y reversibilidad para clasificar cada una entre allow, ask y deny [cite:5].</aside>
+</section>
+<section data-kicker="Solución" data-titulo="Resolución del Mini-reto 1: principio de mínimo privilegio" data-sub="Lectura en automático, escritura sensible con pausa humana y borrado masivo prohibido." data-fuente="Basado en: OpenCode Permissions [cite:5] y OWASP LLM06 [cite:1] · Dibujo propio" data-siglas="MCP = Model Context Protocol">
+<svg viewBox="0 0 1180 500">
+<rect x="24" y="44" width="1132" height="118" rx="18" fill="#E8F3EC" stroke="#2E7D4F" stroke-width="3"/>
+<circle cx="78" cy="103" r="28" fill="#2E7D4F"/><path d="M66.24,103.56 L75.2,113.08 L91.44,94.6" fill="none" stroke="#fff" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="130" y="92" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">A. caribemart_pedidos_atrasados</text>
+<text x="130" y="130" font-size="20" fill="#2A2A2A">Solo lectura sin efectos secundarios; agiliza el bucle.</text>
+<rect x="940" y="70" width="184" height="66" rx="12" fill="#2E7D4F"/>
+<text x="1032" y="112" text-anchor="middle" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#fff">"allow"</text>
+<rect x="24" y="194" width="1132" height="118" rx="18" fill="#FBF6E7" stroke="#9C7B16" stroke-width="3"/>
+<circle cx="78" cy="253" r="28" fill="#2E7D4F"/><path d="M66.24,253.56 L75.2,263.08 L91.44,244.6" fill="none" stroke="#fff" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="130" y="242" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">B. caribemart_cancelar_pedido</text>
+<text x="130" y="280" font-size="20" fill="#2A2A2A">Escribe estado irreversible; exige confirmación y bitácora.</text>
+<rect x="940" y="220" width="184" height="66" rx="12" fill="#9C7B16"/>
+<text x="1032" y="262" text-anchor="middle" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#fff">"ask"</text>
+<rect x="24" y="344" width="1132" height="118" rx="18" fill="#FBEAE8" stroke="#B3261E" stroke-width="3"/>
+<circle cx="78" cy="403" r="28" fill="#B3261E"/><path d="M67.92,392.92 L88.08,413.08 M88.08,392.92 L67.92,413.08" fill="none" stroke="#fff" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="130" y="392" font-size="22" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#2A2A2A">C. borrar_todos_los_pedidos</text>
+<text x="130" y="430" font-size="20" fill="#2A2A2A">Impacto catastrófico innecesario; mejor ni exponerla en MCP.</text>
+<rect x="940" y="370" width="184" height="66" rx="12" fill="#B3261E"/>
+<text x="1032" y="412" text-anchor="middle" font-size="26" font-weight="700" style="font-family:'Roboto Mono',Consolas,monospace" fill="#fff">"deny"</text>
+</svg>
+<aside class="narracion">Comparen ahora su respuesta con la solución recomendada en pantalla bajo el principio de mínimo privilegio. Para la herramienta A, caribemart pedidos atrasados, el permiso adecuado es allow en verde [cite:5], porque únicamente consulta datos sin alterar el archivo comercial y pedir confirmación manual en cada lectura terminaría fatigando al operador hasta hacerlo aprobar todo por pura costumbre. Para la herramienta B, caribemart cancelar pedido, el valor obligatorio dentro del proyecto del curso es ask en dorado, pues modifica un pedido comercial real y requiere discernimiento humano más registro en bitácora. Para la herramienta C, borrar todos los pedidos, la regla inmediata es deny en rojo, y bajo las recomendaciones de OWASP LLM cero seis [cite:1] ni siquiera debería existir programada dentro del servidor MCP. Concedan únicamente el mínimo privilegio necesario para cumplir la operación de forma segura.</aside>
+</section>
+<section data-kicker="Síntesis" data-titulo="La Parte 2 en cuatro ideas maestras" data-sub="El control humano se diseña en opencode y se respalda con criterio y bitácora." data-fuente="Basado en: Anthropic 4D [cite:8] y OpenCode docs [cite:5] · Dibujo propio" data-siglas="HITL = human-in-the-loop (verificación humana)">
+<svg viewBox="0 0 1180 500">
+<rect x="30" y="32" width="1120" height="48" rx="10" fill="#D4AF37"/>
+<text x="590" y="64" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">CONTROL HUMANO EN AGENTES DE CARIBEMART</text>
+<rect x="98" y="80" width="144" height="286" rx="8" fill="#A6192E"/>
+<rect x="78" y="366" width="184" height="26" rx="6" fill="#A6192E"/>
+<circle cx="170" cy="156" r="50" fill="#fff" stroke="#A6192E" stroke-width="0"/>
+<use href="#i-usuario" x="137" y="123" width="66" height="66" color="#A6192E"/>
+<line x1="136" y1="224" x2="136" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="170" y1="224" x2="170" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="204" y1="224" x2="204" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<text x="170" y="434" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">HITL</text>
+<text x="170" y="464" text-anchor="middle" font-size="24" font-weight="700" fill="#A6192E">ACTIVO</text>
+<rect x="378" y="80" width="144" height="286" rx="8" fill="#9C7B16"/>
+<rect x="358" y="366" width="184" height="26" rx="6" fill="#9C7B16"/>
+<circle cx="450" cy="156" r="50" fill="#fff" stroke="#9C7B16" stroke-width="0"/>
+<use href="#i-ojo" x="417" y="123" width="66" height="66" color="#9C7B16"/>
+<line x1="416" y1="224" x2="416" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="450" y1="224" x2="450" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="484" y1="224" x2="484" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<text x="450" y="434" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">MARCO 4D</text>
+<text x="450" y="464" text-anchor="middle" font-size="24" font-weight="700" fill="#9C7B16">COMPLETO</text>
+<rect x="658" y="80" width="144" height="286" rx="8" fill="#2E7D4F"/>
+<rect x="638" y="366" width="184" height="26" rx="6" fill="#2E7D4F"/>
+<circle cx="730" cy="156" r="50" fill="#fff" stroke="#2E7D4F" stroke-width="0"/>
+<use href="#i-candado" x="697" y="123" width="66" height="66" color="#2E7D4F"/>
+<line x1="696" y1="224" x2="696" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="730" y1="224" x2="730" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="764" y1="224" x2="764" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<text x="730" y="434" text-anchor="middle" font-size="24" font-weight="700" fill="#2E7D4F">PERMISSION</text>
+<text x="730" y="464" text-anchor="middle" font-size="24" font-weight="700" fill="#2E7D4F">ASK</text>
+<rect x="938" y="80" width="144" height="286" rx="8" fill="#2A2A2A"/>
+<rect x="918" y="366" width="184" height="26" rx="6" fill="#2A2A2A"/>
+<circle cx="1010" cy="156" r="50" fill="#fff" stroke="#2A2A2A" stroke-width="0"/>
+<use href="#i-registro" x="977" y="123" width="66" height="66" color="#2A2A2A"/>
+<line x1="976" y1="224" x2="976" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="1010" y1="224" x2="1010" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<line x1="1044" y1="224" x2="1044" y2="354" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+<text x="1010" y="434" text-anchor="middle" font-size="24" font-weight="700" fill="#2A2A2A">BITÁCORA</text>
+<text x="1010" y="464" text-anchor="middle" font-size="24" font-weight="700" fill="#2A2A2A">AUDITABLE</text>
+</svg>
+<aside class="narracion">Cerramos la segunda parte fijando cuatro pilares fundamentales sobre la verificación humana en agentes modernos. Primero, el principio human-in-the-loop conserva la autoridad final sobre cualquier operación de escritura sensible en manos de la persona operadora mientras delega el análisis veloz al modelo. Segundo, el marco cuatro D ordena nuestra práctica profesional en cuatro competencias claras [cite:8]: delegar con frontera definida, describir reglas precisas en AGENTS punto md, discernir críticamente las propuestas y actuar con diligencia documentada. Tercero, dentro de opencode punto json configuramos exactamente caribemart guion bajo cancelar guion bajo pedido en modo ask [cite:5] junto al bloque mcp. Cuarto, cada aprobación o rechazo se registra en una bitácora con su justificación operativa. Pero qué ocurre si un atacante esconde órdenes maliciosas dentro de los mismos datos que lee el agente? Ese vector lo estudiaremos en la tercera parte.</aside>
+</section>
